@@ -1,7 +1,10 @@
 package kr.ac.kaist.ir.deep
 
+import breeze.linalg.sum
+import breeze.numerics.{abs, pow}
+import breeze.stats.distributions.Gaussian
 import kr.ac.kaist.ir.deep.function._
-import kr.ac.kaist.ir.deep.network.{AutoEncoder, Network, NeuralObject}
+import kr.ac.kaist.ir.deep.network.Network
 
 import scala.annotation.tailrec
 
@@ -12,26 +15,30 @@ import scala.annotation.tailrec
  */
 package object trainer {
   /** Type of Corruption */
-  type Corruption = NeuronVector ⇒ NeuronVector
+  type Corruption = ScalarMatrix ⇒ ScalarMatrix
 
   /**
    * Abstract class for weight update
    */
-  abstract class WeightUpdater extends (Seq[NeuralObject] ⇒ Unit) with Serializable {
+  abstract class WeightUpdater extends ((Seq[ScalarMatrix], Seq[ScalarMatrix]) ⇒ Unit) with Serializable {
     /** Decay factor for L1-reg */
-    val l1decay: Double
+    val l1decay: Scalar
     /** Decay factor for L2-reg */
-    val l2decay: Double
+    val l2decay: Scalar
 
     /**
      * Compute weight-loss of given neuron objects
      * @param objs to be computed
      * @return weight loss of the set
      */
-    def loss(objs: Seq[NeuralObject]) = {
-      val l1loss = objs.L1 * l1decay
-      val l2loss = objs.L2 * l2decay
-      l1loss + l2loss
+    def loss(objs: Seq[ScalarMatrix]) = {
+      objs.foldLeft(0.0) {
+        (err, obj) ⇒ {
+          val l1loss = sum(abs(obj)) * l1decay
+          val l2loss = sum(pow(obj, 2)) * l2decay
+          err + l1loss + l2loss
+        }
+      }
     }
   }
 
@@ -47,7 +54,7 @@ package object trainer {
      * @param set to be trained
      * @return Training error (loss)
      */
-    def train(set: Seq[(NeuronVector, NeuronVector)]): Scalar = trainWithValidation(set, set)
+    def train(set: Seq[(ScalarMatrix, ScalarMatrix)]): Scalar = trainWithValidation(set, set)
 
     /**
      * Train given sequence, and validate with another sequence.
@@ -55,11 +62,14 @@ package object trainer {
      * @param valid to be used for validation
      * @return Training error (loss)
      */
-    def trainWithValidation(set: Seq[(NeuronVector, NeuronVector)], valid: Seq[(NeuronVector, NeuronVector)]): Scalar
+    def trainWithValidation(set: Seq[(ScalarMatrix, ScalarMatrix)], valid: Seq[(ScalarMatrix, ScalarMatrix)]): Scalar
   }
 
   /**
-   * Input Corruption: Drop input as zero
+   * Input Corruption: Drop input as zero.
+   *
+   * If network uses drop-out training, we recommend that you do not use this.
+   *
    * @param dropRate probability
    */
   case class DroppingCorruption(dropRate: Double = 0.01) extends Corruption {
@@ -68,21 +78,28 @@ package object trainer {
      * @param v1 to be corrupted
      * @return corrupted vector
      */
-    override def apply(v1: NeuronVector): NeuronVector = v1 mapValues { x ⇒ if (UniformNoise() > dropRate) x else 0.0}
+    override def apply(v1: ScalarMatrix): ScalarMatrix =
+      v1 mapValues { x ⇒ if (Math.random() < dropRate) 0.0 else x}
   }
 
   /**
    * Input Corruption: Gaussian
    * @param mean of noise
-   * @param stdev of noise
+   * @param variance of noise
    */
-  case class GaussianCorruption(mean: Double = 0.0, stdev: Double = 1.0) extends Corruption {
+  case class GaussianCorruption(mean: Double = 0.0, variance: Double = 1.0) extends Corruption {
+    /**
+     * Gaussian Distribution
+     */
+    val distro = Gaussian distribution(Double.box(mean), Double.box(variance))
+
     /**
      * Do corruption
      * @param v1 to be corrupted
      * @return corrupted vector
      */
-    override def apply(v1: NeuronVector): NeuronVector = v1 mapValues { x ⇒ x + GaussianNoise(mean, stdev)}
+    override def apply(v1: ScalarMatrix): ScalarMatrix =
+      v1 mapValues { x ⇒ x + distro.draw()}
   }
 
   /**
@@ -95,7 +112,7 @@ package object trainer {
      * @param v1 to be corrupted
      * @return the vector
      */
-    override def apply(v1: NeuronVector) = v1
+    override def apply(v1: ScalarMatrix) = v1
   }
 
   /**
@@ -115,29 +132,6 @@ package object trainer {
    */
   case class TrainingCriteria(batch: Int = 10, dropout: Double = 0.001)
 
-  /**
-   * Operation: Neural Objects
-   * @param seq to be computed
-   */
-  implicit class NeuralObjectOp(seq: Seq[NeuralObject]) {
-    /**
-     * Weight vector
-     * @return weight of neural objects
-     */
-    def w = seq map { n ⇒ Math.abs(n.weight.value)}
-
-    /**
-     * L1-norm
-     * @return size of weight vector
-     */
-    def L1 = w.sum
-
-    /**
-     * Squared L2-norm
-     * @return size of weight vector
-     */
-    def L2 = (w map { x ⇒ x * x}).sum
-  }
 
   /**
    * Algorithm: Gradient Descent
@@ -148,27 +142,33 @@ package object trainer {
    */
   class GradientDescent(rate: Double = 0.6, override val l1decay: Double = 0.01, override val l2decay: Double = 0.01, momentum: Double = 0.001) extends WeightUpdater {
     /** Last update */
-    var lastDelta = Map[Long, Scalar]()
+    var lastDelta = Seq[ScalarMatrix]()
 
     /**
      * Run the algorithm
-     * @param seq to be applied
+     * @param delta matrices of accumulation
+     * @param weight matrices of current
      */
-    override def apply(seq: Seq[NeuralObject]): Unit = {
-      lastDelta = (seq map {
-        o ⇒ {
-          val w = o.weight.value
+    override def apply(delta: Seq[ScalarMatrix], weight: Seq[ScalarMatrix]): Unit = {
+      lastDelta = delta.indices map {
+        id ⇒ {
+          val w: ScalarMatrix = weight(id)
+          val deltaW: ScalarMatrix = delta(id)
 
-          val deltaW = o.weight.delta
-          val deltal1 = if (w > 0) l1decay else if (w < 0) -l1decay else 0.0
-          val deltal2 = w * l2decay * 2
-          val moment = lastDelta.getOrElse(o.weight.id, 0.0) * momentum
-          val dw = moment - (deltaW + deltal1 + deltal2) * rate
+          val deltaL1: ScalarMatrix = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0}
+          val deltaL2: ScalarMatrix = w * (l2decay * 2)
+          val deltaL: ScalarMatrix = deltaL1 + deltaL2
+          val deltaLoss: ScalarMatrix = deltaW + deltaL
+          val adapted: ScalarMatrix = deltaLoss :* rate
+          val moment: ScalarMatrix = lastDelta(id) * momentum
 
-          o.weight += dw
-          o.weight.id → dw
+          val dw: ScalarMatrix = moment - adapted
+
+          w -= dw
+          deltaW := 0.0
+          dw
         }
-      }).toMap
+      }
     }
   }
 
@@ -180,35 +180,38 @@ package object trainer {
    * @param historyCount is size of last update history
    */
   class AdaGrad(rate: Double = 0.6, override val l1decay: Double = 0.01, override val l2decay: Double = 0.01, val historyCount: Int = 10) extends WeightUpdater {
-    /** History of update */
-    var deltaSeq = Seq[Scalar]()
+    /** History of update per each weight */
+    var history: Seq[Scalar] = Seq()
+    /** Constant function */
+    val one = (_: Any) ⇒ 1.0
 
     /**
      * Run the algorithm
-     * @param seq to be updated
+     * @param delta matrices of accumulation
+     * @param weight matrices of current
      */
-    override def apply(seq: Seq[NeuralObject]): Unit = {
-      val grad = (seq map {
-        o ⇒ {
-          val w = o.weight.value
+    override def apply(delta: Seq[ScalarMatrix], weight: Seq[ScalarMatrix]): Unit = {
+      val grad = delta.indices map {
+        id ⇒ {
+          val w = weight(id)
+          val deltaW = delta(id)
 
-          val deltaW = o.weight.delta
-          val deltal1 = if (w > 0) l1decay else if (w < 0) -l1decay else 0.0
-          val deltal2 = w * l2decay * 2
-          o.weight.id → (deltaW + deltal1 + deltal2)
+          val deltaL1: ScalarMatrix = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0}
+          val deltaL2: ScalarMatrix = w * (l2decay * 2)
+          val deltaL: ScalarMatrix = deltaL1 + deltaL2
+          val deltaLoss: ScalarMatrix = deltaW + deltaL
+          deltaLoss
         }
-      }).toMap
+      }
 
-      val gradL2 = grad.foldLeft(0.0) { (sum, pair) ⇒ sum + pair._2 * pair._2}
-      deltaSeq = gradL2 +: deltaSeq.take(historyCount)
+      val adjusted = grad.indices map { id ⇒ rate / history.applyOrElse(id, one)}
+      history = grad.indices map { id ⇒ history.applyOrElse(id, one) + sum(pow(grad(id), 2))}
 
-      val adaptedRate = rate / (if (deltaSeq.isEmpty) 1.0 else Math.sqrt(deltaSeq.sum))
+      delta.indices foreach {
+        id ⇒ {
+          val dw: ScalarMatrix = grad(id) :* adjusted(id)
 
-      seq map {
-        o ⇒ {
-          val dw = grad(o.weight.id) * adaptedRate
-
-          o.weight += dw
+          weight(id) += dw
         }
       }
     }
@@ -227,41 +230,44 @@ package object trainer {
                  val epsilon: Double = 1e-6)
     extends WeightUpdater {
     /** History of Delta */
-    var avgDeltaL2 = 0.0
+    var avgDeltaL2 = Seq[Scalar]()
     /** History of Gradient */
-    var avgGradL2 = 0.0
+    var avgGradL2 = Seq[Scalar]()
+    /** Constant function */
+    val zero = (_: Any) ⇒ 0.0
+    val meanSq = (x: ScalarMatrix) ⇒ sum(pow(x, 2)) / x.size
 
     /**
      * Run the algorithm
-     * @param seq to be applied
+     * @param delta matrices of accumulation
+     * @param weight matrices of current
      */
-    override def apply(seq: Seq[NeuralObject]): Unit = {
-      val grad = (seq map {
-        o ⇒ {
-          val w = o.weight.value
+    override def apply(delta: Seq[ScalarMatrix], weight: Seq[ScalarMatrix]): Unit = {
+      val grad = delta.indices map {
+        id ⇒ {
+          val w = weight(id)
+          val deltaW = delta(id)
 
-          val deltaW = o.weight.delta
-          val deltal1 = if (w > 0) l1decay else if (w < 0) -l1decay else 0.0
-          val deltal2 = w * l2decay * 2
-          o.weight.id → (deltaW + deltal1 + deltal2)
+          val deltaL1: ScalarMatrix = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0}
+          val deltaL2: ScalarMatrix = w * (l2decay * 2)
+          val deltaL: ScalarMatrix = deltaL1 + deltaL2
+          val deltaLoss: ScalarMatrix = deltaW + deltaL
+          deltaLoss
         }
-      }).toMap
+      }
 
-      val gradL2 = grad.foldLeft(0.0) { (sum, pair) ⇒ sum + pair._2 * pair._2} / seq.size
-      avgGradL2 = decay * avgGradL2 + (1.0 - decay) * gradL2
+      avgGradL2 = grad.indices map { id ⇒ decay * avgGradL2.applyOrElse(id, zero) + (1.0 - decay) * meanSq(grad(id))}
 
-      val rate = Math.sqrt(avgDeltaL2 + epsilon) / Math.sqrt(avgGradL2 + epsilon)
+      val adjusted = grad.indices map { id ⇒ Math.sqrt(avgDeltaL2.applyOrElse(id, zero) + epsilon) / Math.sqrt(avgGradL2(id) + epsilon)}
 
-      val delta = seq.foldLeft(0.0) {
-        (sum, o) ⇒ {
-          val dw = grad(o.weight.id) * rate
+      avgDeltaL2 = delta.indices map {
+        id ⇒ {
+          val d: ScalarMatrix = grad(id) :* adjusted(id)
 
-          o.weight += dw
-          sum + dw * dw
+          weight(id) += d
+          decay * avgDeltaL2.applyOrElse(id, zero) + (1.0 - decay) * meanSq(d)
         }
-      } / seq.size
-
-      avgDeltaL2 = decay * avgDeltaL2 + (1.0 - decay) * delta
+      }
     }
   }
 
@@ -282,15 +288,13 @@ package object trainer {
                           override val stops: StoppingCriteria = StoppingCriteria())
     extends Trainer {
     /** Stochastic Generator Base */
-    protected[trainer] val randomSetGenerator = (set: Seq[(NeuronVector, NeuronVector)]) ⇒ () ⇒ set((Math.random() * set.size).toInt)
-    /** One-time trainer of network */
-    protected[trainer] val trainer = net.trainerOf(error) _
+    protected[trainer] val randomSetGenerator = (set: Seq[(ScalarMatrix, ScalarMatrix)]) ⇒ () ⇒ set((Math.random() * set.size).toInt)
     /** Generator */
-    protected[trainer] var generate: () ⇒ (NeuronVector, NeuronVector) = null
+    protected[trainer] var generate: () ⇒ (ScalarMatrix, ScalarMatrix) = null
     /** Validation Set */
-    protected[trainer] var validation: Seq[(NeuronVector, NeuronVector)] = null
+    protected[trainer] var validation: Seq[(ScalarMatrix, ScalarMatrix)] = null
     /** Best Parameter History */
-    protected[trainer] var bestParam: Map[Long, Scalar] = null
+    protected[trainer] var bestParam: Seq[ScalarMatrix] = null
 
     /**
      * Train given sequence, and validate with another sequence.
@@ -298,13 +302,12 @@ package object trainer {
      * @param valid to be used for validation
      * @return Training error (loss)
      */
-    def trainWithValidation(set: Seq[(NeuronVector, NeuronVector)], valid: Seq[(NeuronVector, NeuronVector)]) = {
+    def trainWithValidation(set: Seq[(ScalarMatrix, ScalarMatrix)], valid: Seq[(ScalarMatrix, ScalarMatrix)]) = {
       generate = randomSetGenerator(set)
       validation = valid
 
       val err = trainBatch()
       restoreParams()
-      net.synapses foreach (_.dropIf(clause = false))
       err
     }
 
@@ -312,14 +315,18 @@ package object trainer {
      * Store best parameters
      */
     protected[trainer] final def saveParams() = {
-      bestParam = (net.all map { n ⇒ n.weight.id → n.weight.value}).toMap
+      bestParam = net.W map {
+        _.copy
+      }
     }
 
     /**
      * Restore best parameters
      */
     protected[trainer] final def restoreParams() = {
-      net.all foreach { n ⇒ n.weight := bestParam(n.weight.id)}
+      bestParam.indices foreach {
+        id ⇒ net.W(id) := bestParam(id)
+      }
     }
 
     /**
@@ -333,19 +340,18 @@ package object trainer {
     protected[trainer] final def trainBatch(iter: Int = 0, prevloss: Double = Double.MaxValue, patience: Int = stops.patience): Scalar = {
       (0 until param.batch) foreach { _ ⇒ {
         val pair = generate()
-        val in = corrupt(pair._1)
-        net.synapses foreach (_.dropIf(Math.random() < param.dropout))
-        trainer(in, pair._2)
+        val out = corrupt(pair._1) >>: net
+        val err: ScalarMatrix = error.derivative(pair._2, out)
+        net ! err
       }
       }
-      net ! algorithm
+      algorithm(net.dW, net.W)
 
       var nPatience = patience
 
       val nLoss = if ((iter + 1) % stops.validationFreq == 0) {
-        net.synapses foreach (_.dropIf(clause = false))
         val train = validation.foldLeft(0.0) { (err, item) ⇒ err + error(item._2, net(item._1))} / validation.size
-        val weight = algorithm loss net.all
+        val weight = algorithm loss net.W
         if (train + weight < prevloss * stops.improveThreshold) {
           nPatience = Math.max(patience, iter * stops.patienceStep)
           saveParams()
@@ -364,47 +370,6 @@ package object trainer {
         println(f"Finished $iter%6d, Error = $nLoss%.5f")
         nLoss
       }
-    }
-  }
-
-  /**
-   * Trainer : Auto-Encoder trainer based on Stochastic-style
-   * @param net to be trained
-   * @param algorithm to be applied
-   * @param objective to compute loss
-   * @param corrupt to corrupt input
-   * @param param of training criteria
-   * @param stops of stopping criteria
-   */
-  class EncoderTrainer(override val net: AutoEncoder,
-                       override val algorithm: WeightUpdater = new GradientDescent(),
-                       val objective: Objective = SquaredErr,
-                       override val corrupt: Corruption = NoCorruption,
-                       override val param: TrainingCriteria = TrainingCriteria(),
-                       override val stops: StoppingCriteria = StoppingCriteria())
-    extends StochasticTrainer(net, algorithm, objective, corrupt, param, stops) {
-    /** Ouput Index for conversion */
-    private val outIndexes = net.start + net.input + net.hidden
-    /** New Random Generator for AutoEncoder */
-    protected[trainer] val randomGenerator = (set: Seq[NeuronVector]) ⇒ () ⇒ {
-      val x = set((Math.random() * set.size).toInt)
-      val y = x map { pair ⇒ (outIndexes + pair._1) → pair._2}
-      x → y
-    }
-
-    /**
-     * Train given sequence, and validate with that sequence.
-     * @param set to be used for training
-     * @return Trained Loss
-     */
-    def trainAuto(set: Seq[NeuronVector]) = {
-      generate = randomGenerator(set)
-      validation = set map { x ⇒ x → x}
-
-      val err = trainBatch()
-      restoreParams()
-      net.synapses foreach (_.dropIf(clause = false))
-      err
     }
   }
 

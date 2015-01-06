@@ -1,140 +1,62 @@
 package kr.ac.kaist.ir.deep
 
+import breeze.linalg._
+import breeze.numerics.{exp, log, sigmoid, tanh}
+import play.api.libs.json.{JsArray, JsNumber}
+
 /**
  * Package for functions
  *
  * Created by bydelta on 2014-12-27.
  */
 package object function {
-  /** Type of neuron **/
-  type NeuronId = Int
   /** Type of scalar **/
   type Scalar = Double
+  /** Type of probability **/
+  type Probability = Double
   /** Type of Neuron Input **/
-  type NeuronVector = Map[NeuronId, Scalar]
-
-  private val subtract = (x: Scalar, y: Scalar) ⇒ x - y
-  private val addition = (x: Scalar, y: Scalar) ⇒ x + y
-  private val multiply = (x: Scalar, y: Scalar) ⇒ x * y
-
-  /**
-   * Operation for NeuronVector
-   * @param seq is left hand side for each expression.
-   */
-  implicit class NeuronVectorOp(val seq: NeuronVector) extends AnyVal {
-
-    /**
-     * Subtract operation
-     * @param that is right hand side of subtraction.
-     * @return {seq - that}, defined on at least one of them (If undefined, then it is treated as zero.)
-     */
-    def -(that: NeuronVector) = (seq, that) apply subtract
-
-    /**
-     * Addition operation
-     * @param that is right hand side of addition.
-     * @return {seq + that}, defined on at least one of them (If undefined, then it is treated as zero.)
-     */
-    def +(that: NeuronVector) = (seq, that) apply addition
-
-    /**
-     * Element-wise Multiplication operation
-     * @param that is right hand side of multiplication.
-     * @return {seq + that}, defined on at least one of them (If undefined, then it is treated as zero.)
-     */
-    def *(that: NeuronVector) = (seq, that) apply multiply
-
-    /**
-     * Scalar Multiplication
-     * @param that is multiplier
-     * @return {seq * that}, defined on domain of seq
-     */
-    def *(that: Scalar) = apply(x ⇒ x * that)
-
-    def dot(that: NeuronVector) = (seq * that).$sum
-
-    /**
-     * Sum-up all entries of the given vector
-     * @return sum of entries.
-     */
-    def $sum = seq.foldLeft(0.0)((sum, tpl) ⇒ sum + tpl._2)
-
-    /**
-     * Power operation
-     * @param power is the power
-     * @return {seq ** power}.
-     */
-    def **(power: Scalar) = apply(Math.pow(_, power))
-
-    /**
-     * Compute vector applied by given function.
-     * @param fn to be applied
-     * @return {fn(seq)}
-     */
-    def apply(fn: Scalar ⇒ Scalar) = seq mapValues fn
-  }
-
-  /**
-   * Operation for NeuronVector
-   * @param set is (left, right) hand side for each expression.
-   */
-  implicit class NeuronVectorOp2(val set: (NeuronVector, NeuronVector)) extends AnyVal {
-    /**
-     * Apply given function as a binary operation.
-     * @param fn for applied
-     * @return fn({first}, {second})
-     */
-    def apply(fn: (Scalar, Scalar) ⇒ Scalar) = {
-      val set1 = set._1
-      val set2 = set._2
-      val keys = set._1.keySet union set._2.keySet
-      (keys map {
-        id ⇒ id → fn(set1.getOrElse(id, 0.0), set2.getOrElse(id, 0.0))
-      }).toMap
-    }
-  }
-
+  type ScalarMatrix = DenseMatrix[Scalar]
   /** Define Alias **/
   val Tanh = HyperbolicTangent
 
   /**
    * Define Activation Function trait.
    */
-  trait Activation extends (Scalar ⇒ Scalar) with Serializable {
+  trait Activation extends (ScalarMatrix ⇒ ScalarMatrix) with Serializable {
     /**
      * Compute derivative of this function
      * @param fx is output of this function
-     * @return differentiation value at f(x)=fx.
+     * @return differentiation value at f(x)=fx, which is Square, diagonal matrix
      */
-    def derivative(fx: Scalar): Scalar
+    def derivative(fx: ScalarMatrix): ScalarMatrix
 
     /**
      * Compute mapping at x
      * @param x is input scalar.
      * @return f(x)
      */
-    def apply(x: Scalar): Scalar
+    def apply(x: ScalarMatrix): ScalarMatrix
 
     /**
-     * Initialize Weight Vector
+     * Initialize Weight matrix
      * @param fanIn is a weight vector indicates fan-in
      * @param fanOut is a count of fan-out
-     * @return random number generator
+     * @return weight matrix
      */
-    def initialize(fanIn: Int, fanOut: Int) = Math.random _
+    def initialize(fanIn: Int, fanOut: Int, rows: Int = 0, cols: Int = 0): ScalarMatrix = ScalarMatrix of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn)
   }
 
   /**
    * Define Objective Function trait.
    */
-  trait Objective extends ((NeuronVector, NeuronVector) ⇒ Scalar) with Serializable {
+  trait Objective extends ((ScalarMatrix, ScalarMatrix) ⇒ Scalar) with Serializable {
     /**
      * Compute derivative of this objective function
      * @param real is expected real output
      * @param output is computational output of the network
      * @return is differentiation(Gradient) vector at f(X)=output, i.e. error of each output neuron.
      */
-    def derivative(real: NeuronVector, output: NeuronVector): NeuronVector
+    def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix
 
     /**
      * Compute error
@@ -142,7 +64,103 @@ package object function {
      * @param output is computational output of the network
      * @return is the error
      */
-    override def apply(real: NeuronVector, output: NeuronVector): Scalar
+    override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar
+  }
+
+  /**
+   * Defines sugar operations for ScalarMatrix
+   * @param x to be computed
+   */
+  implicit class ScalarMatrixOp(x: ScalarMatrix) {
+    /**
+     * Add given scalar to last row.
+     * @param y to be added
+     */
+    def row_+(y: Scalar) = {
+      val scalar: ScalarMatrix = (ScalarMatrix $1(1, x.cols)) :* y
+      DenseMatrix.vertcat(x, scalar)
+    }
+
+    /**
+     * Add given matrix to last columns.
+     * @param y to be added
+     */
+    def col_+(y: ScalarMatrix) = {
+      DenseMatrix.horzcat(x, y)
+    }
+
+    /**
+     * Make 2D Sequence
+     */
+    def to2DSeq: JsArray = {
+      val r = x.rows
+      val c = x.cols
+      JsArray((0 until r) map {
+        i ⇒ JsArray((0 until c) map {
+          j ⇒ JsNumber(x(i, j))
+        })
+      })
+    }
+  }
+
+  /**
+   * Defines sugar operations of probability
+   * @param x to be applied
+   */
+  implicit class ProbabilityOp(x: Probability) {
+    /**
+     * Returns safe probability
+     * @return probability between 0 and 1
+     */
+    def safe = if (0.0 <= x && x <= 1.0) x else if (x < 0.0) 0.0 else 1.0
+  }
+
+  /**
+   * Companion Object of ScalarMatrix
+   */
+  object ScalarMatrix {
+    /**
+     * Generates full-one matrix of given size
+     * @param size of matrix, such as (2, 3)
+     * @return Matrix with initialized by one
+     */
+    def $1(size: (Int, Int)) = DenseMatrix.ones[Scalar](size._1, size._2)
+
+    /**
+     * Generates full-random matrix of given size
+     * @param size of matrix, such as (2, 3)
+     * @return Matrix with initialized by random number
+     */
+    def of(size: (Int, Int)) = DenseMatrix.rand[Scalar](size._1, size._2)
+
+    /**
+     * Generate full 0-1 matrix of given size. Probability of 1 is given.
+     * @param pair is pair of (row, col, probability)
+     * @return generated matrix
+     */
+    def $01(pair: (Int, Int, Probability)) = DenseMatrix.tabulate[Scalar](pair._1, pair._2)((_, _) ⇒ if (Math.random() > pair._3) 0.0 else 1.0)
+
+    /**
+     * Restore a matrix from JSON seq.
+     * @param arr to be restored
+     * @return restored matrix
+     */
+    def restore(arr: Seq[Seq[Scalar]]) = {
+      val res = $0(arr.size, arr(0).size)
+      arr.indices foreach {
+        r ⇒ arr(r).indices foreach {
+          c ⇒ res.update(r, c, arr(r)(c))
+        }
+      }
+      res
+    }
+
+    /**
+     * Generates full-zero matrix of given size
+     * @param size of matrix, such as (2, 3)
+     * @return Matrix with initialized by zero
+     */
+    def $0(size: (Int, Int)) = DenseMatrix.zeros[Scalar](size._1, size._2)
   }
 
   /**
@@ -152,26 +170,36 @@ package object function {
     /**
      * Compute derivative of this function
      * @param fx is output of this function
-     * @return differentiation value at f(x)=fx.
+     * @return differentiation value at f(x)=fx, which is Square, diagonal matrix
      */
-    override def derivative(fx: Scalar): Scalar = fx * (1.0 - fx)
+    override def derivative(fx: ScalarMatrix): ScalarMatrix = {
+      // Because fx is n by 1 matrix, generate n by n matrix
+      val res = ScalarMatrix $0(fx.rows, fx.rows)
+      // Output is diagonal matrix, with dfi(xi)/dxi.
+      (0 until fx.rows) foreach { r ⇒ {
+        val x = fx(r, 0)
+        res.update((r, r), x * (1.0 - x))
+      }
+      }
+      res
+    }
 
     /**
      * Compute mapping at x
      * @param x is input scalar.
      * @return f(x)
      */
-    override def apply(x: Scalar): Scalar = 1.0 / (1.0 + Math.exp(-x))
+    override def apply(x: ScalarMatrix): ScalarMatrix = sigmoid(x)
 
     /**
-     * Initialize Weight Vector
+     * Initialize Weight matrix
      * @param fanIn is a weight vector indicates fan-in
      * @param fanOut is a count of fan-out
-     * @return random number generator
+     * @return weight matrix
      */
-    override def initialize(fanIn: Int, fanOut: Int) = {
+    override def initialize(fanIn: Int, fanOut: Int, rows: Int = 0, cols: Int = 0): ScalarMatrix = {
       val range = Math.sqrt(6.0 / (fanIn + fanOut)) * 4.0
-      () ⇒ (Math.random() * 2.0 - 1.0) * range
+      ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) * range
     }
   }
 
@@ -182,26 +210,36 @@ package object function {
     /**
      * Compute derivative of this function
      * @param fx is output of this function
-     * @return differentiation value at f(x)=fx.
+     * @return differentiation value at f(x)=fx, which is Square, diagonal matrix
      */
-    override def derivative(fx: Scalar): Scalar = 1.0 - fx * fx
+    override def derivative(fx: ScalarMatrix): ScalarMatrix = {
+      // Because fx is n by 1 matrix, generate n by n matrix
+      val res = ScalarMatrix $0(fx.rows, fx.rows)
+      // Output is diagonal matrix, with dfi(xi)/dxi.
+      (0 until fx.rows) foreach { r ⇒ {
+        val x = fx(r, 0)
+        res.update((r, r), 1.0 - x * x)
+      }
+      }
+      res
+    }
 
     /**
      * Compute mapping at x
      * @param x is input scalar.
      * @return f(x)
      */
-    override def apply(x: Scalar): Scalar = Math.tanh(x)
+    override def apply(x: ScalarMatrix): ScalarMatrix = tanh(x)
 
     /**
-     * Initialize Weight Vector
+     * Initialize Weight matrix
      * @param fanIn is a weight vector indicates fan-in
      * @param fanOut is a count of fan-out
-     * @return random number generator
+     * @return weight matrix
      */
-    override def initialize(fanIn: Int, fanOut: Int) = {
+    override def initialize(fanIn: Int, fanOut: Int, rows: Int = 0, cols: Int = 0): ScalarMatrix = {
       val range = Math.sqrt(6.0 / (fanIn + fanOut))
-      () ⇒ (Math.random() * 2.0 - 1.0) * range
+      ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) * range
     }
   }
 
@@ -214,16 +252,30 @@ package object function {
     /**
      * Compute derivative of this function
      * @param fx is output of this function
-     * @return differentiation value at f(x)=fx.
+     * @return differentiation value at f(x)=fx, which is Square, diagonal matrix
      */
-    override def derivative(fx: Scalar): Scalar = if (fx > 0) 1.0 else 0.0
+    override def derivative(fx: ScalarMatrix): ScalarMatrix = {
+      // Because fx is n by 1 matrix, generate n by n matrix
+      val res = ScalarMatrix $0(fx.rows, fx.rows)
+      // Output is diagonal matrix, with dfi(xi)/dxi.
+      (0 until fx.rows) foreach { r ⇒ {
+        val x = fx(r, 0)
+        res.update((r, r), if (x > 0) 1.0 else 0.0)
+      }
+      }
+      res
+    }
 
     /**
      * Compute mapping at x
      * @param x is input scalar.
      * @return f(x)
      */
-    override def apply(x: Scalar): Scalar = if (x > 0) x else 0.0
+    override def apply(x: ScalarMatrix): ScalarMatrix = {
+      val res = x.copy
+      x foreachKey { key ⇒ if (x(key) < 0) res.update(key, 0.0)}
+      res
+    }
   }
 
   /**
@@ -235,16 +287,30 @@ package object function {
     /**
      * Compute derivative of this function
      * @param fx is output of this function
-     * @return differentiation value at f(x)=fx.
+     * @return differentiation value at f(x)=fx, which is Square, diagonal matrix
      */
-    override def derivative(fx: Scalar): Scalar = (Math.exp(fx) - 1.0) / Math.exp(fx)
+    override def derivative(fx: ScalarMatrix): ScalarMatrix = {
+      // Because fx is n by 1 matrix, generate n by n matrix
+      val res = ScalarMatrix $0(fx.rows, fx.rows)
+      // Output is diagonal matrix, with dfi(xi)/dxi.
+      (0 until fx.rows) foreach { r ⇒ {
+        val expx = exp(fx(r, 0))
+        res.update((r, r), (expx - 1.0) / expx)
+      }
+      }
+      res
+    }
 
     /**
      * Compute mapping at x
      * @param x is input scalar.
      * @return f(x)
      */
-    override def apply(x: Scalar): Scalar = Math.log(1.0 + Math.exp(x))
+    override def apply(x: ScalarMatrix): ScalarMatrix = {
+      val expx: ScalarMatrix = exp(x)
+      val plus1: ScalarMatrix = expx :+ 1.0
+      log(plus1)
+    }
   }
 
   /**
@@ -257,7 +323,7 @@ package object function {
      * @param output is computational output of the network
      * @return is differentiation(Gradient) vector at f(X)=output, i.e. error of each output neuron.
      */
-    override def derivative(real: NeuronVector, output: NeuronVector): NeuronVector = output - real
+    override def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = output.t - real.t
 
     /**
      * Compute error
@@ -265,7 +331,11 @@ package object function {
      * @param output is computational output of the network
      * @return is the error
      */
-    override def apply(real: NeuronVector, output: NeuronVector): Scalar = 0.5 * ((real - output) ** 2).$sum
+    override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar = {
+      val diff: ScalarMatrix = real - output
+      val sqdiff: ScalarMatrix = diff :^ 2.0
+      0.5 * sum(sqdiff)
+    }
   }
 
   /**
@@ -275,12 +345,12 @@ package object function {
     /**
      * Entropy function
      */
-    val entropy = (r: Scalar, o: Scalar) ⇒ (if (o < 1) -(1.0 - r) * Math.log(1.0 - o) else 0.0) + (if (o > 0) -r * Math.log(o) else 0.0)
+    val entropy = (r: Scalar, o: Scalar) ⇒ (if (r != 0.0) -r * Math.log(o) else 0.0) + (if (r != 1.0) -(1.0 - r) * Math.log(1.0 - o) else 0.0)
 
     /**
      * Derivative of Entropy function
      */
-    val entropyDiff = (r: Scalar, o: Scalar) ⇒ -(r - o) / (o * (1.0 - o))
+    val entropyDiff = (r: Scalar, o: Scalar) ⇒ (r - o) / (o * (o - 1.0))
 
     /**
      * Compute derivative of this objective function
@@ -288,7 +358,8 @@ package object function {
      * @param output is computational output of the network
      * @return is differentiation(Gradient) vector at f(X)=output, i.e. error of each output neuron.
      */
-    override def derivative(real: NeuronVector, output: NeuronVector): NeuronVector = (real, output) apply entropyDiff
+    override def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix =
+      DenseMatrix.tabulate(real.rows, real.cols)((r, c) ⇒ entropyDiff(real(r, c), output(r, c))).t
 
     /**
      * Compute error
@@ -296,46 +367,8 @@ package object function {
      * @param output is computational output of the network
      * @return is the error
      */
-    override def apply(real: NeuronVector, output: NeuronVector): Scalar = ((real, output) apply entropy).$sum
-  }
-
-  /** Noise Generator Type **/
-  type Noise = () ⇒ Double
-
-  /**
-   * Noise: Gaussian
-   */
-  object GaussianNoise extends ((Double, Double) ⇒ Double) with Noise {
-
-    /**
-     * Return Gaussian Random Number with mean 0, standard deviation 1.
-     * @return random noise
-     */
-    override def apply() = {
-      val u1 = Math.random()
-      val u2 = Math.random()
-
-      Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2)
-    }
-
-    /**
-     * Return Gaussian Random Number with given specification
-     * @param mean of distribution
-     * @param stdev of distribution
-     * @return random noise
-     */
-    override def apply(mean: Double, stdev: Double): Double = apply() * stdev + mean
-  }
-
-  /**
-   * Noise: Uniform
-   */
-  object UniformNoise extends Noise {
-    /**
-     * Return uniform random noise.
-     * @return random noise.
-     */
-    override def apply() = Math.random()
+    override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar =
+      sum(DenseMatrix.tabulate(real.rows, real.cols)((r, c) ⇒ entropy(real(r, c), output(r, c))))
   }
 
 }
