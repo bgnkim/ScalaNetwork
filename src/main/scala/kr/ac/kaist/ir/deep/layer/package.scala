@@ -58,7 +58,7 @@ package object layer {
      * @param output of this layer (in this case, <code>y</code>)
      * @return propagated error (in this case, <code>dG/dx</code> )
      */
-    def !(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix
+    protected[deep] def !(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix
 
     /**
      * Sugar: Forward computation. Calls apply(x)
@@ -66,7 +66,7 @@ package object layer {
      * @param x of input matrix
      * @return output matrix
      */
-    def >>:(x: ScalarMatrix) = apply(x)
+    protected[deep] def >>:(x: ScalarMatrix) = apply(x)
 
     /**
      * Translate this layer into JSON object (in Play! framework)
@@ -106,7 +106,7 @@ package object layer {
      * @param output is final reconstruction output of this layer
      * @return propagated error
      */
-    def rec_!(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix
+    protected[deep] def rec_!(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix
   }
 
   /**
@@ -186,7 +186,7 @@ package object layer {
      * @param output of this layer (in this case, <code>y</code>)
      * @return propagated error (in this case, <code>dG/dx</code> )
      */
-    def !(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
+    protected[deep] override def !(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
       // fanOut × fanOut matrix
       val dFdX = act.derivative(output)
       // 1 × fanOut matrix
@@ -335,7 +335,7 @@ package object layer {
      * @param output of this layer (in this case, <code>y</code>)
      * @return propagated error (in this case, <code>dG/dx</code> )
      */
-    def !(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
+    protected[deep] override def !(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
       val inA = input(0 until fanInA, ::)
       val inB: ScalarMatrix = input(fanInA to -1, ::)
 
@@ -396,8 +396,8 @@ package object layer {
    * @param rb is initial reconstruct bias matrix for the case that it is restored from JSON
    */
   class ReconBasicLayer(IO: (Int, Int), act: Activation, w: ScalarMatrix = null, b: ScalarMatrix = null, rb: ScalarMatrix = null) extends BasicLayer(IO, act, w, b) with Reconstructable {
-    val reBias = if (rb != null) rb else act initialize(fanIn, fanOut, fanIn, 1)
-    val drBias = ScalarMatrix $0(fanIn, 1)
+    protected val reBias = if (rb != null) rb else act initialize(fanIn, fanOut, fanIn, 1)
+    protected val drBias = ScalarMatrix $0(fanIn, 1)
 
     /**
      * Sugar: Forward computation + reconstruction
@@ -418,7 +418,7 @@ package object layer {
      * @param output is final reconstruction output of this layer
      * @return propagated error
      */
-    override def rec_!(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
+    protected[deep] override def rec_!(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
       // Reconn × Recon matrix
       val dFdX = act.derivative(output)
       // 1 × Recon matrix
@@ -473,14 +473,14 @@ package object layer {
    */
   object Layer {
     /** Sequence of supported activation functions */
-    val acts = Seq(Sigmoid, HyperbolicTangent, Rectifier, Softplus)
+    private val acts = Seq(Sigmoid, HyperbolicTangent, Rectifier, Softplus)
 
     /**
      * Load layer from JsObject
      * @param obj to be parsed
      * @return New layer reconstructed from this object
      */
-    def fromJSON(obj: JsValue) = {
+    def apply(obj: JsValue) = {
       val in = obj \ "in"
       val out = (obj \ "out").as[Int]
 

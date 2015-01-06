@@ -18,13 +18,13 @@ package object trainer {
   type Corruption = ScalarMatrix ⇒ ScalarMatrix
 
   /**
-   * Abstract class for weight update
+   * Trait : Weight update
    */
-  abstract class WeightUpdater extends ((Seq[ScalarMatrix], Seq[ScalarMatrix]) ⇒ Unit) with Serializable {
+  trait WeightUpdater extends ((Seq[ScalarMatrix], Seq[ScalarMatrix]) ⇒ Unit) with Serializable {
     /** Decay factor for L1-reg */
-    val l1decay: Scalar
+    protected val l1decay: Scalar
     /** Decay factor for L2-reg */
-    val l2decay: Scalar
+    protected val l2decay: Scalar
 
     /**
      * Compute weight-loss of given neuron objects
@@ -47,7 +47,7 @@ package object trainer {
    */
   trait Trainer extends Serializable {
     /** Stopping Criteria */
-    protected[trainer] val stops: StoppingCriteria
+    protected val stops: StoppingCriteria
 
     /**
      * Train given sequence, and validate with given sequence.
@@ -91,7 +91,7 @@ package object trainer {
     /**
      * Gaussian Distribution
      */
-    val distro = Gaussian distribution(Double.box(mean), Double.box(variance))
+    private val distro = Gaussian distribution(Double.box(mean), Double.box(variance))
 
     /**
      * Do corruption
@@ -140,9 +140,9 @@ package object trainer {
    * @param l2decay for L2-reg
    * @param momentum for momentum adaptive learning
    */
-  class GradientDescent(rate: Double = 0.6, override val l1decay: Double = 0.01, override val l2decay: Double = 0.01, momentum: Double = 0.001) extends WeightUpdater {
+  class GradientDescent(rate: Double = 0.6, protected override val l1decay: Double = 0.01, protected override val l2decay: Double = 0.01, momentum: Double = 0.001) extends WeightUpdater {
     /** Last update */
-    var lastDelta = Seq[ScalarMatrix]()
+    private var lastDelta = Seq[ScalarMatrix]()
 
     /**
      * Run the algorithm
@@ -177,13 +177,12 @@ package object trainer {
    * @param rate for learning
    * @param l1decay for L1-reg
    * @param l2decay for L2-reg
-   * @param historyCount is size of last update history
    */
-  class AdaGrad(rate: Double = 0.6, override val l1decay: Double = 0.01, override val l2decay: Double = 0.01, val historyCount: Int = 10) extends WeightUpdater {
+  class AdaGrad(rate: Double = 0.6, protected override val l1decay: Double = 0.01, protected override val l2decay: Double = 0.01) extends WeightUpdater {
     /** History of update per each weight */
-    var history: Seq[Scalar] = Seq()
+    private var history: Seq[Scalar] = Seq()
     /** Constant function */
-    val one = (_: Any) ⇒ 1.0
+    private val one = (_: Any) ⇒ 1.0
 
     /**
      * Run the algorithm
@@ -224,18 +223,18 @@ package object trainer {
    * @param decay for AdaDelta history decay factor
    * @param epsilon for AdaDelta base factor
    */
-  class AdaDelta(override val l1decay: Double = 0.01,
-                 override val l2decay: Double = 0.01,
-                 val decay: Double = 0.95,
-                 val epsilon: Double = 1e-6)
+  class AdaDelta(protected override val l1decay: Double = 0.01,
+                 protected override val l2decay: Double = 0.01,
+                 private val decay: Double = 0.95,
+                 private val epsilon: Double = 1e-6)
     extends WeightUpdater {
     /** History of Delta */
-    var avgDeltaL2 = Seq[Scalar]()
+    private var avgDeltaL2 = Seq[Scalar]()
     /** History of Gradient */
-    var avgGradL2 = Seq[Scalar]()
+    private var avgGradL2 = Seq[Scalar]()
     /** Constant function */
-    val zero = (_: Any) ⇒ 0.0
-    val meanSq = (x: ScalarMatrix) ⇒ sum(pow(x, 2)) / x.size
+    private val zero = (_: Any) ⇒ 0.0
+    private val meanSq = (x: ScalarMatrix) ⇒ sum(pow(x, 2)) / x.size
 
     /**
      * Run the algorithm
@@ -280,21 +279,21 @@ package object trainer {
    * @param param of training criteria
    * @param stops of stopping criteria
    */
-  class StochasticTrainer(val net: Network,
-                          val algorithm: WeightUpdater,
-                          val error: Objective = SquaredErr,
-                          val corrupt: Corruption = NoCorruption,
-                          val param: TrainingCriteria = TrainingCriteria(),
-                          override val stops: StoppingCriteria = StoppingCriteria())
+  class StochasticTrainer(private val net: Network,
+                          private val algorithm: WeightUpdater,
+                          private val error: Objective = SquaredErr,
+                          private val corrupt: Corruption = NoCorruption,
+                          private val param: TrainingCriteria = TrainingCriteria(),
+                          protected override val stops: StoppingCriteria = StoppingCriteria())
     extends Trainer {
     /** Stochastic Generator Base */
-    protected[trainer] val randomSetGenerator = (set: Seq[(ScalarMatrix, ScalarMatrix)]) ⇒ () ⇒ set((Math.random() * set.size).toInt)
+    protected val randomSetGenerator = (set: Seq[(ScalarMatrix, ScalarMatrix)]) ⇒ () ⇒ set((Math.random() * set.size).toInt)
     /** Generator */
-    protected[trainer] var generate: () ⇒ (ScalarMatrix, ScalarMatrix) = null
+    protected var generate: () ⇒ (ScalarMatrix, ScalarMatrix) = null
     /** Validation Set */
-    protected[trainer] var validation: Seq[(ScalarMatrix, ScalarMatrix)] = null
+    protected var validation: Seq[(ScalarMatrix, ScalarMatrix)] = null
     /** Best Parameter History */
-    protected[trainer] var bestParam: Seq[ScalarMatrix] = null
+    protected var bestParam: Seq[ScalarMatrix] = null
 
     /**
      * Train given sequence, and validate with another sequence.
@@ -314,7 +313,7 @@ package object trainer {
     /**
      * Store best parameters
      */
-    protected[trainer] final def saveParams() = {
+    protected final def saveParams() = {
       bestParam = net.W map {
         _.copy
       }
@@ -323,7 +322,7 @@ package object trainer {
     /**
      * Restore best parameters
      */
-    protected[trainer] final def restoreParams() = {
+    protected final def restoreParams() = {
       bestParam.indices foreach {
         id ⇒ net.W(id) := bestParam(id)
       }
@@ -337,7 +336,7 @@ package object trainer {
      * @return Total Loss when train is finished
      */
     @tailrec
-    protected[trainer] final def trainBatch(iter: Int = 0, prevloss: Double = Double.MaxValue, patience: Int = stops.patience): Scalar = {
+    protected final def trainBatch(iter: Int = 0, prevloss: Double = Double.MaxValue, patience: Int = stops.patience): Scalar = {
       (0 until param.batch) foreach { _ ⇒ {
         val pair = generate()
         val out = corrupt(pair._1) >>: net
