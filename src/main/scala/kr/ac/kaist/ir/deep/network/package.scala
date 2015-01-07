@@ -127,7 +127,7 @@ package object network {
      */
     protected[deep] override def >>:(x: ScalarMatrix): ScalarMatrix = {
       // We have to store this value
-      input = layers.indices.foldLeft(Seq(x)) {
+      input = layers.indices.foldLeft(Seq(x.copy)) {
         (seq, id) ⇒ {
           val in = seq.head
           if (presence < 1.0)
@@ -177,6 +177,17 @@ package object network {
     )
 
     /**
+     * Reconstruct the input
+     *
+     * @param x to be reconstructed.
+     * @return reconstruction of x.
+     */
+    def reconstruct(x: ScalarMatrix): ScalarMatrix = {
+      val h = (x >>: layer) :* presence
+      (h rec_>>: layer) :* presence
+    }
+
+    /**
      * Backpropagation algorithm
      * @param err backpropagated error from error function
      */
@@ -193,7 +204,7 @@ package object network {
      * @return output matrix
      */
     protected[deep] override def >>:(x: ScalarMatrix): ScalarMatrix = {
-      input = x
+      input = x.copy
       if (presence < 1.0)
         input :*= ScalarMatrix $01(x.rows, x.cols, presence.safe)
       hidden = input >>: layer
@@ -202,26 +213,6 @@ package object network {
       output = hidden rec_>>: layer
       output
     }
-  }
-
-  class IntAutoEncoder(private val layer: Reconstructable, protected[deep] override val presence: Probability = 1.0) extends AutoEncoder(layer, presence) {
-    /**
-     * Compute output of neural network with given input (without reconstruction)
-     * If drop-out is used, to average drop-out effect, we need to multiply output by presence probability.
-     *
-     * @param in is an input vector
-     * @return output of the vector with rounded output
-     */
-    override def apply(in: ScalarMatrix): ScalarMatrix = super.apply(in) mapValues (x ⇒ Math.round(x).toDouble)
-
-    /**
-     * Forward computation for training.
-     * If drop-out is used, we need to drop-out entry of input vector.
-     *
-     * @param x of input matrix
-     * @return output matrix with rounded output
-     */
-    protected[deep] override def >>:(x: ScalarMatrix): ScalarMatrix = super.>>:(x) mapValues (x ⇒ Math.round(x).toDouble)
   }
 
   class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network {

@@ -1,12 +1,14 @@
 package kr.ac.kaist.ir.deep.network
 
 import breeze.linalg.DenseMatrix
-import kr.ac.kaist.ir.deep.function.{CrossEntropyErr, Scalar, Sigmoid, SquaredErr}
+import kr.ac.kaist.ir.deep.function._
 import kr.ac.kaist.ir.deep.layer.{Layer, ReconBasicLayer}
 import kr.ac.kaist.ir.deep.trainer._
 import org.specs2.mutable.Specification
 
 /**
+ * Network Tester Package.
+ *
  * Created by bydelta on 2015-01-06.
  */
 class NetworkTester extends Specification {
@@ -23,12 +25,12 @@ class NetworkTester extends Specification {
     }
 
     "have Weight" in {
-      layer.W(1).rows must_== 3
+      layer.W(1).rows must_== 5
       layer.W(1).cols must_== 4
     }
 
     "have encoder bias" in {
-      layer.W(2).rows must_== 3
+      layer.W(2).rows must_== 5
       layer.W(2).cols must_== 1
     }
 
@@ -41,41 +43,22 @@ class NetworkTester extends Specification {
 
   "Non-drop encoder training" should {
     val set = (0 to 1) flatMap {
-      x ⇒ (0 to 1) flatMap {
-        y ⇒ (0 until 100) map {
-          _ ⇒ {
-            val m = DenseMatrix.create[Scalar](4, 1, Array(x, y, y, x))
-            (m, m)
-          }
-        }
-      }
-    }
-    val valid = (0 to 1) flatMap {
       x ⇒ (0 to 1) map {
         y ⇒ {
           val m = DenseMatrix.create[Scalar](4, 1, Array(x, y, y, x))
-          (m, m)
+          m
         }
       }
     }
 
-    val encoder = new AutoEncoder(layer)
-    val trainer = new StochasticTrainer(encoder, new GradientDescent(), error = CrossEntropyErr)
+    val encoder = new AutoEncoder(layer, 0.9995)
+    val trainer = new BasicTrainer(net = encoder,
+      algorithm = new StochasticGradientDescent(rate = 0.8, l2decay = 0.0001),
+      param = TrainingCriteria(batch = 8),
+      stops = StoppingCriteria(maxIter = 100000))
 
     "properly trained" in {
-      trainer.trainWithValidation(set, valid) must be_<(0.4)
-    }
-
-    examplesBlock {
-      (0 until valid.size) foreach {
-        i ⇒ {
-          val in = valid(i)._1
-          val out = valid(i)._1 >>: encoder
-          s"Example $i, ${in.toArray.toSeq} ? ${out.toArray.toSeq}" in {
-            SquaredErr(in, out) must be_<(0.02)
-          }
-        }
-      }
+      trainer.trainAutoencoder(set) must be_<(0.3)
     }
   }
 
@@ -104,22 +87,16 @@ class NetworkTester extends Specification {
     }
 
     val net = Network(Sigmoid, 2, 4, 1)
-    val train = new StochasticTrainer(net, new GradientDescent(), param = TrainingCriteria(batch = 1))
+    val train = new BasicTrainer(net = net,
+      algorithm = new AdaDelta(l2decay = 0.0001, decay = 0.95, epsilon = 1e-4),
+      //algorithm = new AdaGrad(l2decay = 0.0001),
+      //algorithm = GradientDescent(rate = 0.8, l2decay = 0.0001),
+      corrupt = GaussianCorruption(variance = 0.1),
+      param = TrainingCriteria(batch = 8),
+      stops = StoppingCriteria(maxIter = 100000))
 
     "properly trained" in {
-      train.trainWithValidation(set, valid) must be_<(0.4)
-    }
-
-    examplesBlock {
-      (0 until valid.size) foreach {
-        i ⇒ {
-          val in = valid(i)._1
-          val out = valid(i)._1 >>: net
-          s"Example $i, ${in.toArray.toSeq} ? ${out.toArray.toSeq}" in {
-            SquaredErr(valid(i)._2, out) must be_<(0.02)
-          }
-        }
-      }
+      train.trainWithValidation(set, valid) must be_<(0.3)
     }
   }
 }

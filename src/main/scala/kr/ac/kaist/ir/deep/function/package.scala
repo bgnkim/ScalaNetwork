@@ -43,7 +43,10 @@ package object function {
      * @param fanOut is a count of fan-out
      * @return weight matrix
      */
-    def initialize(fanIn: Int, fanOut: Int, rows: Int = 0, cols: Int = 0): ScalarMatrix = ScalarMatrix of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn)
+    def initialize(fanIn: Int, fanOut: Int, rows: Int = 0, cols: Int = 0): ScalarMatrix = {
+      val pmMatx: ScalarMatrix = ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :* 1e-2
+      pmMatx :+ 1e-2
+    }
   }
 
   /**
@@ -101,6 +104,11 @@ package object function {
         })
       })
     }
+
+    def mkString: String =
+      "{" + (((0 until x.rows) map {
+        r ⇒ "[" + (((0 until x.cols) map { c ⇒ f"${x(r, c)}%.3f"}) mkString ", ") + "]"
+      }) mkString ", ") + "}"
   }
 
   /**
@@ -131,7 +139,7 @@ package object function {
      * @param size of matrix, such as (2, 3)
      * @return Matrix with initialized by random number
      */
-    def of(size: (Int, Int)) = DenseMatrix.tabulate[Scalar](size._1, size._2)((_, _) ⇒ Math.random() * 1e-2 + 1e-2)
+    def of(size: (Int, Int)) = DenseMatrix.tabulate[Scalar](size._1, size._2)((_, _) ⇒ Math.random())
 
     /**
      * Generate full 0-1 matrix of given size. Probability of 1 is given.
@@ -199,7 +207,8 @@ package object function {
      */
     override def initialize(fanIn: Int, fanOut: Int, rows: Int = 0, cols: Int = 0): ScalarMatrix = {
       val range = Math.sqrt(6.0 / (fanIn + fanOut)) * 4.0
-      ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :* range
+      val pmMatx: ScalarMatrix = ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :- 0.5
+      pmMatx :* (2.0 * range)
     }
   }
 
@@ -239,7 +248,8 @@ package object function {
      */
     override def initialize(fanIn: Int, fanOut: Int, rows: Int = 0, cols: Int = 0): ScalarMatrix = {
       val range = Math.sqrt(6.0 / (fanIn + fanOut))
-      ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :* range
+      val pmMatx: ScalarMatrix = ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :- 0.5
+      pmMatx :* (2.0 * range)
     }
   }
 
@@ -323,7 +333,7 @@ package object function {
      * @param output is computational output of the network
      * @return is differentiation(Gradient) vector at f(X)=output, i.e. error of each output neuron.
      */
-    override def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = output.t - real.t
+    override def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = output - real
 
     /**
      * Compute error
@@ -359,7 +369,7 @@ package object function {
      * @return is differentiation(Gradient) vector at f(X)=output, i.e. error of each output neuron.
      */
     override def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix =
-      DenseMatrix.tabulate(real.rows, real.cols)((r, c) ⇒ entropyDiff(real(r, c), output(r, c))).t
+      DenseMatrix.tabulate(real.rows, real.cols)((r, c) ⇒ entropyDiff(real(r, c), output(r, c)))
 
     /**
      * Compute error

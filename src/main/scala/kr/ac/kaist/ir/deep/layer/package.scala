@@ -31,26 +31,18 @@ package object layer {
      * <p>Backward computation.</p>
      *
      * <p>
-     * Let this layer have function F composed with function <code> X(x) = w.x + b </code>
+     * Let this layer have function F composed with function <code> X(x) = W.x + b </code>
      * and higher layer have function G.
      * </p>
      *
      * <p>
-     * Weight is updated with: <pre>dG/dw = {dG / dF} * {dF / dX} * {dX / dw}</pre>
-     * and propagate <pre>dG/dx = {dG / dF} * {dF / dX} * {dX / dx}</pre>
+     * Weight is updated with: <code>dG/dW</code>
+     * and propagate <code>dG/dx</code>
      * </p>
      *
      * <p>
-     * Suppose that error function G : Rn to R1 and input size (with bias) is in Rm. Then dimensions are:
-     * <pre>
-     * dG / dF : (1, n) matrix
-     * dF / dX : (n, n) matrix
-     * dX / dx : (n, m) matrix
-     * dX / dw : 4th rank tensor with (m, n) matrix with (n, 1) matrix as entries
-     *
-     * dG / dx : (1, m)
-     * dG / dw : (m, n)
-     * </pre>
+     * For the computation, we only used denominator layout. (cf. Wikipedia Page of Matrix Computation)
+     * For the computation rules, see "Matrix Cookbook" from MIT.
      * </p>
      *
      * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
@@ -161,22 +153,13 @@ package object layer {
      * </p>
      *
      * <p>
-     * Weight is updated with: <pre>dG/dW = {dG / dF} * {dF / dX} * {dX / dW}</pre>
-     * and propagate <pre>dG/dx = {dG / dF} * {dF / dX} * {dX / dx}</pre>
+     * Weight is updated with: <code>dG/dW</code>
+     * and propagate <code>dG/dx</code>
      * </p>
      *
      * <p>
-     * Suppose that error function G : Rn to R1 and input size (with bias) is in Rm. Then dimensions are:
-     * <pre>
-     * dG / dF : (1, n) matrix
-     * dF / dX : (n, n) matrix
-     * dX / dx : (n, m) matrix
-     * dX / dW : 4th rank tensor with (m, n) matrix with (n, 1) matrix as entries
-     * In this case, (j, i) entry of tensor is a column vector of all zeros except i-th element(x_j).
-     *
-     * dG / dx : (1, m) matrix
-     * dG / dW : (m, n) matrix
-     * </pre>
+     * For the computation, we only used denominator layout. (cf. Wikipedia Page of Matrix Computation)
+     * For the computation rules, see "Matrix Cookbook" from MIT.
      * </p>
      *
      * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
@@ -185,27 +168,45 @@ package object layer {
      * @return propagated error (in this case, <code>dG/dx</code> )
      */
     protected[deep] override def !(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
-      // fanOut × fanOut matrix
+      // fanOut × fanOut matrix (Numerator/Denominator Layout)
       val dFdX = act.derivative(output)
-      // 1 × fanOut matrix
-      val dGdX: ScalarMatrix = error * dFdX
 
-      // CAUTION: differentiation by matrix gives transposed dimension !!!
-      // dG/dW is fanIn × fanOut tensor with 1 × 1 matrix (i.e. scalar) as entries.
-      // Because (j, i) entry of tensor is a column vector of all zeros except i-th element(x_j),
-      // That is, (j, i) entry of dG/dW is (i-th col of {dG / dF} * {dF / dX}) * x_j.
-      // Hence j-th row of dG/dW is (dG / dX) * x_j
-      // Therefore input * (dG / dX) gives the right thing
-      val dGdW: ScalarMatrix = input * dGdX
-      delta += dGdW.t
+      /*
+       * Chain Rule : dG/dX_ij = tr[ ( dG/dF ).t * dF/dX_ij ].
+       *
+       * Note 1. X, dG/dF, dF/dX_ij are row vectors. Therefore tr(.) can be omitted.
+       * Note 2. dF/dX_ij is a column vector with all zero but (i, 1) = (i, i)-entry of dFdX.
+       *
+       * Thus, dG/dX = [ (dG/dF).t * dF/dX ].t, because [...] is 1 × fanOut matrix.
+       * Therefore dG/dX = dF/dX * dG/dF, because dF/dX is symmetric in our case.
+       */
+      val dGdX: ScalarMatrix = dFdX * error
 
-      // For bias, input is always 1. We only need transpose of dG / dX
-      dbias += dGdX.t
+      /*
+       * Chain Rule : dG/dW_ij = tr[ ( dG/dX ).t * dX/dW_ij ].
+       *
+       * dX/dW_ij is a fan-Out dimension column vector with all zero but (i, 1) = X_j.
+       * Thus, tr(.) can be omitted, and dG/dW_ij = (dX/dW_ij).t * dG/dX
+       * Then {j-th column of dG/dW} = X_j * dG/dX = dG/dX * X_j.
+       *
+       * Therefore dG/dW = dG/dX * X.t
+       */
+      val dGdW: ScalarMatrix = dGdX * input.t
+      delta += dGdW
 
-      // Weight is dX / dx, the fanOut × fanIn matrix.
-      val dXdx = weight
+      // For bias, input is always 1. We only need dG/dX
+      dbias += dGdX
 
-      dGdX * dXdx // 1 × fanIn matrix
+      /*
+       * Chain Rule : dG/dx_ij = tr[ ( dG/dX ).t * dX/dx_ij ].
+       *
+       * X is column vector. Thus j is always 1, so dX/dx_i is a W_?i.
+       * Hence dG/dx_i = tr[ (dG/dX).t * dX/dx_ij ] = (W_?i).t * dG/dX.
+       *
+       * Thus dG/dx = W.t * dG/dX
+       */
+      val dGdx: ScalarMatrix = weight.t * dGdX
+      dGdx
     }
 
     /**
@@ -274,7 +275,7 @@ package object layer {
           val X: ScalarMatrix = xQy + Lxy
 
           // 1 × 1 matrix output.
-          intermediate.update(id, 1, X(0, 0) + bias(id, 0))
+          intermediate.update(id, 0, X(0, 0) + bias(id, 0))
         }
       }
 
@@ -304,28 +305,13 @@ package object layer {
      * </p>
      *
      * <p>
-     * Weight is updated with: <pre>dG/dW = {dG / dF} * {dF / dX} * {dX / dW}</pre>
-     * and propagate <pre>dG/dx = {dG / dF} * {dF / dX} * {dX / dx}</pre>
+     * Weight is updated with: <code>dG/dW</code>
+     * and propagate <code>dG/dx</code>
      * </p>
      *
      * <p>
-     * Suppose that error function G : R1 to R1 and input sizes are in Rp1, Rp2. Then dimensions are:
-     * <pre>
-     * dG / dF : (1, 1) matrix
-     * dF / dX : (1, 1) matrix
-     * dX / dxi = dQ / dxi + dL / dxi
-     * dL / dxi = (1, pi) matrix
-     * dQ / dxi : (1, pi) matrix
-     * dX / dxi : (1, pi) matrix
-     *
-     * dX / dW : dX / dQ, dX / dL
-     * dX / dL : (p, 1) matrix = x
-     * dX / dQ : (p2, p1) matrix = x2.x1'
-     *
-     * dG / dx : (1, p) matrix
-     * dG / dL : (p, 1) matrix
-     * dG / dQ : (p2, p1) matrix
-     * </pre>
+     * For the computation, we only used denominator layout. (cf. Wikipedia Page of Matrix Computation)
+     * For the computation rules, see "Matrix Cookbook" from MIT.
      * </p>
      *
      * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
@@ -337,37 +323,76 @@ package object layer {
       val inA = input(0 until fanInA, ::)
       val inB: ScalarMatrix = input(fanInA to -1, ::)
 
-      // fanOut × fanOut matrix
+      // fanOut × fanOut matrix (Numerator/Denominator Layout)
       val dFdX = act.derivative(output)
-      // 1 × fanOut matrix
-      val dGdXAll: ScalarMatrix = error * dFdX
 
-      (0 until fanOut).foldLeft(ScalarMatrix $0(1, fanIn)) {
+      /*
+       * Chain Rule : dG/dX_ij = tr[ ( dG/dF ).t * dF/dX_ij ].
+       *
+       * Note 1. X, dG/dF, dF/dX_ij are row vectors. Therefore tr(.) can be omitted.
+       * Note 2. dF/dX_ij is a column vector with all zero but (i, 1) = (i, i)-entry of dFdX.
+       *
+       * Thus, dG/dX = [ (dG/dF).t * dF/dX ].t, because [...] is 1 × fanOut matrix.
+       * Therefore dG/dX = dF/dX * dG/dF, because dF/dX is symmetric in our case.
+       */
+      val dGdXAll: ScalarMatrix = dFdX * error
+
+      (0 until fanOut).foldLeft(ScalarMatrix $0(fanIn, 1)) {
         (acc, id) ⇒ {
           // This is scalar
-          val dGdX = dGdXAll(0, id)
+          val dGdX = dGdXAll(id, 0)
 
-          // For Linear weight: dG/dL is fanIn × 1 tensor with 1 × 1 matrix (i.e. scalar) as entries.
-          val dGdL: ScalarMatrix = input :* dGdX // dGdX * input == input * dGdX
-          dL(id) += dGdL.t //To update, we need transpose
+          /*
+           * Chain Rule (Linear weight case) : dG/dW_ij = tr[ ( dG/dX ).t * dX/dW_ij ].
+           *
+           * dX/dW_ij is a fan-Out dimension column vector with all zero but (i, 1) = X_j.
+           * Thus, tr(.) can be omitted, and dG/dW_ij = (dX/dW_ij).t * dG/dX
+           * Then {j-th column of dG/dW} = X_j * dG/dX = dG/dX * X_j.
+           *
+           * Therefore dG/dW = dG/dX * X.t
+           */
+          val dGdL: ScalarMatrix = input.t :* dGdX // Because dGdX is scalar, dGdX * X.t = X.t * dGdX
+          dL(id) += dGdL
 
-          // For Quadratic weight: dG/dQ is fanInB × fanInA tensor with 1 × 1 matrix (i.e. scalar) as entries.
+          /*
+           * Chain Rule (Quadratic weight case) : dG/dQ_ij = tr[ ( dG/dX ).t * dX/dQ_ij ].
+           *
+           * Because X = inA.t * Q * inB, dX/dQ = inA * inB.t
+           * Therefore dX/dQ_ij = (inA * inB.t)_ij, and so dG/dQ_ij = (dG/dX).t * dX/dQ_ij.
+           * They are scalar, so dG/dQ = dG/dX * dX/dQ.
+           */
           val dXdQ: ScalarMatrix = inA * inB.t //d tr(axb)/dx = a'b'
           val dGdQ: ScalarMatrix = dXdQ :* dGdX
-          dQ(id) += dGdQ.t //To update, we need transpose
+          dQ(id) += dGdQ
 
-          // For bias weight: dG/db is 1 × 1. (Which is symmetric)
+          // For bias, input is always 1. We only need dG/dX
           db(id, 0) += dGdX
 
-          // By Linear weight: 1 × fanIn matrix
-          val dLdx = linear(id) //d tr(ax)/dx = d tr(xa)/dx = a
-          // By Quadratic weight: 1 × fanIn matrix
-          val dQdx1: ScalarMatrix = inB.t * quadratic(id).t //d tr(ax')/dx = d tr(x'a)/dx = a'
-          val dQdx2: ScalarMatrix = inA.t * quadratic(id) //d tr(ax)/dx = d tr(xa)/dx = a
-          val dQdx: ScalarMatrix = dQdx1 col_+ dQdx2
-          val dXdx: ScalarMatrix = dLdx + dQdx
+          /*
+           * Chain Rule (Linear weight part) : dG/dx_ij = tr[ ( dG/dX ).t * dX/dx_ij ].
+           *
+           * X is column vector. Thus j is always 1, so dX/dx_i is a W_?i.
+           * Hence dG/dx_i = tr[ (dG/dX).t * dX/dx_ij ] = (W_?i).t * dG/dX.
+           *
+           * Thus dG/dx = W.t * dG/dX
+           */
+          val dGdxL: ScalarMatrix = linear(id).t * dGdX
 
-          acc += dXdx * dGdX // 1 × fanIn matrix
+          /*
+           * Chain Rule (Quadratic weight part) : dG/dx_ij = tr[ ( dG/dX ).t * dX/dx_ij ].
+           *
+           * Note that X is a column vector with inA as upper part, inB as lower part.
+           * Because X = inA.t * Q * inB, dX/dxA = inB.t * Q.t and dX/dxB = inA.t * Q
+           * Therefore dX/dx is obtained by concatnating them.
+           * Since dG/dX is scalar, we obtain dG/dx by scalar multiplication.
+           */
+          val dXdxQ1: ScalarMatrix = inB.t * quadratic(id).t //d tr(ax')/dx = d tr(x'a)/dx = a'
+          val dXdxQ2: ScalarMatrix = inA.t * quadratic(id) //d tr(ax)/dx = d tr(xa)/dx = a
+          val dXdxQ: ScalarMatrix = dXdxQ1 col_+ dXdxQ2
+          val dGdxQ: ScalarMatrix = dXdxQ :* dGdX
+
+          val dGdx: ScalarMatrix = dGdxL + dGdxQ
+          acc += dGdx
         }
       }
     }
@@ -419,26 +444,43 @@ package object layer {
     protected[deep] override def rec_!(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
       // Recon × Recon matrix
       val dFdX = act.derivative(output)
-      // 1 × Recon matrix
-      val dGdX: ScalarMatrix = error * dFdX
 
-      // CAUTION: differentiation by matrix gives transposed dimension !!!
-      // dG/dW is Hidden × Recon tensor with 1 × 1 matrix (i.e. scalar) as entries.
-      // Because (j, i) entry of tensor is a column vector of all zeros except i-th element(x_j),
-      // That is, (j, i) entry of dG/dW is (i-th col of {dG / dF} * {dF / dX}) * x_j.
-      // Hence j-th row of dG/dW is (dG / dX) * x_j
-      // Therefore input * (dG / dX) gives the right thing
-      val dGdW: ScalarMatrix = input * dGdX
-      // dGdW has the form of transpose of W.t (Recon × Hidden), we just add it.
-      delta += dGdW
+      /*
+       * Chain Rule : dG/dX_ij = tr[ ( dG/dF ).t * dF/dX_ij ].
+       *
+       * Note 1. X, dG/dF, dF/dX_ij are row vectors. Therefore tr(.) can be omitted.
+       * Note 2. dF/dX_ij is a column vector with all zero but (i, 1) = (i, i)-entry of dFdX.
+       *
+       * Thus, dG/dX = [ (dG/dF).t * dF/dX ].t, because [...] is 1 × fanOut matrix.
+       * Therefore dG/dX = dF/dX * dG/dF, because dF/dX is symmetric in our case.
+       */
+      val dGdX: ScalarMatrix = dFdX * error
 
-      // For bias, input is always 1. We only need transpose of dG / dX
-      drBias += dGdX.t
+      /*
+       * Chain Rule : dG/dW_ij = tr[ ( dG/dX ).t * dX/dW_ij ].
+       *
+       * dX/dW_ij is a fan-Out dimension column vector with all zero but (i, 1) = X_j.
+       * Thus, tr(.) can be omitted, and dG/dW_ij = (dX/dW_ij).t * dG/dX
+       * Then {j-th column of dG/dW} = X_j * dG/dX = dG/dX * X_j.
+       *
+       * Therefore dG/dW = dG/dX * X.t
+       */
+      val dGdW: ScalarMatrix = dGdX * input.t
+      delta += dGdW.t // Because we used transposed weight for reconstruction, we need to transpose it.
 
-      // Weight is dX / dx, the Recon × Hidden matrix.
-      val dXdx = weight.t
+      // For bias, input is always 1. We only need dG/dX
+      drBias += dGdX
 
-      dGdX * dXdx // 1 × Hidden matrix
+      /*
+       * Chain Rule : dG/dx_ij = tr[ ( dG/dX ).t * dX/dx_ij ].
+       *
+       * X is column vector. Thus j is always 1, so dX/dx_i is a W_?i.
+       * Hence dG/dx_i = tr[ (dG/dX).t * dX/dx_ij ] = (W_?i).t * dG/dX.
+       *
+       * Thus dG/dx = W.t * dG/dX
+       */
+      val dGdx: ScalarMatrix = weight * dGdX // Because we used transposed weight for reconstruction.
+      dGdx
     }
 
     /**
