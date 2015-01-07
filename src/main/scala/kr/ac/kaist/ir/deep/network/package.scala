@@ -10,6 +10,7 @@ import play.api.libs.json._
  * Created by bydelta on 2014-12-30.
  */
 package object network {
+
   /**
    * Trait: Network interface
    */
@@ -65,17 +66,13 @@ package object network {
      * All weights of layers
      * @return all weights of layers
      */
-    override def W = layers flatMap {
-      _.W
-    }
+    override def W = layers flatMap (_.W)
 
     /**
      * All accumulated delta weights of layers
      * @return all accumulated delta weights
      */
-    override def dW = layers flatMap {
-      _.dW
-    }
+    override def dW = layers flatMap (_.dW)
 
     /**
      * Compute output of neural network with given input
@@ -114,8 +111,9 @@ package object network {
       layers.indices.foldRight(err) {
         (id, e) ⇒ {
           val l = layers(id)
-          val out = input(id + 1)
-          val in = input(id)
+          val out = input.head
+          input = input.tail
+          val in = input.head
           l !(e, in, out)
         }
       }
@@ -184,7 +182,7 @@ package object network {
      */
     protected[deep] override def !(err: ScalarMatrix) = {
       val reconErr = layer rec_!(err, hidden, output)
-      layer !(reconErr, input, output)
+      layer !(reconErr, input, hidden)
     }
 
     /**
@@ -204,6 +202,26 @@ package object network {
       output = hidden rec_>>: layer
       output
     }
+  }
+
+  class IntAutoEncoder(private val layer: Reconstructable, protected[deep] override val presence: Probability = 1.0) extends AutoEncoder(layer, presence) {
+    /**
+     * Compute output of neural network with given input (without reconstruction)
+     * If drop-out is used, to average drop-out effect, we need to multiply output by presence probability.
+     *
+     * @param in is an input vector
+     * @return output of the vector with rounded output
+     */
+    override def apply(in: ScalarMatrix): ScalarMatrix = super.apply(in) mapValues (x ⇒ Math.round(x).toDouble)
+
+    /**
+     * Forward computation for training.
+     * If drop-out is used, we need to drop-out entry of input vector.
+     *
+     * @param x of input matrix
+     * @return output matrix with rounded output
+     */
+    protected[deep] override def >>:(x: ScalarMatrix): ScalarMatrix = super.>>:(x) mapValues (x ⇒ Math.round(x).toDouble)
   }
 
   class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network {
@@ -263,7 +281,7 @@ package object network {
         (enc, err) ⇒ enc ! err
       }
   }
-  
+
   /**
    * Companion object of BasicNetwork
    */

@@ -134,8 +134,6 @@ package object layer {
      * @return output matrix
      */
     override def apply(x: ScalarMatrix): ScalarMatrix = {
-
-
       val wx: ScalarMatrix = weight * x
       val wxb: ScalarMatrix = wx + bias
       act(wxb)
@@ -220,7 +218,7 @@ package object layer {
      * accumulated delta values
      * @return delta-weight
      */
-    override def dW: Seq[ScalarMatrix] = Seq(weight, dbias)
+    override def dW: Seq[ScalarMatrix] = Seq(delta, dbias)
   }
 
   /**
@@ -406,7 +404,7 @@ package object layer {
      * @return tuple of reconstruction output
      */
     override def rec_>>:(x: ScalarMatrix): ScalarMatrix = {
-      val wx: ScalarMatrix = w.t[ScalarMatrix, ScalarMatrix] * x
+      val wx: ScalarMatrix = weight.t[ScalarMatrix, ScalarMatrix] * x
       val wxb: ScalarMatrix = wx + reBias
       act(wxb)
     }
@@ -419,7 +417,7 @@ package object layer {
      * @return propagated error
      */
     protected[deep] override def rec_!(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
-      // Reconn × Recon matrix
+      // Recon × Recon matrix
       val dFdX = act.derivative(output)
       // 1 × Recon matrix
       val dGdX: ScalarMatrix = error * dFdX
@@ -440,7 +438,7 @@ package object layer {
       // Weight is dX / dx, the Recon × Hidden matrix.
       val dXdx = weight.t
 
-      dGdX * dXdx // 1 × fanIn matrix
+      dGdX * dXdx // 1 × Hidden matrix
     }
 
     /**

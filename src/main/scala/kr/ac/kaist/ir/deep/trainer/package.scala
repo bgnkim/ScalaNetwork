@@ -140,7 +140,11 @@ package object trainer {
    * @param l2decay for L2-reg
    * @param momentum for momentum adaptive learning
    */
-  class GradientDescent(rate: Double = 0.6, protected override val l1decay: Double = 0.01, protected override val l2decay: Double = 0.01, momentum: Double = 0.001) extends WeightUpdater {
+  class GradientDescent(rate: Double = 0.03,
+                        protected override val l1decay: Double = 0.000,
+                        protected override val l2decay: Double = 0.000,
+                        momentum: Double = 0.000)
+    extends WeightUpdater {
     /** Last update */
     private var lastDelta = Seq[ScalarMatrix]()
 
@@ -156,15 +160,19 @@ package object trainer {
           val deltaW: ScalarMatrix = delta(id)
 
           val deltaL1: ScalarMatrix = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0}
-          val deltaL2: ScalarMatrix = w * (l2decay * 2)
+          val deltaL2: ScalarMatrix = w :* (l2decay * 2)
           val deltaL: ScalarMatrix = deltaL1 + deltaL2
           val deltaLoss: ScalarMatrix = deltaW + deltaL
           val adapted: ScalarMatrix = deltaLoss :* rate
-          val moment: ScalarMatrix = lastDelta(id) * momentum
 
-          val dw: ScalarMatrix = moment - adapted
+          val dw: ScalarMatrix = if (lastDelta.nonEmpty) {
+            val moment: ScalarMatrix = lastDelta(id) * momentum
+            moment - adapted
+          } else {
+            -adapted
+          }
 
-          w -= dw
+          w += dw
           deltaW := 0.0
           dw
         }
@@ -178,7 +186,10 @@ package object trainer {
    * @param l1decay for L1-reg
    * @param l2decay for L2-reg
    */
-  class AdaGrad(rate: Double = 0.6, protected override val l1decay: Double = 0.01, protected override val l2decay: Double = 0.01) extends WeightUpdater {
+  class AdaGrad(rate: Double = 0.6,
+                protected override val l1decay: Double = 0.001,
+                protected override val l2decay: Double = 0.001)
+    extends WeightUpdater {
     /** History of update per each weight */
     private var history: Seq[Scalar] = Seq()
     /** Constant function */
@@ -210,7 +221,7 @@ package object trainer {
         id ⇒ {
           val dw: ScalarMatrix = grad(id) :* adjusted(id)
 
-          weight(id) += dw
+          weight(id) -= dw
         }
       }
     }
@@ -223,8 +234,8 @@ package object trainer {
    * @param decay for AdaDelta history decay factor
    * @param epsilon for AdaDelta base factor
    */
-  class AdaDelta(protected override val l1decay: Double = 0.01,
-                 protected override val l2decay: Double = 0.01,
+  class AdaDelta(protected override val l1decay: Double = 0.001,
+                 protected override val l2decay: Double = 0.001,
                  private val decay: Double = 0.95,
                  private val epsilon: Double = 1e-6)
     extends WeightUpdater {
@@ -263,7 +274,7 @@ package object trainer {
         id ⇒ {
           val d: ScalarMatrix = grad(id) :* adjusted(id)
 
-          weight(id) += d
+          weight(id) -= d
           decay * avgDeltaL2.applyOrElse(id, zero) + (1.0 - decay) * meanSq(d)
         }
       }
@@ -305,6 +316,7 @@ package object trainer {
       generate = randomSetGenerator(set)
       validation = valid
 
+      saveParams()
       val err = trainBatch()
       restoreParams()
       err
@@ -340,7 +352,7 @@ package object trainer {
       (0 until param.batch) foreach { _ ⇒ {
         val pair = generate()
         val out = corrupt(pair._1) >>: net
-        val err: ScalarMatrix = error.derivative(pair._2, out)
+        val err: ScalarMatrix = error.derivative(pair._2, out) / param.batch.toDouble
         net ! err
       }
       }
@@ -349,7 +361,7 @@ package object trainer {
       var nPatience = patience
 
       val nLoss = if ((iter + 1) % stops.validationFreq == 0) {
-        val train = validation.foldLeft(0.0) { (err, item) ⇒ err + error(item._2, net(item._1))} / validation.size
+        val train = validation.foldLeft(0.0) { (err, item) ⇒ err + error(item._2, item._1 >>: net)} / validation.size
         val weight = algorithm loss net.W
         if (train + weight < prevloss * stops.improveThreshold) {
           nPatience = Math.max(patience, iter * stops.patienceStep)

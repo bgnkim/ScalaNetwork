@@ -131,7 +131,7 @@ package object function {
      * @param size of matrix, such as (2, 3)
      * @return Matrix with initialized by random number
      */
-    def of(size: (Int, Int)) = DenseMatrix.rand[Scalar](size._1, size._2)
+    def of(size: (Int, Int)) = DenseMatrix.tabulate[Scalar](size._1, size._2)((_, _) ⇒ Math.random() * 1e-2 + 1e-2)
 
     /**
      * Generate full 0-1 matrix of given size. Probability of 1 is given.
@@ -199,7 +199,7 @@ package object function {
      */
     override def initialize(fanIn: Int, fanOut: Int, rows: Int = 0, cols: Int = 0): ScalarMatrix = {
       val range = Math.sqrt(6.0 / (fanIn + fanOut)) * 4.0
-      ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) * range
+      ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :* range
     }
   }
 
@@ -239,7 +239,7 @@ package object function {
      */
     override def initialize(fanIn: Int, fanOut: Int, rows: Int = 0, cols: Int = 0): ScalarMatrix = {
       val range = Math.sqrt(6.0 / (fanIn + fanOut))
-      ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) * range
+      ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :* range
     }
   }
 
