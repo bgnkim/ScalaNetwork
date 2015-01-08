@@ -8,8 +8,8 @@ A **Neural Network implementation** with Scala & [Breeze](https://github.com/sca
 ## Network
 ScalaNetwork supports following layered neural network implementation:
 
-* *Fully-connected* Neural Network : $f(Wx + b)$
-* *Fully-connected* Rank-3 Tensor Network : $f(v_1^T Q^{[1:k]} v_2 + Lv + b)$
+* *Fully-connected* Neural Network : \(f(Wx + b)\)
+* *Fully-connected* Rank-3 Tensor Network : \(f(v_1^T Q^{[1:k]} v_2 + Lv + b)\)
 * *Fully-connected* Auto Encoder
 * *Fully-connected* Stacked Auto Encoder
 
