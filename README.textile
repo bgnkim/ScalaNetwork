@@ -1,63 +1,65 @@
-ScalaNetwork 0.1.0
-==================
+h1. ScalaNetwork 0.1.0
 
-A **Neural Network implementation** with Scala & [Breeze](https://github.com/scalanlp/breeze)
+p. A **Neural Network implementation** with Scala & "Breeze":https://github.com/scalanlp/breeze
 
-# Features
+h2. Features
 
-## Network
-ScalaNetwork supports following layered neural network implementation:
+h3. Network
 
-* *Fully-connected* Neural Network : \(f(Wx + b)\)
-* *Fully-connected* Rank-3 Tensor Network : \(f(v_1^T Q^{[1:k]} v_2 + Lv + b)\)
+p. ScalaNetwork supports following layered neural network implementation:
+
+* *Fully-connected* Neural Network : f(Wx + b)
+* *Fully-connected* Rank-3 Tensor Network : f(v ~1~ ^T^ Q ^[1:k]^ v ~2~ + L ^[1:k]^ v + b)
 * *Fully-connected* Auto Encoder
 * *Fully-connected* Stacked Auto Encoder
 
-## Training Methodology
-ScalaNetwork supports following training methodologies:
+h3. Training Methodology
+
+p. ScalaNetwork supports following training methodologies:
 
 * Stochastic Gradient Descent w/ L1-, L2-regularization, Momentum.
-* [AdaGrad](http://www.magicbroom.info/Papers/DuchiHaSi10.pdf)
-* [AdaDelta](http://www.matthewzeiler.com/pubs/googleTR2012/googleTR2012.pdf)
+* "AdaGrad":http://www.magicbroom.info/Papers/DuchiHaSi10.pdf
+* "AdaDelta":http://www.matthewzeiler.com/pubs/googleTR2012/googleTR2012.pdf
 
-## Activation Function
-ScalaNetwork supports following activation functions:
+h3. Activation Function
+
+p. ScalaNetwork supports following activation functions:
 
 * Sigmoid
 * HyperbolicTangent
 * Rectifier
 * Softplus
 
-# Usage
+h2. Usage
 
-`Network.apply(Activation, Int*)` generates fully-connected network:
+p. @Network.apply(Activation, Int*)@ generates fully-connected network:
 
-```scala
+pre. 
 // 2(input) -> 4(hidden) -> 1(output)
 val network = Network(Sigmoid, 2, 4, 1)
 //Training with Squared Error
 val trainer = new BasicTrainer(network, SquaredErr)
 //Training gives validation error 
 val err = trainer.trainWithValidation(set, validation)
-```
 
-Also you can use `new BasicNetwork(Seq[Layer], Probability)` to generate a basic network,
-and `new AutoEncoder(Reconstructable, Probability)` to generate a single-layered autoencoder.
 
-For further usage, please read scaladocs.
+p. Also you can use @new BasicNetwork(Seq[Layer], Probability)@ to generate a basic network,
+and @new AutoEncoder(Reconstructable, Probability)@ to generate a single-layered autoencoder.
 
-# Blueprint
+p. For further usage, please read scaladocs.
 
-ScalaNetwork will support these implementations:
+h2. Blueprint
+
+p. ScalaNetwork will support these implementations:
 
 * Recursive Auto Encoder (RAE)
 * Unfolded Recursive Auto Encoder (URAE)
 * Recursive Neural Tensor Network (RNTN)
 
-Also ScalaNetwork will support these features:
+p. Also ScalaNetwork will support these features:
 
 * Input-dependent Weight
 
-## Current Status
+h3. Current Status
 
-Next version(v0.2) will support RAE, URAE
+p. Next version(v0.2) will support RAE, URAE
