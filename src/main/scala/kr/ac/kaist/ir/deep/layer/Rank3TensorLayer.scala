@@ -48,7 +48,7 @@ class Rank3TensorLayer(IO: ((Int, Int), Int), protected override val act: Activa
 
     val intermediate = ScalarMatrix $0(fanOut, 1)
 
-    (0 until fanOut) map {
+    (0 until fanOut).par foreach {
       id ⇒ {
         val xQ: ScalarMatrix = inA.t * quadratic(id)
         val xQy: ScalarMatrix = xQ * inB

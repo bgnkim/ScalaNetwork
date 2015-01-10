@@ -34,7 +34,7 @@ class AdaDelta(protected override val l1decay: Double = 0.01,
       }
     }
 
-    delta.indices map {
+    delta.indices.par foreach {
       id ⇒ {
         val w = weight(id)
         val deltaW = delta(id)

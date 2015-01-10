@@ -34,8 +34,8 @@ object ScalarMatrix {
    */
   def restore(arr: Seq[Seq[Scalar]]) = {
     val res = $0(arr.size, arr(0).size)
-    arr.indices foreach {
-      r ⇒ arr(r).indices foreach {
+    arr.indices.par foreach {
+      r ⇒ arr(r).indices.par foreach {
         c ⇒ res.update(r, c, arr(r)(c))
       }
     }

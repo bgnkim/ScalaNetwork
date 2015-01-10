@@ -105,7 +105,7 @@ class BasicTrainer(private val net: Network,
    * Restore best parameters
    */
   protected final def restoreParams() = {
-    bestParam.indices foreach {
+    bestParam.indices.par foreach {
       id ⇒ net.W(id) := bestParam(id)
     }
   }
@@ -136,7 +136,7 @@ class BasicTrainer(private val net: Network,
     println(s"BEST ITERATION $bestIter : W = ${net.W map (_.mkString) mkString " | "}")
 
     val t = testSet()
-    t map {
+    t.par foreach {
       item ⇒ {
         val in = item._1
         val out = if (isAutoEncoder) net.asInstanceOf[AutoEncoder].reconstruct(in) else net(in)
@@ -159,7 +159,7 @@ class BasicTrainer(private val net: Network,
                                  prevloss: Double = Double.MaxValue,
                                  patience: Int = stops.patience,
                                  isAutoEncoder: Boolean = false): Scalar = {
-    (0 until param.batch) foreach { _ ⇒ {
+    (0 until param.batch).par foreach { _ ⇒ {
       val pair = trainingSet()
       val out = corrupt(pair._1) >>: net
       val err: ScalarMatrix = error.derivative(pair._2, out) / param.batch.toDouble

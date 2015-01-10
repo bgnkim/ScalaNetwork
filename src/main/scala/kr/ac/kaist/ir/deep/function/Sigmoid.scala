@@ -15,7 +15,7 @@ object Sigmoid extends Activation {
     // Because fx is n by 1 matrix, generate n by n matrix
     val res = ScalarMatrix $0(fx.rows, fx.rows)
     // Output is diagonal matrix, with dfi(xi)/dxi.
-    (0 until fx.rows) foreach { r ⇒ {
+    (0 until fx.rows).par foreach { r ⇒ {
       val x = fx(r, 0)
       res.update((r, r), x * (1.0 - x))
     }

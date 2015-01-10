@@ -28,7 +28,7 @@ class AdaGrad(rate: Double = 0.6,
       }
     }
 
-    delta.indices map {
+    delta.indices.par foreach {
       id ⇒ {
         val w = weight(id)
         val deltaW = delta(id)
