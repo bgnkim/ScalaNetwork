@@ -23,7 +23,7 @@ class StochasticGradientDescent(rate: Double = 0.03,
    * @param weight matrices of current
    */
   override def apply(delta: Seq[ScalarMatrix], weight: Seq[ScalarMatrix]): Unit = {
-    lastDelta = delta.indices.par map {
+    lastDelta = (delta.indices.par map {
       id ⇒ {
         val w: ScalarMatrix = weight(id)
         val deltaW: ScalarMatrix = delta(id)
@@ -45,6 +45,6 @@ class StochasticGradientDescent(rate: Double = 0.03,
         deltaW := 0.0
         dw
       }
-    }
+    }).seq
   }
 }

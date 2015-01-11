@@ -54,6 +54,23 @@ package object network {
   }
 
   /**
+   * Operation : Network
+   * @param net to be applied
+   */
+  implicit class NetworkOp(net: Network) extends Serializable {
+
+    /**
+     * Copy given network by given amount
+     * @param n is the nuber of copies
+     * @return Sequence of copied network (Not linked)
+     */
+    def copy(n: Int = 1) = {
+      val json = net.toJSON
+      (1 to n) map { _ ⇒ Network(json)}
+    }
+  }
+
+  /**
    * Companion object of BasicNetwork
    */
   object Network {
@@ -108,5 +125,4 @@ package object network {
         }
       })
   }
-
 }

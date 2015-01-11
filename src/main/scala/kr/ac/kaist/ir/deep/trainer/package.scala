@@ -12,7 +12,7 @@ import kr.ac.kaist.ir.deep.function._
  */
 package object trainer {
   /** Type of Corruption */
-  type Corruption = ScalarMatrix ⇒ ScalarMatrix
+  trait Corruption extends (ScalarMatrix ⇒ ScalarMatrix) with Serializable
 
   /**
    * Trait : Weight update
@@ -48,33 +48,62 @@ package object trainer {
 
     /**
      * Train given sequence, and validate with given sequence.
-     * @param set to be trained
+     * @param set to be trained (Random Sequence Generator)
      * @return Training error (loss)
      */
-    def train(set: Seq[(ScalarMatrix, ScalarMatrix)]): Scalar = trainWithValidation(set, set)
+    def train(set: Int ⇒ Seq[(ScalarMatrix, ScalarMatrix)]): Scalar = train(set, set)
+
+    /**
+     * Train given sequence, and validate with given sequence.
+     * @param set to be trained (Full Seq)
+     * @return Training error (loss)
+     */
+    def train(set: Seq[(ScalarMatrix, ScalarMatrix)]): Scalar = {
+      val index = () ⇒ Math.floor(Math.random() * set.size).toInt
+      val randomizer = (n: Int) ⇒ (0 until n) map { _ ⇒ set(index())}
+      train(randomizer, randomizer)
+    }
 
     /**
      * Train given sequence, and validate with another sequence.
-     * @param set to be used for training
-     * @param valid to be used for validation
+     * @param set to be used for training (Randomized Sequence Generator)
+     * @param validation to be used for validation (Sequence Generator)
      * @return Training error (loss)
      */
-    def trainWithValidation(set: Seq[(ScalarMatrix, ScalarMatrix)], valid: Seq[(ScalarMatrix, ScalarMatrix)]): Scalar
+    def train(set: Int ⇒ Seq[(ScalarMatrix, ScalarMatrix)],
+              validation: Int ⇒ Seq[(ScalarMatrix, ScalarMatrix)]): Scalar
 
     /**
-     * Train given sequence. Randomly split "train" and "validation" set per each mini-batch 
-     * @param set to be used for training
-     * @param split to be used for validation
+     * Train given sequence, and validate with another sequence.
+     * @param set to be used for training (Full Seq)
+     * @param validation to be used for validation (Full Seq)
      * @return Training error (loss)
      */
-    def trainWithSplit(set: Seq[(ScalarMatrix, ScalarMatrix)], split: Probability): Scalar
+    def train(set: Seq[(ScalarMatrix, ScalarMatrix)],
+              validation: Seq[(ScalarMatrix, ScalarMatrix)]): Scalar = {
+      val index = () ⇒ Math.floor(Math.random() * set.size).toInt
+      val randomizer = (n: Int) ⇒ (0 until n) map { _ ⇒ set(index())}
+      val topN = (n: Int) ⇒ validation.slice(0, n)
+      train(randomizer, topN)
+    }
 
     /**
      * Train autoencoder with given sequence.
-     * @param set to be used for input & reconstruction.
+     * @param set to be used for input & reconstruction. (Randomized Sequence Generator)
      * @return Training error (loss)
      */
-    def trainAutoencoder(set: Seq[ScalarMatrix]): Scalar
+    def trainAutoencoder(set: Int ⇒ Seq[ScalarMatrix]): Scalar
+
+    /**
+     * Train autoencoder with given sequence.
+     * @param set to be used for input & reconstruction. (Full Seq)
+     * @return Training error (loss)
+     */
+    def trainAutoencoder(set: Seq[ScalarMatrix]): Scalar = {
+      val index = () ⇒ Math.floor(Math.random() * set.size).toInt
+      val randomizer = (n: Int) ⇒ (0 until n) map { _ ⇒ set(index())}
+      trainAutoencoder(randomizer)
+    }
   }
 
   /**
@@ -142,11 +171,27 @@ package object trainer {
                               improveThreshold: Double = 0.995,
                               lossThreshold: Double = 0.0001,
                               validationFreq: Int = 10)
+    extends Serializable
 
   /**
    * Criteria: How to train
-   * @param batch is size of mini-batch
-   * @param dropout is weight drop-out probability
+   * @param miniBatch is size of mini-batch
+   * @param validationSize is size of validation set to be generated
    */
-  case class TrainingCriteria(batch: Int = 10, dropout: Double = 0.001)
+  case class TrainingCriteria(miniBatch: Int = 100,
+                              validationSize: Int = 20) extends Serializable
+
+  /**
+   * Criteria: How to train (for DistBelief-style online trainer, [[kr.ac.kaist.ir.deep.trainer.SparkTrainer]])
+   * @param miniBatch is size of mini-batch
+   * @param validationSize is size of validation set to be generated
+   * @param updateStep is number of "numCores mini-batches" between update
+   * @param fetchStep is number of "numCores mini-batches" between fetching
+   * @param numCores is number of v-cores in the spark cluster.
+   */
+  case class DistBeliefCriteria(miniBatch: Int = 100,
+                                validationSize: Int = 20,
+                                updateStep: Int = 1,
+                                fetchStep: Int = 1,
+                                numCores: Int = 1)
 }

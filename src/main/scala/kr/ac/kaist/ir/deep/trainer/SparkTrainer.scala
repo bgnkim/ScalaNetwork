@@ -2,33 +2,43 @@ package kr.ac.kaist.ir.deep.trainer
 
 import kr.ac.kaist.ir.deep.function._
 import kr.ac.kaist.ir.deep.network.{AutoEncoder, Network}
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD
 
 import scala.annotation.tailrec
 
 /**
- * Trainer : Stochastic-Style
+ * Trainer : Semi-DistBelief Style, Spark-based.
+ *
+ * Unlike with DistBelief, this trainer do updates and fetch by "master" not the "workers".
+ * Real DistBelief implementation is planned.
+ *
  * @param net to be trained
  * @param algorithm to be applied
+ * @param sc is a spark context that network will be distributed
  * @param error to compute loss
  * @param corrupt to corrupt input
  * @param param of training criteria
  * @param stops of stopping criteria
  */
-class BasicTrainer(private val net: Network,
+class SparkTrainer(private val net: Network,
                    private val algorithm: WeightUpdater,
+                   @transient private val sc: SparkContext,
                    private val error: Objective = SquaredErr,
                    private val corrupt: Corruption = NoCorruption,
-                   private val param: TrainingCriteria = TrainingCriteria(),
+                   private val param: DistBeliefCriteria = DistBeliefCriteria(),
                    protected override val stops: StoppingCriteria = StoppingCriteria(),
                    private val debug: Boolean = false)
   extends Trainer {
+  /** Spark distributed networks */
+  @transient protected val networks: RDD[Network] = sc.makeRDD(net copy param.numCores)
   /** Training Set */
   protected var trainingSet: Int ⇒ Seq[(ScalarMatrix, ScalarMatrix)] = null
   /** Validation Set */
-  protected var testSet: Int ⇒ Seq[(ScalarMatrix, ScalarMatrix)] = null
+  @transient protected var testSet: Int ⇒ Seq[(ScalarMatrix, ScalarMatrix)] = null
   /** Best Parameter History */
-  protected var bestParam: Seq[ScalarMatrix] = null
-  protected var bestIter: Int = 0
+  @transient protected var bestParam: Seq[ScalarMatrix] = null
+  @transient protected var bestIter: Int = 0
 
   /**
    * Train given sequence, and validate with another sequence.
@@ -48,6 +58,12 @@ class BasicTrainer(private val net: Network,
 
     err
   }
+
+  /**
+   * Train using given RDD sequence. 
+   * @param set to be used for training
+   */
+  def train(set: RDD[(ScalarMatrix, ScalarMatrix)]): Scalar = train(set.takeSample(true, _))
 
   /**
    * Train autoencoder with given sequence.
@@ -133,14 +149,52 @@ class BasicTrainer(private val net: Network,
                                  prevloss: Double = Double.MaxValue,
                                  patience: Int = stops.patience,
                                  isAutoEncoder: Boolean = false): Scalar = {
-    trainingSet(param.miniBatch) foreach {
-      pair ⇒ {
-        val out = corrupt(pair._1) >>: net
-        val err: ScalarMatrix = error.derivative(pair._2, out) / param.miniBatch.toDouble
-        net ! err
-      }
+    // if it is a fetch step, distribute network.
+    if (iter % param.fetchStep == 0) {
+      val weights = sc.broadcast(net.W)
+      networks foreach (net ⇒ {
+        val w = net.W
+        w.indices foreach {
+          id ⇒ w(id) := weights.value(id)
+        }
+      })
+      weights.destroy()
     }
-    algorithm(net.dW, net.W)
+
+    // For each training set, do train.
+    networks foreach {
+      copiedNet ⇒
+        trainingSet(param.miniBatch) map {
+          pair ⇒ {
+            val in = corrupt(pair._1)
+            val out = in >>: copiedNet
+            val err: ScalarMatrix = error.derivative(pair._2, out) / param.miniBatch.toDouble
+            copiedNet ! err
+          }
+        }
+    }
+
+    // If this is update step, collect update.
+    if (iter % param.updateStep == 0) {
+      val dWUpdate = networks.aggregate(Seq[ScalarMatrix]())({
+        (seq, copiedNet) ⇒
+          if (seq.isEmpty) copiedNet.dW
+          else
+            seq.indices map {
+              id ⇒ copiedNet.dW(id) + seq(id)
+            }
+      }, {
+        case (dW1, dW2) if dW2.isEmpty ⇒ dW1
+        case (dW1, dW2) if dW1.isEmpty ⇒ dW2
+        case (dW1, dW2) ⇒
+          dW1.indices map {
+            id ⇒ dW1(id) + dW2(id)
+          }
+        case _ ⇒ Seq[ScalarMatrix]()
+      })
+
+      algorithm(dWUpdate, net.W)
+    }
 
     var nPatience = patience
 
