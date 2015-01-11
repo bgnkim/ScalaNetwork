@@ -43,7 +43,7 @@ class SparkTrainer(protected override val net: Network,
    */
   def train(set: RDD[(ScalarMatrix, ScalarMatrix)]): Scalar = {
     set.cache()
-    train(set.takeSample(true, _), set.top(_))
+    train(set.takeSample(true, _))
   }
 
   /**
@@ -125,7 +125,7 @@ class SparkTrainer(protected override val net: Network,
       prevloss
     }
 
-    if (iter < param.miniBatch * stops.maxIter && nPatience > iter && nLoss > stops.lossThreshold) {
+    if (iter < stops.maxIter && nPatience > iter && nLoss > stops.lossThreshold) {
       trainBatch(iter + 1, nLoss, nPatience, isAutoEncoder)
     } else {
       logger.info(f"Finished $iter%6d, Error = $nLoss%.5f")

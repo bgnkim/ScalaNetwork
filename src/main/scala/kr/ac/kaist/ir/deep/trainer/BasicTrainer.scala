@@ -63,7 +63,7 @@ class BasicTrainer(protected override val net: Network,
       prevloss
     }
 
-    if (iter < param.miniBatch * stops.maxIter && nPatience > iter && nLoss > stops.lossThreshold) {
+    if (iter < stops.maxIter && nPatience > iter && nLoss > stops.lossThreshold) {
       trainBatch(iter + 1, nLoss, nPatience, isAutoEncoder)
     } else {
       logger.info(f"Finished $iter%6d, Error = $nLoss%.5f")

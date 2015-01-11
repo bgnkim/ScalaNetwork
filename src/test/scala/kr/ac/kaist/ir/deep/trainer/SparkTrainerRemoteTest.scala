@@ -10,7 +10,7 @@ import org.specs2.mutable.Specification
 /**
  * Created by bydelta on 2015-01-11.
  */
-class SparkTrainerTest extends Specification {
+class SparkTrainerRemoteTest extends Specification {
 
   val set = (0 to 1) flatMap {
     x ⇒ (0 to 1) flatMap {
@@ -38,10 +38,11 @@ class SparkTrainerTest extends Specification {
     }
   }
 
-  "SparkTrainer(Local)" should {
+  "SparkTrainer(Remote)" should {
+    val HOSTNAME = "" //Wrote the remote host here!
     val layer = new Rank3TensorLayer((2, 1) → 4, Sigmoid)
     val net = new BasicNetwork(Seq(layer))
-    val conf = new SparkConf().setMaster("local[6]").setAppName("SparkTrainer Test")
+    val conf = new SparkConf().setMaster(HOSTNAME).setAppName("SparkTrainer Test").set("spark.scheduler.mode", "FAIR")
     val sc = new SparkContext(conf)
     val train = new SparkTrainer(net = net,
       algorithm = new StochasticGradientDescent(rate = 0.8, l2decay = 0.00001),

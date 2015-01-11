@@ -273,7 +273,7 @@ package object trainer {
 
   /**
    * Criteria: When to stop training
-   * @param maxIter is maximum iteration count (default 100,000)
+   * @param maxIter is maximum mini-batch iteration count (default 100,000)
    * @param patience is default patience count (default 5,000)
    * @param patienceStep is default step for patience (default x2)
    * @param improveThreshold is threshold for marked as "improved" (default 95% = 0.95)
