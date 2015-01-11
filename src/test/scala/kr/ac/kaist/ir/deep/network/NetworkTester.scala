@@ -54,7 +54,7 @@ class NetworkTester extends Specification {
     val encoder = new AutoEncoder(layer, 0.9995)
     val trainer = new BasicTrainer(net = encoder,
       algorithm = new StochasticGradientDescent(rate = 0.8, l2decay = 0.0001),
-      param = TrainingCriteria(miniBatch = 8),
+      param = SimpleTrainingCriteria(miniBatch = 8),
       stops = StoppingCriteria(maxIter = 100000))
 
     "properly trained" in {
@@ -92,7 +92,7 @@ class NetworkTester extends Specification {
       //algorithm = new AdaGrad(l2decay = 0.0001),
       //algorithm = GradientDescent(rate = 0.8, l2decay = 0.0001),
       corrupt = GaussianCorruption(variance = 0.1),
-      param = TrainingCriteria(miniBatch = 8),
+      param = SimpleTrainingCriteria(miniBatch = 8),
       stops = StoppingCriteria(maxIter = 100000))
 
     "properly trained" in {

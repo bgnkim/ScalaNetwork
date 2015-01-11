@@ -4,7 +4,14 @@ import kr.ac.kaist.ir.deep.function._
 import kr.ac.kaist.ir.deep.layer.Reconstructable
 import play.api.libs.json.Json
 
-class AutoEncoder(private val layer: Reconstructable, protected[deep] override val presence: Probability = 1.0) extends Network {
+/**
+ * Network: Single-layer Autoencoder
+ * @param layer for this network
+ * @param presence is the probability of non-dropped neurons (for drop-out training). (default : 100% = 1.0)
+ */
+class AutoEncoder(private val layer: Reconstructable,
+                  protected[deep] override val presence: Probability = 1.0)
+  extends Network {
   /** Collected input & output of each layer */
   private var input: ScalarMatrix = null
   private var hidden: ScalarMatrix = null

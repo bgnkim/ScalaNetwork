@@ -83,9 +83,8 @@ class TensorNetworkTester extends Specification {
     val net = new BasicNetwork(Seq(layer))
     val train = new BasicTrainer(net = net,
       algorithm = new AdaDelta(l2decay = 0.001, l1decay = 0.0), //GradientDescent(rate = 0.8, l2decay = 0.0001),
-      param = TrainingCriteria(miniBatch = 8),
-      stops = StoppingCriteria(maxIter = 100000),
-      debug = true)
+      param = SimpleTrainingCriteria(miniBatch = 8),
+      stops = StoppingCriteria(maxIter = 100000))
 
     "properly trained" in {
       train.train(set, valid) must be_<(0.4)

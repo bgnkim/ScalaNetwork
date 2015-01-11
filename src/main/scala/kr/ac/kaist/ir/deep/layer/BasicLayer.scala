@@ -7,10 +7,14 @@ import play.api.libs.json.{JsObject, Json}
  * Layer: Basic, Fully-connected Layer
  * @param IO is a pair of input & output, such as 2 -> 3
  * @param act is an activation function to be applied
- * @param w is initial weight matrix for the case that it is restored from JSON
- * @param b is inital bias matrix for the case that it is restored from JSON
+ * @param w is initial weight matrix for the case that it is restored from JSON (default: null)
+ * @param b is inital bias matrix for the case that it is restored from JSON (default: null)
  */
-class BasicLayer(IO: (Int, Int), protected override val act: Activation, w: ScalarMatrix = null, b: ScalarMatrix = null) extends Layer {
+class BasicLayer(IO: (Int, Int),
+                 protected override val act: Activation,
+                 w: ScalarMatrix = null,
+                 b: ScalarMatrix = null)
+  extends Layer {
   /** Number of Fan-ins */
   protected val fanIn = IO._1
   /** Number of Fan-outs */

@@ -29,9 +29,7 @@ class AdaDelta(protected override val l1decay: Double = 0.01,
       grad = delta map {
         matx ⇒ ScalarMatrix $0(matx.rows, matx.cols)
       }
-      delL2 = grad map {
-        _.copy
-      }
+      delL2 = grad.copy
     }
 
     delta.indices.par foreach {

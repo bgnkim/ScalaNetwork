@@ -3,8 +3,13 @@ package kr.ac.kaist.ir.deep.network
 import kr.ac.kaist.ir.deep.function._
 import play.api.libs.json.{JsObject, Json}
 
+/**
+ * Network: Stack of autoencoders. 
+ * @param encoders to be stacked.
+ */
 class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network {
-  protected override val presence: Probability = 0.0
+  /** Not used for this network */
+  @deprecated protected override val presence: Probability = 0.0
 
   /**
    * All accumulated delta weights of layers

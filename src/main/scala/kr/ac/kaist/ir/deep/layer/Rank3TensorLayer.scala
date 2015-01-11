@@ -17,11 +17,16 @@ import play.api.libs.json.{JsArray, JsObject, Json}
  *
  * @param IO is a pair of input & output, such as (2, 2) -> 3
  * @param act is an activation function to be applied
- * @param quad is initial quadratic-level weight matrix Q for the case that it is restored from JSON
- * @param lin is initial linear-level weight matrix L for the case that it is restored from JSON
- * @param const is initial bias weight matrix b for the case that it is restored from JSON
+ * @param quad is initial quadratic-level weight matrix Q for the case that it is restored from JSON (default: Seq())
+ * @param lin is initial linear-level weight matrix L for the case that it is restored from JSON (default: Seq())
+ * @param const is initial bias weight matrix b for the case that it is restored from JSON (default: null)
  */
-class Rank3TensorLayer(IO: ((Int, Int), Int), protected override val act: Activation, quad: Seq[ScalarMatrix] = Seq(), lin: Seq[ScalarMatrix] = Seq(), const: ScalarMatrix = null) extends Layer {
+class Rank3TensorLayer(IO: ((Int, Int), Int),
+                       protected override val act: Activation,
+                       quad: Seq[ScalarMatrix] = Seq(),
+                       lin: Seq[ScalarMatrix] = Seq(),
+                       const: ScalarMatrix = null)
+  extends Layer {
   /** Number of Fan-ins */
   protected val fanInA = IO._1._1
   protected val fanInB = IO._1._2

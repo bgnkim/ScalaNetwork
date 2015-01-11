@@ -61,7 +61,7 @@ package object network {
 
     /**
      * Copy given network by given amount
-     * @param n is the nuber of copies
+     * @param n is the nuber of copies (default: 1)
      * @return Sequence of copied network (Not linked)
      */
     def copy(n: Int = 1) = {

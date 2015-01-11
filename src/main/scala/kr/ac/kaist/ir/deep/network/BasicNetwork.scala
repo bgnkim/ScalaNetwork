@@ -7,9 +7,11 @@ import play.api.libs.json.{JsArray, Json}
 /**
  * Network: A basic network implementation
  * @param layers of this network
- * @param presence is the probability of non-dropped neurons (for drop-out training). Default value = 1.0
+ * @param presence is the probability of non-dropped neurons (for drop-out training). (default : 100% = 1.0)
  */
-class BasicNetwork(private val layers: Seq[Layer], protected override val presence: Probability = 1.0) extends Network {
+class BasicNetwork(private val layers: Seq[Layer],
+                   protected override val presence: Probability = 1.0)
+  extends Network {
   /** Collected input & output of each layer */
   private var input: Seq[ScalarMatrix] = Seq()
 

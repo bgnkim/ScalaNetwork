@@ -7,11 +7,16 @@ import play.api.libs.json.JsObject
  * Layer : Reconstructable Basic Layer
  * @param IO is a pair of input & output, such as 2 -> 3
  * @param act is an activation function to be applied
- * @param w is initial weight matrix for the case that it is restored from JSON
- * @param b is inital bias matrix for the case that it is restored from JSON
- * @param rb is initial reconstruct bias matrix for the case that it is restored from JSON
+ * @param w is initial weight matrix for the case that it is restored from JSON (default: null)
+ * @param b is inital bias matrix for the case that it is restored from JSON (default: null)
+ * @param rb is initial reconstruct bias matrix for the case that it is restored from JSON (default: null)
  */
-class ReconBasicLayer(IO: (Int, Int), act: Activation, w: ScalarMatrix = null, b: ScalarMatrix = null, rb: ScalarMatrix = null) extends BasicLayer(IO, act, w, b) with Reconstructable {
+class ReconBasicLayer(IO: (Int, Int),
+                      act: Activation,
+                      w: ScalarMatrix = null,
+                      b: ScalarMatrix = null,
+                      rb: ScalarMatrix = null)
+  extends BasicLayer(IO, act, w, b) with Reconstructable {
   protected val reBias = if (rb != null) rb else act initialize(fanIn, fanOut, fanIn, 1)
   protected val drBias = ScalarMatrix $0(fanIn, 1)
 
