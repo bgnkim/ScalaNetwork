@@ -2,7 +2,7 @@ package kr.ac.kaist.ir.deep.trainer
 
 import breeze.linalg.DenseMatrix
 import kr.ac.kaist.ir.deep.function._
-import kr.ac.kaist.ir.deep.layer.Rank3TensorLayer
+import kr.ac.kaist.ir.deep.layer.SplitVecTensorLayer
 import kr.ac.kaist.ir.deep.network.BasicNetwork
 import org.apache.spark.{SparkConf, SparkContext}
 import org.specs2.mutable.Specification
@@ -39,7 +39,7 @@ class SparkTrainerTest extends Specification {
   }
 
   "SparkTrainer(Local)" should {
-    val layer = new Rank3TensorLayer((2, 1) → 4, Sigmoid)
+    val layer = new SplitVecTensorLayer((2, 1) → 4, Sigmoid)
     val net = new BasicNetwork(Seq(layer))
     val conf = new SparkConf().setMaster("local[6]").setAppName("SparkTrainer Test")
     val sc = new SparkContext(conf)

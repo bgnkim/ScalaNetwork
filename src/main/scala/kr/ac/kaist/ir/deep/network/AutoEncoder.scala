@@ -13,9 +13,9 @@ class AutoEncoder(private val layer: Reconstructable,
                   protected[deep] override val presence: Probability = 1.0)
   extends Network {
   /** Collected input & output of each layer */
-  private var input: ScalarMatrix = null
-  private var hidden: ScalarMatrix = null
-  private var output: ScalarMatrix = null
+  protected[deep] var input: ScalarMatrix = null
+  protected[deep] var hidden: ScalarMatrix = null
+  protected[deep] var output: ScalarMatrix = null
 
   /**
    * All weights of layers

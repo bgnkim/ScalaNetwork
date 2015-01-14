@@ -1,0 +1,626 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <title>trainer - kr.ac.kaist.ir.deep.trainer</title>
+    <meta name="description" content="trainer - kr.ac.kaist.ir.deep.trainer"/>
+    <meta name="keywords" content="trainer kr.ac.kaist.ir.deep.trainer"/>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+
+    <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet"/>
+    <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css"/>
+    <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+    <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+    <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+    <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+
+    <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'kr.ac.kaist.ir.deep.trainer.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+
+    </script>
+
+</head>
+<body class="value">
+<div id="definition">
+    <img src="../../../../../../lib/package_big.png"/>
+
+    <p id="owner"><a href="../../../../../package.html" class="extype" name="kr">kr</a>.<a
+            href="../../../../package.html" class="extype" name="kr.ac">ac</a>.<a href="../../../package.html"
+                                                                                  class="extype" name="kr.ac.kaist">kaist</a>.<a
+            href="../../package.html" class="extype" name="kr.ac.kaist.ir">ir</a>.<a href="../package.html"
+                                                                                     class="extype"
+                                                                                     name="kr.ac.kaist.ir.deep">deep</a>
+    </p>
+
+    <h1>trainer</h1> <span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package" title="Permalink" target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+</div>
+
+<h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">trainer</span>
+      </span>
+</h4>
+
+<div id="comment" class="fullcommenttop">
+    <div class="comment cmt"><p>Package for training</p>
+
+        <p>Created by bydelta on 2015-01-02.
+        </p></div>
+    <div class="toggleContainer block">
+        <span class="toggle">Linear Supertypes</span>
+
+        <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span
+                class="extype" name="scala.Any">Any</span></div>
+    </div>
+</div>
+
+
+<div id="mbrsel">
+    <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text"
+                                                                             accesskey="/"/></span><span
+            class="post"></span></div>
+    <div id="order">
+        <span class="filtertype">Ordering</span>
+        <ol>
+
+            <li class="alpha in"><span>Alphabetic</span></li>
+            <li class="inherit out"><span>By inheritance</span></li>
+        </ol>
+    </div>
+    <div id="ancestors">
+                <span class="filtertype">Inherited<br/>
+                </span>
+        <ol id="linearization">
+            <li class="in" name="kr.ac.kaist.ir.deep.trainer"><span>trainer</span></li>
+            <li class="in" name="scala.AnyRef"><span>AnyRef</span></li>
+            <li class="in" name="scala.Any"><span>Any</span></li>
+        </ol>
+    </div>
+    <div id="ancestors">
+        <span class="filtertype"></span>
+        <ol>
+            <li class="hideall out"><span>Hide All</span></li>
+            <li class="showall in"><span>Show all</span></li>
+        </ol>
+        <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about
+            member selection</a>
+    </div>
+    <div id="visbl">
+        <span class="filtertype">Visibility</span>
+        <ol>
+            <li class="public in"><span>Public</span></li>
+            <li class="all out"><span>All</span></li>
+        </ol>
+    </div>
+</div>
+
+<div id="template">
+    <div id="allMembers">
+
+
+        <div id="types" class="types members">
+            <h3>Type Members</h3>
+            <ol>
+                <li name="kr.ac.kaist.ir.deep.trainer.AdaDelta" visbl="pub" data-isabs="false" fullComment="no"
+                    group="Ungrouped">
+                    <a id="AdaDeltaextendsWeightUpdater"></a>
+                    <a id="AdaDelta:AdaDelta"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AdaDelta.html"><span class="name">AdaDelta</span></a><span class="result"> extends <a
+              href="package$$WeightUpdater.html" class="extype" name="kr.ac.kaist.ir.deep.trainer.WeightUpdater">WeightUpdater</a></span>
+      </span>
+                    </h4><span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package@AdaDeltaextendsWeightUpdater"
+         title="Permalink" target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+
+                    <p class="shortcomment cmt">Algorithm: AdaDelta</p>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.trainer.AdaGrad" visbl="pub" data-isabs="false" fullComment="no"
+                    group="Ungrouped">
+                    <a id="AdaGradextendsWeightUpdater"></a>
+                    <a id="AdaGrad:AdaGrad"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AdaGrad.html"><span class="name">AdaGrad</span></a><span class="result"> extends <a
+              href="package$$WeightUpdater.html" class="extype" name="kr.ac.kaist.ir.deep.trainer.WeightUpdater">WeightUpdater</a></span>
+      </span>
+                    </h4><span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package@AdaGradextendsWeightUpdater"
+         title="Permalink" target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+
+                    <p class="shortcomment cmt">Algorithm: AdaGrad</p>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.trainer.BasicTrainer" visbl="pub" data-isabs="false" fullComment="no"
+                    group="Ungrouped">
+                    <a id="BasicTrainerextendsTrainer"></a>
+                    <a id="BasicTrainer:BasicTrainer"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="BasicTrainer.html"><span class="name">BasicTrainer</span></a><span class="result"> extends <a
+              href="package$$Trainer.html" class="extype" name="kr.ac.kaist.ir.deep.trainer.Trainer">Trainer</a></span>
+      </span>
+                    </h4><span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package@BasicTrainerextendsTrainer"
+         title="Permalink" target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+
+                    <p class="shortcomment cmt">Trainer : Stochastic-Style</p>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.trainer.Corruption" visbl="pub" data-isabs="true" fullComment="no"
+                    group="Ungrouped">
+                    <a id="Corruptionextendskr.ac.kaist.ir.deep.function.ScalarMatrix=&gt;kr.ac.kaist.ir.deep.function.ScalarMatrixwithSerializable"></a>
+                    <a id="Corruption:Corruption"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$Corruption.html"><span class="name">Corruption</span></a><span class="result"> extends (<a
+              href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]"
+              class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <a
+              href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]"
+              class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a> with <span class="extype"
+                                                                                                          name="scala.Serializable">Serializable</span></span>
+      </span>
+                    </h4><span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package@Corruptionextendskr.ac.kaist.ir.deep.function.ScalarMatrix=&gt;kr.ac.kaist.ir.deep.function.ScalarMatrixwithSerializable"
+         title="Permalink" target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+
+                    <p class="shortcomment cmt">Type of Corruption</p>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.trainer.DistBeliefCriteria" visbl="pub" data-isabs="false"
+                    fullComment="yes" group="Ungrouped">
+                    <a id="DistBeliefCriteriaextendspackage.TrainingCriteriawithProductwithSerializable"></a>
+                    <a id="DistBeliefCriteria:DistBeliefCriteria"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$DistBeliefCriteria.html"><span class="name">DistBeliefCriteria</span></a><span class="params">(<span
+              name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span
+              class="symbol">100</span></span>, <span name="validationSize">validationSize: <span class="extype"
+                                                                                                  name="scala.Int">Int</span> = <span
+              class="symbol">20</span></span>, <span name="updateStep">updateStep: <span class="extype"
+                                                                                         name="scala.Int">Int</span> = <span
+              class="symbol">2</span></span>, <span name="fetchStep">fetchStep: <span class="extype" name="scala.Int">Int</span> = <span
+              class="symbol">10</span></span>, <span name="numCores">numCores: <span class="extype"
+                                                                                     name="scala.Int">Int</span> = <span
+              class="symbol">1</span></span>)</span><span class="result"> extends <a
+              href="package$$TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.trainer.TrainingCriteria">TrainingCriteria</a> with <span
+              class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+                    </h4><span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package@DistBeliefCriteriaextendspackage.TrainingCriteriawithProductwithSerializable"
+         title="Permalink" target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+
+                    <p class="shortcomment cmt">Criteria: How to train (for DistBelief-style online trainer, <a
+                            href="SparkTrainer.html" class="extype" name="kr.ac.kaist.ir.deep.trainer.SparkTrainer">kr.ac.kaist.ir.deep.trainer.SparkTrainer</a>)
+                    </p>
+
+                    <div class="fullcomment">
+                        <div class="comment cmt"><p>Criteria: How to train (for DistBelief-style online trainer, <a
+                                href="SparkTrainer.html" class="extype" name="kr.ac.kaist.ir.deep.trainer.SparkTrainer">kr.ac.kaist.ir.deep.trainer.SparkTrainer</a>)
+                        </p></div>
+                        <dl class="paramcmts block">
+                            <dt class="param">miniBatch</dt>
+                            <dd class="cmt"><p>is size of mini-batch (default 100)</p></dd>
+                            <dt class="param">validationSize</dt>
+                            <dd class="cmt"><p>is size of validation set to be generated (default 20)</p></dd>
+                            <dt class="param">updateStep</dt>
+                            <dd class="cmt"><p>is number of &quot;numCores mini-batches&quot; between update (default
+                                2)</p></dd>
+                            <dt class="param">fetchStep</dt>
+                            <dd class="cmt"><p>is number of &quot;numCores mini-batches&quot; between fetching (default
+                                10)</p></dd>
+                            <dt class="param">numCores</dt>
+                            <dd class="cmt"><p>is number of v-cores in the spark cluster. (default 1)
+                            </p></dd>
+                        </dl>
+                    </div>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.trainer.DroppingCorruption" visbl="pub" data-isabs="false"
+                    fullComment="yes" group="Ungrouped">
+                    <a id="DroppingCorruptionextendspackage.CorruptionwithProductwithSerializable"></a>
+                    <a id="DroppingCorruption:DroppingCorruption"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$DroppingCorruption.html"><span class="name">DroppingCorruption</span></a><span class="params">(<span
+              name="presence">presence: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.95</span></span>)</span><span
+              class="result"> extends <a href="package$$Corruption.html" class="extype"
+                                         name="kr.ac.kaist.ir.deep.trainer.Corruption">Corruption</a> with <span
+              class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+                    </h4><span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package@DroppingCorruptionextendspackage.CorruptionwithProductwithSerializable"
+         title="Permalink" target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+
+                    <p class="shortcomment cmt">Input Corruption: Drop input as zero.</p>
+
+                    <div class="fullcomment">
+                        <div class="comment cmt"><p>Input Corruption: Drop input as zero.</p>
+
+                            <p>If network uses drop-out training, we recommend that you do not use this.
+                            </p></div>
+                        <dl class="paramcmts block">
+                            <dt class="param">presence</dt>
+                            <dd class="cmt"><p>probability of not-dropped. (default 95% = 0.95)
+                            </p></dd>
+                        </dl>
+                    </div>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.trainer.GaussianCorruption" visbl="pub" data-isabs="false"
+                    fullComment="yes" group="Ungrouped">
+                    <a id="GaussianCorruptionextendspackage.CorruptionwithProductwithSerializable"></a>
+                    <a id="GaussianCorruption:GaussianCorruption"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$GaussianCorruption.html"><span class="name">GaussianCorruption</span></a><span class="params">(<span
+              name="mean">mean: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.0</span></span>, <span
+              name="variance">variance: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.1</span></span>)</span><span
+              class="result"> extends <a href="package$$Corruption.html" class="extype"
+                                         name="kr.ac.kaist.ir.deep.trainer.Corruption">Corruption</a> with <span
+              class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+                    </h4><span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package@GaussianCorruptionextendspackage.CorruptionwithProductwithSerializable"
+         title="Permalink" target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+
+                    <p class="shortcomment cmt">Input Corruption: Gaussian</p>
+
+                    <div class="fullcomment">
+                        <div class="comment cmt"><p>Input Corruption: Gaussian</p></div>
+                        <dl class="paramcmts block">
+                            <dt class="param">mean</dt>
+                            <dd class="cmt"><p>of noise (default 0.0)</p></dd>
+                            <dt class="param">variance</dt>
+                            <dd class="cmt"><p>of noise (default 0.1)
+                            </p></dd>
+                        </dl>
+                    </div>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.trainer.SimpleTrainingCriteria" visbl="pub" data-isabs="false"
+                    fullComment="yes" group="Ungrouped">
+                    <a id="SimpleTrainingCriteriaextendspackage.TrainingCriteriawithProductwithSerializable"></a>
+                    <a id="SimpleTrainingCriteria:SimpleTrainingCriteria"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$SimpleTrainingCriteria.html"><span class="name">SimpleTrainingCriteria</span></a><span
+              class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span
+              class="symbol">100</span></span>, <span name="validationSize">validationSize: <span class="extype"
+                                                                                                  name="scala.Int">Int</span> = <span
+              class="symbol">20</span></span>)</span><span class="result"> extends <a
+              href="package$$TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.trainer.TrainingCriteria">TrainingCriteria</a> with <span
+              class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+                    </h4><span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package@SimpleTrainingCriteriaextendspackage.TrainingCriteriawithProductwithSerializable"
+         title="Permalink" target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+
+                    <p class="shortcomment cmt">Criteria: How to train</p>
+
+                    <div class="fullcomment">
+                        <div class="comment cmt"><p>Criteria: How to train</p></div>
+                        <dl class="paramcmts block">
+                            <dt class="param">miniBatch</dt>
+                            <dd class="cmt"><p>is size of mini-batch (default 100)</p></dd>
+                            <dt class="param">validationSize</dt>
+                            <dd class="cmt"><p>is size of validation set to be generated (default 20)
+                            </p></dd>
+                        </dl>
+                    </div>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.trainer.SparkTrainer" visbl="pub" data-isabs="false" fullComment="yes"
+                    group="Ungrouped">
+                    <a id="SparkTrainerextendsTrainer"></a>
+                    <a id="SparkTrainer:SparkTrainer"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SparkTrainer.html"><span class="name">SparkTrainer</span></a><span class="result"> extends <a
+              href="package$$Trainer.html" class="extype" name="kr.ac.kaist.ir.deep.trainer.Trainer">Trainer</a></span>
+      </span>
+                    </h4><span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package@SparkTrainerextendsTrainer"
+         title="Permalink" target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+
+                    <p class="shortcomment cmt">Trainer : Semi-DistBelief Style, Spark-based.</p>
+
+                    <div class="fullcomment">
+                        <div class="comment cmt"><p>Trainer : Semi-DistBelief Style, Spark-based.</p>
+
+                            <p>Unlike with DistBelief, this trainer do updates and fetch by &quot;master&quot; not the
+                                &quot;workers&quot;.
+                            </p></div>
+                    </div>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.trainer.StochasticGradientDescent" visbl="pub" data-isabs="false"
+                    fullComment="no" group="Ungrouped">
+                    <a id="StochasticGradientDescentextendsWeightUpdater"></a>
+                    <a id="StochasticGradientDescent:StochasticGradientDescent"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StochasticGradientDescent.html"><span class="name">StochasticGradientDescent</span></a><span
+              class="result"> extends <a href="package$$WeightUpdater.html" class="extype"
+                                         name="kr.ac.kaist.ir.deep.trainer.WeightUpdater">WeightUpdater</a></span>
+      </span>
+                    </h4><span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package@StochasticGradientDescentextendsWeightUpdater"
+         title="Permalink" target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+
+                    <p class="shortcomment cmt">Algorithm: Stochastic Gradient Descent</p>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.trainer.StoppingCriteria" visbl="pub" data-isabs="false" fullComment="yes"
+                    group="Ungrouped">
+                    <a id="StoppingCriteriaextendsSerializablewithProduct"></a>
+                    <a id="StoppingCriteria:StoppingCriteria"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$StoppingCriteria.html"><span class="name">StoppingCriteria</span></a><span
+              class="params">(<span name="maxIter">maxIter: <span class="extype" name="scala.Int">Int</span> = <span
+              class="symbol">100000</span></span>, <span name="patience">patience: <span class="extype"
+                                                                                         name="scala.Int">Int</span> = <span
+              class="symbol">5000</span></span>, <span name="patienceStep">patienceStep: <span class="extype"
+                                                                                               name="scala.Int">Int</span> = <span
+              class="symbol">2</span></span>, <span name="improveThreshold">improveThreshold: <span class="extype"
+                                                                                                    name="scala.Double">Double</span> = <span
+              class="symbol">0.995</span></span>, <span name="lossThreshold">lossThreshold: <span class="extype"
+                                                                                                  name="scala.Double">Double</span> = <span
+              class="symbol">0.0001</span></span>, <span name="validationFreq">validationFreq: <span class="extype"
+                                                                                                     name="scala.Int">Int</span> = <span
+              class="symbol">100</span></span>)</span><span class="result"> extends <span class="extype"
+                                                                                          name="scala.Serializable">Serializable</span> with <span
+              class="extype" name="scala.Product">Product</span></span>
+      </span>
+                    </h4><span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package@StoppingCriteriaextendsSerializablewithProduct"
+         title="Permalink" target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+
+                    <p class="shortcomment cmt">Criteria: When to stop training</p>
+
+                    <div class="fullcomment">
+                        <div class="comment cmt"><p>Criteria: When to stop training</p></div>
+                        <dl class="paramcmts block">
+                            <dt class="param">maxIter</dt>
+                            <dd class="cmt"><p>is maximum mini-batch iteration count (default 100,000)</p></dd>
+                            <dt class="param">patience</dt>
+                            <dd class="cmt"><p>is default patience count (default 5,000)</p></dd>
+                            <dt class="param">patienceStep</dt>
+                            <dd class="cmt"><p>is default step for patience (default x2)</p></dd>
+                            <dt class="param">improveThreshold</dt>
+                            <dd class="cmt"><p>is threshold for marked as &quot;improved&quot; (default 95% = 0.95)</p>
+                            </dd>
+                            <dt class="param">lossThreshold</dt>
+                            <dd class="cmt"><p>is maximum-tolerant loss value. (default 0.0001)</p></dd>
+                            <dt class="param">validationFreq</dt>
+                            <dd class="cmt"><p>is step count for validation (default 100)
+                            </p></dd>
+                        </dl>
+                    </div>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.trainer.Trainer" visbl="pub" data-isabs="true" fullComment="no"
+                    group="Ungrouped">
+                    <a id="TrainerextendsSerializable"></a>
+                    <a id="Trainer:Trainer"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$Trainer.html"><span class="name">Trainer</span></a><span class="result"> extends <span
+              class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+                    </h4><span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package@TrainerextendsSerializable"
+         title="Permalink" target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+
+                    <p class="shortcomment cmt">Trait: Trainer
+                    </p>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.trainer.TrainingCriteria" visbl="pub" data-isabs="true" fullComment="no"
+                    group="Ungrouped">
+                    <a id="TrainingCriteriaextendsSerializable"></a>
+                    <a id="TrainingCriteria:TrainingCriteria"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$TrainingCriteria.html"><span class="name">TrainingCriteria</span></a><span class="result"> extends <span
+              class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+                    </h4><span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package@TrainingCriteriaextendsSerializable"
+         title="Permalink" target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+
+                    <p class="shortcomment cmt">Trait : Training Criteria
+                    </p>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.trainer.WeightUpdater" visbl="pub" data-isabs="true" fullComment="no"
+                    group="Ungrouped">
+                    <a id="WeightUpdaterextends(Seq[kr.ac.kaist.ir.deep.function.ScalarMatrix],Seq[kr.ac.kaist.ir.deep.function.ScalarMatrix])=&gt;UnitwithSerializable"></a>
+                    <a id="WeightUpdater:WeightUpdater"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$WeightUpdater.html"><span class="name">WeightUpdater</span></a><span class="result"> extends (<span
+              class="extype" name="scala.Seq">Seq</span>[<a
+              href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]"
+              class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>], <span class="extype"
+                                                                                                       name="scala.Seq">Seq</span>[<a
+              href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]"
+              class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>]) ⇒ <span class="extype"
+                                                                                                         name="scala.Unit">Unit</span> with <span
+              class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+                    </h4><span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package@WeightUpdaterextends(Seq[kr.ac.kaist.ir.deep.function.ScalarMatrix],Seq[kr.ac.kaist.ir.deep.function.ScalarMatrix])=&gt;UnitwithSerializable"
+         title="Permalink" target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+
+                    <p class="shortcomment cmt">Trait : Weight update
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+
+        <div id="values" class="values members">
+            <h3>Value Members</h3>
+            <ol>
+                <li name="kr.ac.kaist.ir.deep.trainer.NoCorruption" visbl="pub" data-isabs="false" fullComment="no"
+                    group="Ungrouped">
+                    <a id="NoCorruption"></a>
+                    <a id="NoCorruption:NoCorruption"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$NoCorruption$.html"><span class="name">NoCorruption</span></a><span class="result"> extends <a
+              href="package$$Corruption.html" class="extype"
+              name="kr.ac.kaist.ir.deep.trainer.Corruption">Corruption</a> with <span class="extype"
+                                                                                      name="scala.Product">Product</span> with <span
+              class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+                    </h4><span class="permalink">
+      <a href="../../../../../../index.html#kr.ac.kaist.ir.deep.trainer.package@NoCorruption" title="Permalink"
+         target="_top">
+          <img src="../../../../../../lib/permalink.png"/>
+      </a>
+    </span>
+
+                    <p class="shortcomment cmt">Input Corruption: None
+                    </p>
+                </li>
+            </ol>
+        </div>
+
+
+    </div>
+
+    <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+            <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+        </div>
+        <div class="parent" name="scala.Any">
+            <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+        </div>
+
+    </div>
+
+    <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+            <h3>Ungrouped</h3>
+
+        </div>
+    </div>
+
+</div>
+
+<div id="tooltip"></div>
+
+<div id="footer"></div>
+
+
+</body>
+</html>

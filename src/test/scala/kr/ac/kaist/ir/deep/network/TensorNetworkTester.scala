@@ -2,7 +2,7 @@ package kr.ac.kaist.ir.deep.network
 
 import breeze.linalg.DenseMatrix
 import kr.ac.kaist.ir.deep.function._
-import kr.ac.kaist.ir.deep.layer.{Layer, Rank3TensorLayer}
+import kr.ac.kaist.ir.deep.layer.{Layer, Rank3TensorLayer, SplitVecTensorLayer}
 import kr.ac.kaist.ir.deep.trainer._
 import org.specs2.mutable.Specification
 
@@ -12,7 +12,7 @@ import org.specs2.mutable.Specification
  * Created by bydelta on 2015-01-06.
  */
 class TensorNetworkTester extends Specification {
-  val layer = new Rank3TensorLayer((2, 1) → 4, Sigmoid)
+  val layer = new SplitVecTensorLayer((2, 1) → 4, Sigmoid)
   "Rank3TensorLayer" should {
     "have 3 weights" in {
       layer.W must have size 9

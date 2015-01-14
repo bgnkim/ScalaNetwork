@@ -13,7 +13,7 @@ class BasicNetwork(private val layers: Seq[Layer],
                    protected override val presence: Probability = 1.0)
   extends Network {
   /** Collected input & output of each layer */
-  private var input: Seq[ScalarMatrix] = Seq()
+  protected[deep] var input: Seq[ScalarMatrix] = Seq()
 
   /**
    * All weights of layers

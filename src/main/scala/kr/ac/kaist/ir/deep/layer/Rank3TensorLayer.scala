@@ -15,24 +15,22 @@ import play.api.libs.json.{JsArray, JsObject, Json}
  * output = f( v1'.Q.v2 + L.v0 + b )
  * </pre>
  *
- * @param IO is a pair of input & output, such as (2, 2) -> 3
+ * @param fanOut is the number of output
  * @param act is an activation function to be applied
  * @param quad is initial quadratic-level weight matrix Q for the case that it is restored from JSON (default: Seq())
  * @param lin is initial linear-level weight matrix L for the case that it is restored from JSON (default: Seq())
  * @param const is initial bias weight matrix b for the case that it is restored from JSON (default: null)
  */
-class Rank3TensorLayer(IO: ((Int, Int), Int),
-                       protected override val act: Activation,
-                       quad: Seq[ScalarMatrix] = Seq(),
-                       lin: Seq[ScalarMatrix] = Seq(),
-                       const: ScalarMatrix = null)
+abstract class Rank3TensorLayer(protected val fanOut: Int,
+                                protected override val act: Activation,
+                                quad: Seq[ScalarMatrix] = Seq(),
+                                lin: Seq[ScalarMatrix] = Seq(),
+                                const: ScalarMatrix = null)
   extends Layer {
   /** Number of Fan-ins */
-  protected val fanInA = IO._1._1
-  protected val fanInB = IO._1._2
-  protected val fanIn = fanInA + fanInB
-  /** Number of Fan-outs */
-  protected val fanOut = IO._2
+  protected val fanInA: Int
+  protected val fanInB: Int
+  protected val fanIn: Int
   /** Initialize weight */
   protected val quadratic: Seq[ScalarMatrix] = if (quad.nonEmpty) quad else (0 until fanOut) map { _ ⇒ act.initialize(fanIn, fanOut, fanInA, fanInB)}
   protected val linear: Seq[ScalarMatrix] = if (lin.nonEmpty) lin else (0 until fanOut) map { _ ⇒ act.initialize(fanIn, fanOut, 1, fanIn)}
@@ -43,13 +41,27 @@ class Rank3TensorLayer(IO: ((Int, Int), Int),
   protected val db = ScalarMatrix $0(fanOut, 1)
 
   /**
+   * Retrieve first input 
+   * @param x to be separated
+   * @return first input
+   */
+  protected def in1(x: ScalarMatrix): ScalarMatrix
+
+  /**
+   * Retrive second input
+   * @param x to be separated
+   * @return second input
+   */
+  protected def in2(x: ScalarMatrix): ScalarMatrix
+
+  /**
    * Forward computation
    * @param x of input matrix
    * @return output matrix
    */
   override def apply(x: ScalarMatrix): ScalarMatrix = {
-    val inA = x(0 until fanInA, ::)
-    val inB = x(fanInA to -1, ::)
+    val inA = in1(x)
+    val inB = in2(x)
 
     val intermediate = ScalarMatrix $0(fanOut, 1)
 
@@ -118,8 +130,8 @@ class Rank3TensorLayer(IO: ((Int, Int), Int),
    * @return propagated error (in this case, <code>dG/dx</code> )
    */
   protected[deep] override def !(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
-    val inA = input(0 until fanInA, ::)
-    val inB: ScalarMatrix = input(fanInA to -1, ::)
+    val inA = in1(input)
+    val inB = in2(input)
 
     // fanOut × fanOut matrix (Numerator/Denominator Layout)
     val dFdX = act.derivative(output)

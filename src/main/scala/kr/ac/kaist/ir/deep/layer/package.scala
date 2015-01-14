@@ -101,11 +101,6 @@ package object layer {
     protected[deep] def rec_!(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix
   }
 
-  // TODO class ReconRank3TensorLayer
-
-  // TODO class WeightDepBasicLayer
-  // TODO class WeightDepRank3TensorLayer
-
   /**
    * Companion object of Layer
    */
@@ -142,7 +137,7 @@ package object layer {
           val tuple = in.as[Seq[Int]]
           val quad = (obj \ "quadratic").as[Seq[Seq[Seq[Scalar]]]] map { x ⇒ ScalarMatrix restore x}
           val linear = (obj \ "linear").as[Seq[Seq[Seq[Scalar]]]] map { x ⇒ ScalarMatrix restore x}
-          new Rank3TensorLayer((tuple(0), tuple(1)) → out, act, quad, linear, b)
+          new SplitVecTensorLayer((tuple(0), tuple(1)) → out, act, quad, linear, b)
       }
     }
   }

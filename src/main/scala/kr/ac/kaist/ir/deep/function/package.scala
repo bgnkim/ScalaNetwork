@@ -78,11 +78,19 @@ package object function {
      * Add given scalar to last row.
      * @param y to be added
      */
-    def row_+(y: Scalar) = {
+    def row_+(y: Scalar): ScalarMatrix = {
       val scalar: ScalarMatrix = (ScalarMatrix $1(1, x.cols)) :* y
-      DenseMatrix.vertcat(x, scalar)
+      x row_+ scalar
     }
 
+    /**
+     * Add given matrix to last rows.
+     * @param y to be added
+     */
+    def row_+(y: ScalarMatrix): ScalarMatrix = {
+      DenseMatrix.vertcat(x, y)
+    }
+    
     /**
      * Add given matrix to last columns.
      * @param y to be added
