@@ -50,6 +50,7 @@ package object function {
 
     /**
      * Make 2D Sequence
+     * @return JsArray
      */
     def to2DSeq: JsArray = {
       val r = x.rows
@@ -61,6 +62,10 @@ package object function {
       })
     }
 
+    /**
+     * String representation of matrix
+     * @return string repr.
+     */
     def mkString: String =
       "{" + (((0 until x.rows) map {
         r ⇒ "[" + (((0 until x.cols) map { c ⇒ f"${x(r, c)}%.3f"}) mkString ", ") + "]"
@@ -127,6 +132,14 @@ package object function {
     def :+=(w2: Seq[ScalarMatrix]) = {
       w.indices.par foreach { id ⇒ w(id) :+= w2(id)}
       w
+    }
+
+    /**
+     * Divide matrices with given scalar
+     * @param x is a divider.
+     */
+    def :/=(x: Scalar) = {
+      w foreach { matx ⇒ matx :/= x}
     }
   }
 }

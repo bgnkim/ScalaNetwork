@@ -1,7 +1,6 @@
-package kr.ac.kaist.ir.deep.trainer
+package kr.ac.kaist.ir.deep.function
 
 import breeze.numerics._
-import kr.ac.kaist.ir.deep.function._
 
 /**
  * Algorithm: AdaGrad

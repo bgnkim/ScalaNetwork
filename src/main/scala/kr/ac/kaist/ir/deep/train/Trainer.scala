@@ -1,63 +1,56 @@
-package kr.ac.kaist.ir.deep.trainer
+package kr.ac.kaist.ir.deep.train
 
 import kr.ac.kaist.ir.deep.function._
-import kr.ac.kaist.ir.deep.network.{AutoEncoder, Network}
+import kr.ac.kaist.ir.deep.train.op.{InputOp, ScalarVector}
+import kr.ac.kaist.ir.deep.train.style.TrainStyle
 import org.apache.log4j.Logger
+import org.apache.spark.rdd.RDD
 
 import scala.annotation.tailrec
 
 
 /**
- * Trait: Trainer
+ * General Trainer
+ *
+ * @param style supervises how to train. There are two styles, 
+ *              one is [[kr.ac.kaist.ir.deep.train.style.SingleThreadTrainStyle]]
+ *              and the other is [[kr.ac.kaist.ir.deep.train.style.DistBeliefTrainStyle]].
+ * @param make supervises how to manipulate input as matrices.
+ *             This also controls how to compute actual network.             
+ * @param stops controls the threshold for stopping. (Default : [[StoppingCriteria]])
+ *
+ * @tparam IN is the type of input. 
+ *            Currently, [[ScalarMatrix]] and [[kr.ac.kaist.ir.deep.rec.VectorTree]] are supported
  */
-trait Trainer extends Serializable {
-  /** Stopping Criteria */
-  protected val stops: StoppingCriteria
-  /** Algorithm */
-  protected val algorithm: WeightUpdater
-  /** Network */
-  protected val net: Network
-  /** Objective function */
-  protected val error: Objective
-  /** Corruption function */
-  protected val corrupt: Corruption
-  /** Training parameters */
-  protected val param: TrainingCriteria
-  /** Training Set */
-  protected var trainingSet: Int ⇒ Seq[(ScalarMatrix, ScalarMatrix)] = null
+class Trainer[IN](protected val style: TrainStyle[IN],
+                  protected[train] val make: InputOp[IN] = new ScalarVector(),
+                  protected val stops: StoppingCriteria = StoppingCriteria())
+  extends Serializable {
+  /** import everything in the style */
+
+  import style._
+
+  /** Logger */
+  @transient protected val logger = Logger.getLogger(this.getClass)
   /** Validation Set */
-  protected var testSet: Int ⇒ Seq[(ScalarMatrix, ScalarMatrix)] = null
+  protected var testSet: Int ⇒ Seq[(IN, ScalarMatrix)] = null
   /** Best Parameter History */
   @transient protected var bestParam: Seq[ScalarMatrix] = null
   @transient protected var bestIter: Int = 0
-  /** Logger */
-  @transient protected val logger = Logger.getLogger(this.getClass)
-
-  /**
-   * Implicit weight operation
-   * @param w to be applied
-   */
-  implicit class WeightOp(w: Seq[ScalarMatrix]) extends Serializable {
-    /**
-     * Sugar: Weight update
-     * @param dw is a amount of update
-     */
-    def -=(dw: Seq[ScalarMatrix]) = algorithm(dw, w)
-  }
 
   /**
    * Train given sequence, and validate with given sequence.
    * @param set to be trained (Random Sequence Generator)
    * @return Training error (loss)
    */
-  def train(set: Int ⇒ Seq[(ScalarMatrix, ScalarMatrix)]): Scalar = train(set, set)
+  def train(set: Int ⇒ Seq[(IN, ScalarMatrix)]): Scalar = train(set, set)
 
   /**
    * Train given sequence, and validate with given sequence.
    * @param set to be trained (Full Seq)
    * @return Training error (loss)
    */
-  def train(set: Seq[(ScalarMatrix, ScalarMatrix)]): Scalar = {
+  def train(set: Seq[(IN, ScalarMatrix)]): Scalar = {
     val index = () ⇒ Math.floor(Math.random() * set.size).toInt
     val randomizer = (n: Int) ⇒ (0 until n) map { _ ⇒ set(index())}
     train(randomizer, randomizer)
@@ -69,8 +62,8 @@ trait Trainer extends Serializable {
    * @param validation to be used for validation (Full Seq)
    * @return Training error (loss)
    */
-  def train(set: Seq[(ScalarMatrix, ScalarMatrix)],
-            validation: Seq[(ScalarMatrix, ScalarMatrix)]): Scalar = {
+  def train(set: Seq[(IN, ScalarMatrix)],
+            validation: Seq[(IN, ScalarMatrix)]): Scalar = {
     val index = () ⇒ Math.floor(Math.random() * set.size).toInt
     val randomizer = (n: Int) ⇒ (0 until n) map { _ ⇒ set(index())}
     val topN = (n: Int) ⇒ validation.slice(0, n)
@@ -84,8 +77,8 @@ trait Trainer extends Serializable {
    * @param validation to be used for validation (Sequence Generator)
    * @return Training error (loss)
    */
-  def train(set: Int ⇒ Seq[(ScalarMatrix, ScalarMatrix)],
-            validation: Int ⇒ Seq[(ScalarMatrix, ScalarMatrix)]) = {
+  def train(set: Int ⇒ Seq[(IN, ScalarMatrix)],
+            validation: Int ⇒ Seq[(IN, ScalarMatrix)]) = {
     trainingSet = set
     testSet = validation
 
@@ -98,33 +91,25 @@ trait Trainer extends Serializable {
   }
 
   /**
-   * Train autoencoder with given sequence.
-   * @param set to be used for input & reconstruction. (Full Seq)
-   * @return Training error (loss)
+   * Train using given RDD sequence. 
+   * @param set to be used for training
    */
-  def trainAutoencoder(set: Seq[ScalarMatrix]): Scalar = {
-    val index = () ⇒ Math.floor(Math.random() * set.size).toInt
-    val randomizer = (n: Int) ⇒ (0 until n) map { _ ⇒ set(index())}
-    trainAutoencoder(randomizer)
+  def train(set: RDD[(IN, ScalarMatrix)]): Scalar = {
+    set.cache()
+    train(set.takeSample(true, _))
   }
 
   /**
-   * Train autoencoder with given sequence.
-   * @param set to be used for input & reconstruction. (Randomized Sequence Generator)
-   * @return Training error (loss)
+   * Train using given RDD sequence. 
+   * @param set to be used for training
+   * @param validation to be used for validation
    */
-  def trainAutoencoder(set: Int ⇒ Seq[ScalarMatrix]): Scalar = {
-    trainingSet = set andThen { seq ⇒ seq map { item ⇒ item → item}}
-    testSet = trainingSet
-
-    saveParams()
-    val err = trainBatch(isAutoEncoder = true)
-    restoreParams()
-    printValidation(isAutoEncoder = true)
-
-    err
+  def train(set: RDD[(IN, ScalarMatrix)], validation: RDD[(IN, ScalarMatrix)]): Scalar = {
+    set.cache()
+    validation.cache()
+    train(set.takeSample(true, _), validation.takeSample(true, _))
   }
-
+  
   /**
    * Calculate validation error
    * @param isAutoEncoder true if it is autoencoder training
@@ -133,10 +118,9 @@ trait Trainer extends Serializable {
   protected def validationError(isAutoEncoder: Boolean = false) = {
     val t = testSet(param.validationSize)
     t.foldLeft(0.0) { (err, item) ⇒ {
-      val in = item._1
-      val out = if (isAutoEncoder) in >>: net else net(in)
-      logger.debug(s"IN ${in.mkString} : EXP ${item._2.mkString} = OUT : ${out.mkString}")
-      err + error(item._2, out)
+      val out = make onewayTrip(net, item._1)
+      logger.debug(s"${make stringOf item} = OUT : ${out.mkString}")
+      err + (make error(item._2, out))
     }
     } / t.size
   }
@@ -151,9 +135,8 @@ trait Trainer extends Serializable {
     val t = testSet(param.validationSize)
     t.par foreach {
       item ⇒ {
-        val in = item._1
-        val out = if (isAutoEncoder) net.asInstanceOf[AutoEncoder].reconstruct(in) else net(in)
-        logger.info(s"IN ${in.mkString} : EXP ${item._2.mkString} = OUT : ${out.mkString}")
+        val out = make onewayTrip(net, item._1)
+        logger.info(s"${make stringOf item} = OUT : ${out.mkString}")
       }
     }
   }
@@ -177,23 +160,21 @@ trait Trainer extends Serializable {
    * @param iter indicates current iteration
    * @param prevloss indicates previous loss
    * @param patience indicates current patience
-   * @param isAutoEncoder is a flag for autoencoder.
    * @return Total Loss when train is finished
    */
   @tailrec
   protected final def trainBatch(iter: Int = 0,
                                  prevloss: Double = Double.MaxValue,
-                                 patience: Int = stops.patience,
-                                 isAutoEncoder: Boolean = false): Scalar = {
+                                 patience: Int = stops.patience): Scalar = {
     fetch(iter)
-    batch()
+    batch(make)
     update(iter)
 
     var nPatience = patience
 
     val nLoss = if ((iter + 1) % stops.validationFreq == 0) {
       logger.debug(s"ITERATION $iter : W = ${net.W map (_.mkString) mkString " | "}")
-      val train = validationError(isAutoEncoder)
+      val train = validationError()
       val weight = algorithm loss net.W
       if (train + weight < prevloss * stops.improveThreshold) {
         nPatience = Math.max(patience, iter * stops.patienceStep)
@@ -209,27 +190,11 @@ trait Trainer extends Serializable {
     }
 
     if (iter < stops.maxIter && nPatience > iter && nLoss > stops.lossThreshold) {
-      trainBatch(iter + 1, nLoss, nPatience, isAutoEncoder)
+      trainBatch(iter + 1, nLoss, nPatience)
     } else {
       logger.info(f"Finished $iter%6d, Error = $nLoss%.5f")
       nLoss
     }
   }
 
-  /**
-   * Fetch weights 
-   * @param iter is current iteration
-   */
-  protected def fetch(iter: Int): Unit
-
-  /**
-   * Do mini-batch
-   */
-  protected def batch(): Unit
-
-  /**
-   * Send update of weights
-   * @param iter is current iteration
-   */
-  protected def update(iter: Int): Unit
 }

@@ -1,6 +1,7 @@
 package kr.ac.kaist.ir.deep.layer
 
-import kr.ac.kaist.ir.deep.function.{Activation, ScalarMatrix}
+import kr.ac.kaist.ir.deep.function.{Activation, ScalarMatrix, ScalarMatrixOp}
+import play.api.libs.json.{JsArray, JsObject, Json}
 
 /**
  * Layer: Basic, Fully-connected Rank 3 Tensor Layer.
@@ -20,16 +21,25 @@ import kr.ac.kaist.ir.deep.function.{Activation, ScalarMatrix}
  * @param lin is initial linear-level weight matrix L for the case that it is restored from JSON (default: Seq())
  * @param const is initial bias weight matrix b for the case that it is restored from JSON (default: null)
  */
-class SplitVecTensorLayer(IO: ((Int, Int), Int),
-                          protected override val act: Activation,
-                          quad: Seq[ScalarMatrix] = Seq(),
-                          lin: Seq[ScalarMatrix] = Seq(),
-                          const: ScalarMatrix = null)
-  extends Rank3TensorLayer(IO._2, act, quad, lin, const) {
-  /** Number of Fan-ins */
-  override protected val fanInA: Int = IO._1._1
-  override protected val fanInB: Int = IO._1._2
-  override protected val fanIn: Int = fanInA + fanInB
+class SplitTensorLayer(IO: ((Int, Int), Int),
+                       protected override val act: Activation,
+                       quad: Seq[ScalarMatrix] = Seq(),
+                       lin: Seq[ScalarMatrix] = Seq(),
+                       const: ScalarMatrix = null)
+  extends Rank3TensorLayer((IO._1._1, IO._1._2, IO._1._1 + IO._1._2), IO._2, act, quad, lin, const) {
+  /**
+   * Translate this layer into JSON object (in Play! framework)
+   * @return JSON object describes this layer
+   */
+  override def toJSON: JsObject = Json.obj(
+    "type" → "SplitTensorLayer",
+    "in" → Json.arr(fanInA, fanInB),
+    "out" → fanOut,
+    "act" → act.getClass.getSimpleName,
+    "quadratic" → JsArray.apply(quadratic.map(_.to2DSeq)),
+    "linear" → JsArray.apply(linear.map(_.to2DSeq)),
+    "bias" → bias.to2DSeq
+  )
 
   /**
    * Retrieve first input
@@ -43,5 +53,5 @@ class SplitVecTensorLayer(IO: ((Int, Int), Int),
    * @param x to be separated
    * @return second input
    */
-  protected override def in2(x: ScalarMatrix): ScalarMatrix = x(fanInB to -1, ::)
+  protected override def in2(x: ScalarMatrix): ScalarMatrix = x(fanInA to -1, ::)
 }

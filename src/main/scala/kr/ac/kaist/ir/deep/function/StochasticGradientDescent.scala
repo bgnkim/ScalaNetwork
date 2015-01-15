@@ -1,6 +1,4 @@
-package kr.ac.kaist.ir.deep.trainer
-
-import kr.ac.kaist.ir.deep.function._
+package kr.ac.kaist.ir.deep.function
 
 /**
  * Algorithm: Stochastic Gradient Descent

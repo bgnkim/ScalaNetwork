@@ -1,8 +1,7 @@
-package kr.ac.kaist.ir.deep.trainer
+package kr.ac.kaist.ir.deep.function
 
 import breeze.linalg.sum
 import breeze.numerics._
-import kr.ac.kaist.ir.deep.function._
 
 /**
  * Trait : Weight update

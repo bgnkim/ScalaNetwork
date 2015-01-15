@@ -1,6 +1,7 @@
 package kr.ac.kaist.ir.deep
 
 import kr.ac.kaist.ir.deep.function.ScalarMatrix
+import kr.ac.kaist.ir.deep.train.Corruption
 
 /**
  * Package object for tree
@@ -31,25 +32,47 @@ package object rec {
   }
 
   /**
-   * Operations for Vector Tree 
-   * @param t1 to be applied
+   * Tree Operation 
+   * @param x to be applied
    */
-  implicit class VectorTreeOp(t1: VectorTree) {
-    /**
-     * Construct a new binary tree 
-     * @param t2 is right tree
-     * @return new binary tree
-     */
-    def &(t2: VectorTree) = new BinaryTree[ScalarMatrix](ScalarMatrix $0(t1.value.rows, 1), t1, t2)
+  implicit class TreeOp(x: VectorTree) extends Serializable {
 
     /**
-     * Set value of this tree 
-     * @param x is the matrix to be applied
-     * @return the value
+     * Post-Order Traversal (LC - RC - Root)
+     * @param fn to be applied
+     * @return final value of root node
      */
-    def :=(x: ScalarMatrix) = {
-      t1.value := x
-    }
+    def postOrder(fn: (ScalarMatrix, ScalarMatrix) ⇒ ScalarMatrix): ScalarMatrix =
+      x match {
+        case Leaf(v) ⇒ v
+        case BinaryTree(v, t1, t2) ⇒
+          val v1 = t1 postOrder fn
+          val v2 = t2 postOrder fn
+          val out = fn(v1, v2)
+          v := out
+      }
+
+    /**
+     * Pre-Order Traversal (Root - RC - LC)
+     * @param err to be propagated
+     * @param fn to be applied
+     */
+    def preOrder(err: ScalarMatrix, fn: ScalarMatrix ⇒ ScalarMatrix): Unit =
+      x match {
+        case BinaryTree(v, t1, t2) ⇒
+          val e = fn(err)
+          val e1 = e(0 until t1.value.rows, ::)
+          val e2 = e(t1.value.rows to -1, ::)
+          t2 preOrder(e2, fn)
+          t1 preOrder(e1, fn)
+      }
+
+    def ?(corrupt: Corruption): VectorTree =
+      x match {
+        case Leaf(v) ⇒ Leaf(corrupt(v))
+        case BinaryTree(v, t1, t2) ⇒ BinaryTree(v, t1 ? corrupt, t2 ? corrupt)
+      }
+
   }
 
   /**

@@ -2,8 +2,9 @@ package kr.ac.kaist.ir.deep.network
 
 import breeze.linalg.DenseMatrix
 import kr.ac.kaist.ir.deep.function._
-import kr.ac.kaist.ir.deep.layer.{Layer, Rank3TensorLayer, SplitVecTensorLayer}
-import kr.ac.kaist.ir.deep.trainer._
+import kr.ac.kaist.ir.deep.layer.{Layer, SplitTensorLayer}
+import kr.ac.kaist.ir.deep.train._
+import kr.ac.kaist.ir.deep.train.style.SingleThreadTrainStyle
 import org.specs2.mutable.Specification
 
 /**
@@ -12,7 +13,7 @@ import org.specs2.mutable.Specification
  * Created by bydelta on 2015-01-06.
  */
 class TensorNetworkTester extends Specification {
-  val layer = new SplitVecTensorLayer((2, 1) → 4, Sigmoid)
+  val layer = new SplitTensorLayer((2, 1) → 4, Sigmoid)
   "Rank3TensorLayer" should {
     "have 3 weights" in {
       layer.W must have size 9
@@ -49,7 +50,7 @@ class TensorNetworkTester extends Specification {
     "can be reconstructed" in {
       val json = layer.toJSON
       val l2 = Layer(json)
-      l2 must haveClass[Rank3TensorLayer]
+      l2 must haveClass[SplitTensorLayer]
     }
   }
 
@@ -81,9 +82,12 @@ class TensorNetworkTester extends Specification {
     }
 
     val net = new BasicNetwork(Seq(layer))
-    val train = new BasicTrainer(net = net,
-      algorithm = new AdaDelta(l2decay = 0.001, l1decay = 0.0), //GradientDescent(rate = 0.8, l2decay = 0.0001),
-      param = SimpleTrainingCriteria(miniBatch = 8),
+    val style = new SingleThreadTrainStyle[ScalarMatrix](
+      net = net,
+      algorithm = new StochasticGradientDescent(rate = 0.8, l2decay = 0.0001),
+      param = SimpleTrainingCriteria(miniBatch = 8)
+    )
+    val train = new Trainer(style = style,
       stops = StoppingCriteria(maxIter = 100000))
 
     "properly trained" in {

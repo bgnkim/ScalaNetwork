@@ -13,9 +13,7 @@ class AutoEncoder(private val layer: Reconstructable,
                   protected[deep] override val presence: Probability = 1.0)
   extends Network {
   /** Collected input & output of each layer */
-  protected[deep] var input: ScalarMatrix = null
-  protected[deep] var hidden: ScalarMatrix = null
-  protected[deep] var output: ScalarMatrix = null
+  protected[deep] var input: Seq[ScalarMatrix] = Seq()
 
   /**
    * All weights of layers
@@ -49,23 +47,33 @@ class AutoEncoder(private val layer: Reconstructable,
   )
 
   /**
-   * Reconstruct the input
-   *
-   * @param x to be reconstructed.
-   * @return reconstruction of x.
-   */
-  def reconstruct(x: ScalarMatrix): ScalarMatrix = {
-    val h = (x >>: layer) :* presence
-    (h rec_>>: layer) :* presence
-  }
-
-  /**
    * Backpropagation algorithm
    * @param err backpropagated error from error function
    */
-  protected[deep] override def !(err: ScalarMatrix) = {
-    val reconErr = layer rec_!(err, hidden, output)
-    layer !(reconErr, input, hidden)
+  protected[deep] override def !(err: ScalarMatrix) = encode_!(decode_!(err))
+
+  /**
+   * Backpropagation algorithm for decoding phrase
+   * @param err backpropagated error from error function
+   */
+  protected[deep] def decode_!(err: ScalarMatrix) = {
+    val output = input.head
+    val hidden = input.tail.head
+    input = input.tail.tail
+
+    layer rec_!(err, hidden, output)
+  }
+
+  /**
+   * Backpropagation algorithm for encoding phrase
+   * @param err backpropagated error from error function
+   */
+  protected[deep] def encode_!(err: ScalarMatrix) = {
+    val hidden = input.head
+    val in = input.tail.head
+    input = input.tail.tail
+
+    layer !(err, in, hidden)
   }
 
   /**
@@ -75,14 +83,56 @@ class AutoEncoder(private val layer: Reconstructable,
    * @param x of input matrix
    * @return output matrix
    */
-  protected[deep] override def >>:(x: ScalarMatrix): ScalarMatrix = {
-    input = x.copy
+  protected[deep] override def >>:(x: ScalarMatrix): ScalarMatrix = decode(encode(x))
+  
+  /**
+   * Encode computation for training.
+   * If drop-out is used, we need to drop-out entry of input vector.
+   *
+   * @param x of input matrix
+   * @return hidden values
+   */
+  protected[deep] def encode(x: ScalarMatrix): ScalarMatrix = {
+    val in = x.copy
     if (presence < 1.0)
-      input :*= ScalarMatrix $01(x.rows, x.cols, presence.safe)
-    hidden = input >>: layer
+      in :*= ScalarMatrix $01(x.rows, x.cols, presence.safe)
+    val hidden = in >>: layer
+    input = Seq(hidden, in) ++: input
+    hidden
+  }
+
+  /**
+   * Decode computation for training.
+   * If drop-out is used, we need to drop-out entry of input vector.
+   *
+   * @param x of hidden values
+   * @return output matrix
+   */
+  protected[deep] def decode(x: ScalarMatrix): ScalarMatrix = {
+    val hidden = x.copy
     if (presence < 1.0)
       hidden :*= ScalarMatrix $01(hidden.rows, hidden.cols, presence.safe)
-    output = hidden rec_>>: layer
+    val output = hidden rec_>>: layer
+    input = Seq(output, hidden) ++: input
     output
+  }
+
+  /**
+   * Sugar: Forward computation for validation. Calls apply(x)
+   *
+   * @param x of input matrix
+   * @return output matrix
+   */
+  override protected[deep] def on(x: ScalarMatrix): ScalarMatrix = reconstruct(x)
+
+  /**
+   * Reconstruct the input
+   *
+   * @param x to be reconstructed.
+   * @return reconstruction of x.
+   */
+  def reconstruct(x: ScalarMatrix): ScalarMatrix = {
+    val h = (x >>: layer) :* presence
+    (h rec_>>: layer) :* presence
   }
 }

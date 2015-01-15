@@ -1,4 +1,4 @@
-package kr.ac.kaist.ir.deep.trainer
+package kr.ac.kaist.ir.deep.train
 
 /**
  * Trait : Training Criteria

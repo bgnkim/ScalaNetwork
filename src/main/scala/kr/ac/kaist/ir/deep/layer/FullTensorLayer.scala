@@ -1,6 +1,7 @@
 package kr.ac.kaist.ir.deep.layer
 
-import kr.ac.kaist.ir.deep.function.{Activation, ScalarMatrix}
+import kr.ac.kaist.ir.deep.function.{Activation, ScalarMatrix, ScalarMatrixOp}
+import play.api.libs.json.{JsArray, JsObject, Json}
 
 /**
  * Layer: Basic, Fully-connected Rank 3 Tensor Layer.
@@ -25,11 +26,21 @@ class FullTensorLayer(IO: (Int, Int),
                       quad: Seq[ScalarMatrix] = Seq(),
                       lin: Seq[ScalarMatrix] = Seq(),
                       const: ScalarMatrix = null)
-  extends Rank3TensorLayer(IO._2, act, quad, lin, const) {
-  /** Number of Fan-ins */
-  override protected val fanInA: Int = IO._1
-  override protected val fanInB: Int = IO._1
-  override protected val fanIn: Int = IO._1
+  extends Rank3TensorLayer((IO._1, IO._1, IO._1), IO._2, act, quad, lin, const) {
+
+  /**
+   * Translate this layer into JSON object (in Play! framework)
+   * @return JSON object describes this layer
+   */
+  override def toJSON: JsObject = Json.obj(
+    "type" → "FullTensorLayer",
+    "in" → fanIn,
+    "out" → fanOut,
+    "act" → act.getClass.getSimpleName,
+    "quadratic" → JsArray.apply(quadratic.map(_.to2DSeq)),
+    "linear" → JsArray.apply(linear.map(_.to2DSeq)),
+    "bias" → bias.to2DSeq
+  )
 
   /**
    * Retrieve first input

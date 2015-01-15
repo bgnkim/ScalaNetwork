@@ -60,8 +60,8 @@ class BasicNetwork(private val layers: Seq[Layer],
    * Backpropagation algorithm
    * @param err backpropagated error from error function
    */
-  protected[deep] override def !(err: ScalarMatrix) =
-    layers.indices.foldRight(err) {
+  protected[deep] override def !(err: ScalarMatrix) = {
+    val error = layers.indices.foldRight(err) {
       (id, e) ⇒ {
         val l = layers(id)
         val out = input.head
@@ -70,6 +70,11 @@ class BasicNetwork(private val layers: Seq[Layer],
         l !(e, in, out)
       }
     }
+
+    // Clean-up last entry
+    input = input.tail
+    error
+  }
 
   /**
    * Forward computation for training.
@@ -87,7 +92,7 @@ class BasicNetwork(private val layers: Seq[Layer],
           in :*= ScalarMatrix $01(in.rows, in.cols, presence.safe)
         (in >>: layers(id)) +: seq
       }
-    }
+    } ++: input
     input.head
   }
 }

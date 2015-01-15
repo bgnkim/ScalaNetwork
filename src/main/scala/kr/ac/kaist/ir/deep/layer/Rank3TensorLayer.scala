@@ -1,7 +1,6 @@
 package kr.ac.kaist.ir.deep.layer
 
 import kr.ac.kaist.ir.deep.function._
-import play.api.libs.json.{JsArray, JsObject, Json}
 
 /**
  * Layer: Basic, Fully-connected Rank 3 Tensor Layer.
@@ -15,22 +14,24 @@ import play.api.libs.json.{JsArray, JsObject, Json}
  * output = f( v1'.Q.v2 + L.v0 + b )
  * </pre>
  *
+ * @param fanIns is the number of input. (vector1, vector2, entire).
  * @param fanOut is the number of output
  * @param act is an activation function to be applied
  * @param quad is initial quadratic-level weight matrix Q for the case that it is restored from JSON (default: Seq())
  * @param lin is initial linear-level weight matrix L for the case that it is restored from JSON (default: Seq())
  * @param const is initial bias weight matrix b for the case that it is restored from JSON (default: null)
  */
-abstract class Rank3TensorLayer(protected val fanOut: Int,
+abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
+                                protected val fanOut: Int,
                                 protected override val act: Activation,
                                 quad: Seq[ScalarMatrix] = Seq(),
                                 lin: Seq[ScalarMatrix] = Seq(),
                                 const: ScalarMatrix = null)
   extends Layer {
   /** Number of Fan-ins */
-  protected val fanInA: Int
-  protected val fanInB: Int
-  protected val fanIn: Int
+  protected val fanInA = fanIns._1
+  protected val fanInB = fanIns._2
+  protected val fanIn = fanIns._3
   /** Initialize weight */
   protected val quadratic: Seq[ScalarMatrix] = if (quad.nonEmpty) quad else (0 until fanOut) map { _ ⇒ act.initialize(fanIn, fanOut, fanInA, fanInB)}
   protected val linear: Seq[ScalarMatrix] = if (lin.nonEmpty) lin else (0 until fanOut) map { _ ⇒ act.initialize(fanIn, fanOut, 1, fanIn)}
@@ -79,20 +80,6 @@ abstract class Rank3TensorLayer(protected val fanOut: Int,
 
     act(intermediate)
   }
-
-  /**
-   * Translate this layer into JSON object (in Play! framework)
-   * @return JSON object describes this layer
-   */
-  override def toJSON: JsObject = Json.obj(
-    "type" → "Rank3TensorLayer",
-    "in" → Json.arr(fanInA, fanInB),
-    "out" → fanOut,
-    "act" → act.getClass.getSimpleName,
-    "quadratic" → JsArray.apply(quadratic.map(_.to2DSeq)),
-    "linear" → JsArray.apply(linear.map(_.to2DSeq)),
-    "bias" → bias.to2DSeq
-  )
 
   /**
    * weights for update

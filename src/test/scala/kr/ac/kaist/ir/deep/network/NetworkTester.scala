@@ -3,7 +3,9 @@ package kr.ac.kaist.ir.deep.network
 import breeze.linalg.DenseMatrix
 import kr.ac.kaist.ir.deep.function._
 import kr.ac.kaist.ir.deep.layer.{Layer, ReconBasicLayer}
-import kr.ac.kaist.ir.deep.trainer._
+import kr.ac.kaist.ir.deep.train._
+import kr.ac.kaist.ir.deep.train.op.ScalarVector
+import kr.ac.kaist.ir.deep.train.style.SingleThreadTrainStyle
 import org.specs2.mutable.Specification
 
 /**
@@ -46,19 +48,22 @@ class NetworkTester extends Specification {
       x ⇒ (0 to 1) map {
         y ⇒ {
           val m = DenseMatrix.create[Scalar](4, 1, Array(x, y, y, x))
-          m
+          m → m
         }
       }
     }
 
     val encoder = new AutoEncoder(layer, 0.9995)
-    val trainer = new BasicTrainer(net = encoder,
+    val style = new SingleThreadTrainStyle[ScalarMatrix](
+      net = encoder,
       algorithm = new StochasticGradientDescent(rate = 0.8, l2decay = 0.0001),
-      param = SimpleTrainingCriteria(miniBatch = 8),
+      param = SimpleTrainingCriteria(miniBatch = 8))
+    val trainer = new Trainer(style = style,
+      make = new ScalarVector(),
       stops = StoppingCriteria(maxIter = 100000))
 
     "properly trained" in {
-      trainer.trainAutoencoder(set) must be_<(0.3)
+      trainer.train(set, set) must be_<(0.3)
     }
   }
 
@@ -87,12 +92,18 @@ class NetworkTester extends Specification {
     }
 
     val net = Network(Sigmoid, 2, 4, 1)
-    val train = new BasicTrainer(net = net,
-      algorithm = new AdaDelta(l2decay = 0.0001, decay = 0.95, epsilon = 1e-4),
+    val style = new SingleThreadTrainStyle[ScalarMatrix](
+      net = net,
+      algorithm = new AdaGrad(l2decay = 0.0001),
       //algorithm = new AdaGrad(l2decay = 0.0001),
       //algorithm = GradientDescent(rate = 0.8, l2decay = 0.0001),
-      corrupt = GaussianCorruption(variance = 0.1),
-      param = SimpleTrainingCriteria(miniBatch = 8),
+      param = SimpleTrainingCriteria(miniBatch = 8))
+    val operation = new ScalarVector(
+      corrupt = GaussianCorruption(variance = 0.1)
+    )
+    val train = new Trainer(
+      style = style,
+      make = operation,
       stops = StoppingCriteria(maxIter = 100000))
 
     "properly trained" in {

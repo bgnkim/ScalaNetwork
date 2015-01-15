@@ -8,7 +8,7 @@ import kr.ac.kaist.ir.deep.function._
  *
  * Created by bydelta on 2015-01-02.
  */
-package object trainer {
+package object train {
 
   /** Type of Corruption */
   trait Corruption extends (ScalarMatrix ⇒ ScalarMatrix) with Serializable
@@ -68,7 +68,7 @@ package object trainer {
     extends Serializable
 
   /**
-   * Criteria: How to train
+   * Criteria: How to train (for [[kr.ac.kaist.ir.deep.train.style.SingleThreadTrainStyle]])
    * @param miniBatch is size of mini-batch (default 100)
    * @param validationSize is size of validation set to be generated (default 20)
    */
@@ -76,7 +76,7 @@ package object trainer {
                                     override val validationSize: Int = 20) extends TrainingCriteria
 
   /**
-   * Criteria: How to train (for DistBelief-style online trainer, [[kr.ac.kaist.ir.deep.trainer.SparkTrainer]])
+   * Criteria: How to train (for [[kr.ac.kaist.ir.deep.train.style.DistBeliefTrainStyle]])
    * @param miniBatch is size of mini-batch (default 100)
    * @param validationSize is size of validation set to be generated (default 20)
    * @param updateStep is number of "numCores mini-batches" between update (default 2)
@@ -101,5 +101,4 @@ package object trainer {
      */
     override def apply(v1: ScalarMatrix) = v1
   }
-
 }

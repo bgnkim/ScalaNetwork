@@ -1,9 +1,10 @@
-package kr.ac.kaist.ir.deep.trainer
+package kr.ac.kaist.ir.deep.train
 
 import breeze.linalg.DenseMatrix
 import kr.ac.kaist.ir.deep.function._
-import kr.ac.kaist.ir.deep.layer.SplitVecTensorLayer
+import kr.ac.kaist.ir.deep.layer.SplitTensorLayer
 import kr.ac.kaist.ir.deep.network.BasicNetwork
+import kr.ac.kaist.ir.deep.train.style.DistBeliefTrainStyle
 import org.apache.spark.{SparkConf, SparkContext}
 import org.specs2.mutable.Specification
 
@@ -39,14 +40,17 @@ class SparkTrainerTest extends Specification {
   }
 
   "SparkTrainer(Local)" should {
-    val layer = new SplitVecTensorLayer((2, 1) → 4, Sigmoid)
+    val layer = new SplitTensorLayer((2, 1) → 4, Sigmoid)
     val net = new BasicNetwork(Seq(layer))
     val conf = new SparkConf().setMaster("local[6]").setAppName("SparkTrainer Test")
     val sc = new SparkContext(conf)
-    val train = new SparkTrainer(net = net,
-      algorithm = new StochasticGradientDescent(rate = 0.8, l2decay = 0.00001),
+    val style = new DistBeliefTrainStyle[ScalarMatrix](
+      net = net,
       sc = sc,
-      param = DistBeliefCriteria(miniBatch = 16, fetchStep = 10, updateStep = 2, numCores = 6),
+      algorithm = new StochasticGradientDescent(rate = 0.3, l2decay = 0.00001),
+      param = DistBeliefCriteria(miniBatch = 16, fetchStep = 10, updateStep = 2, numCores = 6))
+    val train = new Trainer(
+      style = style,
       stops = StoppingCriteria(maxIter = 100000))
 
     "properly trained" in {
