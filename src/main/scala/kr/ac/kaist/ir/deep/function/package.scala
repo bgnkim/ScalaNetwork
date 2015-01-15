@@ -19,57 +19,6 @@ package object function {
   val Tanh = HyperbolicTangent
 
   /**
-   * Define Activation Function trait.
-   */
-  trait Activation extends (ScalarMatrix ⇒ ScalarMatrix) with Serializable {
-    /**
-     * Compute derivative of this function
-     * @param fx is output of this function
-     * @return differentiation value at f(x)=fx, which is Square, diagonal matrix
-     */
-    def derivative(fx: ScalarMatrix): ScalarMatrix
-
-    /**
-     * Compute mapping at x
-     * @param x is input scalar.
-     * @return f(x)
-     */
-    def apply(x: ScalarMatrix): ScalarMatrix
-
-    /**
-     * Initialize Weight matrix
-     * @param fanIn is a weight vector indicates fan-in
-     * @param fanOut is a count of fan-out
-     * @return weight matrix
-     */
-    def initialize(fanIn: Int, fanOut: Int, rows: Int = 0, cols: Int = 0): ScalarMatrix = {
-      val pmMatx: ScalarMatrix = ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :* 1e-2
-      pmMatx :+ 1e-2
-    }
-  }
-
-  /**
-   * Define Objective Function trait.
-   */
-  trait Objective extends ((ScalarMatrix, ScalarMatrix) ⇒ Scalar) with Serializable {
-    /**
-     * Compute derivative of this objective function
-     * @param real is expected real output
-     * @param output is computational output of the network
-     * @return is differentiation(Gradient) vector at f(X)=output, i.e. error of each output neuron.
-     */
-    def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix
-
-    /**
-     * Compute error
-     * @param real is expected real output
-     * @param output is computational output of the network
-     * @return is the error
-     */
-    override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar
-  }
-
-  /**
    * Defines sugar operations for ScalarMatrix
    * @param x to be computed
    */

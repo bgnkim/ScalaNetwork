@@ -3,8 +3,6 @@ package kr.ac.kaist.ir.deep.trainer
 import kr.ac.kaist.ir.deep.function._
 import kr.ac.kaist.ir.deep.network.Network
 
-import scala.annotation.tailrec
-
 /**
  * Trainer : Stochastic-Style
  * @param net to be trained
@@ -23,18 +21,23 @@ class BasicTrainer(protected override val net: Network,
   extends Trainer {
 
   /**
-   * Tail Recursive : Train each batch
-   * @param iter indicates current iteration
-   * @param prevloss indicates previous loss
-   * @param patience indicates current patience
-   * @param isAutoEncoder is a flag for autoencoder.
-   * @return Total Loss when train is finished
+   * Fetch weights 
+   * @param iter is current iteration
    */
-  @tailrec
-  protected final def trainBatch(iter: Int = 0,
-                                 prevloss: Double = Double.MaxValue,
-                                 patience: Int = stops.patience,
-                                 isAutoEncoder: Boolean = false): Scalar = {
+  override protected def fetch(iter: Int): Unit = {}
+
+  /**
+   * Send update of weights  
+   * @param iter is current iteration
+   */
+  override protected def update(iter: Int): Unit = {
+    net.W -= net.dW
+  }
+
+  /**
+   * Do mini-batch
+   */
+  override protected def batch(): Unit =
     trainingSet(param.miniBatch) foreach {
       pair ⇒ {
         val out = corrupt(pair._1) >>: net
@@ -42,32 +45,4 @@ class BasicTrainer(protected override val net: Network,
         net ! err
       }
     }
-    net.W -= net.dW
-
-    var nPatience = patience
-
-    val nLoss = if ((iter + 1) % stops.validationFreq == 0) {
-      logger.debug(s"ITERATION $iter : W = ${net.W map (_.mkString) mkString " | "}")
-      val train = validationError(isAutoEncoder)
-      val weight = algorithm loss net.W
-      if (train + weight < prevloss * stops.improveThreshold) {
-        nPatience = Math.max(patience, iter * stops.patienceStep)
-        bestIter = iter
-        saveParams()
-        logger.info(f"Iteration $iter%6d, Validation = $train%.5f, WeightLoss = $weight%.5f")
-        train + weight
-      } else {
-        prevloss
-      }
-    } else {
-      prevloss
-    }
-
-    if (iter < stops.maxIter && nPatience > iter && nLoss > stops.lossThreshold) {
-      trainBatch(iter + 1, nLoss, nPatience, isAutoEncoder)
-    } else {
-      logger.info(f"Finished $iter%6d, Error = $nLoss%.5f")
-      nLoss
-    }
-  }
 }
