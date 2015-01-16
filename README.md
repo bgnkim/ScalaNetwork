@@ -3,6 +3,8 @@ ScalaNetwork 0.1.3-SNAPSHOT
 
 A *Neural Network implementation* with Scala, [Breeze](https://github.com/scalanlp/breeze) & [Spark](http://spark.apache.org)
 
+Spark Network follows [GPL v2 license](http://choosealicense.com/licenses/gpl-2.0/).
+
 # Features
 
 ## Network
