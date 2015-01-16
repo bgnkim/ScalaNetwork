@@ -67,6 +67,27 @@ package object rec {
           t1 preOrder(e1, fn)
       }
 
+    /**
+     * Pre-Order Traversal and Copy new tree (Root - RC - LC)
+     * @param err to be propagated
+     * @param binary to be applied to binary internal node
+     * @param leaf to be applied to transformation
+     */
+    def preOrderCopy(err: ScalarMatrix,
+                     binary: ScalarMatrix ⇒ ScalarMatrix,
+                     leaf: (ScalarMatrix, ScalarMatrix) ⇒ ScalarMatrix): VectorTree =
+      x match {
+        case BinaryTree(v, t1, t2) ⇒
+          val e = binary(err)
+          val e1 = e(0 until t1.value.rows, ::)
+          val e2 = e(t1.value.rows to -1, ::)
+          val newt2 = t2 preOrderCopy(e2, binary, leaf)
+          val newt1 = t1 preOrderCopy(e1, binary, leaf)
+          BinaryTree(v, newt1, newt2)
+        case Leaf(v) ⇒
+          Leaf(leaf(v, err))
+      }
+
     def ?(corrupt: Corruption): VectorTree =
       x match {
         case Leaf(v) ⇒ Leaf(corrupt(v))

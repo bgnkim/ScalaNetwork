@@ -20,7 +20,7 @@ import scala.annotation.tailrec
  * @param stops controls the threshold for stopping. (Default : [[StoppingCriteria]])
  *
  * @tparam IN is the type of input. 
- *            Currently, [[ScalarMatrix]] and [[kr.ac.kaist.ir.deep.rec.VectorTree]] are supported
+ *            Currently, [[kr.ac.kaist.ir.deep.function.ScalarMatrix]] and [[kr.ac.kaist.ir.deep.rec.VectorTree]] are supported
  */
 class Trainer[IN](protected val style: TrainStyle[IN],
                   protected[train] val make: InputOp[IN] = new ScalarVector(),

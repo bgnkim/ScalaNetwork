@@ -20,7 +20,7 @@ object CrossEntropyErr extends Objective {
    * Compute derivative of this objective function
    * @param real is expected real output
    * @param output is computational output of the network
-   * @return is differentiation(Gradient) vector at f(X)=output, i.e. error of each output neuron.
+   * @return differentiation value at f(x)=fx, which is Square, diagonal matrix
    */
   override def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix =
     DenseMatrix.tabulate(real.rows, real.cols)((r, c) ⇒ entropyDiff(real(r, c), output(r, c)))

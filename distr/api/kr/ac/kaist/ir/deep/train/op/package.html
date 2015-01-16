@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+<head>
+    <title>op - kr.ac.kaist.ir.deep.train.op</title>
+    <meta name="description" content="op - kr.ac.kaist.ir.deep.train.op"/>
+    <meta name="keywords" content="op kr.ac.kaist.ir.deep.train.op"/>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+
+    <link href="../../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet"/>
+    <link href="../../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet"
+          id="diagrams-css"/>
+    <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../../index.html';
+            var hash = 'kr.ac.kaist.ir.deep.train.op.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+
+    </script>
+
+</head>
+<body class="value">
+<div id="definition">
+    <img src="../../../../../../../lib/package_big.png"/>
+
+    <p id="owner"><a href="../../../../../../package.html" class="extype" name="kr">kr</a>.<a
+            href="../../../../../package.html" class="extype" name="kr.ac">ac</a>.<a href="../../../../package.html"
+                                                                                     class="extype" name="kr.ac.kaist">kaist</a>.<a
+            href="../../../package.html" class="extype" name="kr.ac.kaist.ir">ir</a>.<a href="../../package.html"
+                                                                                        class="extype"
+                                                                                        name="kr.ac.kaist.ir.deep">deep</a>.<a
+            href="../package.html" class="extype" name="kr.ac.kaist.ir.deep.train">train</a></p>
+
+    <h1>op</h1>
+</div>
+
+<h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">op</span>
+      </span>
+</h4>
+
+<div id="comment" class="fullcommenttop"></div>
+
+
+<div id="mbrsel">
+    <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text"
+                                                                             accesskey="/"/></span><span
+            class="post"></span></div>
+
+
+    <div id="visbl">
+        <span class="filtertype">Visibility</span>
+        <ol>
+            <li class="public in"><span>Public</span></li>
+            <li class="all out"><span>All</span></li>
+        </ol>
+    </div>
+</div>
+
+<div id="template">
+    <div id="allMembers">
+
+
+        <div id="types" class="types members">
+            <h3>Type Members</h3>
+            <ol>
+                <li name="kr.ac.kaist.ir.deep.train.op.InputOp" visbl="pub" data-isabs="true" fullComment="no"
+                    group="Ungrouped">
+                    <a id="InputOp[IN]extendsSerializable"></a>
+                    <a id="InputOp[IN]:InputOp[IN]"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="InputOp.html"><span class="name">InputOp</span></a><span class="tparams">[<span
+              name="IN">IN</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+                    </h4>
+
+                    <p class="comment cmt">Corrupt and apply given single input
+                    </p>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.train.op.ScalarVector" visbl="pub" data-isabs="false" fullComment="no"
+                    group="Ungrouped">
+                    <a id="ScalarVectorextendsInputOp[kr.ac.kaist.ir.deep.function.ScalarMatrix]"></a>
+                    <a id="ScalarVector:ScalarVector"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ScalarVector.html"><span class="name">ScalarVector</span></a><span class="result"> extends <a
+              href="InputOp.html" class="extype" name="kr.ac.kaist.ir.deep.train.op.InputOp">InputOp</a>[<a
+              href="../../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]"
+              class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>]</span>
+      </span>
+                    </h4>
+
+                    <p class="comment cmt">Input Operation : For Vector
+                    </p>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.train.op.TreeRAE" visbl="pub" data-isabs="false" fullComment="no"
+                    group="Ungrouped">
+                    <a id="TreeRAEextendsInputOp[kr.ac.kaist.ir.deep.rec.VectorTree]"></a>
+                    <a id="TreeRAE:TreeRAE"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TreeRAE.html"><span class="name">TreeRAE</span></a><span class="result"> extends <a href="InputOp.html"
+                                                                                                     class="extype"
+                                                                                                     name="kr.ac.kaist.ir.deep.train.op.InputOp">InputOp</a>[<a
+              href="../../rec/package.html#VectorTree=kr.ac.kaist.ir.deep.rec.package.Tree[kr.ac.kaist.ir.deep.function.ScalarMatrix]"
+              class="extmbr" name="kr.ac.kaist.ir.deep.rec.VectorTree">VectorTree</a>]</span>
+      </span>
+                    </h4>
+
+                    <p class="comment cmt">Input Operation : For VectorTree, &amp; Recursive Auto-Encoder Training
+                    </p>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.train.op.TreeRecursive" visbl="pub" data-isabs="false" fullComment="no"
+                    group="Ungrouped">
+                    <a id="TreeRecursiveextendsInputOp[kr.ac.kaist.ir.deep.rec.VectorTree]"></a>
+                    <a id="TreeRecursive:TreeRecursive"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TreeRecursive.html"><span class="name">TreeRecursive</span></a><span class="result"> extends <a
+              href="InputOp.html" class="extype" name="kr.ac.kaist.ir.deep.train.op.InputOp">InputOp</a>[<a
+              href="../../rec/package.html#VectorTree=kr.ac.kaist.ir.deep.rec.package.Tree[kr.ac.kaist.ir.deep.function.ScalarMatrix]"
+              class="extmbr" name="kr.ac.kaist.ir.deep.rec.VectorTree">VectorTree</a>]</span>
+      </span>
+                    </h4>
+
+                    <p class="comment cmt">Input Operation : For VectorTree, &amp; General Recursive Network Training
+                    </p>
+                </li>
+                <li name="kr.ac.kaist.ir.deep.train.op.TreeURAE" visbl="pub" data-isabs="false" fullComment="no"
+                    group="Ungrouped">
+                    <a id="TreeURAEextendsInputOp[kr.ac.kaist.ir.deep.rec.VectorTree]"></a>
+                    <a id="TreeURAE:TreeURAE"></a>
+                    <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TreeURAE.html"><span class="name">TreeURAE</span></a><span class="result"> extends <a
+              href="InputOp.html" class="extype" name="kr.ac.kaist.ir.deep.train.op.InputOp">InputOp</a>[<a
+              href="../../rec/package.html#VectorTree=kr.ac.kaist.ir.deep.rec.package.Tree[kr.ac.kaist.ir.deep.function.ScalarMatrix]"
+              class="extmbr" name="kr.ac.kaist.ir.deep.rec.VectorTree">VectorTree</a>]</span>
+      </span>
+                    </h4>
+
+                    <p class="comment cmt">Input Operation : For VectorTree, &amp; Unfolding Recursive Auto Encoder
+                        Training</p>
+                </li>
+            </ol>
+        </div>
+
+
+    </div>
+
+    <div id="inheritedMembers">
+
+
+    </div>
+
+    <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+            <h3>Ungrouped</h3>
+
+        </div>
+    </div>
+
+</div>
+
+<div id="tooltip"></div>
+
+<div id="footer"></div>
+<script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../../lib/jquery.js"></script>
+<script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../../lib/jquery-ui.js"></script>
+<script defer="defer" type="text/javascript" id="tools-tooltip-js"
+        src="../../../../../../../lib/tools.tooltip.js"></script>
+<script defer="defer" type="text/javascript" id="template-js" src="../../../../../../../lib/template.js"></script>
+</body>
+</html>

@@ -9,7 +9,7 @@ import kr.ac.kaist.ir.deep.train._
  * Input Operation : For VectorTree, & General Recursive Network Training
  *
  * @param corrupt supervises how to corrupt the input matrix. (Default : [[NoCorruption]])
- * @param error is an objective function (Default: [[SquaredErr]])
+ * @param error is an objective function (Default: [[kr.ac.kaist.ir.deep.function.SquaredErr]])
  */
 class TreeRecursive(override protected[train] val corrupt: Corruption = NoCorruption,
                     override protected[train] val error: Objective = SquaredErr)

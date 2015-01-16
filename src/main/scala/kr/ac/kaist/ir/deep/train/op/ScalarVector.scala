@@ -8,7 +8,7 @@ import kr.ac.kaist.ir.deep.train.{Corruption, NoCorruption}
  * Input Operation : For Vector
  *
  * @param corrupt supervises how to corrupt the input matrix. (Default : [[NoCorruption]])
- * @param error is an objective function (Default: [[SquaredErr]])
+ * @param error is an objective function (Default: [[kr.ac.kaist.ir.deep.function.SquaredErr]])
  */
 class ScalarVector(override protected[train] val corrupt: Corruption = NoCorruption,
                    override protected[train] val error: Objective = SquaredErr)

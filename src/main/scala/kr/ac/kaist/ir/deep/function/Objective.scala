@@ -8,7 +8,7 @@ trait Objective extends ((ScalarMatrix, ScalarMatrix) ⇒ Scalar) with Serializa
    * Compute derivative of this objective function
    * @param real is expected real output
    * @param output is computational output of the network
-   * @return is differentiation(Gradient) vector at f(X)=output, i.e. error of each output neuron.
+   * @return differentiation value at f(x)=fx, which is Square, diagonal matrix
    */
   def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix
 
