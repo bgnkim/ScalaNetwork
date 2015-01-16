@@ -43,7 +43,7 @@ ScalaNetwork supports following activation functions:
 
 # Usage
 
-Here is some examples for basic usage. If you want to extend this package or use it more precisely, please refer [ScalaDoc](http://nearbydelta.github.io/ScalaNetwork/distr/api)
+Here is some examples for basic usage. If you want to extend this package or use it more precisely, please refer [ScalaDoc](http://nearbydelta.github.io/ScalaNetwork/api)
 
 ## Simple Example
 `Network.apply(Activation, Int*)` generates fully-connected network:
