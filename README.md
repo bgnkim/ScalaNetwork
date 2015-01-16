@@ -16,8 +16,8 @@ ScalaNetwork supports following layered neural network implementation:
 
 Also you can implement following Recursive Network via training tools.
 
-* *Recursive* Auto Encoder (RAE)
-* *Recursive* General Neural Network (Including Recursive Neural Tensor Network, RNTN)
+* *Recursive* Auto Encoder (RAE) : *[TEST-IN-PROGRESS]*
+* *Recursive* General Neural Network (Including Recursive Neural Tensor Network, RNTN) *[TEST-IN-PROGRESS]*
 
 ## Training Methodology
 
@@ -25,7 +25,7 @@ ScalaNetwork supports following training methodologies:
 
 * Stochastic Gradient Descent w/ L1-, L2-regularization, Momentum.
 * [AdaGrad](http://www.magicbroom.info/Papers/DuchiHaSi10.pdf)
-* **Experimental** [AdaDelta](http://www.matthewzeiler.com/pubs/googleTR2012/googleTR2012.pdf)
+* **(Experimental)** [AdaDelta](http://www.matthewzeiler.com/pubs/googleTR2012/googleTR2012.pdf)
 
 ScalaNetwork supports following environments:
 
@@ -158,11 +158,14 @@ CrossEntropyErr // Which is Logistic Err
 new ScalarVector(corrupt, objective)
 
 /* Tree Input */
-// Train network as RAE style. Every internal node regarded as reconstruction its direct children (not all leaves).
+// Train network as RAE style. 
+// Every internal node regarded as reconstruction its direct children (not all leaves).
 new TreeRAE(corrupt, objective)
-// Train network as Recursive Network style(for RNTN). Forward propagation is done on whole tree at once, and then propagate back.
+// Train network as Recursive Network style(for RNTN). 
+// Forward propagation is done on whole tree at once, and then propagate back.
 new TreeRecursive(corrupt, objective)
-// Experimental: Train network as URAE style. With same structure, network should reconstruct all leaves from root.
+// Experimental: Train network as URAE style. 
+// With same structure, network should reconstruct all leaves from root.
 new TreeURAE(corrupt, objective)
 ```
 
@@ -171,18 +174,19 @@ Training is done by `Trainer` class.
 
 ```scala
 /* Stopping Criteria */
-StoppingCriteria(maxIter = 100000, patience= 5000, patienceStep=2, improveThreshold=0.95, lossThreshold=1e-4, validationFreq=100)
+StoppingCriteria(maxIter = 100000, patience= 5000, patienceStep=2, 
+  improveThreshold=0.95, lossThreshold=1e-4, validationFreq=100)
 
 /* Trainer */
 new Trainer(style = style, make = operation, stops = StoppingCriteria())
 ```
 
-* Patience and its step indicates wating time from the improvement. If network output improved on 100-th iteration, 
-  the trainer waits until Max(patience, 100 * patienceStep).
-* Improve Threshold indicates bottom line for improvement. 
+* **Patience** and **its step** indicates wating time from the improvement. If network output improved on 100-th iteration, 
+  the trainer waits until `Max(patience, 100 * patienceStep)`.
+* **Improve Threshold** indicates bottom line for improvement. 
   To be regarded as improved, loss should be less than (best loss) * improveThreshold
-* Loss threshold indicates maximum loss can be accepted.
-* Validation Frequency sets the number of iterations between validations.
+* **Loss threshold** indicates maximum loss can be accepted.
+* **Validation Frequency** sets the number of iterations between validations.
 
 Training is done by `train` method.
 
