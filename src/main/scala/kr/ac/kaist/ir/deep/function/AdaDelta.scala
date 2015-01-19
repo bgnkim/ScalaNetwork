@@ -1,6 +1,7 @@
 package kr.ac.kaist.ir.deep.function
 
 import breeze.numerics._
+import org.apache.spark.annotation.Experimental
 
 /**
  * Algorithm: AdaDelta
@@ -9,6 +10,7 @@ import breeze.numerics._
  * @param decay for AdaDelta history decay factor
  * @param epsilon for AdaDelta base factor
  */
+@Experimental
 class AdaDelta(protected override val l1decay: Double = 0.01,
                protected override val l2decay: Double = 0.01,
                private val decay: Double = 0.95,

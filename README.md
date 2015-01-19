@@ -16,8 +16,8 @@ ScalaNetwork supports following layered neural network implementation:
 
 Also you can implement following Recursive Network via training tools.
 
-* *Recursive* Auto Encoder (RAE) : *[TEST-IN-PROGRESS]*
-* *Recursive* General Neural Network (Including Recursive Neural Tensor Network, RNTN) *[TEST-IN-PROGRESS]*
+* *Recursive* Auto Encoder (RAE) <sup>[TEST-IN-PROGRESS]</sup>
+* *Recursive* General Neural Network (Including Recursive Neural Tensor Network, RNTN) <sup>[TEST-IN-PROGRESS]</sup>
 
 ## Training Methodology
 
@@ -25,7 +25,7 @@ ScalaNetwork supports following training methodologies:
 
 * Stochastic Gradient Descent w/ L1-, L2-regularization, Momentum.
 * [AdaGrad](http://www.magicbroom.info/Papers/DuchiHaSi10.pdf)
-* **(Experimental)** [AdaDelta](http://www.matthewzeiler.com/pubs/googleTR2012/googleTR2012.pdf)
+* [AdaDelta](http://www.matthewzeiler.com/pubs/googleTR2012/googleTR2012.pdf) <sup>Experimental</sup>
 
 ScalaNetwork supports following environments:
 
@@ -44,6 +44,25 @@ ScalaNetwork supports following activation functions:
 # Usage
 
 Here is some examples for basic usage. If you want to extend this package or use it more precisely, please refer [ScalaDoc](http://nearbydelta.github.io/ScalaNetwork/distr/api)
+
+## Download
+
+Currently ScalaNetwork supports Scala version 2.10, 2.11<sup>Experimental</sup>.
+ 
+If you are using SBT, add a dependency as described below:
+
+```scala
+libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "0.1.3"
+```
+
+If you are using Maven, add a dependency as described below:
+```xml
+<dependency>
+  <groupId>kr.ac.kaist.ir</groupId>
+  <artifactId>scalanetwork_${your.scala.version}</artifactId>
+  <version>0.1.3</version>
+</dependency>
+```
 
 ## Simple Example
 `Network.apply(Activation, Int*)` generates fully-connected network:
