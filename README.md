@@ -1,4 +1,4 @@
-ScalaNetwork 0.1.3-SNAPSHOT
+ScalaNetwork 0.1.3
 ===========================
 
 A *Neural Network implementation* with Scala, [Breeze](https://github.com/scalanlp/breeze) & [Spark](http://spark.apache.org)
