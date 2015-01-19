@@ -45,7 +45,7 @@ ScalaNetwork supports following activation functions:
 
 # Usage
 
-Here is some examples for basic usage. If you want to extend this package or use it more precisely, please refer [ScalaDoc](http://nearbydelta.github.io/ScalaNetwork/api)
+Here is some examples for basic usage. If you want to extend this package or use it more precisely, please refer [ScalaDoc](http://nearbydelta.github.io/ScalaNetwork/api/#kr.ac.kaist.ir.deep.package)
 
 ## Download
 
