@@ -1,4 +1,4 @@
-ScalaNetwork 0.1.3-SNAPSHOT
+ScalaNetwork 0.1.3
 ===========================
 
 A *Neural Network implementation* with Scala, [Breeze](https://github.com/scalanlp/breeze) & [Spark](http://spark.apache.org)
@@ -45,7 +45,7 @@ ScalaNetwork supports following activation functions:
 
 # Usage
 
-Here is some examples for basic usage. If you want to extend this package or use it more precisely, please refer [ScalaDoc](http://nearbydelta.github.io/ScalaNetwork/api)
+Here is some examples for basic usage. If you want to extend this package or use it more precisely, please refer [ScalaDoc](http://nearbydelta.github.io/ScalaNetwork/api/#kr.ac.kaist.ir.deep.package)
 
 ## Download
 
