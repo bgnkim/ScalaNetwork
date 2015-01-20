@@ -49,7 +49,10 @@ Here is some examples for basic usage. If you want to extend this package or use
 
 ## Download
 
-Currently ScalaNetwork supports Scala version 2.10, 2.11<sup>Experimental</sup>.
+Currently ScalaNetwork supports Scala version 2.10 ~ 2.11.
+
+* Stable Release is 0.1.3
+* Snapshot Release is 0.1.4-SNAPSHOT
  
 If you are using SBT, add a dependency as described below:
 

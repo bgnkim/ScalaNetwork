@@ -29,15 +29,15 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
                                 lin: Seq[ScalarMatrix] = Seq(),
                                 const: ScalarMatrix = null)
   extends Layer {
-  /** Number of Fan-ins */
+  /* Number of Fan-ins */
   protected val fanInA = fanIns._1
   protected val fanInB = fanIns._2
   protected val fanIn = fanIns._3
-  /** Initialize weight */
+  /* Initialize weight */
   protected val quadratic: Seq[ScalarMatrix] = if (quad.nonEmpty) quad else (0 until fanOut) map { _ ⇒ act.initialize(fanIn, fanOut, fanInA, fanInB)}
   protected val linear: Seq[ScalarMatrix] = if (lin.nonEmpty) lin else (0 until fanOut) map { _ ⇒ act.initialize(fanIn, fanOut, 1, fanIn)}
   protected val bias: ScalarMatrix = if (const != null) const else act.initialize(fanIn, fanOut, fanOut, 1)
-  /** Weight-Update Stand-by */
+  /* Weight-Update Stand-by */
   protected val dQ = quadratic map { matx ⇒ ScalarMatrix $0(matx.rows, matx.cols)}
   protected val dL = linear map { matx ⇒ ScalarMatrix $0(matx.rows, matx.cols)}
   protected val db = ScalarMatrix $0(fanOut, 1)

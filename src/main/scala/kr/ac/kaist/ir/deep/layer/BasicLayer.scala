@@ -19,12 +19,12 @@ class BasicLayer(IO: (Int, Int),
   extends Layer {
   /** Number of Fan-ins */
   protected val fanIn = IO._1
-  /** Number of Fan-outs */
+  /** Number of output */
   protected val fanOut = IO._2
-  /** Initialize weight */
+  /* Initialize weight */
   protected val weight = if (w != null) w else act.initialize(fanIn, fanOut)
   protected val bias = if (b != null) b else act.initialize(fanIn, fanOut, fanOut, 1)
-  /** Weight-Update Accumulator */
+  /* Weight-Update Accumulator */
   protected val delta = ScalarMatrix $0(fanOut, fanIn)
   protected val dbias = ScalarMatrix $0(fanOut, 1)
 
