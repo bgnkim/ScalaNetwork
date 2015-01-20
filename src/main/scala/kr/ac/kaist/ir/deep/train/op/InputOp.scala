@@ -6,7 +6,11 @@ import kr.ac.kaist.ir.deep.network.Network
 import kr.ac.kaist.ir.deep.train.Corruption
 
 /**
- * Corrupt and apply given single input
+ * __Trait__ that describes how to convert input into corrupted matrix
+ *
+ * Input operation corrupts the given input, and apply network propagations onto matrix representation of input 
+ *
+ * @tparam IN the type of input
  */
 trait InputOp[IN] extends Serializable {
   /** Corruption function */
@@ -16,25 +20,33 @@ trait InputOp[IN] extends Serializable {
 
   /**
    * Corrupt input
+   *
+   * @param x input to be corrupted 
    * @return corrupted input
    */
   def corrupted(x: IN): IN
 
   /**
    * Apply & Back-prop given single input
-   * @param net that gets input
+   *
+   * @param net A network that gets input
+   * @param in __corrupted__ input
+   * @param real __Real label__ for comparing
    */
   def roundTrip(net: Network, in: IN, real: ScalarMatrix): Unit
 
   /**
-   * Apply given single input
-   * @param net that gets input
+   * Apply given single input as one-way forward trip.
+   *
+   * @param net A network that gets input
+   * @param x input to be computed            
    * @return output of the network.
    */
   def onewayTrip(net: Network, x: IN): ScalarMatrix
 
   /**
    * Make input to string
+   *
    * @return input as string
    */
   def stringOf(in: (IN, ScalarMatrix)): String

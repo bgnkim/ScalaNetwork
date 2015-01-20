@@ -1,7 +1,7 @@
 package kr.ac.kaist.ir.deep.train
 
 /**
- * Trait : Training Criteria
+ * __Trait__ that describes Training Criteria
  */
 trait TrainingCriteria extends Serializable {
   /** Size of mini-batch */

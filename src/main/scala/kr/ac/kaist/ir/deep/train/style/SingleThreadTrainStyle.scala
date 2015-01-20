@@ -7,11 +7,11 @@ import kr.ac.kaist.ir.deep.train._
 import kr.ac.kaist.ir.deep.train.op.InputOp
 
 /**
- * Trainer : Stochastic-Style, Single-Threaded
+ * __Trainer__ : Stochastic-Style, Single-Threaded
  *
- * @param net to be trained
- * @param algorithm to be applied
- * @param param of training criteria (default: [[kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria]])
+ * @param net __Network__ to be trained
+ * @param algorithm Weight __update algorithm__ to be applied
+ * @param param __Training criteria__ (default: [[kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria]])
  */
 class SingleThreadTrainStyle[IN](protected[train] override val net: Network,
                                  protected[train] override val algorithm: WeightUpdater,
@@ -19,14 +19,16 @@ class SingleThreadTrainStyle[IN](protected[train] override val net: Network,
   extends TrainStyle[IN] {
 
   /**
-   * Fetch weights 
-   * @param iter is current iteration
+   * Fetch weights
+   *
+   * @param iter current iteration
    */
   override protected[train] def fetch(iter: Int): Unit = {}
 
   /**
-   * Send update of weights  
-   * @param iter is current iteration
+   * Send update of weights
+   *
+   * @param iter current iteration
    */
   override protected[train] def update(iter: Int): Unit = {
     net.dW :/= param.miniBatch.toDouble
@@ -35,7 +37,8 @@ class SingleThreadTrainStyle[IN](protected[train] override val net: Network,
 
   /**
    * Do mini-batch
-   * @param op : set of input operations
+   *
+   * @param op Set of input operations
    */
   override protected[train] def batch(op: InputOp[IN]): Unit =
     trainingSet(param.miniBatch) foreach {

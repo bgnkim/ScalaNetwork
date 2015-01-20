@@ -5,9 +5,9 @@ import kr.ac.kaist.ir.deep.fn.{ScalarMatrix, ScalarMatrixOp}
 import play.api.libs.json.{JsArray, JsObject, Json}
 
 /**
- * Layer: Basic, Fully-connected Rank 3 Tensor Layer.
+ * __Layer__: Basic, Fully-connected Rank 3 Tensor Layer.
  *
- * <pre>
+ * @note <pre>
  * v0 = a column vector
  * Q = Rank 3 Tensor with size out, in × in is its entry.
  * L = Rank 3 Tensor with size out, 1 × in is its entry.
@@ -31,6 +31,7 @@ class FullTensorLayer(IO: (Int, Int),
 
   /**
    * Translate this layer into JSON object (in Play! framework)
+   *
    * @return JSON object describes this layer
    */
   override def toJSON: JsObject = Json.obj(
@@ -45,14 +46,16 @@ class FullTensorLayer(IO: (Int, Int),
 
   /**
    * Retrieve first input
-   * @param x to be separated
+   *
+   * @param x input to be separated
    * @return first input
    */
   protected override def in1(x: ScalarMatrix): ScalarMatrix = x
 
   /**
    * Retrive second input
-   * @param x to be separated
+   *
+   * @param x input to be separated
    * @return second input
    */
   protected override def in2(x: ScalarMatrix): ScalarMatrix = x

@@ -30,7 +30,7 @@ package object layer {
     /**
      * <p>Backward computation.</p>
      *
-     * <p>
+     * @note <p>
      * Let this layer have function F composed with function <code> X(x) = W.x + b </code>
      * and higher layer have function G.
      * </p>

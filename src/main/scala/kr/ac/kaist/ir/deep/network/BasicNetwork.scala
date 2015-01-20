@@ -5,9 +5,9 @@ import kr.ac.kaist.ir.deep.layer.Layer
 import play.api.libs.json.{JsArray, Json}
 
 /**
- * Network: A basic network implementation
- * @param layers of this network
- * @param presence is the probability of non-dropped neurons (for drop-out training). (default : 100% = 1.0)
+ * __Network__: A basic network implementation
+ * @param layers __Sequence of layers__ of this network
+ * @param presence the probability of non-dropped neurons (for drop-out training). `(default : 100% = 1.0)`
  */
 class BasicNetwork(private val layers: Seq[Layer],
                    protected override val presence: Probability = 1.0)
@@ -17,12 +17,14 @@ class BasicNetwork(private val layers: Seq[Layer],
 
   /**
    * All weights of layers
+   *
    * @return all weights of layers
    */
   override def W = layers flatMap (_.W)
 
   /**
    * All accumulated delta weights of layers
+   *
    * @return all accumulated delta weights
    */
   override def dW = layers flatMap (_.dW)
@@ -31,7 +33,7 @@ class BasicNetwork(private val layers: Seq[Layer],
    * Compute output of neural network with given input
    * If drop-out is used, to average drop-out effect, we need to multiply output by presence probability.
    *
-   * @param in is an input vector
+   * @param in an input vector
    * @return output of the vector
    */
   override def apply(in: ScalarMatrix): ScalarMatrix = {
@@ -47,7 +49,8 @@ class BasicNetwork(private val layers: Seq[Layer],
 
   /**
    * Serialize network to JSON
-   * @return JsObject
+   *
+   * @return JsObject of this network
    */
   override def toJSON = Json.obj(
     "type" → "BasicNetwork",
@@ -57,6 +60,7 @@ class BasicNetwork(private val layers: Seq[Layer],
 
   /**
    * Backpropagation algorithm
+   *
    * @param err backpropagated error from error function
    */
   protected[deep] override def !(err: ScalarMatrix) = {
@@ -78,7 +82,7 @@ class BasicNetwork(private val layers: Seq[Layer],
    * Forward computation for training.
    * If drop-out is used, we need to drop-out entry of input vector.
    *
-   * @param x of input matrix
+   * @param x input matrix
    * @return output matrix
    */
   protected[deep] override def >>:(x: ScalarMatrix): ScalarMatrix = {

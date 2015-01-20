@@ -9,20 +9,20 @@ package kr.ac.kaist.ir
  *
  *   // Define Training Style. SingleThreadTrainStyle vs DistBeliefTrainStyle
  *   val style = new SingleThreadTrainStyle[ScalarMatrix](
- *   net = net,
- *   algorithm = new StochasticGradientDescent(l2decay = 0.0001),
- *   param = SimpleTrainingCriteria(miniBatch = 8))
+ *      net = net,
+ *      algorithm = new StochasticGradientDescent(l2decay = 0.0001),
+ *      param = SimpleTrainingCriteria(miniBatch = 8))
  *
  *   // Define Input Operation. ScalarVector vs TreeRAE vs TreeRecursive
  *   val operation = new ScalarVector(
- *   corrupt = GaussianCorruption(variance = 0.1)
+ *      corrupt = GaussianCorruption(variance = 0.1)
  *   )
  *
  *   // Define Trainer
  *   val train = new Trainer(
- *   style = style,
- *   make = operation,
- *   stops = StoppingCriteria(maxIter = 100000))
+ *      style = style,
+ *      make = operation,
+ *      stops = StoppingCriteria(maxIter = 100000))
  *
  *   // Do Train
  *   train.train(set, valid)}}}

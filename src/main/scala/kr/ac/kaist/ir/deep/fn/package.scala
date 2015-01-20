@@ -8,9 +8,9 @@ import play.api.libs.json.{JsArray, JsNumber}
  * Package for various functions.
  *
  * For the informations about...
- * $ Activation functions, see [[kr.ac.kaist.ir.deep.fn.act]]
- * $ Weight Update Algorithms, see [[kr.ac.kaist.ir.deep.fn.alg]]
- * $ Objective functions, see [[kr.ac.kaist.ir.deep.fn.obj]]
+ - Activation functions, see [[kr.ac.kaist.ir.deep.fn.act]]
+ - Weight Update Algorithms, see [[kr.ac.kaist.ir.deep.fn.alg]]
+ - Objective functions, see [[kr.ac.kaist.ir.deep.fn.obj]]
  */
 package object fn {
   /** Type of scalar **/

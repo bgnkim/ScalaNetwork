@@ -5,11 +5,12 @@ import kr.ac.kaist.ir.deep.fn.act.Activation
 import play.api.libs.json.{JsObject, Json}
 
 /**
- * Layer: Basic, Fully-connected Layer
- * @param IO is a pair of input & output, such as 2 -> 3
- * @param act is an activation function to be applied
- * @param w is initial weight matrix for the case that it is restored from JSON (default: null)
- * @param b is inital bias matrix for the case that it is restored from JSON (default: null)
+ * __Layer__: Basic, Fully-connected Layer
+ *
+ * @param IO a pair of __input & output__, such as 2 -> 3
+ * @param act an __activation function__ to be applied
+ * @param w initial weight matrix for the case that it is restored from JSON `(default: null)`
+ * @param b inital bias matrix for the case that it is restored from JSON `(default: null)`
  */
 class BasicLayer(IO: (Int, Int),
                  protected override val act: Activation,
@@ -29,7 +30,8 @@ class BasicLayer(IO: (Int, Int),
 
   /**
    * Forward computation
-   * @param x of input matrix
+   *
+   * @param x input matrix
    * @return output matrix
    */
   override def apply(x: ScalarMatrix): ScalarMatrix = {
@@ -40,6 +42,7 @@ class BasicLayer(IO: (Int, Int),
 
   /**
    * Translate this layer into JSON object (in Play! framework)
+   *
    * @return JSON object describes this layer
    */
   override def toJSON: JsObject = Json.obj(
@@ -53,12 +56,14 @@ class BasicLayer(IO: (Int, Int),
 
   /**
    * weights for update
+   *
    * @return weights
    */
   override def W: Seq[ScalarMatrix] = Seq(weight, bias)
 
   /**
    * accumulated delta values
+   *
    * @return delta-weight
    */
   override def dW: Seq[ScalarMatrix] = Seq(delta, dbias)
@@ -66,7 +71,7 @@ class BasicLayer(IO: (Int, Int),
   /**
    * <p>Backward computation.</p>
    *
-   * <p>
+   * @note <p>
    * Let this layer have function F composed with function <code> X(x) = W.x + b </code>
    * and higher layer have function G.
    * </p>

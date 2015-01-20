@@ -6,10 +6,15 @@ import kr.ac.kaist.ir.deep.network.Network
 import kr.ac.kaist.ir.deep.train.{Corruption, NoCorruption}
 
 /**
- * Input Operation : For Vector
+ * __Input Operation__ : Vector as Input
  *
- * @param corrupt supervises how to corrupt the input matrix. (Default : [[NoCorruption]])
- * @param error is an objective function (Default: [[SquaredErr]])
+ * @param corrupt Corruption that supervises how to corrupt the input matrix. (Default : [[kr.ac.kaist.ir.deep.train.NoCorruption]])
+ * @param error An objective function (Default: [[kr.ac.kaist.ir.deep.fn.obj.SquaredErr]])
+ *
+ * @example
+ * {{{var make = new ScalarVector(error = CrossEntropyErr)
+ *  var corruptedIn = make corrupted in
+ *  var out = make onewayTrip (net, corruptedIn)}}}
  */
 class ScalarVector(override protected[train] val corrupt: Corruption = NoCorruption,
                    override protected[train] val error: Objective = SquaredErr)
@@ -17,13 +22,18 @@ class ScalarVector(override protected[train] val corrupt: Corruption = NoCorrupt
 
   /**
    * Corrupt input
+   *
+   * @param x input to be corrupted 
    * @return corrupted input
    */
   override def corrupted(x: ScalarMatrix): ScalarMatrix = corrupt(x)
 
   /**
    * Apply & Back-prop given single input
-   * @param net that gets input
+   *
+   * @param net A network that gets input
+   * @param in __corrupted__ input
+   * @param real __Real label__ for comparing
    */
   override def roundTrip(net: Network, in: ScalarMatrix, real: ScalarMatrix): Unit = {
     val out = in >>: net
@@ -32,14 +42,17 @@ class ScalarVector(override protected[train] val corrupt: Corruption = NoCorrupt
   }
 
   /**
-   * Apply given single input
-   * @param net that gets input
+   * Apply given single input as one-way forward trip.
+   *
+   * @param net A network that gets input
+   * @param x input to be computed
    * @return output of the network.
    */
   override def onewayTrip(net: Network, x: ScalarMatrix): ScalarMatrix = net on x
 
   /**
    * Make input to string
+   *
    * @return input as string
    */
   override def stringOf(in: (ScalarMatrix, ScalarMatrix)): String =

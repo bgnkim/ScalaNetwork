@@ -4,9 +4,9 @@ import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.fn.act.Activation
 
 /**
- * Layer: Basic, Fully-connected Rank 3 Tensor Layer.
+ * __Layer__: Basic, Fully-connected Rank 3 Tensor Layer.
  *
- * <pre>
+ * @note <pre>
  * v0 = a column vector concatenate v2 after v1 (v11, v12, ... v1in1, v21, ...)
  * Q = Rank 3 Tensor with size out, in1 × in2 is its entry.
  * L = Rank 3 Tensor with size out, 1 × (in1 + in2) is its entry.
@@ -43,22 +43,25 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
   protected val db = ScalarMatrix $0(fanOut, 1)
 
   /**
-   * Retrieve first input 
-   * @param x to be separated
+   * Retrieve first input
+   *
+   * @param x input to be separated
    * @return first input
    */
   protected def in1(x: ScalarMatrix): ScalarMatrix
 
   /**
    * Retrive second input
-   * @param x to be separated
+   *
+   * @param x input to be separated
    * @return second input
    */
   protected def in2(x: ScalarMatrix): ScalarMatrix
 
   /**
    * Forward computation
-   * @param x of input matrix
+   *
+   * @param x input matrix
    * @return output matrix
    */
   override def apply(x: ScalarMatrix): ScalarMatrix = {
@@ -83,12 +86,14 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
 
   /**
    * weights for update
+   *
    * @return weights
    */
   override def W: Seq[ScalarMatrix] = bias +: (linear ++ quadratic)
 
   /**
    * accumulated delta values
+   *
    * @return delta-weight
    */
   override def dW: Seq[ScalarMatrix] = db +: (dL ++ dQ)
@@ -96,7 +101,7 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
   /**
    * <p>Backward computation.</p>
    *
-   * <p>
+   * @note <p>
    * Let this layer have function F composed with function <code> X(x) = x1'.Q.x2 + L.x + b </code>
    * and higher layer have function G. (Each output is treated as separately except propagation)
    * </p>

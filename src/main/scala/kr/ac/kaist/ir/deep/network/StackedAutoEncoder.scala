@@ -4,8 +4,9 @@ import kr.ac.kaist.ir.deep.fn._
 import play.api.libs.json.{JsObject, Json}
 
 /**
- * Network: Stack of autoencoders. 
- * @param encoders to be stacked.
+ * __Network__: Stack of autoencoders. 
+ *
+ * @param encoders __Sequence of AutoEncoders__ to be stacked.
  */
 class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network {
   /** Not used for this network */
@@ -13,19 +14,22 @@ class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network
 
   /**
    * All accumulated delta weights of layers
+   *
    * @return all accumulated delta weights
    */
   override def dW: Seq[ScalarMatrix] = encoders flatMap (_.dW)
 
   /**
    * All weights of layers
+   *
    * @return all weights of layers
    */
   override def W: Seq[ScalarMatrix] = encoders flatMap (_.W)
 
   /**
    * Serialize network to JSON
-   * @return JsObject
+   *
+   * @return JsObject of this network
    */
   override def toJSON: JsObject =
     Json.obj(
@@ -37,7 +41,7 @@ class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network
    * Compute output of neural network with given input (without reconstruction)
    * If drop-out is used, to average drop-out effect, we need to multiply output by presence probability.
    *
-   * @param in is an input vector
+   * @param in an input vector
    * @return output of the vector
    */
   override def apply(in: ScalarMatrix): ScalarMatrix =
@@ -48,7 +52,7 @@ class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network
   /**
    * Sugar: Forward computation for training. Calls apply(x)
    *
-   * @param x of input matrix
+   * @param x input matrix
    * @return output matrix
    */
   protected[deep] override def >>:(x: ScalarMatrix): ScalarMatrix =
@@ -58,6 +62,7 @@ class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network
 
   /**
    * Backpropagation algorithm
+   *
    * @param err backpropagated error from error function
    */
   protected[deep] override def !(err: ScalarMatrix): ScalarMatrix =

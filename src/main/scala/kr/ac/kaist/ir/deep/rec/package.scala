@@ -5,8 +5,6 @@ import kr.ac.kaist.ir.deep.train.Corruption
 
 /**
  * Package object for tree
- *
- * Created by bydelta on 2015-01-14.
  */
 package object rec {
 
@@ -14,8 +12,9 @@ package object rec {
   type VectorTree = Tree[ScalarMatrix]
 
   /**
-   * Trait: Tree
-   * @tparam T is a label value for a tree
+   * __Trait__: Tree
+   * * 
+   * @tparam T type of a label value for a tree
    */
   trait Tree[T] extends Serializable {
     /** Label */
@@ -25,7 +24,8 @@ package object rec {
 
     /**
      * Get child at specific index (0-based, left to right.) 
-     * @param n is the index
+     *
+     * @param n the index
      * @return child of given index
      */
     def apply(n: Int) = children(n)
@@ -33,13 +33,15 @@ package object rec {
 
   /**
    * Tree Operation 
-   * @param x to be applied
+   *
+   * @param x Tree that operation will be applied
    */
   implicit class TreeOp(x: VectorTree) extends Serializable {
 
     /**
      * Post-Order Traversal (LC - RC - Root)
-     * @param fn to be applied
+     *
+     * @param fn Function to be applied
      * @return final value of root node
      */
     def postOrder(fn: (ScalarMatrix, ScalarMatrix) ⇒ ScalarMatrix): ScalarMatrix =
@@ -54,8 +56,9 @@ package object rec {
 
     /**
      * Pre-Order Traversal (Root - RC - LC)
-     * @param err to be propagated
-     * @param fn to be applied
+     *
+     * @param err Error Matrix to be propagated
+     * @param fn Function to be applied
      */
     def preOrder(err: ScalarMatrix, fn: ScalarMatrix ⇒ ScalarMatrix): Unit =
       x match {
@@ -69,9 +72,10 @@ package object rec {
 
     /**
      * Pre-Order Traversal and Copy new tree (Root - RC - LC)
-     * @param err to be propagated
-     * @param binary to be applied to binary internal node
-     * @param leaf to be applied to transformation
+     *
+     * @param err Error Matrix to be propagated
+     * @param binary Function to be applied to binary internal node
+     * @param leaf Function to be applied to transformation
      */
     def preOrderCopy(err: ScalarMatrix,
                      binary: ScalarMatrix ⇒ ScalarMatrix,
@@ -97,9 +101,10 @@ package object rec {
   }
 
   /**
-   * Tree : Leaf node 
-   * @param value for this node
-   * @tparam T is a label value for a tree
+   * __Tree__ : Leaf node
+   *
+   * @param value label for this node
+   * @tparam T type of a label value for a tree
    */
   case class Leaf[T](override val value: T) extends Tree[T] {
     /** Empty */
@@ -107,11 +112,12 @@ package object rec {
   }
 
   /**
-   * Tree : Binary
-   * @param value for this node
-   * @param left tree
-   * @param right tree
-   * @tparam T is a label value for a tree
+   * __Tree__ : Binary
+   *
+   * @param value label for this node
+   * @param left tree for left child
+   * @param right tree for right child
+   * @tparam T type of a label value for a tree
    */
   case class BinaryTree[T](override val value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
     /** Children has left and right */

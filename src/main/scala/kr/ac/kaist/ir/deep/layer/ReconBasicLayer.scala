@@ -5,7 +5,8 @@ import kr.ac.kaist.ir.deep.fn.act.Activation
 import play.api.libs.json.JsObject
 
 /**
- * Layer : Reconstructable Basic Layer
+ * __Layer__ : Reconstructable Basic Layer
+ *
  * @param IO is a pair of input & output, such as 2 -> 3
  * @param act is an activation function to be applied
  * @param w is initial weight matrix for the case that it is restored from JSON (default: null)
@@ -24,7 +25,7 @@ class ReconBasicLayer(IO: (Int, Int),
   /**
    * Sugar: Forward computation + reconstruction
    *
-   * @param x of hidden layer output matrix
+   * @param x hidden layer output matrix
    * @return tuple of reconstruction output
    */
   override def rec_>>:(x: ScalarMatrix): ScalarMatrix = {
@@ -35,27 +36,31 @@ class ReconBasicLayer(IO: (Int, Int),
 
   /**
    * weights for update
+   *
    * @return weights
    */
   override def W: Seq[ScalarMatrix] = reBias +: super.W
 
   /**
    * accumulated delta values
+   *
    * @return delta-weight
    */
   override def dW: Seq[ScalarMatrix] = drBias +: super.dW
 
   /**
    * Translate this layer into JSON object (in Play! framework)
+   *
    * @return JSON object describes this layer
    */
   override def toJSON: JsObject = super.toJSON + ("reconst_bias" → reBias.to2DSeq)
 
   /**
    * Backpropagation of reconstruction. For the information about backpropagation calculation, see [[kr.ac.kaist.ir.deep.layer.Layer]]
-   * @param error to be propagated
-   * @param input of this layer
-   * @param output is final reconstruction output of this layer
+   *
+   * @param error error matrix to be propagated
+   * @param input input of this layer
+   * @param output final reconstruction output of this layer
    * @return propagated error
    */
   protected[deep] override def rec_!(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {

@@ -10,16 +10,44 @@ import scala.annotation.tailrec
 
 
 /**
- * General Trainer
+ * __General__ Trainer Implementation.
  *
- * @param style supervises how to train. There are two styles, 
+ * This class trains with help of Training Style and Input Operation.
+ *
+ * @note This trainer is generalized class. Further implementation, you should see several styles.       
+ * @example
+ * {{{val net:Network = ...
+ *
+ *    // Define Training Style. SingleThreadTrainStyle vs DistBeliefTrainStyle
+ *    val style = new SingleThreadTrainStyle[ScalarMatrix](
+ *    net = net,
+ *    algorithm = new StochasticGradientDescent(l2decay = 0.0001),
+ *    param = SimpleTrainingCriteria(miniBatch = 8))
+ *
+ *    // Define Input Operation. ScalarVector vs TreeRAE vs TreeRecursive
+ *    val operation = new ScalarVector(
+ *    corrupt = GaussianCorruption(variance = 0.1)
+ *    )
+ *
+ *    // Define Trainer
+ *    val train = new Trainer(
+ *    style = style,
+ *    make = operation,
+ *    stops = StoppingCriteria(maxIter = 100000))
+ *
+ *    // Do Train
+ *    train.train(set, valid)}}}
+ *
+ * @note To train an autoencoder, you can provide same training set as validation set.
+ *
+ * @param style __Training style__ that supervises how to train. There are two styles,
  *              one is [[kr.ac.kaist.ir.deep.train.style.SingleThreadTrainStyle]]
  *              and the other is [[kr.ac.kaist.ir.deep.train.style.DistBeliefTrainStyle]].
- * @param make supervises how to manipulate input as matrices.
+ * @param make __Input Operation__ that supervises how to manipulate input as matrices.
  *             This also controls how to compute actual network.             
- * @param stops controls the threshold for stopping. (Default : [[StoppingCriteria]])
+ * @param stops __Stopping Criteria__ that controls the threshold for stopping. (Default : [[StoppingCriteria]])
  *
- * @tparam IN is the type of input. 
+ * @tparam IN the type of input. 
  *            Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and [[kr.ac.kaist.ir.deep.rec.VectorTree]] are supported
  */
 class Trainer[IN](protected val style: TrainStyle[IN],
@@ -36,18 +64,21 @@ class Trainer[IN](protected val style: TrainStyle[IN],
   protected var testSet: Int ⇒ Seq[(IN, ScalarMatrix)] = null
   /** Best Parameter History */
   @transient protected var bestParam: Seq[ScalarMatrix] = null
+  /** Best Loss Iteration Number */
   @transient protected var bestIter: Int = 0
 
   /**
    * Train given sequence, and validate with given sequence.
-   * @param set to be trained (Random Sequence Generator)
+   *
+   * @param set __Random Sequence Generator__ of training set
    * @return Training error (loss)
    */
   def train(set: Int ⇒ Seq[(IN, ScalarMatrix)]): Scalar = train(set, set)
 
   /**
    * Train given sequence, and validate with given sequence.
-   * @param set to be trained (Full Seq)
+   *
+   * @param set Full Sequence of training set
    * @return Training error (loss)
    */
   def train(set: Seq[(IN, ScalarMatrix)]): Scalar = {
@@ -58,8 +89,9 @@ class Trainer[IN](protected val style: TrainStyle[IN],
 
   /**
    * Train given sequence, and validate with another sequence.
-   * @param set to be used for training (Full Seq)
-   * @param validation to be used for validation (Full Seq)
+   *
+   * @param set Full Sequence of training set
+   * @param validation Full Sequence of validation set
    * @return Training error (loss)
    */
   def train(set: Seq[(IN, ScalarMatrix)],
@@ -73,8 +105,8 @@ class Trainer[IN](protected val style: TrainStyle[IN],
   /**
    * Train given sequence, and validate with another sequence.
    *
-   * @param set to be used for training (Randomized Sequence Generator)
-   * @param validation to be used for validation (Sequence Generator)
+   * @param set __Randomized Sequence Generator__ of training set
+   * @param validation Sequence Generator of validation set
    * @return Training error (loss)
    */
   def train(set: Int ⇒ Seq[(IN, ScalarMatrix)],
@@ -92,7 +124,8 @@ class Trainer[IN](protected val style: TrainStyle[IN],
 
   /**
    * Train using given RDD sequence. 
-   * @param set to be used for training
+   *
+   * @param set RDD of training set
    */
   def train(set: RDD[(IN, ScalarMatrix)]): Scalar = {
     set.cache()
@@ -101,8 +134,9 @@ class Trainer[IN](protected val style: TrainStyle[IN],
 
   /**
    * Train using given RDD sequence. 
-   * @param set to be used for training
-   * @param validation to be used for validation
+   *
+   * @param set RDD of training set
+   * @param validation RDD of validation set
    */
   def train(set: RDD[(IN, ScalarMatrix)], validation: RDD[(IN, ScalarMatrix)]): Scalar = {
     set.cache()
@@ -112,10 +146,10 @@ class Trainer[IN](protected val style: TrainStyle[IN],
   
   /**
    * Calculate validation error
-   * @param isAutoEncoder true if it is autoencoder training
+   *
    * @return validation error
    */
-  protected def validationError(isAutoEncoder: Boolean = false) = {
+  protected def validationError() = {
     val t = testSet(param.validationSize)
     t.foldLeft(0.0) {
       (err, item) ⇒
@@ -126,10 +160,9 @@ class Trainer[IN](protected val style: TrainStyle[IN],
   }
 
   /**
-   * Print validation result
-   * @param isAutoEncoder true if it is autoencoder training
+   * Print validation result into logger
    */
-  protected def printValidation(isAutoEncoder: Boolean = false) = {
+  protected def printValidation() = {
     logger.info(s"BEST ITERATION $bestIter : W = ${net.W map (_.mkString) mkString " | "}")
 
     val t = testSet(param.validationSize)
@@ -156,9 +189,10 @@ class Trainer[IN](protected val style: TrainStyle[IN],
 
   /**
    * Tail Recursive : Train each batch
-   * @param iter indicates current iteration
-   * @param prevloss indicates previous loss
-   * @param patience indicates current patience
+   *
+   * @param iter current iteration
+   * @param prevloss previous loss
+   * @param patience current patience
    * @return Total Loss when train is finished
    */
   @tailrec

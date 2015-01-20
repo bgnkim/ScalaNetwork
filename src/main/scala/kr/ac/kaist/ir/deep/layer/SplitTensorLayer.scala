@@ -5,9 +5,9 @@ import kr.ac.kaist.ir.deep.fn.act.Activation
 import play.api.libs.json.{JsArray, JsObject, Json}
 
 /**
- * Layer: Basic, Fully-connected Rank 3 Tensor Layer.
+ * __Layer__: Basic, Fully-connected Rank 3 Tensor Layer.
  *
- * <pre>
+ * @note <pre>
  * v0 = a column vector concatenate v2 after v1 (v11, v12, ... v1in1, v21, ...)
  * Q = Rank 3 Tensor with size out, in1 × in2 is its entry.
  * L = Rank 3 Tensor with size out, 1 × (in1 + in2) is its entry.
@@ -30,6 +30,7 @@ class SplitTensorLayer(IO: ((Int, Int), Int),
   extends Rank3TensorLayer((IO._1._1, IO._1._2, IO._1._1 + IO._1._2), IO._2, act, quad, lin, const) {
   /**
    * Translate this layer into JSON object (in Play! framework)
+   *
    * @return JSON object describes this layer
    */
   override def toJSON: JsObject = Json.obj(
@@ -44,14 +45,15 @@ class SplitTensorLayer(IO: ((Int, Int), Int),
 
   /**
    * Retrieve first input
-   * @param x to be separated
+   *
+   * @param x input to be separated
    * @return first input
    */
   protected override def in1(x: ScalarMatrix): ScalarMatrix = x(0 until fanInA, ::)
 
   /**
    * Retrive second input
-   * @param x to be separated
+   * @param x input to be separated
    * @return second input
    */
   protected override def in2(x: ScalarMatrix): ScalarMatrix = x(fanInA to -1, ::)
