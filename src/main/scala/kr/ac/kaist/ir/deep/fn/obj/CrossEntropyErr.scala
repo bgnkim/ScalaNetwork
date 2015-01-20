@@ -1,9 +1,17 @@
-package kr.ac.kaist.ir.deep.function
+package kr.ac.kaist.ir.deep.fn.obj
 
 import breeze.linalg.{DenseMatrix, sum}
+import kr.ac.kaist.ir.deep.fn._
 
 /**
- * Objective Function: Sum of Cross-Entropy (Logistic)
+ * __Objective Function__: Sum of Cross-Entropy (Logistic)
+ *
+ * @note This objective function prefer 0/1 output
+ * @example
+ * {{{val output = net(input)
+ *   val err = CrossEntropyErr(real, output)
+ *   val diff = CrossEntropyErr.derivative(real, output)
+ * }}}
  */
 object CrossEntropyErr extends Objective {
   /**
@@ -17,19 +25,21 @@ object CrossEntropyErr extends Objective {
   val entropyDiff = (r: Scalar, o: Scalar) ⇒ (r - o) / (o * (o - 1.0))
 
   /**
-   * Compute derivative of this objective function
-   * @param real is expected real output
-   * @param output is computational output of the network
-   * @return differentiation value at f(x)=fx, which is Square, diagonal matrix
+   * Compute differentiation value of this objective function at `x = r - o`
+   *
+   * @param real the expected __real output__, `r`
+   * @param output the computed __output of the network__, `o`
+   * @return differentiation value at `f(x)=fx`, which is __square, diagonal matrix__
    */
   override def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix =
     DenseMatrix.tabulate(real.rows, real.cols)((r, c) ⇒ entropyDiff(real(r, c), output(r, c)))
 
   /**
-   * Compute error
-   * @param real is expected real output
-   * @param output is computational output of the network
-   * @return is the error
+   * Compute error (loss)
+   *
+   * @param real the expected __real output__
+   * @param output the computed __output of the network__
+   * @return the error
    */
   override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar =
     sum(DenseMatrix.tabulate(real.rows, real.cols)((r, c) ⇒ entropy(real(r, c), output(r, c))))

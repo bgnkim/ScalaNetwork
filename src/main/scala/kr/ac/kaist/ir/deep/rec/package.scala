@@ -1,6 +1,6 @@
 package kr.ac.kaist.ir.deep
 
-import kr.ac.kaist.ir.deep.function.ScalarMatrix
+import kr.ac.kaist.ir.deep.fn.ScalarMatrix
 import kr.ac.kaist.ir.deep.train.Corruption
 
 /**

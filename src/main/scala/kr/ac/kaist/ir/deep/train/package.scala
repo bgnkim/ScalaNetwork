@@ -1,7 +1,7 @@
 package kr.ac.kaist.ir.deep
 
 import breeze.stats.distributions.Gaussian
-import kr.ac.kaist.ir.deep.function._
+import kr.ac.kaist.ir.deep.fn._
 
 /**
  * Package for training

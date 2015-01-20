@@ -1,6 +1,6 @@
 package kr.ac.kaist.ir.deep.network
 
-import kr.ac.kaist.ir.deep.function._
+import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.layer.Layer
 import play.api.libs.json.{JsArray, Json}
 
@@ -37,11 +37,10 @@ class BasicNetwork(private val layers: Seq[Layer],
   override def apply(in: ScalarMatrix): ScalarMatrix = {
     // We don't have to store this value
     val localInput = layers.indices.foldLeft(Seq(in)) {
-      (seq, id) ⇒ {
+      (seq, id) ⇒
         val layerOut = seq.head >>: layers(id)
         val adjusted: ScalarMatrix = layerOut :* presence.safe
         adjusted +: seq
-      }
     }
     localInput.head
   }
@@ -62,13 +61,12 @@ class BasicNetwork(private val layers: Seq[Layer],
    */
   protected[deep] override def !(err: ScalarMatrix) = {
     val error = layers.indices.foldRight(err) {
-      (id, e) ⇒ {
+      (id, e) ⇒
         val l = layers(id)
         val out = input.head
         input = input.tail
         val in = input.head
         l !(e, in, out)
-      }
     }
 
     // Clean-up last entry
@@ -86,12 +84,11 @@ class BasicNetwork(private val layers: Seq[Layer],
   protected[deep] override def >>:(x: ScalarMatrix): ScalarMatrix = {
     // We have to store this value
     input = layers.indices.foldLeft(Seq(x.copy)) {
-      (seq, id) ⇒ {
+      (seq, id) ⇒
         val in = seq.head
         if (presence < 1.0)
           in :*= ScalarMatrix $01(in.rows, in.cols, presence.safe)
         (in >>: layers(id)) +: seq
-      }
     } ++: input
     input.head
   }

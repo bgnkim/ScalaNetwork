@@ -27,7 +27,7 @@ ScalaNetwork supports following training methodologies:
 
 * Stochastic Gradient Descent w/ L1-, L2-regularization, Momentum.
 * [AdaGrad](http://www.magicbroom.info/Papers/DuchiHaSi10.pdf)
-* [AdaDelta](http://www.matthewzeiler.com/pubs/googleTR2012/googleTR2012.pdf) <sup>Experimental</sup>
+* [AdaDelta](http://www.matthewzeiler.com/pubs/googleTR2012/googleTR2012.pdf)
 
 ScalaNetwork supports following environments:
 
@@ -145,7 +145,6 @@ Before choose Training Style, you must specify algorithm and training criteria.
 
 new StochasticGradientDescent(rate=0.8, l1decay=0.0, l2decay=0.0001, momentum=0.0001)
 new AdaGrad(rate=0.6, l1decay=0.0, l2decay=0.0001)
-// AdaDelta is Experimental
 new AdaDelta(l1decay=0.0, l2decay=0.0001, decay=0.95, epsilon=1e-6)
 
 /* Training Criteria */

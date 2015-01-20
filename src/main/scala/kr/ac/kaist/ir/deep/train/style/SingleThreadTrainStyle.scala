@@ -1,6 +1,7 @@
 package kr.ac.kaist.ir.deep.train.style
 
-import kr.ac.kaist.ir.deep.function.{WeightSeqOp, WeightUpdater}
+import kr.ac.kaist.ir.deep.fn.WeightSeqOp
+import kr.ac.kaist.ir.deep.fn.alg.WeightUpdater
 import kr.ac.kaist.ir.deep.network.Network
 import kr.ac.kaist.ir.deep.train._
 import kr.ac.kaist.ir.deep.train.op.InputOp

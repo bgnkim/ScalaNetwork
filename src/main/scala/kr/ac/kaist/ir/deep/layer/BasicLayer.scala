@@ -1,6 +1,7 @@
 package kr.ac.kaist.ir.deep.layer
 
-import kr.ac.kaist.ir.deep.function._
+import kr.ac.kaist.ir.deep.fn._
+import kr.ac.kaist.ir.deep.fn.act.Activation
 import play.api.libs.json.{JsObject, Json}
 
 /**

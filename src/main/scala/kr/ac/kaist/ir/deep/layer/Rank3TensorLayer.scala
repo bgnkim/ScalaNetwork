@@ -1,6 +1,7 @@
 package kr.ac.kaist.ir.deep.layer
 
-import kr.ac.kaist.ir.deep.function._
+import kr.ac.kaist.ir.deep.fn._
+import kr.ac.kaist.ir.deep.fn.act.Activation
 
 /**
  * Layer: Basic, Fully-connected Rank 3 Tensor Layer.
@@ -67,7 +68,7 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
     val intermediate = ScalarMatrix $0(fanOut, 1)
 
     (0 until fanOut).par foreach {
-      id ⇒ {
+      id ⇒
         val xQ: ScalarMatrix = inA.t * quadratic(id)
         val xQy: ScalarMatrix = xQ * inB
         val Lxy: ScalarMatrix = linear(id) * x
@@ -75,7 +76,6 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
 
         // 1 × 1 matrix output.
         intermediate.update(id, 0, X(0, 0) + bias(id, 0))
-      }
     }
 
     act(intermediate)
@@ -135,7 +135,7 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
     val dGdXAll: ScalarMatrix = dFdX * error
 
     (0 until fanOut).foldLeft(ScalarMatrix $0(fanIn, 1)) {
-      (acc, id) ⇒ {
+      (acc, id) ⇒
         // This is scalar
         val dGdX = dGdXAll(id, 0)
 
@@ -190,7 +190,6 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
 
         val dGdx: ScalarMatrix = dGdxL + dGdxQ
         acc += dGdx
-      }
     }
   }
 }

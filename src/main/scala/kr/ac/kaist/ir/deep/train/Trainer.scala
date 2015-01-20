@@ -1,6 +1,6 @@
 package kr.ac.kaist.ir.deep.train
 
-import kr.ac.kaist.ir.deep.function._
+import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.train.op.{InputOp, ScalarVector}
 import kr.ac.kaist.ir.deep.train.style.TrainStyle
 import org.apache.log4j.Logger
@@ -20,7 +20,7 @@ import scala.annotation.tailrec
  * @param stops controls the threshold for stopping. (Default : [[StoppingCriteria]])
  *
  * @tparam IN is the type of input. 
- *            Currently, [[kr.ac.kaist.ir.deep.function.ScalarMatrix]] and [[kr.ac.kaist.ir.deep.rec.VectorTree]] are supported
+ *            Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and [[kr.ac.kaist.ir.deep.rec.VectorTree]] are supported
  */
 class Trainer[IN](protected val style: TrainStyle[IN],
                   protected[train] val make: InputOp[IN] = new ScalarVector(),
@@ -117,11 +117,11 @@ class Trainer[IN](protected val style: TrainStyle[IN],
    */
   protected def validationError(isAutoEncoder: Boolean = false) = {
     val t = testSet(param.validationSize)
-    t.foldLeft(0.0) { (err, item) ⇒ {
-      val out = make onewayTrip(net, item._1)
-      logger.debug(s"${make stringOf item} = OUT : ${out.mkString}")
-      err + (make error(item._2, out))
-    }
+    t.foldLeft(0.0) {
+      (err, item) ⇒
+        val out = make onewayTrip(net, item._1)
+        logger.debug(s"${make stringOf item} = OUT : ${out.mkString}")
+        err + (make error(item._2, out))
     } / t.size
   }
 
@@ -134,10 +134,9 @@ class Trainer[IN](protected val style: TrainStyle[IN],
 
     val t = testSet(param.validationSize)
     t.par foreach {
-      item ⇒ {
+      item ⇒
         val out = make onewayTrip(net, item._1)
         logger.info(s"${make stringOf item} = OUT : ${out.mkString}")
-      }
     }
   }
 

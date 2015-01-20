@@ -1,6 +1,7 @@
 package kr.ac.kaist.ir.deep.train.op
 
-import kr.ac.kaist.ir.deep.function._
+import kr.ac.kaist.ir.deep.fn._
+import kr.ac.kaist.ir.deep.fn.obj.{Objective, SquaredErr}
 import kr.ac.kaist.ir.deep.network.{AutoEncoder, Network}
 import kr.ac.kaist.ir.deep.rec.VectorTree
 import kr.ac.kaist.ir.deep.train._
@@ -14,7 +15,7 @@ import org.apache.spark.annotation.AlphaComponent
  * </p> 
  *
  * @param corrupt supervises how to corrupt the input matrix. (Default : [[NoCorruption]])
- * @param error is an objective function (Default: [[kr.ac.kaist.ir.deep.function.SquaredErr]])
+ * @param error is an objective function (Default: [[kr.ac.kaist.ir.deep.fn.obj.SquaredErr]])
  */
 @AlphaComponent
 class TreeURAE(override protected[train] val corrupt: Corruption = NoCorruption,

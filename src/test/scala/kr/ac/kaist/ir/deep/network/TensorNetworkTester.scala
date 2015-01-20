@@ -1,7 +1,9 @@
 package kr.ac.kaist.ir.deep.network
 
 import breeze.linalg.DenseMatrix
-import kr.ac.kaist.ir.deep.function._
+import kr.ac.kaist.ir.deep.fn._
+import kr.ac.kaist.ir.deep.fn.act.Sigmoid
+import kr.ac.kaist.ir.deep.fn.alg.StochasticGradientDescent
 import kr.ac.kaist.ir.deep.layer.{Layer, SplitTensorLayer}
 import kr.ac.kaist.ir.deep.train._
 import kr.ac.kaist.ir.deep.train.style.SingleThreadTrainStyle

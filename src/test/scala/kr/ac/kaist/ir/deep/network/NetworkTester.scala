@@ -1,7 +1,9 @@
 package kr.ac.kaist.ir.deep.network
 
 import breeze.linalg.DenseMatrix
-import kr.ac.kaist.ir.deep.function._
+import kr.ac.kaist.ir.deep.fn._
+import kr.ac.kaist.ir.deep.fn.act.Sigmoid
+import kr.ac.kaist.ir.deep.fn.alg.{AdaDelta, StochasticGradientDescent}
 import kr.ac.kaist.ir.deep.layer.{Layer, ReconBasicLayer}
 import kr.ac.kaist.ir.deep.train._
 import kr.ac.kaist.ir.deep.train.op.ScalarVector
@@ -94,7 +96,7 @@ class NetworkTester extends Specification {
     val net = Network(Sigmoid, 2, 4, 1)
     val style = new SingleThreadTrainStyle[ScalarMatrix](
       net = net,
-      algorithm = new AdaGrad(l2decay = 0.0001),
+      algorithm = new AdaDelta(decay = 0.9, l2decay = 0.0),
       //algorithm = new AdaGrad(l2decay = 0.0001),
       //algorithm = GradientDescent(rate = 0.8, l2decay = 0.0001),
       param = SimpleTrainingCriteria(miniBatch = 8))

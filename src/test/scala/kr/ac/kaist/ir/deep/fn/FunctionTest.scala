@@ -1,7 +1,9 @@
-package kr.ac.kaist.ir.deep.function
+package kr.ac.kaist.ir.deep.fn
 
 import breeze.linalg.{DenseMatrix, sum}
 import breeze.numerics.abs
+import kr.ac.kaist.ir.deep.fn.act.{HyperbolicTangent, Rectifier, Sigmoid, Softplus}
+import kr.ac.kaist.ir.deep.fn.obj.{CrossEntropyErr, SquaredErr}
 import org.specs2.mutable.Specification
 
 /**

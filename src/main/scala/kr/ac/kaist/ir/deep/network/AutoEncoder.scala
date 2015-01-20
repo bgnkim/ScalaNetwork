@@ -1,6 +1,6 @@
 package kr.ac.kaist.ir.deep.network
 
-import kr.ac.kaist.ir.deep.function._
+import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.layer.Reconstructable
 import play.api.libs.json.Json
 

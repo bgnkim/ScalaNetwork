@@ -1,6 +1,7 @@
 package kr.ac.kaist.ir.deep.train.op
 
-import kr.ac.kaist.ir.deep.function._
+import kr.ac.kaist.ir.deep.fn._
+import kr.ac.kaist.ir.deep.fn.obj.{Objective, SquaredErr}
 import kr.ac.kaist.ir.deep.network.Network
 import kr.ac.kaist.ir.deep.train.{Corruption, NoCorruption}
 
@@ -8,7 +9,7 @@ import kr.ac.kaist.ir.deep.train.{Corruption, NoCorruption}
  * Input Operation : For Vector
  *
  * @param corrupt supervises how to corrupt the input matrix. (Default : [[NoCorruption]])
- * @param error is an objective function (Default: [[kr.ac.kaist.ir.deep.function.SquaredErr]])
+ * @param error is an objective function (Default: [[SquaredErr]])
  */
 class ScalarVector(override protected[train] val corrupt: Corruption = NoCorruption,
                    override protected[train] val error: Objective = SquaredErr)

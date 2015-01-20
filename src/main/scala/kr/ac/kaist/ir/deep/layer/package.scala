@@ -1,17 +1,16 @@
 package kr.ac.kaist.ir.deep
 
-import kr.ac.kaist.ir.deep.function._
+import kr.ac.kaist.ir.deep.fn._
+import kr.ac.kaist.ir.deep.fn.act._
 import play.api.libs.json.{JsObject, JsValue}
 
 /**
  * Package for layer implementation
- *
- * Created by bydelta on 2015-01-06.
  */
 package object layer {
 
   /**
-   * Trait: Layer
+   * __Trait__ that describes layer-level computation
    *
    * Layer is an instance of ScalaMatrix => ScalaMatrix function.
    * Therefore "layers" can be composed together.
@@ -22,7 +21,8 @@ package object layer {
 
     /**
      * Forward computation
-     * @param x of input matrix
+     *
+     * @param x input matrix
      * @return output matrix
      */
     override def apply(x: ScalarMatrix): ScalarMatrix
@@ -55,25 +55,28 @@ package object layer {
     /**
      * Sugar: Forward computation. Calls apply(x)
      *
-     * @param x of input matrix
+     * @param x input matrix
      * @return output matrix
      */
     protected[deep] def >>:(x: ScalarMatrix) = apply(x)
 
     /**
      * Translate this layer into JSON object (in Play! framework)
+     *
      * @return JSON object describes this layer
      */
     def toJSON: JsObject
 
     /**
      * weights for update
+     *
      * @return weights
      */
     def W: Seq[ScalarMatrix]
 
     /**
      * accumulated delta values
+     *
      * @return delta-weight
      */
     def dW: Seq[ScalarMatrix]
@@ -88,7 +91,8 @@ package object layer {
 
     /**
      * Load layer from JsObject
-     * @param obj to be parsed
+     *
+     * @param obj JsObject to be parsed
      * @return New layer reconstructed from this object
      */
     def apply(obj: JsValue) = {

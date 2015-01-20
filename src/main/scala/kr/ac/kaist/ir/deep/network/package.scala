@@ -1,6 +1,7 @@
 package kr.ac.kaist.ir.deep
 
-import kr.ac.kaist.ir.deep.function._
+import kr.ac.kaist.ir.deep.fn._
+import kr.ac.kaist.ir.deep.fn.act.Activation
 import kr.ac.kaist.ir.deep.layer.{BasicLayer, Layer, Reconstructable}
 import play.api.libs.json._
 
@@ -87,7 +88,7 @@ package object network {
      * @param obj to be parsed
      * @return New Network reconstructed from this object
      */
-    def apply(obj: JsObject): Network = {
+    def apply(obj: JsObject): Network =
       (obj \ "type").as[String] match {
         case "AutoEncoder" ⇒
           AutoEncoder(obj)
@@ -97,7 +98,6 @@ package object network {
           val layers = (obj \ "stack").as[Seq[JsObject]] map Network.AutoEncoder
           new StackedAutoEncoder(layers)
       }
-    }
 
     /**
      * Load network from JsObject
@@ -128,9 +128,8 @@ package object network {
      */
     def apply(act: Activation, layerSizes: Int*): Network =
       new BasicNetwork(layerSizes.indices.tail map {
-        i ⇒ {
-          new BasicLayer(layerSizes(i - 1) → layerSizes(i), act)
-        }
+        i ⇒ new BasicLayer(layerSizes(i - 1) → layerSizes(i), act)
       })
   }
+
 }
