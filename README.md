@@ -1,5 +1,5 @@
-ScalaNetwork 0.1.4-SNAPSHOT
-===========================
+ScalaNetwork 0.1.5
+==================
 
 A *Neural Network implementation* with Scala, [Breeze](https://github.com/scalanlp/breeze) & [Spark](http://spark.apache.org)
 
@@ -38,6 +38,7 @@ ScalaNetwork supports following environments:
 
 ScalaNetwork supports following activation functions:
 
+* Linear
 * Sigmoid
 * HyperbolicTangent
 * Rectifier

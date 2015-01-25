@@ -128,8 +128,10 @@ class Trainer[IN](protected val style: TrainStyle[IN],
    * @param set RDD of training set
    */
   def train(set: RDD[(IN, ScalarMatrix)]): Scalar = {
-    set.cache()
-    train(set.takeSample(true, _))
+    train({
+      val cached = set.cache()
+      x: Int ⇒ cached.takeSample(withReplacement = true, num = x).toSeq
+    })
   }
 
   /**
@@ -139,9 +141,13 @@ class Trainer[IN](protected val style: TrainStyle[IN],
    * @param validation RDD of validation set
    */
   def train(set: RDD[(IN, ScalarMatrix)], validation: RDD[(IN, ScalarMatrix)]): Scalar = {
-    set.cache()
-    validation.cache()
-    train(set.takeSample(true, _), validation.takeSample(true, _))
+    train({
+      val cached = set.cache()
+      x: Int ⇒ cached.takeSample(withReplacement = true, num = x).toSeq
+    }, {
+      val cached = validation.cache()
+      x: Int ⇒ cached.takeSample(withReplacement = true, num = x).toSeq
+    })
   }
   
   /**
@@ -154,7 +160,7 @@ class Trainer[IN](protected val style: TrainStyle[IN],
     t.foldLeft(0.0) {
       (err, item) ⇒
         val out = make onewayTrip(net, item._1)
-        logger.debug(s"${make stringOf item} = OUT : ${out.mkString}")
+        logger debug s"${make stringOf item} = OUT : ${out.mkString}"
         err + (make error(item._2, out))
     } / t.size
   }
@@ -163,13 +169,13 @@ class Trainer[IN](protected val style: TrainStyle[IN],
    * Print validation result into logger
    */
   protected def printValidation() = {
-    logger.info(s"BEST ITERATION $bestIter : W = ${net.W map (_.mkString) mkString " | "}")
+    logger info s"BEST ITERATION $bestIter : W = ${net.W map (_.mkString) mkString " | "}"
 
     val t = testSet(param.validationSize)
     t.par foreach {
       item ⇒
         val out = make onewayTrip(net, item._1)
-        logger.info(s"${make stringOf item} = OUT : ${out.mkString}")
+        logger debug s"${make stringOf item} = OUT : ${out.mkString}"
     }
   }
 
@@ -206,14 +212,14 @@ class Trainer[IN](protected val style: TrainStyle[IN],
     var nPatience = patience
 
     val nLoss = if ((iter + 1) % stops.validationFreq == 0) {
-      logger.debug(s"ITERATION $iter : W = ${net.W map (_.mkString) mkString " | "}")
+      logger debug s"ITERATION $iter : W = ${net.W map (_.mkString) mkString " | "}"
       val train = validationError()
       val weight = algorithm loss net.W
       if (train + weight < prevloss * stops.improveThreshold) {
         nPatience = Math.max(patience, iter * stops.patienceStep)
         bestIter = iter
         saveParams()
-        logger.info(f"Iteration $iter%6d, Validation = $train%.5f, WeightLoss = $weight%.5f")
+        logger info f"Iteration $iter%6d, Validation = $train%.5f, WeightLoss = $weight%.5f"
         train + weight
       } else {
         prevloss

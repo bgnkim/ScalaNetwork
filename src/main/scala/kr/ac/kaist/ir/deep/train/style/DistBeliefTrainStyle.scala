@@ -84,11 +84,18 @@ class DistBeliefTrainStyle[IN](protected[train] override val net: Network,
    *
    * @param op Set of input operations
    */
-  override protected[train] def batch(op: InputOp[IN]): Unit =
-    networks foreach {
-      copiedNet ⇒
-        trainingSet(param.miniBatch) map {
+  override protected[train] def batch(op: InputOp[IN]): Unit = {
+    val sets = (0 until param.numCores) map {
+      _ ⇒ trainingSet(param.miniBatch)
+    }
+    val setRDD = sc.makeRDD(sets)
+
+    networks zip setRDD foreach {
+      pair ⇒
+        val copiedNet = pair._1
+        pair._2 map {
           pair ⇒ op roundTrip(copiedNet, op corrupted pair._1, pair._2)
         }
     }
+  }
 }
