@@ -137,6 +137,6 @@ package object train {
      * @param v1 to be corrupted
      * @return the vector
      */
-    override def apply(v1: ScalarMatrix) = v1
+    override def apply(v1: ScalarMatrix) = v1.copy
   }
 }

@@ -7,10 +7,8 @@ import play.api.libs.json.{JsArray, Json}
 /**
  * __Network__: A basic network implementation
  * @param layers __Sequence of layers__ of this network
- * @param presence the probability of non-dropped neurons (for drop-out training). `(default : 100% = 1.0)`
  */
-class BasicNetwork(private val layers: Seq[Layer],
-                   protected override val presence: Probability = 1.0)
+class BasicNetwork(private val layers: Seq[Layer])
   extends Network {
   /** Collected input & output of each layer */
   protected[deep] var input: Seq[ScalarMatrix] = Seq()
@@ -36,16 +34,11 @@ class BasicNetwork(private val layers: Seq[Layer],
    * @param in an input vector
    * @return output of the vector
    */
-  override def apply(in: ScalarMatrix): ScalarMatrix = {
+  override def apply(in: ScalarMatrix): ScalarMatrix =
     // We don't have to store this value
-    val localInput = layers.indices.foldLeft(Seq(in)) {
-      (seq, id) ⇒
-        val layerOut = seq.head >>: layers(id)
-        val adjusted: ScalarMatrix = layerOut :* presence.safe
-        adjusted +: seq
+    layers.indices.foldLeft(in) {
+      (input, id) ⇒ layers(id)(input)
     }
-    localInput.head
-  }
 
   /**
    * Serialize network to JSON
@@ -54,7 +47,6 @@ class BasicNetwork(private val layers: Seq[Layer],
    */
   override def toJSON = Json.obj(
     "type" → "BasicNetwork",
-    "presence" → presence.safe,
     "layers" → JsArray(layers map (_.toJSON))
   )
 
@@ -88,11 +80,7 @@ class BasicNetwork(private val layers: Seq[Layer],
   protected[deep] override def >>:(x: ScalarMatrix): ScalarMatrix = {
     // We have to store this value
     input = layers.indices.foldLeft(Seq(x.copy)) {
-      (seq, id) ⇒
-        val in = seq.head
-        if (presence < 1.0)
-          in :*= ScalarMatrix $01(in.rows, in.cols, presence.safe)
-        (in >>: layers(id)) +: seq
+      (seq, id) ⇒ (seq.head >>: layers(id)) +: seq
     } ++: input
     input.head
   }

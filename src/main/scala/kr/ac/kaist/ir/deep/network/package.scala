@@ -15,11 +15,6 @@ package object network {
    */
   trait Network extends (ScalarMatrix ⇒ ScalarMatrix) with Serializable {
     /**
-     * Probability that each input neuron of each layer is not dropped (For neuron drop-out)
-     */
-    protected val presence: Probability
-
-    /**
      * All weights of layers
      *
      * @return all weights of layers
@@ -124,8 +119,7 @@ package object network {
      */
     def BasicNetwork(obj: JsObject): BasicNetwork = {
       val layers = (obj \ "layers").as[JsArray].value map Layer.apply
-      val presence = (obj \ "presence").as[Probability]
-      new BasicNetwork(layers, presence)
+      new BasicNetwork(layers)
     }
 
     /**

@@ -107,6 +107,9 @@ package object layer {
       val b = ScalarMatrix restore (obj \ "bias").as[Seq[Seq[Scalar]]]
 
       (obj \ "type").as[String] match {
+        case "DropoutLayer" ⇒
+          val presence = (obj \ "presence").as[Probability]
+          new DropoutLayer(presence)
         case "BasicLayer" ⇒
           val w = ScalarMatrix restore (obj \ "weight").as[Seq[Seq[Scalar]]]
           (obj \ "reconst_bias").asOpt[Seq[Seq[Scalar]]] match {

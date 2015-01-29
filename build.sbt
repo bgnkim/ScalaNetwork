@@ -2,7 +2,7 @@ organization := "kr.ac.kaist.ir"
 
 name := "ScalaNetwork"
 
-version := "0.1.5"
+version := "0.1.5.1"
 
 scalaVersion := "2.10.4"
 
@@ -17,7 +17,7 @@ resolvers ++= Seq(
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % "1.2.0",
   "com.typesafe.play" %% "play-json" % "2.3.4",
-  "org.scalanlp" %% "breeze" % "0.10" withJavadoc() withSources(),
+  "org.scalanlp" %% "breeze" % "0.10",
   "org.scalanlp" %% "breeze-natives" % "0.10",
   "org.specs2" %% "specs2-core" % "2.4.15" % "test"
 )

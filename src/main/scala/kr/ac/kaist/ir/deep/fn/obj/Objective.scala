@@ -13,7 +13,7 @@ trait Objective extends ((ScalarMatrix, ScalarMatrix) ⇒ Scalar) with Serializa
    *
    * @param real the expected __real output__, `r`
    * @param output the computed __output of the network__, `o`
-   * @return differentiation value at `f(x)=fx`, which is __square, diagonal matrix__
+   * @return differentiation value at `f(x)=fx`, which is __a column vector__
    */
   def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix
 

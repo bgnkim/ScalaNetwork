@@ -48,7 +48,7 @@ import scala.annotation.tailrec
  * @param stops __Stopping Criteria__ that controls the threshold for stopping. (Default : [[StoppingCriteria]])
  *
  * @tparam IN the type of input. 
- *            Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and [[kr.ac.kaist.ir.deep.rec.VectorTree]] are supported
+ *            Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and [[kr.ac.kaist.ir.deep.rec.DAG]] are supported
  */
 class Trainer[IN](protected val style: TrainStyle[IN],
                   protected[train] val make: InputOp[IN] = new ScalarVector(),

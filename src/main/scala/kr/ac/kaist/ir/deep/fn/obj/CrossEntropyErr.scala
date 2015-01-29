@@ -29,7 +29,7 @@ object CrossEntropyErr extends Objective {
    *
    * @param real the expected __real output__, `r`
    * @param output the computed __output of the network__, `o`
-   * @return differentiation value at `f(x)=fx`, which is __square, diagonal matrix__
+   * @return differentiation value at `f(x)=fx`, which is __a column vector__
    */
   override def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix =
     DenseMatrix.tabulate(real.rows, real.cols)((r, c) ⇒ entropyDiff(real(r, c), output(r, c)))

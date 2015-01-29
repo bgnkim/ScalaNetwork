@@ -28,7 +28,7 @@ class DistBeliefTrainStyle[IN](protected[train] override val net: Network,
                                protected[train] override val param: DistBeliefCriteria = DistBeliefCriteria())
   extends TrainStyle[IN] {
   /** Spark distributed networks */
-  @transient protected val networks: RDD[Network] = sc.makeRDD(net copy param.numCores).persist(StorageLevel.MEMORY_ONLY).cache()
+  @transient protected val networks: RDD[Network] = sc.makeRDD(net copy param.numCores, param.numCores).persist(StorageLevel.MEMORY_ONLY).cache()
   /** Flag for fetch : Is fetching? */
   @transient protected var fetchFlag: Boolean = false
   /** Flag for update : Is updating? */
@@ -88,7 +88,7 @@ class DistBeliefTrainStyle[IN](protected[train] override val net: Network,
     val sets = (0 until param.numCores) map {
       _ ⇒ trainingSet(param.miniBatch)
     }
-    val setRDD = sc.makeRDD(sets)
+    val setRDD = sc.makeRDD(sets, param.numCores)
 
     networks zip setRDD foreach {
       pair ⇒

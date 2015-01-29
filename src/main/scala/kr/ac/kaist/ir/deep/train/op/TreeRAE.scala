@@ -3,7 +3,7 @@ package kr.ac.kaist.ir.deep.train.op
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.fn.obj.{Objective, SquaredErr}
 import kr.ac.kaist.ir.deep.network.Network
-import kr.ac.kaist.ir.deep.rec.VectorTree
+import kr.ac.kaist.ir.deep.rec.DAG
 import kr.ac.kaist.ir.deep.train._
 import org.apache.spark.annotation.AlphaComponent
 
@@ -34,10 +34,9 @@ class TreeRAE(override protected[train] val corrupt: Corruption = NoCorruption,
    * @param in __corrupted__ input
    * @param real __Real label__ for comparing
    */
-  override def roundTrip(net: Network, in: VectorTree, real: ScalarMatrix): Unit =
-    in postOrder {
-      (v1, v2) ⇒
-        val x = v1 row_+ v2
+  override def roundTrip(net: Network, in: DAG, real: ScalarMatrix): Unit =
+    in forward {
+      x ⇒
         val out = x >>: net
         val err = error.derivative(x, out)
         net ! err

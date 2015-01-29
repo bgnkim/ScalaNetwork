@@ -9,9 +9,6 @@ import play.api.libs.json.{JsObject, Json}
  * @param encoders __Sequence of AutoEncoders__ to be stacked.
  */
 class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network {
-  /** Not used for this network */
-  @deprecated protected override val presence: Probability = 0.0
-
   /**
    * All accumulated delta weights of layers
    *

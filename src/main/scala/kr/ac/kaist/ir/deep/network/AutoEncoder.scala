@@ -1,7 +1,7 @@
 package kr.ac.kaist.ir.deep.network
 
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.layer.Reconstructable
+import kr.ac.kaist.ir.deep.layer.{DropoutLayer, Reconstructable}
 import play.api.libs.json.Json
 
 /**
@@ -11,8 +11,10 @@ import play.api.libs.json.Json
  * @param presence the probability of non-dropped neurons (for drop-out training). `(default : 100% = 1.0)`
  */
 class AutoEncoder(private val layer: Reconstructable,
-                  protected[deep] override val presence: Probability = 1.0)
+                  private val presence: Probability = 1.0)
   extends Network {
+  /** Dropout layer **/
+  private val dropout = new DropoutLayer(presence)
   /** Collected input & output of each layer */
   protected[deep] var input: Seq[ScalarMatrix] = Seq()
 
@@ -37,7 +39,7 @@ class AutoEncoder(private val layer: Reconstructable,
    * @param in an input vector
    * @return output of the vector
    */
-  override def apply(in: ScalarMatrix): ScalarMatrix = layer(in) :* presence.safe
+  override def apply(in: ScalarMatrix): ScalarMatrix = dropout(layer(in))
 
   /**
    * Serialize network to JSON
@@ -67,7 +69,8 @@ class AutoEncoder(private val layer: Reconstructable,
     val hidden = input.tail.head
     input = input.tail.tail
 
-    layer rec_!(err, hidden, output)
+    val hiddenErr = layer rec_!(err, hidden, output)
+    dropout !(hiddenErr, null, null)
   }
 
   /**
@@ -100,11 +103,8 @@ class AutoEncoder(private val layer: Reconstructable,
    * @return hidden values
    */
   protected[deep] def encode(x: ScalarMatrix): ScalarMatrix = {
-    val in = x.copy
-    if (presence < 1.0)
-      in :*= ScalarMatrix $01(x.rows, x.cols, presence.safe)
-    val hidden = in >>: layer
-    input = Seq(hidden, in) ++: input
+    val hidden = x >>: layer
+    input = Seq(hidden, x) ++: input
     hidden
   }
 
@@ -116,9 +116,7 @@ class AutoEncoder(private val layer: Reconstructable,
    * @return output matrix
    */
   protected[deep] def decode(x: ScalarMatrix): ScalarMatrix = {
-    val hidden = x.copy
-    if (presence < 1.0)
-      hidden :*= ScalarMatrix $01(hidden.rows, hidden.cols, presence.safe)
+    val hidden = x >>: dropout
     val output = hidden rec_>>: layer
     input = Seq(output, hidden) ++: input
     output
@@ -139,7 +137,7 @@ class AutoEncoder(private val layer: Reconstructable,
    * @return reconstruction of x.
    */
   def reconstruct(x: ScalarMatrix): ScalarMatrix = {
-    val h = (x >>: layer) :* presence
-    (h rec_>>: layer) :* presence
+    val h = (x >>: layer) >>: dropout
+    h rec_>>: layer
   }
 }
