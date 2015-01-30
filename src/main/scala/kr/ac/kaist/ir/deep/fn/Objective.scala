@@ -1,6 +1,4 @@
-package kr.ac.kaist.ir.deep.fn.obj
-
-import kr.ac.kaist.ir.deep.fn._
+package kr.ac.kaist.ir.deep.fn
 
 /**
  * __Trait__ that describes an objective function for '''entire network'''

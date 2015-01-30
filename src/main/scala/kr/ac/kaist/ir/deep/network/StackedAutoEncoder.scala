@@ -52,9 +52,9 @@ class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network
    * @param x input matrix
    * @return output matrix
    */
-  protected[deep] override def >>:(x: ScalarMatrix): ScalarMatrix =
+  protected[deep] override def into_:(x: ScalarMatrix): ScalarMatrix =
     encoders.foldLeft(x) {
-      (in, enc) ⇒ in >>: enc
+      (in, enc) ⇒ in into_: enc
     }
 
   /**
@@ -62,8 +62,8 @@ class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network
    *
    * @param err backpropagated error from error function
    */
-  protected[deep] override def !(err: ScalarMatrix): ScalarMatrix =
+  protected[deep] override def updateBy(err: ScalarMatrix): ScalarMatrix =
     encoders.foldRight(err) {
-      (enc, err) ⇒ enc ! err
+      (enc, err) ⇒ enc updateBy err
     }
 }

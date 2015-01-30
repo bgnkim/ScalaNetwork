@@ -38,5 +38,5 @@ trait Node extends Serializable {
    * @param corrupt Corruption function to be applied
    * @return Corrupted DAG
    */
-  def ?(corrupt: Corruption): Node
+  def through(corrupt: Corruption): Node
 }

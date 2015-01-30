@@ -1,6 +1,4 @@
-package kr.ac.kaist.ir.deep.fn.act
-
-import kr.ac.kaist.ir.deep.fn._
+package kr.ac.kaist.ir.deep.fn
 
 /**
  * __Activation Function__: Rectifier

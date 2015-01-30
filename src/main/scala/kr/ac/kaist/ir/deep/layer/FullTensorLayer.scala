@@ -1,7 +1,6 @@
 package kr.ac.kaist.ir.deep.layer
 
-import kr.ac.kaist.ir.deep.fn.act.Activation
-import kr.ac.kaist.ir.deep.fn.{ScalarMatrix, ScalarMatrixOp}
+import kr.ac.kaist.ir.deep.fn.{Activation, ScalarMatrix, ScalarMatrixOp}
 import play.api.libs.json.{JsArray, JsObject, Json}
 
 /**

@@ -54,8 +54,8 @@ class DAG(val finals: Seq[Node]) extends Node {
    * @param corrupt Corruption function to be applied
    * @return Corrupted DAG
    */
-  override def ?(corrupt: Corruption): DAG =
+  override def through(corrupt: Corruption): DAG =
     new DAG(finals map {
-      _ ? corrupt
+      _ through corrupt
     })
 }

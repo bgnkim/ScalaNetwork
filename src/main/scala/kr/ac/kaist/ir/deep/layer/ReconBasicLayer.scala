@@ -1,7 +1,6 @@
 package kr.ac.kaist.ir.deep.layer
 
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.fn.act.Activation
 import play.api.libs.json.JsObject
 
 /**
@@ -28,7 +27,7 @@ class ReconBasicLayer(IO: (Int, Int),
    * @param x hidden layer output matrix
    * @return tuple of reconstruction output
    */
-  override def rec_>>:(x: ScalarMatrix): ScalarMatrix = {
+  override def decodeBy_:(x: ScalarMatrix): ScalarMatrix = {
     val wx: ScalarMatrix = weight.t[ScalarMatrix, ScalarMatrix] * x
     val wxb: ScalarMatrix = wx + reBias
     act(wxb)
@@ -63,7 +62,7 @@ class ReconBasicLayer(IO: (Int, Int),
    * @param output final reconstruction output of this layer
    * @return propagated error
    */
-  protected[deep] override def rec_!(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
+  protected[deep] override def decodeUpdateBy(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
     // Recon × Recon matrix
     val dFdX = act.derivative(output)
 

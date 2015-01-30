@@ -1,7 +1,6 @@
-package kr.ac.kaist.ir.deep.fn.act
+package kr.ac.kaist.ir.deep.fn
 
 import breeze.linalg.DenseMatrix
-import kr.ac.kaist.ir.deep.fn._
 
 /**
  * __Activation Function__: Linear

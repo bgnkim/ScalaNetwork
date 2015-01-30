@@ -12,7 +12,7 @@ trait Reconstructable extends Layer {
    * @param x hidden layer output matrix
    * @return tuple of reconstruction output
    */
-  def rec_>>:(x: ScalarMatrix): ScalarMatrix
+  def decodeBy_:(x: ScalarMatrix): ScalarMatrix
 
   /**
    * Backpropagation of reconstruction. For the information about backpropagation calculation, see [[kr.ac.kaist.ir.deep.layer.Layer]]
@@ -22,5 +22,5 @@ trait Reconstructable extends Layer {
    * @param output final reconstruction output of this layer
    * @return propagated error
    */
-  protected[deep] def rec_!(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix
+  protected[deep] def decodeUpdateBy(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix
 }

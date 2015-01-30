@@ -1,8 +1,7 @@
-package kr.ac.kaist.ir.deep.fn.alg
+package kr.ac.kaist.ir.deep.fn
 
 import breeze.linalg.sum
 import breeze.numerics._
-import kr.ac.kaist.ir.deep.fn._
 
 /**
  * __Trait__ that describes the algorithm for weight update

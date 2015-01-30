@@ -53,11 +53,19 @@ class AutoEncoder(private val layer: Reconstructable,
   )
 
   /**
+   * Reconstruct the given hidden value
+   *
+   * @param x hidden value to be reconstructed.
+   * @return reconstruction value.
+   */
+  def reconstruct(x: ScalarMatrix): ScalarMatrix = x decodeBy_: layer
+
+  /**
    * Backpropagation algorithm
    *
    * @param err backpropagated error from error function
    */
-  protected[deep] override def !(err: ScalarMatrix) = encode_!(decode_!(err))
+  protected[deep] override def updateBy(err: ScalarMatrix) = encode_!(decode_!(err))
 
   /**
    * Backpropagation algorithm for decoding phrase
@@ -69,8 +77,8 @@ class AutoEncoder(private val layer: Reconstructable,
     val hidden = input.tail.head
     input = input.tail.tail
 
-    val hiddenErr = layer rec_!(err, hidden, output)
-    dropout !(hiddenErr, null, null)
+    val hiddenErr = layer decodeUpdateBy(err, hidden, output)
+    dropout updateBy(hiddenErr, null, null)
   }
 
   /**
@@ -83,9 +91,9 @@ class AutoEncoder(private val layer: Reconstructable,
     val in = input.tail.head
     input = input.tail.tail
 
-    layer !(err, in, hidden)
+    layer updateBy(err, in, hidden)
   }
-
+  
   /**
    * Forward computation for training.
    * If drop-out is used, we need to drop-out entry of input vector.
@@ -93,8 +101,8 @@ class AutoEncoder(private val layer: Reconstructable,
    * @param x input matrix
    * @return output matrix
    */
-  protected[deep] override def >>:(x: ScalarMatrix): ScalarMatrix = decode(encode(x))
-  
+  protected[deep] override def into_:(x: ScalarMatrix): ScalarMatrix = decode(encode(x))
+
   /**
    * Encode computation for training.
    * If drop-out is used, we need to drop-out entry of input vector.
@@ -103,7 +111,7 @@ class AutoEncoder(private val layer: Reconstructable,
    * @return hidden values
    */
   protected[deep] def encode(x: ScalarMatrix): ScalarMatrix = {
-    val hidden = x >>: layer
+    val hidden = x into_: layer
     input = Seq(hidden, x) ++: input
     hidden
   }
@@ -116,28 +124,20 @@ class AutoEncoder(private val layer: Reconstructable,
    * @return output matrix
    */
   protected[deep] def decode(x: ScalarMatrix): ScalarMatrix = {
-    val hidden = x >>: dropout
-    val output = hidden rec_>>: layer
+    val hidden = x into_: dropout
+    val output = hidden decodeBy_: layer
     input = Seq(output, hidden) ++: input
     output
   }
-
+  
   /**
    * Sugar: Forward computation for validation. Calls apply(x)
    *
    * @param x input matrix
    * @return output matrix
    */
-  override protected[deep] def on(x: ScalarMatrix): ScalarMatrix = reconstruct(x)
-
-  /**
-   * Reconstruct the input
-   *
-   * @param x input to be reconstructed.
-   * @return reconstruction of x.
-   */
-  def reconstruct(x: ScalarMatrix): ScalarMatrix = {
-    val h = (x >>: layer) >>: dropout
-    h rec_>>: layer
+  override protected[deep] def of(x: ScalarMatrix): ScalarMatrix = {
+    val h = (x into_: layer) into_: dropout
+    h decodeBy_: layer
   }
 }

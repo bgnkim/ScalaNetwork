@@ -2,11 +2,8 @@ package kr.ac.kaist.ir.deep.network
 
 import breeze.linalg.DenseMatrix
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.fn.act.Sigmoid
-import kr.ac.kaist.ir.deep.fn.alg.StochasticGradientDescent
 import kr.ac.kaist.ir.deep.layer.{Layer, SplitTensorLayer}
 import kr.ac.kaist.ir.deep.train._
-import kr.ac.kaist.ir.deep.train.style.SingleThreadTrainStyle
 import org.specs2.mutable.Specification
 
 /**
@@ -84,7 +81,7 @@ class TensorNetworkTester extends Specification {
     }
 
     val net = new BasicNetwork(Seq(layer))
-    val style = new SingleThreadTrainStyle[ScalarMatrix](
+    val style = new SingleThreadTrainStyle[ScalarMatrix, ScalarMatrix](
       net = net,
       algorithm = new StochasticGradientDescent(rate = 0.8, l2decay = 0.0001),
       param = SimpleTrainingCriteria(miniBatch = 8)

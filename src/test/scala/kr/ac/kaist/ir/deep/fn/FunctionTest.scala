@@ -2,12 +2,10 @@ package kr.ac.kaist.ir.deep.fn
 
 import breeze.linalg.{DenseMatrix, sum}
 import breeze.numerics.abs
-import kr.ac.kaist.ir.deep.fn.act.{HyperbolicTangent, Rectifier, Sigmoid, Softplus}
-import kr.ac.kaist.ir.deep.fn.obj.{CrossEntropyErr, SquaredErr}
 import org.specs2.mutable.Specification
 
 /**
- * Created by bydelta on 2015-01-03.
+ * Test for functions
  */
 class FunctionTest extends Specification {
   val input: ScalarMatrix = DenseMatrix.create(4, 1, Array[Double](0.0, 1.0, -0.35, 10.0))

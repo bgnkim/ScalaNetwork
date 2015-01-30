@@ -1,7 +1,6 @@
 package kr.ac.kaist.ir.deep
 
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.fn.act._
 import play.api.libs.json.{JsObject, JsValue}
 
 /**
@@ -50,7 +49,7 @@ package object layer {
      * @param output of this layer (in this case, <code>y</code>)
      * @return propagated error (in this case, <code>dG/dx</code> )
      */
-    protected[deep] def !(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix
+    protected[deep] def updateBy(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix
 
     /**
      * Sugar: Forward computation. Calls apply(x)
@@ -58,7 +57,7 @@ package object layer {
      * @param x input matrix
      * @return output matrix
      */
-    protected[deep] def >>:(x: ScalarMatrix) = apply(x)
+    protected[deep] def into_:(x: ScalarMatrix) = apply(x)
 
     /**
      * Translate this layer into JSON object (in Play! framework)

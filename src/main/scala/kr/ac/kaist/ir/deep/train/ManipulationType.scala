@@ -1,9 +1,7 @@
-package kr.ac.kaist.ir.deep.train.op
+package kr.ac.kaist.ir.deep.train
 
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.fn.obj.Objective
 import kr.ac.kaist.ir.deep.network.Network
-import kr.ac.kaist.ir.deep.train.Corruption
 
 /**
  * __Trait__ that describes how to convert input into corrupted matrix
@@ -11,8 +9,9 @@ import kr.ac.kaist.ir.deep.train.Corruption
  * Input operation corrupts the given input, and apply network propagations onto matrix representation of input 
  *
  * @tparam IN the type of input
+ * @tparam OUT the type of output
  */
-trait InputOp[IN] extends Serializable {
+trait ManipulationType[IN, OUT] extends Serializable {
   /** Corruption function */
   protected[train] val corrupt: Corruption
   /** Objective function */
@@ -30,16 +29,15 @@ trait InputOp[IN] extends Serializable {
    * Apply & Back-prop given single input
    *
    * @param net A network that gets input
-   * @param in __corrupted__ input
-   * @param real __Real label__ for comparing
+   * @param seq Sequence of (Input, Real output) for error computation.
    */
-  def roundTrip(net: Network, in: IN, real: ScalarMatrix): Unit
+  def roundTrip(net: Network, seq: Seq[(IN, OUT)]): Unit
 
   /**
    * Apply given single input as one-way forward trip.
    *
    * @param net A network that gets input
-   * @param x input to be computed            
+   * @param x input to be computed
    * @return output of the network.
    */
   def onewayTrip(net: Network, x: IN): ScalarMatrix
@@ -49,5 +47,14 @@ trait InputOp[IN] extends Serializable {
    *
    * @return input as string
    */
-  def stringOf(in: (IN, ScalarMatrix)): String
+  def stringOf(in: (IN, OUT)): String
+
+  /**
+   * Apply given input and compute the error
+   *
+   * @param net A network that gets input  
+   * @param validation Sequence of (Input, Real output) for error computation.
+   * @return error of this network
+   */
+  def lossOf(net: Network, validation: Seq[(IN, OUT)]): Scalar
 }

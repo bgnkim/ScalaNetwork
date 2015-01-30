@@ -1,6 +1,4 @@
-package kr.ac.kaist.ir.deep.fn.alg
-
-import kr.ac.kaist.ir.deep.fn._
+package kr.ac.kaist.ir.deep.fn
 
 /**
  * __Algorithm__: Stochastic Gradient Descent

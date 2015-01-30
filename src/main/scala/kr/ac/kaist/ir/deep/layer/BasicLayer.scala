@@ -1,7 +1,6 @@
 package kr.ac.kaist.ir.deep.layer
 
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.fn.act.Activation
 import play.api.libs.json.{JsObject, Json}
 
 /**
@@ -91,7 +90,7 @@ class BasicLayer(IO: (Int, Int),
    * @param output of this layer (in this case, <code>y</code>)
    * @return propagated error (in this case, <code>dG/dx</code> )
    */
-  protected[deep] override def !(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
+  protected[deep] override def updateBy(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
     // fanOut × fanOut matrix (Numerator/Denominator Layout)
     val dFdX = act.derivative(output)
 

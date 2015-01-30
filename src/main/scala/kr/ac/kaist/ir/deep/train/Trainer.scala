@@ -1,8 +1,6 @@
 package kr.ac.kaist.ir.deep.train
 
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.train.op.{InputOp, ScalarVector}
-import kr.ac.kaist.ir.deep.train.style.TrainStyle
 import org.apache.log4j.Logger
 import org.apache.spark.rdd.RDD
 
@@ -20,20 +18,20 @@ import scala.annotation.tailrec
  *
  *    // Define Training Style. SingleThreadTrainStyle vs DistBeliefTrainStyle
  *    val style = new SingleThreadTrainStyle[ScalarMatrix](
- *    net = net,
- *    algorithm = new StochasticGradientDescent(l2decay = 0.0001),
- *    param = SimpleTrainingCriteria(miniBatch = 8))
+ *       net = net,
+ *       algorithm = new StochasticGradientDescent(l2decay = 0.0001),
+ *       param = SimpleTrainingCriteria(miniBatch = 8))
  *
- *    // Define Input Operation. ScalarVector vs TreeRAE vs TreeRecursive
- *    val operation = new ScalarVector(
- *    corrupt = GaussianCorruption(variance = 0.1)
+ *     // Define Manipulation Type. VectorType, AEType, RAEType and URAEType.
+ *     val operation = new VectorType(
+ *       corrupt = GaussianCorruption(variance = 0.1)
  *    )
  *
  *    // Define Trainer
  *    val train = new Trainer(
- *    style = style,
- *    make = operation,
- *    stops = StoppingCriteria(maxIter = 100000))
+ *       style = style,
+ *       make = operation,
+ *       stops = StoppingCriteria(maxIter = 100000))
  *
  *    // Do Train
  *    train.train(set, valid)}}}
@@ -41,18 +39,20 @@ import scala.annotation.tailrec
  * @note To train an autoencoder, you can provide same training set as validation set.
  *
  * @param style __Training style__ that supervises how to train. There are two styles,
- *              one is [[kr.ac.kaist.ir.deep.train.style.SingleThreadTrainStyle]]
- *              and the other is [[kr.ac.kaist.ir.deep.train.style.DistBeliefTrainStyle]].
+ *              one is [[SingleThreadTrainStyle]]
+ *              and the other is [[DistBeliefTrainStyle]].
  * @param make __Input Operation__ that supervises how to manipulate input as matrices.
  *             This also controls how to compute actual network.             
  * @param stops __Stopping Criteria__ that controls the threshold for stopping. (Default : [[StoppingCriteria]])
  *
  * @tparam IN the type of input. 
  *            Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and [[kr.ac.kaist.ir.deep.rec.DAG]] are supported
+ * @tparam OUT the type of output
+ *             Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and [[Null]] are supported
  */
-class Trainer[IN](protected val style: TrainStyle[IN],
-                  protected[train] val make: InputOp[IN] = new ScalarVector(),
-                  protected val stops: StoppingCriteria = StoppingCriteria())
+class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
+                       protected[train] val make: ManipulationType[IN, OUT] = new VectorType(),
+                       protected val stops: StoppingCriteria = StoppingCriteria())
   extends Serializable {
   /** import everything in the style */
 
@@ -61,7 +61,7 @@ class Trainer[IN](protected val style: TrainStyle[IN],
   /** Logger */
   @transient protected val logger = Logger.getLogger(this.getClass)
   /** Validation Set */
-  protected var testSet: Int ⇒ Seq[(IN, ScalarMatrix)] = null
+  protected var testSet: Int ⇒ Seq[Pair] = null
   /** Best Parameter History */
   @transient protected var bestParam: Seq[ScalarMatrix] = null
   /** Best Loss Iteration Number */
@@ -73,7 +73,7 @@ class Trainer[IN](protected val style: TrainStyle[IN],
    * @param set __Random Sequence Generator__ of training set
    * @return Training error (loss)
    */
-  def train(set: Int ⇒ Seq[(IN, ScalarMatrix)]): Scalar = train(set, set)
+  def train(set: Int ⇒ Seq[Pair]): Scalar = train(set, set)
 
   /**
    * Train given sequence, and validate with given sequence.
@@ -81,7 +81,7 @@ class Trainer[IN](protected val style: TrainStyle[IN],
    * @param set Full Sequence of training set
    * @return Training error (loss)
    */
-  def train(set: Seq[(IN, ScalarMatrix)]): Scalar = {
+  def train(set: Seq[Pair]): Scalar = {
     val index = () ⇒ Math.floor(Math.random() * set.size).toInt
     val randomizer = (n: Int) ⇒ (0 until n) map { _ ⇒ set(index())}
     train(randomizer, randomizer)
@@ -94,8 +94,8 @@ class Trainer[IN](protected val style: TrainStyle[IN],
    * @param validation Full Sequence of validation set
    * @return Training error (loss)
    */
-  def train(set: Seq[(IN, ScalarMatrix)],
-            validation: Seq[(IN, ScalarMatrix)]): Scalar = {
+  def train(set: Seq[Pair],
+            validation: Seq[Pair]): Scalar = {
     val index = () ⇒ Math.floor(Math.random() * set.size).toInt
     val randomizer = (n: Int) ⇒ (0 until n) map { _ ⇒ set(index())}
     val topN = (n: Int) ⇒ validation.slice(0, n)
@@ -109,8 +109,8 @@ class Trainer[IN](protected val style: TrainStyle[IN],
    * @param validation Sequence Generator of validation set
    * @return Training error (loss)
    */
-  def train(set: Int ⇒ Seq[(IN, ScalarMatrix)],
-            validation: Int ⇒ Seq[(IN, ScalarMatrix)]) = {
+  def train(set: Int ⇒ Seq[Pair],
+            validation: Int ⇒ Seq[Pair]) = {
     trainingSet = set
     testSet = validation
 
@@ -127,7 +127,7 @@ class Trainer[IN](protected val style: TrainStyle[IN],
    *
    * @param set RDD of training set
    */
-  def train(set: RDD[(IN, ScalarMatrix)]): Scalar = {
+  def train(set: RDD[Pair]): Scalar = {
     train({
       val cached = set.cache()
       x: Int ⇒ cached.takeSample(withReplacement = true, num = x).toSeq
@@ -140,7 +140,7 @@ class Trainer[IN](protected val style: TrainStyle[IN],
    * @param set RDD of training set
    * @param validation RDD of validation set
    */
-  def train(set: RDD[(IN, ScalarMatrix)], validation: RDD[(IN, ScalarMatrix)]): Scalar = {
+  def train(set: RDD[Pair], validation: RDD[Pair]): Scalar = {
     train({
       val cached = set.cache()
       x: Int ⇒ cached.takeSample(withReplacement = true, num = x).toSeq
@@ -149,7 +149,7 @@ class Trainer[IN](protected val style: TrainStyle[IN],
       x: Int ⇒ cached.takeSample(withReplacement = true, num = x).toSeq
     })
   }
-  
+
   /**
    * Calculate validation error
    *
@@ -157,12 +157,7 @@ class Trainer[IN](protected val style: TrainStyle[IN],
    */
   protected def validationError() = {
     val t = testSet(param.validationSize)
-    t.foldLeft(0.0) {
-      (err, item) ⇒
-        val out = make onewayTrip(net, item._1)
-        logger debug s"${make stringOf item} = OUT : ${out.mkString}"
-        err + (make error(item._2, out))
-    } / t.size
+    make.lossOf(net, t) / t.size
   }
 
   /**
@@ -170,13 +165,6 @@ class Trainer[IN](protected val style: TrainStyle[IN],
    */
   protected def printValidation() = {
     logger info s"BEST ITERATION $bestIter : W = ${net.W map (_.mkString) mkString " | "}"
-
-    val t = testSet(param.validationSize)
-    t.par foreach {
-      item ⇒
-        val out = make onewayTrip(net, item._1)
-        logger debug s"${make stringOf item} = OUT : ${out.mkString}"
-    }
   }
 
   /**

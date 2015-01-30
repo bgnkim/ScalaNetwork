@@ -1,7 +1,6 @@
-package kr.ac.kaist.ir.deep.fn.obj
+package kr.ac.kaist.ir.deep.fn
 
 import breeze.linalg.{DenseMatrix, sum}
-import kr.ac.kaist.ir.deep.fn._
 
 /**
  * __Objective Function__: Sum of Cross-Entropy (Logistic)

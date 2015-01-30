@@ -1,5 +1,5 @@
-ScalaNetwork 0.1.5
-==================
+ScalaNetwork 0.1.6
+====================
 
 A *Neural Network implementation* with Scala, [Breeze](https://github.com/scalanlp/breeze) & [Spark](http://spark.apache.org)
 
@@ -18,8 +18,8 @@ ScalaNetwork supports following layered neural network implementation:
 
 Also you can implement following Recursive Network via training tools.
 
-* *Recursive* Auto Encoder (RAE) <sup>[TEST-IN-PROGRESS]</sup>
-* *Recursive* General Neural Network (Including Recursive Neural Tensor Network, RNTN) <sup>[TEST-IN-PROGRESS]</sup>
+* *Recursive* Auto Encoder (RAE) <sup>[EXPERIMENTAL]</sup>
+* *Recursive* General Neural Network (Including Recursive Neural Tensor Network, RNTN) <sup>[EXPERIMENTAL]</sup>
 
 ## Training Methodology
 
@@ -52,13 +52,13 @@ Here is some examples for basic usage. If you want to extend this package or use
 
 Currently ScalaNetwork supports Scala version 2.10 ~ 2.11.
 
-* Stable Release is 0.1.3
-* Snapshot Release is 0.1.4-SNAPSHOT
+* Stable Release is 0.1.6
+* Snapshot Release is 0.1.7-SNAPSHOT
  
 If you are using SBT, add a dependency as described below:
 
 ```scala
-libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "0.1.3"
+libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "0.1.6"
 ```
 
 If you are using Maven, add a dependency as described below:
@@ -66,7 +66,7 @@ If you are using Maven, add a dependency as described below:
 <dependency>
   <groupId>kr.ac.kaist.ir</groupId>
   <artifactId>scalanetwork_${your.scala.version}</artifactId>
-  <version>0.1.3</version>
+  <version>0.1.6</version>
 </dependency>
 ```
 
@@ -81,9 +81,9 @@ val style = new SingleThreadTrainStyle[ScalarMatrix](
   net = net,
   algorithm = new StochasticGradientDescent(l2decay = 0.0001),
   param = SimpleTrainingCriteria(miniBatch = 8))
-// Define Input Operation. ScalarVector vs TreeRAE vs TreeRecursive
-val operation = new ScalarVector(
-  corrupt = GaussianCorruption(variance = 0.1)
+// Define Manipulation Type. VectorType, AEType, RAEType, and URAEType.
+val operation = new VectorType(
+   corrupt = GaussianCorruption(variance = 0.1)
 )
 // Define Trainer
 val train = new Trainer(
@@ -146,11 +146,11 @@ Before choose Training Style, you must specify algorithm and training criteria.
 
 ```scala
 /* Algorithms */
-
 new StochasticGradientDescent(rate=0.8, l1decay=0.0, l2decay=0.0001, momentum=0.0001)
 new AdaGrad(rate=0.6, l1decay=0.0, l2decay=0.0001)
 new AdaDelta(l1decay=0.0, l2decay=0.0001, decay=0.95, epsilon=1e-6)
-
+```
+```scala
 /* Training Criteria */
 SimpleTrainingCriteria(miniBatch=100, validationSize=20)
 DistBeliefCriteria(miniBatch=100, validationSize=20, updateStep=2, fetchStep=10, numCores=1)
@@ -175,24 +175,26 @@ Also you can specify input operations or options.
 NoCorruption
 DroppingCorruption(presence=0.95)
 GaussianCorruption(mean=0, variance=0.1)
-
+```
+```scala
 /* Objective Functions */
 SquaredErr
 CrossEntropyErr // Which is Logistic Err
+```
+```scala
+/* Manipulation Type : Vector input, Vector output */
+// General Neural Network type
+new VectorType(corrupt, objective)
+// General AutoEncoder type
+new AEType(corrupt, objective)
 
-/* Vector Input */
-new ScalarVector(corrupt, objective)
-
-/* Tree Input */
+/* Manipulation Type : Tree input, Null output (AutoEncoder) */
 // Train network as RAE style. 
 // Every internal node regarded as reconstruction its direct children (not all leaves).
-new TreeRAE(corrupt, objective)
-// Train network as Recursive Network style(for RNTN). 
-// Forward propagation is done on whole tree at once, and then propagate back.
-new TreeRecursive(corrupt, objective)
+new RAEType(corrupt, objective)
 // Experimental: Train network as URAE style. 
 // With same structure, network should reconstruct all leaves from root.
-new TreeURAE(corrupt, objective)
+new URAEType(corrupt, objective)
 ```
 
 ### Training
@@ -236,12 +238,13 @@ If you are using RDD, ScalaNetwork automatically caches your input sequence.
 
 ScalaNetwork will support these implementations:
 
-* Unfolded Recursive Auto Encoder (URAE)
+* Manipulation Type : Word
+* Input-dependent Weight
 
 Also ScalaNetwork will support these features:
 
-* Input-dependent Weight
+* Recursive Neural Tensor Network (RNTN)
 
 ## Current Status
 
-Next version(v0.2) will support URAE
+Next version(v0.2) will support Word(String) manipulation type

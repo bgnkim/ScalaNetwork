@@ -55,14 +55,14 @@ class BasicNetwork(private val layers: Seq[Layer])
    *
    * @param err backpropagated error from error function
    */
-  protected[deep] override def !(err: ScalarMatrix) = {
+  protected[deep] override def updateBy(err: ScalarMatrix) = {
     val error = layers.indices.foldRight(err) {
       (id, e) ⇒
         val l = layers(id)
         val out = input.head
         input = input.tail
         val in = input.head
-        l !(e, in, out)
+        l updateBy(e, in, out)
     }
 
     // Clean-up last entry
@@ -77,10 +77,10 @@ class BasicNetwork(private val layers: Seq[Layer])
    * @param x input matrix
    * @return output matrix
    */
-  protected[deep] override def >>:(x: ScalarMatrix): ScalarMatrix = {
+  protected[deep] override def into_:(x: ScalarMatrix): ScalarMatrix = {
     // We have to store this value
     input = layers.indices.foldLeft(Seq(x.copy)) {
-      (seq, id) ⇒ (seq.head >>: layers(id)) +: seq
+      (seq, id) ⇒ (seq.head into_: layers(id)) +: seq
     } ++: input
     input.head
   }

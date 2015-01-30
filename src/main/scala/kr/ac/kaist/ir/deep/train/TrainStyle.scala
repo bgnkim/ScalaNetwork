@@ -1,19 +1,19 @@
-package kr.ac.kaist.ir.deep.train.style
+package kr.ac.kaist.ir.deep.train
 
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.fn.alg.WeightUpdater
 import kr.ac.kaist.ir.deep.network.Network
-import kr.ac.kaist.ir.deep.train.TrainingCriteria
-import kr.ac.kaist.ir.deep.train.op.InputOp
 
 /**
  * __Trait__ that describes style of training
  *
  * This trait controls how to train, i.e. __Single-threaded__ or __Distributed__.
+ *
+ * @tparam IN the type of input
+ * @tparam OUT the type of output
  */
-trait TrainStyle[IN] extends Serializable {
+trait TrainStyle[IN, OUT] extends Serializable {
   /** Training Pair Type */
-  type Pair = (IN, ScalarMatrix)
+  type Pair = (IN, OUT)
   /** Training parameters */
   protected[train] val param: TrainingCriteria
   /** Network */
@@ -33,9 +33,9 @@ trait TrainStyle[IN] extends Serializable {
   /**
    * Do mini-batch
    *
-   * @param op Set of input operations
+   * @param make Set of input operations
    */
-  protected[train] def batch(op: InputOp[IN]): Unit
+  protected[train] def batch(make: ManipulationType[IN, OUT]): Unit
 
   /**
    * Send update of weights

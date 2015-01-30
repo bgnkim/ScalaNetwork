@@ -65,5 +65,12 @@ object ScalarMatrix {
    * @return column vector with given sequence
    */
   def apply(seq: Double*): ScalarMatrix = DenseMatrix.create(seq.size, 1, seq.toArray)
+
+  /**
+   * An empty matrix for RAE training.
+   *
+   * @return an empty matrix
+   */
+  def empty: ScalarMatrix = ScalarMatrix $0(0, 0)
 }
 

@@ -1,10 +1,7 @@
-package kr.ac.kaist.ir.deep.train.style
+package kr.ac.kaist.ir.deep.train
 
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.fn.alg.WeightUpdater
 import kr.ac.kaist.ir.deep.network.Network
-import kr.ac.kaist.ir.deep.train._
-import kr.ac.kaist.ir.deep.train.op.InputOp
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
@@ -22,11 +19,11 @@ import scala.concurrent._
  * @param sc A __spark context__ that network will be distributed
  * @param param __DistBelief-style__ Training criteria (default: [[kr.ac.kaist.ir.deep.train.DistBeliefCriteria]])
  */
-class DistBeliefTrainStyle[IN](protected[train] override val net: Network,
-                               protected[train] override val algorithm: WeightUpdater,
-                               @transient protected val sc: SparkContext,
-                               protected[train] override val param: DistBeliefCriteria = DistBeliefCriteria())
-  extends TrainStyle[IN] {
+class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
+                                    protected[train] override val algorithm: WeightUpdater,
+                                    @transient protected val sc: SparkContext,
+                                    protected[train] override val param: DistBeliefCriteria = DistBeliefCriteria())
+  extends TrainStyle[IN, OUT] {
   /** Spark distributed networks */
   @transient protected val networks: RDD[Network] = sc.makeRDD(net copy param.numCores, param.numCores).persist(StorageLevel.MEMORY_ONLY).cache()
   /** Flag for fetch : Is fetching? */
@@ -82,20 +79,21 @@ class DistBeliefTrainStyle[IN](protected[train] override val net: Network,
   /**
    * Do mini-batch
    *
-   * @param op Set of input operations
+   * @param make Set of input operations
    */
-  override protected[train] def batch(op: InputOp[IN]): Unit = {
+  override protected[train] def batch(make: ManipulationType[IN, OUT]): Unit = {
     val sets = (0 until param.numCores) map {
       _ ⇒ trainingSet(param.miniBatch)
     }
     val setRDD = sc.makeRDD(sets, param.numCores)
 
     networks zip setRDD foreach {
-      pair ⇒
-        val copiedNet = pair._1
-        pair._2 map {
-          pair ⇒ op roundTrip(copiedNet, op corrupted pair._1, pair._2)
-        }
+      rddPair ⇒
+        val copiedNet = rddPair._1
+        val seq = rddPair._2.par.map {
+          pair ⇒ (make corrupted pair._1) → pair._2
+        }.seq
+        make roundTrip(copiedNet, seq)
     }
   }
 }

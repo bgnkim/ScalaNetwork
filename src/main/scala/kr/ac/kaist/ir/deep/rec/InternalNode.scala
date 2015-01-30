@@ -4,7 +4,7 @@ import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.train.Corruption
 
 /**
- * Created by bydelta on 2015-01-28.
+ * __Node__ for internal structure (non-terminal)
  */
 class InternalNode(val req: Seq[Node]) extends Node {
 
@@ -53,8 +53,8 @@ class InternalNode(val req: Seq[Node]) extends Node {
    * @param corrupt Corruption function to be applied
    * @return Corrupted DAG
    */
-  override def ?(corrupt: Corruption): Node =
+  override def through(corrupt: Corruption): Node =
     new InternalNode(req map {
-      _ ? corrupt
+      _ through corrupt
     })
 }

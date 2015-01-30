@@ -1,7 +1,6 @@
 package kr.ac.kaist.ir.deep
 
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.fn.act.Activation
 import kr.ac.kaist.ir.deep.layer.{BasicLayer, Layer, Reconstructable}
 import play.api.libs.json._
 
@@ -40,7 +39,7 @@ package object network {
      *
      * @param err backpropagated error from error function
      */
-    protected[deep] def !(err: ScalarMatrix): ScalarMatrix
+    protected[deep] def updateBy(err: ScalarMatrix): ScalarMatrix
 
     /**
      * Forward computation for training
@@ -48,7 +47,7 @@ package object network {
      * @param x input matrix
      * @return output matrix
      */
-    protected[deep] def >>:(x: ScalarMatrix): ScalarMatrix
+    protected[deep] def into_:(x: ScalarMatrix): ScalarMatrix
 
     /**
      * Sugar: Forward computation for validation. Calls apply(x)
@@ -56,7 +55,7 @@ package object network {
      * @param x input matrix
      * @return output matrix
      */
-    protected[deep] def on(x: ScalarMatrix): ScalarMatrix = apply(x)
+    protected[deep] def of(x: ScalarMatrix): ScalarMatrix = apply(x)
   }
 
   /**

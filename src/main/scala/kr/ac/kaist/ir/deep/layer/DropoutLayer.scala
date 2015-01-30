@@ -58,7 +58,7 @@ class DropoutLayer(protected val presence: Probability = 1.0) extends Layer {
    * @param x input matrix
    * @return output matrix
    */
-  override protected[deep] def >>:(x: ScalarMatrix): ScalarMatrix =
+  override protected[deep] def into_:(x: ScalarMatrix): ScalarMatrix =
     if (presence >= 1.0) x
     else {
       onoff = ScalarMatrix $01(x.rows, x.cols, presence.safe)
@@ -75,7 +75,7 @@ class DropoutLayer(protected val presence: Probability = 1.0) extends Layer {
    * @param output of this layer (in this case, <code>y</code>)
    * @return propagated error (in this case, <code>dG/dx</code> )
    */
-  protected[deep] override def !(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix =
+  protected[deep] override def updateBy(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix =
     if (presence >= 1) error
     else error :* onoff
 }

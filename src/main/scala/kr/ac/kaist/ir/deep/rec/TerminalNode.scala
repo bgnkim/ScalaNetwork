@@ -39,6 +39,6 @@ class TerminalNode(val x: ScalarMatrix) extends Node {
    * @param corrupt Corruption function to be applied
    * @return Corrupted DAG
    */
-  override def ?(corrupt: Corruption): Node =
+  override def through(corrupt: Corruption): Node =
     new TerminalNode(corrupt(x))
 }

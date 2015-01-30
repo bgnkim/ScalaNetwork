@@ -2,16 +2,13 @@ package kr.ac.kaist.ir.deep.train
 
 import breeze.linalg.DenseMatrix
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.fn.act.Sigmoid
-import kr.ac.kaist.ir.deep.fn.alg.StochasticGradientDescent
 import kr.ac.kaist.ir.deep.layer.SplitTensorLayer
 import kr.ac.kaist.ir.deep.network.BasicNetwork
-import kr.ac.kaist.ir.deep.train.style.DistBeliefTrainStyle
 import org.apache.spark.{SparkConf, SparkContext}
 import org.specs2.mutable.Specification
 
 /**
- * Created by bydelta on 2015-01-11.
+ * Test for spark-based local training.
  */
 class SparkTrainerTest extends Specification {
 
@@ -46,7 +43,7 @@ class SparkTrainerTest extends Specification {
     val net = new BasicNetwork(Seq(layer))
     val conf = new SparkConf().setMaster("local[6]").setAppName("SparkTrainer Test")
     val sc = new SparkContext(conf)
-    val style = new DistBeliefTrainStyle[ScalarMatrix](
+    val style = new DistBeliefTrainStyle[ScalarMatrix, ScalarMatrix](
       net = net,
       sc = sc,
       algorithm = new StochasticGradientDescent(rate = 0.3, l2decay = 0.00001),

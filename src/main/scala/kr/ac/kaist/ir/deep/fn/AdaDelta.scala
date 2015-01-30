@@ -1,7 +1,6 @@
-package kr.ac.kaist.ir.deep.fn.alg
+package kr.ac.kaist.ir.deep.fn
 
 import breeze.numerics._
-import kr.ac.kaist.ir.deep.fn._
 
 /**
  * __Algorithm__: AdaDelta algorithm

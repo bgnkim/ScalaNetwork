@@ -1,6 +1,4 @@
-package kr.ac.kaist.ir.deep.fn.act
-
-import kr.ac.kaist.ir.deep.fn._
+package kr.ac.kaist.ir.deep.fn
 
 /**
  * __Trait__ that describes an activation function for '''each layer'''

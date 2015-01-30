@@ -13,8 +13,8 @@ package kr.ac.kaist.ir
  *      algorithm = new StochasticGradientDescent(l2decay = 0.0001),
  *      param = SimpleTrainingCriteria(miniBatch = 8))
  *
- *   // Define Input Operation. ScalarVector vs TreeRAE vs TreeRecursive
- *   val operation = new ScalarVector(
+ *       // Define Manipulation Type. VectorType, AEType, RAEType, and URAEType.
+ *       val operation = new VectorType(
  *      corrupt = GaussianCorruption(variance = 0.1)
  *   )
  *

@@ -5,10 +5,6 @@ import kr.ac.kaist.ir.deep.fn._
 
 /**
  * Package for training.
- *
- * This package includes some sub packages:
- - Training Style package contains Single-threaded or Distributed training style. See [[kr.ac.kaist.ir.deep.train.style]]
- - Methods for handling various type of input are defined in input operations. See [[kr.ac.kaist.ir.deep.train.op]]
  */
 package object train {
 
@@ -94,7 +90,7 @@ package object train {
     extends Serializable
 
   /**
-   * __Criteria__: How to train (for [[kr.ac.kaist.ir.deep.train.style.SingleThreadTrainStyle]])
+   * __Criteria__: How to train (for [[SingleThreadTrainStyle]])
    *
    * This case class defines how to train the network. Training parameter is defined in this class.
    *
@@ -105,7 +101,7 @@ package object train {
                                     override val validationSize: Int = 20) extends TrainingCriteria
 
   /**
-   * __Criteria__: How to train (for [[kr.ac.kaist.ir.deep.train.style.DistBeliefTrainStyle]])
+   * __Criteria__: How to train (for [[DistBeliefTrainStyle]])
    *
    * This case class defines how to train the network. Training parameter is defined in this class. 
    *

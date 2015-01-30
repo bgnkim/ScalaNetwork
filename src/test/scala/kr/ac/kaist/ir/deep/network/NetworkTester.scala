@@ -2,12 +2,8 @@ package kr.ac.kaist.ir.deep.network
 
 import breeze.linalg.DenseMatrix
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.fn.act.Sigmoid
-import kr.ac.kaist.ir.deep.fn.alg.{AdaDelta, StochasticGradientDescent}
 import kr.ac.kaist.ir.deep.layer.{Layer, ReconBasicLayer}
 import kr.ac.kaist.ir.deep.train._
-import kr.ac.kaist.ir.deep.train.op.ScalarVector
-import kr.ac.kaist.ir.deep.train.style.SingleThreadTrainStyle
 import org.specs2.mutable.Specification
 
 /**
@@ -50,18 +46,18 @@ class NetworkTester extends Specification {
       x ⇒ (0 to 1) map {
         y ⇒ {
           val m = DenseMatrix.create[Scalar](4, 1, Array(x, y, y, x))
-          m → m
+          m → null
         }
       }
     }
 
     val encoder = new AutoEncoder(layer, 0.9995)
-    val style = new SingleThreadTrainStyle[ScalarMatrix](
+    val style = new SingleThreadTrainStyle[ScalarMatrix, Null](
       net = encoder,
       algorithm = new StochasticGradientDescent(rate = 0.8, l2decay = 0.0001),
       param = SimpleTrainingCriteria(miniBatch = 8))
     val trainer = new Trainer(style = style,
-      make = new ScalarVector(),
+      make = new AEType(),
       stops = StoppingCriteria(maxIter = 100000))
 
     "properly trained" in {
@@ -94,13 +90,13 @@ class NetworkTester extends Specification {
     }
 
     val net = Network(Sigmoid, 2, 4, 1)
-    val style = new SingleThreadTrainStyle[ScalarMatrix](
+    val style = new SingleThreadTrainStyle[ScalarMatrix, ScalarMatrix](
       net = net,
       algorithm = new AdaDelta(decay = 0.9, l2decay = 0.0),
       //algorithm = new AdaGrad(l2decay = 0.0001),
       //algorithm = GradientDescent(rate = 0.8, l2decay = 0.0001),
       param = SimpleTrainingCriteria(miniBatch = 8))
-    val operation = new ScalarVector(
+    val operation = new VectorType(
       corrupt = GaussianCorruption(variance = 0.1)
     )
     val train = new Trainer(
