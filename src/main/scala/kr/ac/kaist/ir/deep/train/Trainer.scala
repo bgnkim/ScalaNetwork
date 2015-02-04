@@ -16,21 +16,21 @@ import scala.annotation.tailrec
  * @example
  * {{{val net:Network = ...
  *
- *    // Define Training Style. SingleThreadTrainStyle vs DistBeliefTrainStyle
- *    val style = new SingleThreadTrainStyle[ScalarMatrix](
- *       net = net,
- *       algorithm = new StochasticGradientDescent(l2decay = 0.0001),
- *       param = SimpleTrainingCriteria(miniBatch = 8))
- *
  *     // Define Manipulation Type. VectorType, AEType, RAEType and URAEType.
  *     val operation = new VectorType(
- *       corrupt = GaussianCorruption(variance = 0.1)
- *    )
+ *        corrupt = GaussianCorruption(variance = 0.1)
+ *     )
+ *
+ *    // Define Training Style. SingleThreadTrainStyle vs DistBeliefTrainStyle
+ *     val style = new SingleThreadTrainStyle(
+ *       net = net,
+ *       algorithm = new StochasticGradientDescent(l2decay = 0.0001),
+ *        make = operation,
+ *       param = SimpleTrainingCriteria(miniBatch = 8))
  *
  *    // Define Trainer
  *    val train = new Trainer(
  *       style = style,
- *       make = operation,
  *       stops = StoppingCriteria(maxIter = 100000))
  *
  *    // Do Train
@@ -41,17 +41,14 @@ import scala.annotation.tailrec
  * @param style __Training style__ that supervises how to train. There are two styles,
  *              one is [[SingleThreadTrainStyle]]
  *              and the other is [[DistBeliefTrainStyle]].
- * @param make __Input Operation__ that supervises how to manipulate input as matrices.
- *             This also controls how to compute actual network.             
  * @param stops __Stopping Criteria__ that controls the threshold for stopping. (Default : [[StoppingCriteria]])
  *
  * @tparam IN the type of input. 
  *            Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and [[kr.ac.kaist.ir.deep.rec.DAG]] are supported
  * @tparam OUT the type of output
- *             Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and [[Null]] are supported
+ *             Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and [[scala.Null]] are supported
  */
 class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
-                       protected[train] val make: ManipulationType[IN, OUT] = new VectorType(),
                        protected val stops: StoppingCriteria = StoppingCriteria())
   extends Serializable {
   /** import everything in the style */
@@ -63,7 +60,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
   /** Validation Set */
   protected var testSet: Int ⇒ Seq[Pair] = null
   /** Best Parameter History */
-  @transient protected var bestParam: Seq[ScalarMatrix] = null
+  @transient protected var bestParam: IndexedSeq[ScalarMatrix] = null
   /** Best Loss Iteration Number */
   @transient protected var bestIter: Int = 0
 
@@ -165,6 +162,10 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    */
   protected def printValidation() = {
     logger info s"BEST ITERATION $bestIter : W = ${net.W map (_.mkString) mkString " | "}"
+    testSet(5).map {
+      item ⇒
+        logger info make.stringOf(net, item)
+    }
   }
 
   /**
@@ -178,6 +179,11 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    * Restore best parameters
    */
   protected final def restoreParams() = {
+    // Wait for finish of update, to prohibit race condition.
+    while (!isUpdateFinished) {
+      Thread sleep 100
+    }
+    
     net.W := bestParam
   }
 
@@ -194,7 +200,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
                                  prevloss: Double = Double.MaxValue,
                                  patience: Int = stops.patience): Scalar = {
     fetch(iter)
-    batch(make)
+    batch()
     update(iter)
 
     var nPatience = patience

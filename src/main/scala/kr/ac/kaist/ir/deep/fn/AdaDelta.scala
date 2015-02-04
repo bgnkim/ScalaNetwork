@@ -2,6 +2,8 @@ package kr.ac.kaist.ir.deep.fn
 
 import breeze.numerics._
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
  * __Algorithm__: AdaDelta algorithm
  *
@@ -20,9 +22,9 @@ class AdaDelta(protected override val l1decay: Double = 0.0000,
                private val epsilon: Double = 1e-6)
   extends WeightUpdater {
   /** accumulated history of gradients */
-  private var gradSq = Seq[ScalarMatrix]()
+  private val gradSq = ArrayBuffer[ScalarMatrix]()
   /** accumulated history of parameter updates */
-  private var deltaSq = Seq[ScalarMatrix]()
+  private val deltaSq = ArrayBuffer[ScalarMatrix]()
 
   /**
    * Execute the algorithm for given __sequence of Δweight__ and sequence of __weights__
@@ -30,12 +32,13 @@ class AdaDelta(protected override val l1decay: Double = 0.0000,
    * @param delta the __sequence of accumulated Δweight__
    * @param weight the __sequence of current weights__
    */
-  override def apply(delta: Seq[ScalarMatrix], weight: Seq[ScalarMatrix]): Unit = {
+  override def apply(delta: IndexedSeq[ScalarMatrix], weight: IndexedSeq[ScalarMatrix]): Unit = {
     if (gradSq.isEmpty) {
-      gradSq = delta map {
-        matx ⇒ ScalarMatrix $0(matx.rows, matx.cols)
+      delta foreach {
+        matx ⇒
+          gradSq.append(ScalarMatrix $0(matx.rows, matx.cols))
+          deltaSq.append(ScalarMatrix $0(matx.rows, matx.cols))
       }
-      deltaSq = gradSq.copy
     }
 
     delta.indices.par foreach {

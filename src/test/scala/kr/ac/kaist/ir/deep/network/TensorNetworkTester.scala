@@ -4,6 +4,7 @@ import breeze.linalg.DenseMatrix
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.layer.{Layer, SplitTensorLayer}
 import kr.ac.kaist.ir.deep.train._
+import org.apache.log4j.{ConsoleAppender, Level, Logger, PatternLayout}
 import org.specs2.mutable.Specification
 
 /**
@@ -12,8 +13,16 @@ import org.specs2.mutable.Specification
  * Created by bydelta on 2015-01-06.
  */
 class TensorNetworkTester extends Specification {
+  val console = new ConsoleAppender()
+  val PATTERN = "%d %p %C{1} %m%n"
+  console.setLayout(new PatternLayout(PATTERN))
+  console.setThreshold(Level.INFO)
+  console.activateOptions()
+  val logger = Logger.getRootLogger
+  logger.addAppender(console)
+  
   val layer = new SplitTensorLayer((2, 1) → 4, Sigmoid)
-  "Rank3TensorLayer" should {
+  "Split3TensorLayer" should {
     "have 3 weights" in {
       layer.W must have size 9
       layer.dW must have size 9
@@ -80,7 +89,7 @@ class TensorNetworkTester extends Specification {
       }
     }
 
-    val net = new BasicNetwork(Seq(layer))
+    val net = new BasicNetwork(IndexedSeq(layer))
     val style = new SingleThreadTrainStyle[ScalarMatrix, ScalarMatrix](
       net = net,
       algorithm = new StochasticGradientDescent(rate = 0.8, l2decay = 0.0001),

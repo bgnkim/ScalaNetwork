@@ -8,24 +8,22 @@ import play.api.libs.json.{JsArray, Json}
  * __Network__: A basic network implementation
  * @param layers __Sequence of layers__ of this network
  */
-class BasicNetwork(private val layers: Seq[Layer])
+class BasicNetwork(private val layers: IndexedSeq[Layer])
   extends Network {
-  /** Collected input & output of each layer */
-  protected[deep] var input: Seq[ScalarMatrix] = Seq()
-
   /**
    * All weights of layers
    *
    * @return all weights of layers
    */
-  override def W = layers flatMap (_.W)
-
+  override val W: IndexedSeq[ScalarMatrix] = layers flatMap (_.W)
   /**
    * All accumulated delta weights of layers
    *
    * @return all accumulated delta weights
    */
-  override def dW = layers flatMap (_.dW)
+  override val dW: IndexedSeq[ScalarMatrix] = layers flatMap (_.dW)
+  /** Collected input & output of each layer */
+  protected[deep] var input: Seq[ScalarMatrix] = Seq()
 
   /**
    * Compute output of neural network with given input

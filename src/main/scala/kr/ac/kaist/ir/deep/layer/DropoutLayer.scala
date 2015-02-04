@@ -13,6 +13,18 @@ import play.api.libs.json.{JsObject, Json}
  * @param presence The probability of the neuron is alive. `(Default: 1.0, 100%)`
  */
 class DropoutLayer(protected val presence: Probability = 1.0) extends Layer {
+  /**
+   * weights for update
+   *
+   * @return weights
+   */
+  override lazy val W: IndexedSeq[ScalarMatrix] = IndexedSeq.empty
+  /**
+   * accumulated delta values
+   *
+   * @return delta-weight
+   */
+  override lazy val dW: IndexedSeq[ScalarMatrix] = IndexedSeq.empty
   /** Null activation */
   protected override val act = null
   /* On-off matrix */
@@ -37,20 +49,6 @@ class DropoutLayer(protected val presence: Probability = 1.0) extends Layer {
     "type" → "DropoutLayer",
     "presence" → presence.safe
   )
-
-  /**
-   * weights for update
-   *
-   * @return weights
-   */
-  override def W: Seq[ScalarMatrix] = Seq.empty
-
-  /**
-   * accumulated delta values
-   *
-   * @return delta-weight
-   */
-  override def dW: Seq[ScalarMatrix] = Seq.empty
 
   /**
    * Sugar: Forward computation. Calls apply(x)

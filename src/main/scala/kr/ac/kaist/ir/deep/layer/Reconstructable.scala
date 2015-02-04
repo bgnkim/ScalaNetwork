@@ -7,7 +7,7 @@ import kr.ac.kaist.ir.deep.fn._
  */
 trait Reconstructable extends Layer {
   /**
-   * Sugar: Forward computation + reconstruction
+   * Sugar: reconstruction
    *
    * @param x hidden layer output matrix
    * @return tuple of reconstruction output

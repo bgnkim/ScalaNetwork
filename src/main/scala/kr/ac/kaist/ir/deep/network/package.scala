@@ -1,8 +1,10 @@
 package kr.ac.kaist.ir.deep
 
-import kr.ac.kaist.ir.deep.fn._
+import kr.ac.kaist.ir.deep.fn.{Activation, Probability, ScalarMatrix}
 import kr.ac.kaist.ir.deep.layer.{BasicLayer, Layer, Reconstructable}
-import play.api.libs.json._
+import play.api.libs.json.{JsArray, JsObject}
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * Package for network structure
@@ -18,14 +20,14 @@ package object network {
      *
      * @return all weights of layers
      */
-    def W: Seq[ScalarMatrix]
+    val W: IndexedSeq[ScalarMatrix]
 
     /**
      * All accumulated delta weights of layers
      *
      * @return all accumulated delta weights
      */
-    def dW: Seq[ScalarMatrix]
+    val dW: IndexedSeq[ScalarMatrix]
 
     /**
      * Serialize network to JSON
@@ -117,7 +119,11 @@ package object network {
      * @return New Basic Network reconstructed from this object
      */
     def BasicNetwork(obj: JsObject): BasicNetwork = {
-      val layers = (obj \ "layers").as[JsArray].value map Layer.apply
+      val layers = ArrayBuffer[Layer]()
+      (obj \ "layers").as[JsArray].value.foreach {
+        obj ⇒
+          layers.append(Layer(obj))
+      }
       new BasicNetwork(layers)
     }
 
@@ -127,10 +133,13 @@ package object network {
      * @param act Activation function for activation function
      * @param layerSizes Sizes for construct layers
      */
-    def apply(act: Activation, layerSizes: Int*): Network =
-      new BasicNetwork(layerSizes.indices.tail map {
-        i ⇒ new BasicLayer(layerSizes(i - 1) → layerSizes(i), act)
-      })
+    def apply(act: Activation, layerSizes: Int*): Network = {
+      val layers = ArrayBuffer[Layer]()
+      layerSizes.indices.tail.foreach {
+        i ⇒ layers.append(new BasicLayer(layerSizes(i - 1) → layerSizes(i), act))
+      }
+      new BasicNetwork(layers)
+    }
   }
 
 }

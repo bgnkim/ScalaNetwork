@@ -18,11 +18,23 @@ class ReconBasicLayer(IO: (Int, Int),
                       b: ScalarMatrix = null,
                       rb: ScalarMatrix = null)
   extends BasicLayer(IO, act, w, b) with Reconstructable {
-  protected val reBias = if (rb != null) rb else act initialize(fanIn, fanOut, fanIn, 1)
-  protected val drBias = ScalarMatrix $0(fanIn, 1)
+  protected lazy val reBias = if (rb != null) rb else act initialize(fanIn, fanOut, fanIn, 1)
+  protected lazy val drBias = ScalarMatrix $0(fanIn, 1)
+  /**
+   * weights for update
+   *
+   * @return weights
+   */
+  override val W: IndexedSeq[ScalarMatrix] = IndexedSeq(reBias, weight, bias)
+  /**
+   * accumulated delta values
+   *
+   * @return delta-weight
+   */
+  override val dW: IndexedSeq[ScalarMatrix] = IndexedSeq(drBias, delta, dbias)
 
   /**
-   * Sugar: Forward computation + reconstruction
+   * Sugar: reconstruction
    *
    * @param x hidden layer output matrix
    * @return tuple of reconstruction output
@@ -32,20 +44,6 @@ class ReconBasicLayer(IO: (Int, Int),
     val wxb: ScalarMatrix = wx + reBias
     act(wxb)
   }
-
-  /**
-   * weights for update
-   *
-   * @return weights
-   */
-  override def W: Seq[ScalarMatrix] = reBias +: super.W
-
-  /**
-   * accumulated delta values
-   *
-   * @return delta-weight
-   */
-  override def dW: Seq[ScalarMatrix] = drBias +: super.dW
 
   /**
    * Translate this layer into JSON object (in Play! framework)

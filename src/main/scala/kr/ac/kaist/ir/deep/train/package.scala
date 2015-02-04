@@ -49,7 +49,7 @@ package object train {
     /**
      * Gaussian Distribution
      */
-    private val distro = Gaussian distribution(Double.box(mean), Double.box(variance))
+    private val distro = Gaussian distribution(mean, variance)
 
     /**
      * Do corruption

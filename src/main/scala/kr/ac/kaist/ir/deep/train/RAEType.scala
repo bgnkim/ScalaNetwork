@@ -14,7 +14,7 @@ import org.apache.spark.annotation.AlphaComponent
  *       [[http://ai.stanford.edu/~ang/papers/emnlp11-RecursiveAutoencodersSentimentDistributions.pdf this paper]]
  *
  * @param corrupt Corruption that supervises how to corrupt the input matrix. `(Default : [[kr.ac.kaist.ir.deep.train.NoCorruption]])`
- * @param error An objective function `(Default: [[kr.ac.kaist.ir.deep.fn.obj.SquaredErr]])`
+ * @param error An objective function `(Default: [[kr.ac.kaist.ir.deep.fn.SquaredErr]])`
  *
  * @example
  * {{{var make = new RAEType(error = CrossEntropyErr)
@@ -24,7 +24,7 @@ import org.apache.spark.annotation.AlphaComponent
 @AlphaComponent
 class RAEType(override protected[train] val corrupt: Corruption = NoCorruption,
               override protected[train] val error: Objective = SquaredErr)
-  extends DAGType(corrupt, error) {
+  extends DAGType {
 
   /**
    * Apply & Back-prop given single input
@@ -63,4 +63,20 @@ class RAEType(override protected[train] val corrupt: Corruption = NoCorruption,
         }
         sum
     }.sum
+
+  /**
+   * Make validation output
+   *
+   * @return input as string
+   */
+  def stringOf(net: Network, pair: (DAG, Null)): String = {
+    val string = StringBuilder.newBuilder
+    pair._1 forward {
+      x ⇒
+        val out = x into_: net
+        string ++ s"IN: ${x.mkString} RAE → OUT: ${out.mkString}; "
+        out
+    }
+    string.mkString
+  }
 }

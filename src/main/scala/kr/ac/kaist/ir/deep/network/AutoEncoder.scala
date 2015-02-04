@@ -13,24 +13,22 @@ import play.api.libs.json.Json
 class AutoEncoder(private val layer: Reconstructable,
                   private val presence: Probability = 1.0)
   extends Network {
-  /** Dropout layer **/
-  private val dropout = new DropoutLayer(presence)
-  /** Collected input & output of each layer */
-  protected[deep] var input: Seq[ScalarMatrix] = Seq()
-
   /**
    * All weights of layers
    *
    * @return all weights of layers
    */
-  override def W = layer.W
-
+  override val W: IndexedSeq[ScalarMatrix] = layer.W
   /**
    * All accumulated delta weights of layers
    *
    * @return all accumulated delta weights
    */
-  override def dW = layer.dW
+  override val dW: IndexedSeq[ScalarMatrix] = layer.dW
+  /** Dropout layer **/
+  private val dropout = new DropoutLayer(presence)
+  /** Collected input & output of each layer */
+  protected[deep] var input: Seq[ScalarMatrix] = Seq()
 
   /**
    * Compute output of neural network with given input (without reconstruction)
@@ -137,7 +135,7 @@ class AutoEncoder(private val layer: Reconstructable,
    * @return output matrix
    */
   override protected[deep] def of(x: ScalarMatrix): ScalarMatrix = {
-    val h = (x into_: layer) into_: dropout
+    val h = dropout(layer(x))
     h decodeBy_: layer
   }
 }

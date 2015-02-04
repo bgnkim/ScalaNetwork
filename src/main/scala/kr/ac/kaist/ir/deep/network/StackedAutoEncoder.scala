@@ -1,7 +1,9 @@
 package kr.ac.kaist.ir.deep.network
 
-import kr.ac.kaist.ir.deep.fn._
+import kr.ac.kaist.ir.deep.fn.ScalarMatrix
 import play.api.libs.json.{JsObject, Json}
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * __Network__: Stack of autoencoders. 
@@ -14,14 +16,22 @@ class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network
    *
    * @return all accumulated delta weights
    */
-  override def dW: Seq[ScalarMatrix] = encoders flatMap (_.dW)
+  override val dW: IndexedSeq[ScalarMatrix] = {
+    val matrices = ArrayBuffer[ScalarMatrix]()
+    encoders.flatMap(_.dW).map(matrices.append(_))
+    matrices
+  }
 
   /**
    * All weights of layers
    *
    * @return all weights of layers
    */
-  override def W: Seq[ScalarMatrix] = encoders flatMap (_.W)
+  override val W: IndexedSeq[ScalarMatrix] = {
+    val matrices = ArrayBuffer[ScalarMatrix]()
+    encoders.flatMap(_.W).map(matrices.append(_))
+    matrices
+  }
 
   /**
    * Serialize network to JSON

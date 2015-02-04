@@ -3,7 +3,6 @@ package kr.ac.kaist.ir.deep.train
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.network.Network
 import org.apache.spark.SparkContext
-import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -17,15 +16,23 @@ import scala.concurrent._
  * @param net __Network__ to be trained
  * @param algorithm Weight __update algorithm__ to be applied
  * @param sc A __spark context__ that network will be distributed
+ * @param make __Input Operation__ that supervises how to manipulate input as matrices.
+ *             This also controls how to compute actual network. (default: [[VectorType]])
  * @param param __DistBelief-style__ Training criteria (default: [[kr.ac.kaist.ir.deep.train.DistBeliefCriteria]])
  */
 class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
                                     protected[train] override val algorithm: WeightUpdater,
                                     @transient protected val sc: SparkContext,
+                                    protected[train] override val make: ManipulationType[IN, OUT] = new VectorType(),
                                     protected[train] override val param: DistBeliefCriteria = DistBeliefCriteria())
   extends TrainStyle[IN, OUT] {
   /** Spark distributed networks */
-  @transient protected val networks: RDD[Network] = sc.makeRDD(net copy param.numCores, param.numCores).persist(StorageLevel.MEMORY_ONLY).cache()
+  @transient protected val networks = {
+    val pairs = net copy param.numCores
+    sc.makeRDD(pairs.indices map { id ⇒ id → pairs(id)}, param.numCores)
+      .persist(StorageLevel.MEMORY_ONLY).cache()
+  }
+
   /** Flag for fetch : Is fetching? */
   @transient protected var fetchFlag: Boolean = false
   /** Flag for update : Is updating? */
@@ -41,7 +48,7 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
       fetchFlag = true
       future {
         val weights = sc.broadcast(net.W)
-        networks foreach (_.W := weights.value)
+        networks foreach (_._2.W := weights.value)
         weights.destroy()
       } onComplete {
         _ ⇒ fetchFlag = false
@@ -57,8 +64,9 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
     if (iter % param.updateStep == 0 && !updateFlag) {
       updateFlag = true
       future {
-        val dWUpdate = networks.aggregate(Seq[ScalarMatrix]())({
-          (seq, copiedNet) ⇒
+        val dWUpdate = networks.aggregate(IndexedSeq[ScalarMatrix]())({
+          (seq, pair) ⇒
+            val copiedNet = pair._2
             val out = copiedNet.dW copy_+ seq
             copiedNet.dW := 0.0
             out
@@ -77,23 +85,33 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
     }
 
   /**
-   * Do mini-batch
+   * Indicates whether the asynchrononus update is finished or not.
    *
-   * @param make Set of input operations
+   * @return boolean flag of update
    */
-  override protected[train] def batch(make: ManipulationType[IN, OUT]): Unit = {
-    val sets = (0 until param.numCores) map {
-      _ ⇒ trainingSet(param.miniBatch)
-    }
-    val setRDD = sc.makeRDD(sets, param.numCores)
+  override protected[train] def isUpdateFinished: Boolean = updateFlag
 
-    networks zip setRDD foreach {
-      rddPair ⇒
-        val copiedNet = rddPair._1
-        val seq = rddPair._2.par.map {
-          pair ⇒ (make corrupted pair._1) → pair._2
-        }.seq
-        make roundTrip(copiedNet, seq)
+  /**
+   * Do mini-batch
+   */
+  override protected[train] def batch(): Unit = {
+    val sets = (0 until param.numCores) map {
+      _ ⇒ sc.broadcast(trainingSet(param.miniBatch))
+    }
+
+    networks foreachPartition {
+      _ foreach {
+        rddPair ⇒
+          val copiedNet = rddPair._2
+          val seq = sets(rddPair._1).value.map {
+            pair ⇒ (make corrupted pair._1) → pair._2
+          }.seq
+          make roundTrip(copiedNet, seq)
+      }
+    }
+
+    sets map {
+      _.destroy()
     }
   }
 }

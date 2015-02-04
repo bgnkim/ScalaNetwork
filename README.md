@@ -1,4 +1,4 @@
-ScalaNetwork 0.1.6
+ScalaNetwork 0.1.7
 ====================
 
 A *Neural Network implementation* with Scala, [Breeze](https://github.com/scalanlp/breeze) & [Spark](http://spark.apache.org)
@@ -52,7 +52,7 @@ Here is some examples for basic usage. If you want to extend this package or use
 
 Currently ScalaNetwork supports Scala version 2.10 ~ 2.11.
 
-* Stable Release is 0.1.6
+* Stable Release is 0.1.7
 * Snapshot Release is 0.1.7-SNAPSHOT
  
 If you are using SBT, add a dependency as described below:
@@ -76,19 +76,19 @@ If you are using Maven, add a dependency as described below:
 ```scala
 // Define 2 -> 4 -> 1 Layered, Fully connected network.
 val net = Network(Sigmoid, 2, 4, 1)
-// Define Training Style. SingleThreadTrainStyle vs DistBeliefTrainStyle
-val style = new SingleThreadTrainStyle[ScalarMatrix](
-  net = net,
-  algorithm = new StochasticGradientDescent(l2decay = 0.0001),
-  param = SimpleTrainingCriteria(miniBatch = 8))
 // Define Manipulation Type. VectorType, AEType, RAEType, and URAEType.
 val operation = new VectorType(
    corrupt = GaussianCorruption(variance = 0.1)
 )
+// Define Training Style. SingleThreadTrainStyle vs DistBeliefTrainStyle
+val style = new SingleThreadTrainStyle(
+  net = net,
+  algorithm = new StochasticGradientDescent(l2decay = 0.0001),
+  make = operation,
+  param = SimpleTrainingCriteria(miniBatch = 8))
 // Define Trainer
 val train = new Trainer(
   style = style,
-  make = operation,
   stops = StoppingCriteria(maxIter = 100000))
 // Do Train
 train.train(set, valid)
@@ -158,15 +158,6 @@ DistBeliefCriteria(miniBatch=100, validationSize=20, updateStep=2, fetchStep=10,
 
 Validation size sets the number of elements used for validation phrase.
 
-### Training Style
-You can choose the training style of the network.
-
-```scala
-/* Styles */
-new SingleThreadTrainStyle(net, algorithm, param)
-new DistBeliefTrainStyle(net, sparkContext, algorithm, param:DistBeliefCriteria)
-```
-
 ### Input Options
 Also you can specify input operations or options.
 
@@ -197,6 +188,15 @@ new RAEType(corrupt, objective)
 new URAEType(corrupt, objective)
 ```
 
+### Training Style
+You can choose the training style of the network.
+
+```scala
+/* Styles */
+new SingleThreadTrainStyle(net, algorithm, mnpl:ManipulationType, param)
+new DistBeliefTrainStyle(net, sparkContext, algorithm, mnpl:ManipulationType, param:DistBeliefCriteria)
+```
+
 ### Training
 Training is done by `Trainer` class.
 
@@ -206,7 +206,7 @@ StoppingCriteria(maxIter = 100000, patience= 5000, patienceStep=2,
   improveThreshold=0.95, lossThreshold=1e-4, validationFreq=100)
 
 /* Trainer */
-new Trainer(style = style, make = operation, stops = StoppingCriteria())
+new Trainer(style = style, stops = StoppingCriteria())
 ```
 
 * **Patience** and **its step** indicates wating time from the improvement. If network output improved on 100-th iteration, 
@@ -220,16 +220,16 @@ Training is done by `train` method.
 
 ```scala
 // If training and validation set are the same
-trainer.train(Seq[(IN, ScalarMatrix)])
-trainer.train(Int => Seq[(IN, ScalarMatrix)]) // With generator.
+trainer.train(Seq[(IN, OUT)])
+trainer.train(Int => Seq[(IN, OUT)]) // With generator.
 
 // If they are different
-trainer.train(Seq[(IN, ScalarMatrix)], Seq[(IN, ScalarMatrix)])
-trainer.train(Int => Seq[(IN, ScalarMatrix)], Int => Seq[(IN, ScalarMatrix)])
+trainer.train(Seq[(IN, OUT)], Seq[(IN, OUT)])
+trainer.train(Int => Seq[(IN, OUT)], Int => Seq[(IN, OUT)])
 
 // If you are using RDD
-trainer.train(RDD[(IN, ScalarMatrix)])
-trainer.train(RDD[(IN, ScalarMatrix)], RDD[(IN, ScalarMatrix)])
+trainer.train(RDD[(IN, OUT)])
+trainer.train(RDD[(IN, OUT)], RDD[(IN, OUT)])
 ```
 
 If you are using RDD, ScalaNetwork automatically caches your input sequence.

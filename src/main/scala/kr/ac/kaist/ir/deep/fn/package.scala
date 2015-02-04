@@ -1,6 +1,6 @@
 package kr.ac.kaist.ir.deep
 
-import breeze.linalg._
+import breeze.linalg.DenseMatrix
 import play.api.libs.json.{JsArray, JsNumber}
 
 /**
@@ -95,7 +95,7 @@ package object fn {
    *
    * @param w __matrix sequence__ to be applied.
    */
-  implicit class WeightSeqOp(w: Seq[ScalarMatrix]) {
+  implicit class WeightSeqOp(w: IndexedSeq[ScalarMatrix]) {
     /**
      * Assign scalar 
      *
@@ -109,7 +109,7 @@ package object fn {
      * Assign matrices 
      * @param w2 to be assigned
      */
-    def :=(w2: Seq[ScalarMatrix]) = w.indices.par foreach { id ⇒ w(id) := w2(id)}
+    def :=(w2: IndexedSeq[ScalarMatrix]) = w.indices.par foreach { id ⇒ w(id) := w2(id)}
 
     /**
      * Add onto another matrices if they are exists, otherwise copy these matrices.
@@ -117,7 +117,7 @@ package object fn {
      * @param w2 __matrix sequence__ to be added onto.
      * @return added matrices
      */
-    def copy_+(w2: Seq[ScalarMatrix]) =
+    def copy_+(w2: IndexedSeq[ScalarMatrix]) =
       if (w2.isEmpty) copy
       else {
         w.indices.par foreach {
@@ -140,7 +140,7 @@ package object fn {
      *
      * @param w2 __matrix sequence__ to be added
      */
-    def :+=(w2: Seq[ScalarMatrix]) = {
+    def :+=(w2: IndexedSeq[ScalarMatrix]) = {
       w.indices.par foreach { id ⇒ w(id) :+= w2(id)}
       w
     }

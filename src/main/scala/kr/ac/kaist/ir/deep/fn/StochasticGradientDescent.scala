@@ -1,5 +1,7 @@
 package kr.ac.kaist.ir.deep.fn
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
  * __Algorithm__: Stochastic Gradient Descent
  *
@@ -18,7 +20,7 @@ class StochasticGradientDescent(rate: Double = 0.03,
                                 momentum: Double = 0.0001)
   extends WeightUpdater {
   /** the last update of parameters */
-  private var lastDelta = Seq[ScalarMatrix]()
+  private val lastDelta = ArrayBuffer[ScalarMatrix]()
 
   /**
    * Execute the algorithm for given __sequence of Δweight__ and sequence of __weights__
@@ -26,8 +28,14 @@ class StochasticGradientDescent(rate: Double = 0.03,
    * @param delta the __sequence of accumulated Δweight__
    * @param weight the __sequence of current weights__
    */
-  override def apply(delta: Seq[ScalarMatrix], weight: Seq[ScalarMatrix]): Unit = {
-    lastDelta = (delta.indices.par map {
+  override def apply(delta: IndexedSeq[ScalarMatrix], weight: IndexedSeq[ScalarMatrix]): Unit = {
+    if (lastDelta.isEmpty) {
+      delta foreach {
+        matx ⇒ lastDelta.append(ScalarMatrix $0(matx.rows, matx.cols))
+      }
+    }
+
+    delta.indices.par foreach {
       id ⇒
         val w = weight(id)
         val deltaW = delta(id)
@@ -46,7 +54,7 @@ class StochasticGradientDescent(rate: Double = 0.03,
 
         w += dw
         deltaW := 0.0
-        dw
-    }).seq
+        lastDelta.update(id, dw)
+    }
   }
 }

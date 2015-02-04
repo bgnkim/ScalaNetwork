@@ -2,6 +2,8 @@ package kr.ac.kaist.ir.deep.layer
 
 import kr.ac.kaist.ir.deep.fn._
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
  * __Layer__: Basic, Fully-connected Rank 3 Tensor Layer.
  *
@@ -33,14 +35,37 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
   protected val fanInB = fanIns._2
   protected val fanIn = fanIns._3
   /* Initialize weight */
-  protected val quadratic: Seq[ScalarMatrix] = if (quad.nonEmpty) quad else (0 until fanOut) map { _ ⇒ act.initialize(fanIn, fanOut, fanInA, fanInB)}
-  protected val linear: Seq[ScalarMatrix] = if (lin.nonEmpty) lin else (0 until fanOut) map { _ ⇒ act.initialize(fanIn, fanOut, 1, fanIn)}
+  protected val quadratic: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
+  protected val linear: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
   protected val bias: ScalarMatrix = if (const != null) const else act.initialize(fanIn, fanOut, fanOut, 1)
   /* Weight-Update Stand-by */
-  protected val dQ = quadratic map { matx ⇒ ScalarMatrix $0(matx.rows, matx.cols)}
-  protected val dL = linear map { matx ⇒ ScalarMatrix $0(matx.rows, matx.cols)}
+  protected val dQ: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
+  protected val dL: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
   protected val db = ScalarMatrix $0(fanOut, 1)
 
+  /* Initialization */
+  if (quad.nonEmpty) {
+    quadratic.appendAll(quad)
+    quadratic.foreach {
+      matx ⇒ dQ.append(ScalarMatrix $0(matx.rows, matx.cols))
+    }
+  } else (0 until fanOut) foreach {
+    _ ⇒
+      quadratic.append(act.initialize(fanIn, fanOut, fanInA, fanInB))
+      dQ.append(ScalarMatrix $0(fanInA, fanInB))
+  }
+
+  if (lin.nonEmpty) {
+    linear.appendAll(lin)
+    linear.foreach {
+      matx ⇒ dL.append(ScalarMatrix $0(matx.rows, matx.cols))
+    }
+  } else (0 until fanOut) map {
+    _ ⇒
+      linear.append(act.initialize(fanIn, fanOut, 1, fanIn))
+      dL.append(ScalarMatrix $0(1, fanIn))
+  }
+  
   /**
    * Retrieve first input
    *
@@ -88,14 +113,14 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
    *
    * @return weights
    */
-  override def W: Seq[ScalarMatrix] = bias +: (linear ++ quadratic)
+  override lazy val W: IndexedSeq[ScalarMatrix] = bias +: (linear ++ quadratic)
 
   /**
    * accumulated delta values
    *
    * @return delta-weight
    */
-  override def dW: Seq[ScalarMatrix] = db +: (dL ++ dQ)
+  override lazy val dW: IndexedSeq[ScalarMatrix] = db +: (dL ++ dQ)
 
   /**
    * <p>Backward computation.</p>

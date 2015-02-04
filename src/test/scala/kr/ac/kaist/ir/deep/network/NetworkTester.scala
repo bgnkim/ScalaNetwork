@@ -4,6 +4,7 @@ import breeze.linalg.DenseMatrix
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.layer.{Layer, ReconBasicLayer}
 import kr.ac.kaist.ir.deep.train._
+import org.apache.log4j.{ConsoleAppender, Level, Logger, PatternLayout}
 import org.specs2.mutable.Specification
 
 /**
@@ -12,6 +13,14 @@ import org.specs2.mutable.Specification
  * Created by bydelta on 2015-01-06.
  */
 class NetworkTester extends Specification {
+  val console = new ConsoleAppender()
+  val PATTERN = "%d %p %C{1} %m%n"
+  console.setLayout(new PatternLayout(PATTERN))
+  console.setThreshold(Level.INFO)
+  console.activateOptions()
+  val logger = Logger.getRootLogger
+  logger.addAppender(console)
+  
   val layer = new ReconBasicLayer(4 → 5, Sigmoid)
   "ReconBasicLayer" should {
     "have 3 weights" in {
@@ -52,12 +61,12 @@ class NetworkTester extends Specification {
     }
 
     val encoder = new AutoEncoder(layer, 0.9995)
-    val style = new SingleThreadTrainStyle[ScalarMatrix, Null](
+    val style = new SingleThreadTrainStyle(
       net = encoder,
+      make = new AEType(),
       algorithm = new StochasticGradientDescent(rate = 0.8, l2decay = 0.0001),
       param = SimpleTrainingCriteria(miniBatch = 8))
     val trainer = new Trainer(style = style,
-      make = new AEType(),
       stops = StoppingCriteria(maxIter = 100000))
 
     "properly trained" in {
@@ -90,18 +99,18 @@ class NetworkTester extends Specification {
     }
 
     val net = Network(Sigmoid, 2, 4, 1)
-    val style = new SingleThreadTrainStyle[ScalarMatrix, ScalarMatrix](
-      net = net,
-      algorithm = new AdaDelta(decay = 0.9, l2decay = 0.0),
-      //algorithm = new AdaGrad(l2decay = 0.0001),
-      //algorithm = GradientDescent(rate = 0.8, l2decay = 0.0001),
-      param = SimpleTrainingCriteria(miniBatch = 8))
     val operation = new VectorType(
       corrupt = GaussianCorruption(variance = 0.1)
     )
+    val style = new SingleThreadTrainStyle(
+      net = net,
+      algorithm = new AdaDelta(decay = 0.9, l2decay = 0.0),
+      make = operation,
+      //algorithm = new AdaGrad(l2decay = 0.0001),
+      //algorithm = GradientDescent(rate = 0.8, l2decay = 0.0001),
+      param = SimpleTrainingCriteria(miniBatch = 8))
     val train = new Trainer(
       style = style,
-      make = operation,
       stops = StoppingCriteria(maxIter = 100000))
 
     "properly trained" in {

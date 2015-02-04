@@ -16,16 +16,28 @@ class BasicLayer(IO: (Int, Int),
                  w: ScalarMatrix = null,
                  b: ScalarMatrix = null)
   extends Layer {
+  /* Initialize weight */
+  protected lazy val weight = if (w != null) w else act.initialize(fanIn, fanOut)
+  protected lazy val bias = if (b != null) b else act.initialize(fanIn, fanOut, fanOut, 1)
+  /* Weight-Update Accumulator */
+  protected lazy val delta = ScalarMatrix $0(fanOut, fanIn)
+  protected lazy val dbias = ScalarMatrix $0(fanOut, 1)
+  /**
+   * weights for update
+   *
+   * @return weights
+   */
+  override val W: IndexedSeq[ScalarMatrix] = IndexedSeq(weight, bias)
+  /**
+   * accumulated delta values
+   *
+   * @return delta-weight
+   */
+  override val dW: IndexedSeq[ScalarMatrix] = IndexedSeq(delta, dbias)
   /** Number of Fan-ins */
   protected val fanIn = IO._1
   /** Number of output */
   protected val fanOut = IO._2
-  /* Initialize weight */
-  protected val weight = if (w != null) w else act.initialize(fanIn, fanOut)
-  protected val bias = if (b != null) b else act.initialize(fanIn, fanOut, fanOut, 1)
-  /* Weight-Update Accumulator */
-  protected val delta = ScalarMatrix $0(fanOut, fanIn)
-  protected val dbias = ScalarMatrix $0(fanOut, 1)
 
   /**
    * Forward computation
@@ -52,20 +64,6 @@ class BasicLayer(IO: (Int, Int),
     "weight" → weight.to2DSeq,
     "bias" → bias.to2DSeq
   )
-
-  /**
-   * weights for update
-   *
-   * @return weights
-   */
-  override def W: Seq[ScalarMatrix] = Seq(weight, bias)
-
-  /**
-   * accumulated delta values
-   *
-   * @return delta-weight
-   */
-  override def dW: Seq[ScalarMatrix] = Seq(delta, dbias)
 
   /**
    * <p>Backward computation.</p>

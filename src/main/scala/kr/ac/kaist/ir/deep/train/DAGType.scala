@@ -26,12 +26,4 @@ trait DAGType extends ManipulationType[DAG, Null] {
    */
   override def onewayTrip(net: Network, x: DAG): ScalarMatrix =
     x forward net.of
-
-  /**
-   * Make input to string
-   *
-   * @return input as string
-   */
-  override def stringOf(in: (DAG, Null)): String = "IN: DAG"
-
 }

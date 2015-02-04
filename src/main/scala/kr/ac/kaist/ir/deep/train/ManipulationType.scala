@@ -1,6 +1,6 @@
 package kr.ac.kaist.ir.deep.train
 
-import kr.ac.kaist.ir.deep.fn._
+import kr.ac.kaist.ir.deep.fn.{Objective, Scalar, ScalarMatrix}
 import kr.ac.kaist.ir.deep.network.Network
 
 /**
@@ -17,6 +17,8 @@ trait ManipulationType[IN, OUT] extends Serializable {
   /** Objective function */
   protected[train] val error: Objective
 
+  // We didn't assign a "network" value, because of dist-belief training style.
+  
   /**
    * Corrupt input
    *
@@ -43,11 +45,11 @@ trait ManipulationType[IN, OUT] extends Serializable {
   def onewayTrip(net: Network, x: IN): ScalarMatrix
 
   /**
-   * Make input to string
+   * Make validation output
    *
    * @return input as string
    */
-  def stringOf(in: (IN, OUT)): String
+  def stringOf(net: Network, in: (IN, OUT)): String
 
   /**
    * Apply given input and compute the error

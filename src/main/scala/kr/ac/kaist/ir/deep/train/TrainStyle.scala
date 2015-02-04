@@ -20,6 +20,8 @@ trait TrainStyle[IN, OUT] extends Serializable {
   protected[train] val net: Network
   /** Algorithm */
   protected[train] val algorithm: WeightUpdater
+  /** Set of input manipulations */
+  protected[train] val make: ManipulationType[IN, OUT]
   /** Training Set */
   protected[train] var trainingSet: Int ⇒ Seq[Pair] = null
 
@@ -32,10 +34,8 @@ trait TrainStyle[IN, OUT] extends Serializable {
 
   /**
    * Do mini-batch
-   *
-   * @param make Set of input operations
    */
-  protected[train] def batch(make: ManipulationType[IN, OUT]): Unit
+  protected[train] def batch(): Unit
 
   /**
    * Send update of weights
@@ -45,17 +45,24 @@ trait TrainStyle[IN, OUT] extends Serializable {
   protected[train] def update(iter: Int): Unit
 
   /**
+   * Indicates whether the asynchrononus update is finished or not.
+   *
+   * @return boolean flag of update
+   */
+  protected[train] def isUpdateFinished: Boolean = true
+
+  /**
    * Implicit weight operation
    *
    * @param w Sequence of weight to be applied
    */
-  implicit class WeightOp(w: Seq[ScalarMatrix]) extends Serializable {
+  implicit class WeightOp(w: IndexedSeq[ScalarMatrix]) extends Serializable {
     /**
      * Sugar: Weight update
      *
      * @param dw A amount of update i.e. __ΔWeight__
      */
-    def -=(dw: Seq[ScalarMatrix]) = algorithm(dw, w)
+    def -=(dw: IndexedSeq[ScalarMatrix]) = algorithm(dw, w)
   }
 
 }

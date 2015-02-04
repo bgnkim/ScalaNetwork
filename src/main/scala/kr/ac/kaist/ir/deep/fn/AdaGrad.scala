@@ -2,6 +2,8 @@ package kr.ac.kaist.ir.deep.fn
 
 import breeze.numerics._
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
  * __Algorithm__: AdaGrad algorithm.
  *
@@ -19,7 +21,7 @@ class AdaGrad(rate: Double = 0.6,
               protected override val l2decay: Double = 0.0001)
   extends WeightUpdater {
   /** accumulated history of parameter updates */
-  private var history = Seq[ScalarMatrix]()
+  private val history = ArrayBuffer[ScalarMatrix]()
 
   /**
    * Execute the algorithm for given __sequence of Δweight__ and sequence of __weights__
@@ -27,10 +29,10 @@ class AdaGrad(rate: Double = 0.6,
    * @param delta the __sequence of accumulated Δweight__
    * @param weight the __sequence of current weights__
    */
-  override def apply(delta: Seq[ScalarMatrix], weight: Seq[ScalarMatrix]): Unit = {
+  override def apply(delta: IndexedSeq[ScalarMatrix], weight: IndexedSeq[ScalarMatrix]): Unit = {
     if (history.isEmpty) {
-      history = delta map {
-        matx ⇒ ScalarMatrix $0(matx.rows, matx.cols)
+      delta foreach {
+        matx ⇒ history.append(ScalarMatrix $0(matx.rows, matx.cols))
       }
     }
 

@@ -40,7 +40,7 @@ object ScalarMatrix {
    * @param arr 2D Sequence to be restored
    * @return restored matrix
    */
-  def restore(arr: Seq[Seq[Scalar]]): ScalarMatrix = {
+  def restore(arr: IndexedSeq[IndexedSeq[Scalar]]): ScalarMatrix = {
     val res = $0(arr.size, arr(0).size)
     arr.indices.par foreach {
       r ⇒ arr(r).indices.par foreach {

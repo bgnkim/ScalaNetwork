@@ -7,7 +7,7 @@ import kr.ac.kaist.ir.deep.network.Network
  * __Input Operation__ : Vector as Input and output
  *
  * @param corrupt Corruption that supervises how to corrupt the input matrix. (Default : [[kr.ac.kaist.ir.deep.train.NoCorruption]])
- * @param error An objective function (Default: [[SquaredErr]])
+ * @param error An objective function (Default: [[kr.ac.kaist.ir.deep.fn.SquaredErr]])
  *
  * @example
  * {{{var make = new VectorType(error = CrossEntropyErr)
@@ -68,10 +68,14 @@ class VectorType(override protected[train] val corrupt: Corruption = NoCorruptio
   override def onewayTrip(net: Network, x: ScalarMatrix): ScalarMatrix = net of x
 
   /**
-   * Make input to string
+   * Make validation output
    *
    * @return input as string
    */
-  override def stringOf(in: (ScalarMatrix, ScalarMatrix)): String =
-    "IN:" + in._1.mkString + " EXP:" + in._2.mkString
+  def stringOf(net: Network, pair: (ScalarMatrix, ScalarMatrix)): String = {
+    val in = pair._1
+    val real = pair._2
+    val out = net of in
+    s"IN: ${in.mkString} EXP: ${real.mkString} → OUT: ${out.mkString}"
+  }
 }

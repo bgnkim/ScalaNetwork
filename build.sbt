@@ -2,11 +2,11 @@ organization := "kr.ac.kaist.ir"
 
 name := "ScalaNetwork"
 
-version := "0.1.6"
+version := "0.1.7"
 
 scalaVersion := "2.10.4"
 
-crossScalaVersions := Seq("2.10.4", "2.11.4")
+crossScalaVersions := Seq("2.11.4")
 
 resolvers ++= Seq("snapshots", "releases").map(Resolver.sonatypeRepo)
 

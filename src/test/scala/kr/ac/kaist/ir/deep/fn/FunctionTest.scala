@@ -203,7 +203,7 @@ class FunctionTest extends Specification {
     "store & restore" in {
       val a = ScalarMatrix of(3, 5)
       val json = a.to2DSeq
-      val b = ScalarMatrix restore json.as[Seq[Seq[Double]]]
+      val b = ScalarMatrix restore json.as[IndexedSeq[IndexedSeq[Double]]]
       val d: Double = sum(abs(a - b))
       d must beBetween(0.0, 0.1)
     }
@@ -226,15 +226,15 @@ class FunctionTest extends Specification {
     val c = DenseMatrix.create(3, 1, Array(0.4, 0.2, 0.5))
 
     "do basic calculation" in {
-      SquaredErr(a, b) must_== 1.0
-      SquaredErr(a, c) must_== 0.325
+      SquaredErr(a, b) must_== 2.0
+      SquaredErr(a, c) must_== 0.65
     }
 
     "do diff calculation" in {
       val x = SquaredErr.derivative(a, b)
       x(0, 0) must_== -1.0
-      x(0, 1) must_== 1.0
-      x(0, 2) must_== 0.0
+      x(1, 0) must_== 1.0
+      x(2, 0) must_== 0.0
     }
   }
 
@@ -251,12 +251,12 @@ class FunctionTest extends Specification {
     "do diff calculation" in {
       val x = CrossEntropyErr.derivative(a, b)
       x(0, 0) must beBetween(-10.0001, -9.999)
-      x(0, 1) must beBetween(9.999, 10.0001)
-      x(0, 2) must beBetween(-1.112, -1.110)
+      x(1, 0) must beBetween(9.999, 10.0001)
+      x(2, 0) must beBetween(-1.112, -1.110)
       val y = CrossEntropyErr.derivative(a, c)
       y(0, 0) must beBetween(-2.5001, -2.499)
-      y(0, 1) must beBetween(1.2499, 1.25001)
-      y(0, 2) must beBetween(-2.0001, -1.999)
+      y(1, 0) must beBetween(1.2499, 1.25001)
+      y(2, 0) must beBetween(-2.0001, -1.999)
     }
   }
 }

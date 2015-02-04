@@ -4,6 +4,7 @@ import breeze.linalg.DenseMatrix
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.layer.SplitTensorLayer
 import kr.ac.kaist.ir.deep.network.BasicNetwork
+import org.apache.log4j.{ConsoleAppender, Level, Logger, PatternLayout}
 import org.apache.spark.{SparkConf, SparkContext}
 import org.specs2.mutable.Specification
 
@@ -11,6 +12,14 @@ import org.specs2.mutable.Specification
  * Test for spark-based local training.
  */
 class SparkTrainerTest extends Specification {
+  val console = new ConsoleAppender()
+  val PATTERN = "%d %p %C{1} %m%n"
+  console.setLayout(new PatternLayout(PATTERN))
+  console.setThreshold(Level.INFO)
+  console.activateOptions()
+  Logger.getLogger("kr.ac").addAppender(console)
+  Logger.getLogger("org.spark").setLevel(Level.FATAL)
+
 
   val set = (0 to 1) flatMap {
     x ⇒ (0 to 1) flatMap {
@@ -40,14 +49,14 @@ class SparkTrainerTest extends Specification {
 
   "SparkTrainer(Local)" should {
     val layer = new SplitTensorLayer((2, 1) → 4, Sigmoid)
-    val net = new BasicNetwork(Seq(layer))
+    val net = new BasicNetwork(IndexedSeq(layer))
     val conf = new SparkConf().setMaster("local[6]").setAppName("SparkTrainer Test")
     val sc = new SparkContext(conf)
     val style = new DistBeliefTrainStyle[ScalarMatrix, ScalarMatrix](
       net = net,
       sc = sc,
-      algorithm = new StochasticGradientDescent(rate = 0.3, l2decay = 0.00001),
-      param = DistBeliefCriteria(miniBatch = 16, fetchStep = 10, updateStep = 2, numCores = 6))
+      algorithm = new StochasticGradientDescent(rate = 0.7, l2decay = 0.00001),
+      param = DistBeliefCriteria(miniBatch = 16, fetchStep = 10, updateStep = 2, numCores = 6, validationSize = 10))
     val train = new Trainer(
       style = style,
       stops = StoppingCriteria(maxIter = 100000))

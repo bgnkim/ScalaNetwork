@@ -8,7 +8,7 @@ import breeze.numerics._
  *
  * Because each weight update requires history, we recommend to make inherited one as a class. 
  */
-trait WeightUpdater extends ((Seq[ScalarMatrix], Seq[ScalarMatrix]) ⇒ Unit) with Serializable {
+trait WeightUpdater extends ((IndexedSeq[ScalarMatrix], IndexedSeq[ScalarMatrix]) ⇒ Unit) with Serializable {
   /** Decay factor for L,,1,, regularization */
   protected val l1decay: Scalar
   /** Decay factor for L,,2,, regularization */
@@ -20,7 +20,7 @@ trait WeightUpdater extends ((Seq[ScalarMatrix], Seq[ScalarMatrix]) ⇒ Unit) wi
    * @param delta the __sequence of accumulated Δweight__
    * @param weight the __sequence of current weights__
    */
-  override def apply(delta: Seq[ScalarMatrix], weight: Seq[ScalarMatrix]): Unit
+  override def apply(delta: IndexedSeq[ScalarMatrix], weight: IndexedSeq[ScalarMatrix]): Unit
 
   /**
    * Compute weight-loss of given weight parameters

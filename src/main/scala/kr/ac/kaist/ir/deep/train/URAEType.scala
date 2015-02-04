@@ -14,7 +14,7 @@ import org.apache.spark.annotation.AlphaComponent
  *       [[http://ai.stanford.edu/~ang/papers/nips11-DynamicPoolingUnfoldingRecursiveAutoencoders.pdf this paper]]
  *
  * @param corrupt Corruption that supervises how to corrupt the input matrix. `(Default : [[kr.ac.kaist.ir.deep.train.NoCorruption]])`
- * @param error An objective function `(Default: [[kr.ac.kaist.ir.deep.fn.obj.SquaredErr]])`
+ * @param error An objective function `(Default: [[kr.ac.kaist.ir.deep.fn.SquaredErr]])`
  *
  * @example
  * {{{var make = new URAEType(error = CrossEntropyErr)
@@ -24,7 +24,7 @@ import org.apache.spark.annotation.AlphaComponent
 @AlphaComponent
 class URAEType(override protected[train] val corrupt: Corruption = NoCorruption,
                override protected[train] val error: Objective = SquaredErr)
-  extends DAGType(corrupt, error) {
+  extends DAGType {
 
   /**
    * Apply & Back-prop given single input
@@ -78,5 +78,28 @@ class URAEType(override protected[train] val corrupt: Corruption = NoCorruption,
             }.sum
         }.sum
       case _ ⇒ 0.0
+    }
+
+
+  /**
+   * Make validation output
+   *
+   * @return input as string
+   */
+  def stringOf(net: Network, pair: (DAG, Null)): String =
+    net match {
+      case net: AutoEncoder ⇒
+        val string = StringBuilder.newBuilder
+        val in = pair._1
+        // Encode phrase of Reconstruction
+        val out = in forward net.apply
+
+        // Decode phrase of reconstruction
+        in.backward(out, net.reconstruct).foreach {
+          leaf ⇒
+            s"IN: ${leaf.x.mkString} URAE → OUT: ${leaf.out.mkString};"
+        }
+        string.mkString
+      case _ ⇒ "NOT AN AUTOENCODER"
     }
 }
