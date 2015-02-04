@@ -16,12 +16,16 @@ class BasicLayer(IO: (Int, Int),
                  w: ScalarMatrix = null,
                  b: ScalarMatrix = null)
   extends Layer {
+  /** Number of Fan-ins */
+  protected final val fanIn = IO._1
+  /** Number of output */
+  protected final val fanOut = IO._2
   /* Initialize weight */
-  protected lazy val weight = if (w != null) w else act.initialize(fanIn, fanOut)
-  protected lazy val bias = if (b != null) b else act.initialize(fanIn, fanOut, fanOut, 1)
+  protected val weight = if (w != null) w else act.initialize(fanIn, fanOut)
+  protected val bias = if (b != null) b else act.initialize(fanIn, fanOut, fanOut, 1)
   /* Weight-Update Accumulator */
-  protected lazy val delta = ScalarMatrix $0(fanOut, fanIn)
-  protected lazy val dbias = ScalarMatrix $0(fanOut, 1)
+  protected val delta = ScalarMatrix $0(fanOut, fanIn)
+  protected val dbias = ScalarMatrix $0(fanOut, 1)
   /**
    * weights for update
    *
@@ -34,10 +38,6 @@ class BasicLayer(IO: (Int, Int),
    * @return delta-weight
    */
   override val dW: IndexedSeq[ScalarMatrix] = IndexedSeq(delta, dbias)
-  /** Number of Fan-ins */
-  protected val fanIn = IO._1
-  /** Number of output */
-  protected val fanOut = IO._2
 
   /**
    * Forward computation
@@ -69,19 +69,19 @@ class BasicLayer(IO: (Int, Int),
    * <p>Backward computation.</p>
    *
    * @note <p>
-   * Let this layer have function F composed with function <code> X(x) = W.x + b </code>
-   * and higher layer have function G.
-   * </p>
+   *       Let this layer have function F composed with function <code> X(x) = W.x + b </code>
+   *       and higher layer have function G.
+   *       </p>
    *
-   * <p>
-   * Weight is updated with: <code>dG/dW</code>
-   * and propagate <code>dG/dx</code>
-   * </p>
+   *       <p>
+   *       Weight is updated with: <code>dG/dW</code>
+   *       and propagate <code>dG/dx</code>
+   *       </p>
    *
-   * <p>
-   * For the computation, we only used denominator layout. (cf. Wikipedia Page of Matrix Computation)
-   * For the computation rules, see "Matrix Cookbook" from MIT.
-   * </p>
+   *       <p>
+   *       For the computation, we only used denominator layout. (cf. Wikipedia Page of Matrix Computation)
+   *       For the computation rules, see "Matrix Cookbook" from MIT.
+   *       </p>
    *
    * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
    * @param input of this layer (in this case, <code>x = entry of dX / dw</code>)

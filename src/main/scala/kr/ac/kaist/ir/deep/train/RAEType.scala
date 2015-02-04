@@ -36,10 +36,10 @@ class RAEType(override protected[train] val corrupt: Corruption = NoCorruption,
     seq foreach {
       _._1 forward {
         x ⇒
-          val out = x into_: net
-          val err = error.derivative(x, out)
+          val err = error.derivative(x, x into_: net)
           net updateBy err
-          out
+          // propagate hidden-layer value
+          net(x)
       }
     }
 
@@ -57,9 +57,9 @@ class RAEType(override protected[train] val corrupt: Corruption = NoCorruption,
         var sum = 0.0
         in forward {
           x ⇒
-            val out = net of x
-            sum += error(x, out)
-            out
+            sum += error(x, net of x)
+            //propagate hidden-layer value
+            net(x)
         }
         sum
     }.sum
@@ -73,9 +73,11 @@ class RAEType(override protected[train] val corrupt: Corruption = NoCorruption,
     val string = StringBuilder.newBuilder
     pair._1 forward {
       x ⇒
-        val out = x into_: net
-        string ++ s"IN: ${x.mkString} RAE → OUT: ${out.mkString}; "
-        out
+        val out = net of x
+        val hid = net(x)
+        string append s"IN: ${x.mkString} RAE → OUT: ${out.mkString}, HDN: ${hid.mkString}; "
+        // propagate hidden-layer value
+        hid
     }
     string.mkString
   }

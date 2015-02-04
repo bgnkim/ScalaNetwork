@@ -18,8 +18,8 @@ class ReconBasicLayer(IO: (Int, Int),
                       b: ScalarMatrix = null,
                       rb: ScalarMatrix = null)
   extends BasicLayer(IO, act, w, b) with Reconstructable {
-  protected lazy val reBias = if (rb != null) rb else act initialize(fanIn, fanOut, fanIn, 1)
-  protected lazy val drBias = ScalarMatrix $0(fanIn, 1)
+  protected val reBias = if (rb != null) rb else act initialize(fanIn, fanOut, fanIn, 1)
+  protected val drBias = ScalarMatrix $0(fanIn, 1)
   /**
    * weights for update
    *

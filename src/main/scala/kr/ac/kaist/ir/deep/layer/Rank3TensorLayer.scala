@@ -31,9 +31,9 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
                                 const: ScalarMatrix = null)
   extends Layer {
   /* Number of Fan-ins */
-  protected val fanInA = fanIns._1
-  protected val fanInB = fanIns._2
-  protected val fanIn = fanIns._3
+  protected final val fanInA = fanIns._1
+  protected final val fanInB = fanIns._2
+  protected final val fanIn = fanIns._3
   /* Initialize weight */
   protected val quadratic: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
   protected val linear: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
@@ -113,14 +113,14 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
    *
    * @return weights
    */
-  override lazy val W: IndexedSeq[ScalarMatrix] = bias +: (linear ++ quadratic)
+  override val W: IndexedSeq[ScalarMatrix] = bias +: (linear ++ quadratic)
 
   /**
    * accumulated delta values
    *
    * @return delta-weight
    */
-  override lazy val dW: IndexedSeq[ScalarMatrix] = db +: (dL ++ dQ)
+  override val dW: IndexedSeq[ScalarMatrix] = db +: (dL ++ dQ)
 
   /**
    * <p>Backward computation.</p>

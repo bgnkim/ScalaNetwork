@@ -97,7 +97,7 @@ class URAEType(override protected[train] val corrupt: Corruption = NoCorruption,
         // Decode phrase of reconstruction
         in.backward(out, net.reconstruct).foreach {
           leaf ⇒
-            s"IN: ${leaf.x.mkString} URAE → OUT: ${leaf.out.mkString};"
+            string append s"IN: ${leaf.x.mkString} URAE → OUT: ${leaf.out.mkString};"
         }
         string.mkString
       case _ ⇒ "NOT AN AUTOENCODER"

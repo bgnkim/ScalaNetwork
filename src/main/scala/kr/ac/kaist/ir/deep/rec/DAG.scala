@@ -42,8 +42,9 @@ class DAG(val finals: Seq[Node]) extends Node {
         val e = pair._1
         val seq = pair._2
         val splited = spliter(e, rSize)
-        val seq2 = curr.backward(splited._1, fn)
-        (splited._2, seq2 ++ seq)
+        val seq2 = curr.backward(splited._2, fn)
+        //pass left part
+        (splited._1, seq2 ++ seq)
     }
     res._2
   }

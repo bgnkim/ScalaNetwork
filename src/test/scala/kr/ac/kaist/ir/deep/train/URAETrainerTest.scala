@@ -57,12 +57,12 @@ class URAETrainerTest extends Specification {
     val net = new AutoEncoder(layer)
     val style = new SingleThreadTrainStyle(
       net = net,
-      algorithm = new StochasticGradientDescent(rate = 0.7, l2decay = 0.00001),
+      algorithm = new StochasticGradientDescent(rate = 0.01, l2decay = 0.001),
       make = new URAEType(),
       param = SimpleTrainingCriteria(miniBatch = 16, validationSize = 10))
     val train = new Trainer(
       style = style,
-      stops = StoppingCriteria(maxIter = 100000))
+      stops = StoppingCriteria(patience = 100000, maxIter = 100000))
 
     "properly trained" in {
       train.train(set, valid) must be_<(0.4)
