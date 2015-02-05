@@ -4,44 +4,35 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Scalanetwork by nearbydelta</title>
+
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
+    <script src="javascripts/scale.fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/nearbydelta/ScalaNetwork">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/nearbydelta/ScalaNetwork/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/nearbydelta/ScalaNetwork/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
-
     <div class="wrapper">
-
+      <header>
+        <h1>Scalanetwork</h1>
+        <p>A Neural network implementation with Scala</p>
+        <p class="view"><a href="https://github.com/nearbydelta/ScalaNetwork">View the Project on GitHub <small>nearbydelta/ScalaNetwork</small></a></p>
+        <ul>
+          <li><a href="https://github.com/nearbydelta/ScalaNetwork/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/nearbydelta/ScalaNetwork/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/nearbydelta/ScalaNetwork">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
       <section>
-        <div id="title">
-          <h1>Scalanetwork</h1>
-          <p>A Neural network implementation with Scala</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/nearbydelta">nearbydelta</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
-
         <h1>
-<a id="scalanetwork-013-snapshot" class="anchor" href="#scalanetwork-013-snapshot" aria-hidden="true"><span class="octicon octicon-link"></span></a>ScalaNetwork 0.1.3-SNAPSHOT</h1>
+<a id="scalanetwork-014-snapshot" class="anchor" href="#scalanetwork-014-snapshot" aria-hidden="true"><span class="octicon octicon-link"></span></a>ScalaNetwork 0.1.4-SNAPSHOT</h1>
 
 <p>A <em>Neural Network implementation</em> with Scala, <a href="https://github.com/scalanlp/breeze">Breeze</a> &amp; <a href="http://spark.apache.org">Spark</a></p>
+
+<p>Spark Network follows <a href="http://choosealicense.com/licenses/gpl-2.0/">GPL v2 license</a>.</p>
 
 <h1>
 <a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h1>
@@ -66,9 +57,11 @@
 
 <ul>
 <li>
-<em>Recursive</em> Auto Encoder (RAE)</li>
+<em>Recursive</em> Auto Encoder (RAE) <sup>[TEST-IN-PROGRESS]</sup>
+</li>
 <li>
-<em>Recursive</em> General Neural Network (Including Recursive Neural Tensor Network, RNTN)</li>
+<em>Recursive</em> General Neural Network (Including Recursive Neural Tensor Network, RNTN) <sup>[TEST-IN-PROGRESS]</sup>
+</li>
 </ul>
 
 <h2>
@@ -79,9 +72,7 @@
 <ul>
 <li>Stochastic Gradient Descent w/ L1-, L2-regularization, Momentum.</li>
 <li><a href="http://www.magicbroom.info/Papers/DuchiHaSi10.pdf">AdaGrad</a></li>
-<li>
-<strong>Experimental</strong> <a href="http://www.matthewzeiler.com/pubs/googleTR2012/googleTR2012.pdf">AdaDelta</a>
-</li>
+<li><a href="http://www.matthewzeiler.com/pubs/googleTR2012/googleTR2012.pdf">AdaDelta</a></li>
 </ul>
 
 <p>ScalaNetwork supports following environments:</p>
@@ -107,7 +98,29 @@
 <h1>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h1>
 
-<p>Here is some examples for basic usage. If you want to extend this package or use it more precisely, please refer <a href="api">ScalaDoc</a></p>
+<p>Here is some examples for basic usage. If you want to extend this package or use it more precisely, please refer <a href="http://nearbydelta.github.io/ScalaNetwork/api/#kr.ac.kaist.ir.deep.package">ScalaDoc</a></p>
+
+<h2>
+<a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h2>
+
+<p>Currently ScalaNetwork supports Scala version 2.10 ~ 2.11.</p>
+
+<ul>
+<li>Stable Release is 0.1.3</li>
+<li>Snapshot Release is 0.1.4-SNAPSHOT</li>
+</ul>
+
+<p>If you are using SBT, add a dependency as described below:</p>
+
+<div class="highlight highlight-scala"><pre>libraryDependencies <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>kr.ac.kaist.ir<span class="pl-pds">"</span></span> <span class="pl-k">%%</span> <span class="pl-s1"><span class="pl-pds">"</span>scalanetwork<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s1"><span class="pl-pds">"</span>0.1.3<span class="pl-pds">"</span></span></pre></div>
+
+<p>If you are using Maven, add a dependency as described below:</p>
+
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+  &lt;<span class="pl-ent">groupId</span>&gt;kr.ac.kaist.ir&lt;/<span class="pl-ent">groupId</span>&gt;
+  &lt;<span class="pl-ent">artifactId</span>&gt;scalanetwork_${your.scala.version}&lt;/<span class="pl-ent">artifactId</span>&gt;
+  &lt;<span class="pl-ent">version</span>&gt;0.1.3&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <h2>
 <a id="simple-example" class="anchor" href="#simple-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simple Example</h2>
@@ -192,7 +205,6 @@ i.e. 1 - (neuron drop-out probability for drop-out training). Default is 1.</p>
 
 <span class="pl-k">new</span> <span class="pl-en">StochasticGradientDescent</span>(rate<span class="pl-k">=</span><span class="pl-c1">0.8</span>, l1decay<span class="pl-k">=</span><span class="pl-c1">0.0</span>, l2decay<span class="pl-k">=</span><span class="pl-c1">0.0001</span>, momentum<span class="pl-k">=</span><span class="pl-c1">0.0001</span>)
 <span class="pl-k">new</span> <span class="pl-en">AdaGrad</span>(rate<span class="pl-k">=</span><span class="pl-c1">0.6</span>, l1decay<span class="pl-k">=</span><span class="pl-c1">0.0</span>, l2decay<span class="pl-k">=</span><span class="pl-c1">0.0001</span>)
-<span class="pl-c">// AdaDelta is Experimental</span>
 <span class="pl-k">new</span> <span class="pl-en">AdaDelta</span>(l1decay<span class="pl-k">=</span><span class="pl-c1">0.0</span>, l2decay<span class="pl-k">=</span><span class="pl-c1">0.0001</span>, decay<span class="pl-k">=</span><span class="pl-c1">0.95</span>, epsilon<span class="pl-k">=</span><span class="pl-c1">1e-6</span>)
 
 <span class="pl-c">/* Training Criteria */</span>
@@ -228,11 +240,14 @@ i.e. 1 - (neuron drop-out probability for drop-out training). Default is 1.</p>
 <span class="pl-k">new</span> <span class="pl-en">ScalarVector</span>(corrupt, objective)
 
 <span class="pl-c">/* Tree Input */</span>
-<span class="pl-c">// Train network as RAE style. Every internal node regarded as reconstruction its direct children (not all leaves).</span>
+<span class="pl-c">// Train network as RAE style. </span>
+<span class="pl-c">// Every internal node regarded as reconstruction its direct children (not all leaves).</span>
 <span class="pl-k">new</span> <span class="pl-en">TreeRAE</span>(corrupt, objective)
-<span class="pl-c">// Train network as Recursive Network style(for RNTN). Forward propagation is done on whole tree at once, and then propagate back.</span>
+<span class="pl-c">// Train network as Recursive Network style(for RNTN). </span>
+<span class="pl-c">// Forward propagation is done on whole tree at once, and then propagate back.</span>
 <span class="pl-k">new</span> <span class="pl-en">TreeRecursive</span>(corrupt, objective)
-<span class="pl-c">// Experimental: Train network as URAE style. With same structure, network should reconstruct all leaves from root.</span>
+<span class="pl-c">// Experimental: Train network as URAE style. </span>
+<span class="pl-c">// With same structure, network should reconstruct all leaves from root.</span>
 <span class="pl-k">new</span> <span class="pl-en">TreeURAE</span>(corrupt, objective)</pre></div>
 
 <h3>
@@ -241,18 +256,23 @@ i.e. 1 - (neuron drop-out probability for drop-out training). Default is 1.</p>
 <p>Training is done by <code>Trainer</code> class.</p>
 
 <div class="highlight highlight-scala"><pre><span class="pl-c">/* Stopping Criteria */</span>
-<span class="pl-en">StoppingCriteria</span>(maxIter <span class="pl-k">=</span> <span class="pl-c1">100000</span>, patience<span class="pl-k">=</span> <span class="pl-c1">5000</span>, patienceStep<span class="pl-k">=</span><span class="pl-c1">2</span>, improveThreshold<span class="pl-k">=</span><span class="pl-c1">0.95</span>, lossThreshold<span class="pl-k">=</span><span class="pl-c1">1e-4</span>, validationFreq<span class="pl-k">=</span><span class="pl-c1">100</span>)
+<span class="pl-en">StoppingCriteria</span>(maxIter <span class="pl-k">=</span> <span class="pl-c1">100000</span>, patience<span class="pl-k">=</span> <span class="pl-c1">5000</span>, patienceStep<span class="pl-k">=</span><span class="pl-c1">2</span>, 
+  improveThreshold<span class="pl-k">=</span><span class="pl-c1">0.95</span>, lossThreshold<span class="pl-k">=</span><span class="pl-c1">1e-4</span>, validationFreq<span class="pl-k">=</span><span class="pl-c1">100</span>)
 
 <span class="pl-c">/* Trainer */</span>
 <span class="pl-k">new</span> <span class="pl-en">Trainer</span>(style <span class="pl-k">=</span> style, make <span class="pl-k">=</span> operation, stops <span class="pl-k">=</span> <span class="pl-en">StoppingCriteria</span>())</pre></div>
 
 <ul>
-<li>Patience and its step indicates wating time from the improvement. If network output improved on 100-th iteration, 
-the trainer waits until Max(patience, 100 * patienceStep).</li>
-<li>Improve Threshold indicates bottom line for improvement. 
+<li>
+<strong>Patience</strong> and <strong>its step</strong> indicates wating time from the improvement. If network output improved on 100-th iteration, 
+the trainer waits until <code>Max(patience, 100 * patienceStep)</code>.</li>
+<li>
+<strong>Improve Threshold</strong> indicates bottom line for improvement. 
 To be regarded as improved, loss should be less than (best loss) * improveThreshold</li>
-<li>Loss threshold indicates maximum loss can be accepted.</li>
-<li>Validation Frequency sets the number of iterations between validations.</li>
+<li>
+<strong>Loss threshold</strong> indicates maximum loss can be accepted.</li>
+<li>
+<strong>Validation Frequency</strong> sets the number of iterations between validations.</li>
 </ul>
 
 <p>Training is done by <code>train</code> method.</p>
@@ -291,8 +311,11 @@ trainer.train(<span class="pl-en">RDD</span>[(<span class="pl-en">IN</span>, <sp
 
 <p>Next version(v0.2) will support URAE</p>
       </section>
-
     </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/nearbydelta">nearbydelta</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
     
   </body>
