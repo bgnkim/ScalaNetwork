@@ -39,10 +39,14 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Input Corruption: Gaussian</p></div><dl class="paramcmts block"><dt class="param">mean</dt><dd class="cmt"><p>of noise (default 0.0)</p></dd><dt class="param">variance</dt><dd class="cmt"><p>of noise (default 0.1)
-</p></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Input Corruption</u>: Gaussian
+</p></div><dl class="paramcmts block"><dt class="param">mean</dt><dd class="cmt"><p><u>Mean</u> of noise <code>(default 0.0)</code></p></dd><dt class="param">variance</dt><dd class="cmt"><p><u>Variance</u> of noise <code>(default 0.1)</code>
+</p></dd></dl><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="kw">var</span> corrupt = GaussianCorruption(variance = <span class="num">0.1</span>)
+<span class="kw">var</span> corrupted = corrupt(vector)</pre></li></ol>
+            </div></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="package$$Corruption.html" class="extype" name="kr.ac.kaist.ir.deep.train.Corruption">Corruption</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="package$$Corruption.html" class="extype" name="kr.ac.kaist.ir.deep.train.Corruption">Corruption</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -92,7 +96,7 @@
         <span class="name">GaussianCorruption</span><span class="params">(<span name="mean">mean: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.0</span></span>, <span name="variance">variance: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.1</span></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">mean</dt><dd class="cmt"><p>of noise (default 0.0)</p></dd><dt class="param">variance</dt><dd class="cmt"><p>of noise (default 0.1)
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">mean</dt><dd class="cmt"><p><u>Mean</u> of noise <code>(default 0.0)</code></p></dd><dt class="param">variance</dt><dd class="cmt"><p><u>Variance</u> of noise <code>(default 0.1)</code>
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -177,7 +181,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>)</span><span class="result">: (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>
+        <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>)</span><span class="result">: (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
@@ -185,7 +189,7 @@
               
         </dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.GaussianCorruption#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(v1:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
+      <a id="apply(v1:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="apply(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -193,10 +197,12 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="v1">v1: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">apply</span><span class="params">(<span name="v1">v1: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Do corruption</p><div class="fullcomment"><div class="comment cmt"><p>Do corruption</p></div><dl class="paramcmts block"><dt class="param">v1</dt><dd class="cmt"><p>to be corrupted</p></dd><dt>returns</dt><dd class="cmt"><p>corrupted vector
+      <p class="shortcomment cmt">Do corruption
+</p><div class="fullcomment"><div class="comment cmt"><p>Do corruption
+</p></div><dl class="paramcmts block"><dt class="param">v1</dt><dd class="cmt"><p>Matrix to be corrupted</p></dd><dt>returns</dt><dd class="cmt"><p>corrupted vector
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.GaussianCorruption">GaussianCorruption</a> → Function1</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
@@ -239,7 +245,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
@@ -304,7 +310,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.GaussianCorruption#mean" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="kr.ac.kaist.ir.deep.train.GaussianCorruption#mean" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="mean:Double"></a>
       <a id="mean:Double"></a>
       <h4 class="signature">
@@ -316,7 +322,7 @@
         <span class="name">mean</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">of noise (default 0.</p><div class="fullcomment"><div class="comment cmt"><p>of noise (default 0.0)</p></div></div>
+      <p class="shortcomment cmt"><u>Mean</u> of noise <code>(default 0.0)</code></p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -382,7 +388,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1 → AnyRef → Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.GaussianCorruption#variance" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="kr.ac.kaist.ir.deep.train.GaussianCorruption#variance" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="variance:Double"></a>
       <a id="variance:Double"></a>
       <h4 class="signature">
@@ -394,8 +400,8 @@
         <span class="name">variance</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">of noise (default 0.</p><div class="fullcomment"><div class="comment cmt"><p>of noise (default 0.1)
-</p></div></div>
+      <p class="shortcomment cmt"><u>Variance</u> of noise <code>(default 0.1)</code>
+</p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -473,7 +479,7 @@
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.Function1">
-              <h3>Inherited from (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></h3>
+              <h3>Inherited from (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

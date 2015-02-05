@@ -163,7 +163,9 @@
         <span class="name">AutoEncoder</span><span class="params">(<span name="obj">obj: <span class="extype" name="play.api.libs.json.JsObject">JsObject</span></span>)</span><span class="result">: <a href="AutoEncoder.html" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Load network from JsObject</p><div class="fullcomment"><div class="comment cmt"><p>Load network from JsObject</p></div><dl class="paramcmts block"><dt class="param">obj</dt><dd class="cmt"><p>to be parsed</p></dd><dt>returns</dt><dd class="cmt"><p>New AutoEncoder reconstructed from this object
+      <p class="shortcomment cmt">Load network from JsObject
+</p><div class="fullcomment"><div class="comment cmt"><p>Load network from JsObject
+</p></div><dl class="paramcmts block"><dt class="param">obj</dt><dd class="cmt"><p>JsObject to be parsed</p></dd><dt>returns</dt><dd class="cmt"><p>New AutoEncoder reconstructed from this object
 </p></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.network.Network#BasicNetwork" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="BasicNetwork(obj:play.api.libs.json.JsObject):kr.ac.kaist.ir.deep.network.BasicNetwork"></a>
@@ -177,10 +179,12 @@
         <span class="name">BasicNetwork</span><span class="params">(<span name="obj">obj: <span class="extype" name="play.api.libs.json.JsObject">JsObject</span></span>)</span><span class="result">: <a href="BasicNetwork.html" class="extype" name="kr.ac.kaist.ir.deep.network.BasicNetwork">BasicNetwork</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Load network from JsObject</p><div class="fullcomment"><div class="comment cmt"><p>Load network from JsObject</p></div><dl class="paramcmts block"><dt class="param">obj</dt><dd class="cmt"><p>to be parsed</p></dd><dt>returns</dt><dd class="cmt"><p>New Basic Network reconstructed from this object
+      <p class="shortcomment cmt">Load network from JsObject
+</p><div class="fullcomment"><div class="comment cmt"><p>Load network from JsObject
+</p></div><dl class="paramcmts block"><dt class="param">obj</dt><dd class="cmt"><p>JsObject to be parsed</p></dd><dt>returns</dt><dd class="cmt"><p>New Basic Network reconstructed from this object
 </p></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.network.Network#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(act:kr.ac.kaist.ir.deep.function.Activation,layerSizes:Int*):kr.ac.kaist.ir.deep.network.package.Network"></a>
+      <a id="apply(act:kr.ac.kaist.ir.deep.fn.Activation,layerSizes:Int*):kr.ac.kaist.ir.deep.network.package.Network"></a>
       <a id="apply(Activation,Int*):Network"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -188,10 +192,12 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="act">act: <a href="../function/Activation.html" class="extype" name="kr.ac.kaist.ir.deep.function.Activation">Activation</a></span>, <span name="layerSizes">layerSizes: <span class="extype" name="scala.Int">Int</span>*</span>)</span><span class="result">: <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>
+        <span class="name">apply</span><span class="params">(<span name="act">act: <a href="../fn/Activation.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Activation">Activation</a></span>, <span name="layerSizes">layerSizes: <span class="extype" name="scala.Int">Int</span>*</span>)</span><span class="result">: <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Construct network from given layer size information</p><div class="fullcomment"><div class="comment cmt"><p>Construct network from given layer size information</p></div><dl class="paramcmts block"><dt class="param">act</dt><dd class="cmt"><p>for activation function</p></dd><dt class="param">layerSizes</dt><dd class="cmt"><p>for construct layers
+      <p class="shortcomment cmt">Construct network from given layer size information
+</p><div class="fullcomment"><div class="comment cmt"><p>Construct network from given layer size information
+</p></div><dl class="paramcmts block"><dt class="param">act</dt><dd class="cmt"><p>Activation function for activation function</p></dd><dt class="param">layerSizes</dt><dd class="cmt"><p>Sizes for construct layers
 </p></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.network.Network#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="apply(obj:play.api.libs.json.JsObject):kr.ac.kaist.ir.deep.network.package.Network"></a>
@@ -205,7 +211,9 @@
         <span class="name">apply</span><span class="params">(<span name="obj">obj: <span class="extype" name="play.api.libs.json.JsObject">JsObject</span></span>)</span><span class="result">: <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Load network from JsObject</p><div class="fullcomment"><div class="comment cmt"><p>Load network from JsObject</p></div><dl class="paramcmts block"><dt class="param">obj</dt><dd class="cmt"><p>to be parsed</p></dd><dt>returns</dt><dd class="cmt"><p>New Network reconstructed from this object
+      <p class="shortcomment cmt">Load network from JsObject
+</p><div class="fullcomment"><div class="comment cmt"><p>Load network from JsObject
+</p></div><dl class="paramcmts block"><dt class="param">obj</dt><dd class="cmt"><p>JsObject to be parsed</p></dd><dt>returns</dt><dd class="cmt"><p>New Network reconstructed from this object
 </p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>

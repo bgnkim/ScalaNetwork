@@ -39,8 +39,10 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Criteria: How to train (for <a href="style/DistBeliefTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.style.DistBeliefTrainStyle">kr.ac.kaist.ir.deep.train.style.DistBeliefTrainStyle</a>)</p></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>is size of mini-batch (default 100)</p></dd><dt class="param">validationSize</dt><dd class="cmt"><p>is size of validation set to be generated (default 20)</p></dd><dt class="param">updateStep</dt><dd class="cmt"><p>is number of &quot;numCores mini-batches&quot; between update (default 2)</p></dd><dt class="param">fetchStep</dt><dd class="cmt"><p>is number of &quot;numCores mini-batches&quot; between fetching (default 10)</p></dd><dt class="param">numCores</dt><dd class="cmt"><p>is number of v-cores in the spark cluster. (default 1)
-</p></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Criteria</u>: How to train (for <a href="DistBeliefTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a>)</p><p>This case class defines how to train the network. Training parameter is defined in this class.
+</p></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></dd><dt class="param">validationSize</dt><dd class="cmt"><p>size of <u>validation set</u> to be generated <code>(default 20)</code></p></dd><dt class="param">updateStep</dt><dd class="cmt"><p>number of <u>numCores × mini-batches</u> between update <code>(default 2)</code></p></dd><dt class="param">fetchStep</dt><dd class="cmt"><p>number of <u>numCores × mini-batches</u> between fetching <code>(default 10)</code></p></dd><dt class="param">numCores</dt><dd class="cmt"><p>number of <u>v-cores</u> in the spark cluster. <code>(default 1)</code>
+</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>We recommend set numCores as similar as possible with allocated spark v-cores.
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -92,7 +94,7 @@
         <span class="name">DistBeliefCriteria</span><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="validationSize">validationSize: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">20</span></span>, <span name="updateStep">updateStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="fetchStep">fetchStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">10</span></span>, <span name="numCores">numCores: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>is size of mini-batch (default 100)</p></dd><dt class="param">validationSize</dt><dd class="cmt"><p>is size of validation set to be generated (default 20)</p></dd><dt class="param">updateStep</dt><dd class="cmt"><p>is number of &quot;numCores mini-batches&quot; between update (default 2)</p></dd><dt class="param">fetchStep</dt><dd class="cmt"><p>is number of &quot;numCores mini-batches&quot; between fetching (default 10)</p></dd><dt class="param">numCores</dt><dd class="cmt"><p>is number of v-cores in the spark cluster. (default 1)
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></dd><dt class="param">validationSize</dt><dd class="cmt"><p>size of <u>validation set</u> to be generated <code>(default 20)</code></p></dd><dt class="param">updateStep</dt><dd class="cmt"><p>number of <u>numCores × mini-batches</u> between update <code>(default 2)</code></p></dd><dt class="param">fetchStep</dt><dd class="cmt"><p>number of <u>numCores × mini-batches</u> between fetching <code>(default 10)</code></p></dd><dt class="param">numCores</dt><dd class="cmt"><p>number of <u>v-cores</u> in the spark cluster. <code>(default 1)</code>
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -225,7 +227,7 @@
         <span class="name">fetchStep</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">is number of &quot;numCores mini-batches&quot; between fetching (default 10)</p>
+      <p class="shortcomment cmt">number of <u>numCores × mini-batches</u> between fetching <code>(default 10)</code></p>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -283,7 +285,7 @@
         <span class="name">miniBatch</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">is size of mini-batch (default 100)</p><div class="fullcomment"><div class="comment cmt"><p>is size of mini-batch (default 100)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria">DistBeliefCriteria</a> → <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a></dd></dl></div>
+      <p class="shortcomment cmt">size of <u>mini-batch</u> <code>(default 100)</code></p><div class="fullcomment"><div class="comment cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria">DistBeliefCriteria</a> → <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -335,7 +337,7 @@
         <span class="name">numCores</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">is number of v-cores in the spark cluster.</p><div class="fullcomment"><div class="comment cmt"><p>is number of v-cores in the spark cluster. (default 1)
+      <p class="shortcomment cmt">number of <u>v-cores</u> in the spark cluster.</p><div class="fullcomment"><div class="comment cmt"><p>number of <u>v-cores</u> in the spark cluster. <code>(default 1)</code>
 </p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
@@ -362,7 +364,7 @@
         <span class="name">updateStep</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">is number of &quot;numCores mini-batches&quot; between update (default 2)</p>
+      <p class="shortcomment cmt">number of <u>numCores × mini-batches</u> between update <code>(default 2)</code></p>
     </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#validationSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="validationSize:Int"></a>
       <a id="validationSize:Int"></a>
@@ -375,7 +377,7 @@
         <span class="name">validationSize</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">is size of validation set to be generated (default 20)</p><div class="fullcomment"><div class="comment cmt"><p>is size of validation set to be generated (default 20)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria">DistBeliefCriteria</a> → <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a></dd></dl></div>
+      <p class="shortcomment cmt">size of <u>validation set</u> to be generated <code>(default 20)</code></p><div class="fullcomment"><div class="comment cmt"><p>size of <u>validation set</u> to be generated <code>(default 20)</code></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria">DistBeliefCriteria</a> → <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

@@ -35,14 +35,14 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">Network</span><span class="result"> extends (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">Network</span><span class="result"> extends (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Trait: Network interface
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Trait</u>: Network interface
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a href="AutoEncoder.html" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a>, <a href="BasicNetwork.html" class="extype" name="kr.ac.kaist.ir.deep.network.BasicNetwork">BasicNetwork</a>, <a href="StackedAutoEncoder.html" class="extype" name="kr.ac.kaist.ir.deep.network.StackedAutoEncoder">StackedAutoEncoder</a></div>
@@ -87,49 +87,21 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="kr.ac.kaist.ir.deep.network.Network#!" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="!(err:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
-      <a id="!(ScalarMatrix):ScalarMatrix"></a>
+              <ol><li name="kr.ac.kaist.ir.deep.network.Network#W" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="W:IndexedSeq[kr.ac.kaist.ir.deep.fn.ScalarMatrix]"></a>
+      <a id="W:IndexedSeq[ScalarMatrix]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
-        <span class="kind">def</span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang" class="name">!</span><span class="params">(<span name="err">err: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">W</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Backpropagation algorithm</p><div class="fullcomment"><div class="comment cmt"><p>Backpropagation algorithm</p></div><dl class="paramcmts block"><dt class="param">err</dt><dd class="cmt"><p>backpropagated error from error function
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.network.Network#&gt;&gt;:" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="&gt;&gt;:(x:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
-      <a id="&gt;&gt;:(ScalarMatrix):ScalarMatrix"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $greater$greater$colon" class="name">&gt;&gt;:</span><span class="params">(<span name="x">x: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Forward computation for training
-</p><div class="fullcomment"><div class="comment cmt"><p>Forward computation for training
-</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>of input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.network.Network#W" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="W:Seq[kr.ac.kaist.ir.deep.function.ScalarMatrix]"></a>
-      <a id="W:Seq[ScalarMatrix]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">W</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">All weights of layers</p><div class="fullcomment"><div class="comment cmt"><p>All weights of layers</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>all weights of layers
+      <p class="shortcomment cmt">All weights of layers
+</p><div class="fullcomment"><div class="comment cmt"><p>All weights of layers
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>all weights of layers
 </p></dd></dl></div>
     </li><li name="scala.Function1#apply" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="apply(v1:T1):R"></a>
@@ -140,39 +112,42 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="v1">v1: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">apply</span><span class="params">(<span name="v1">v1: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.network.Network#dW" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="dW:Seq[kr.ac.kaist.ir.deep.function.ScalarMatrix]"></a>
-      <a id="dW:Seq[ScalarMatrix]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">dW</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">All accumulated delta weights of layers</p><div class="fullcomment"><div class="comment cmt"><p>All accumulated delta weights of layers</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>all accumulated delta weights
-</p></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.network.Network#presence" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="presence:kr.ac.kaist.ir.deep.function.Probability"></a>
-      <a id="presence:Probability"></a>
+      <a id="dW:IndexedSeq[kr.ac.kaist.ir.deep.fn.ScalarMatrix]"></a>
+      <a id="dW:IndexedSeq[ScalarMatrix]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">presence</span><span class="result">: <a href="../function/package.html#Probability=Double" class="extmbr" name="kr.ac.kaist.ir.deep.function.Probability">Probability</a></span>
+        <span class="name">dW</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Probability that each input neuron of each layer is not dropped (For neuron drop-out)
-</p><div class="fullcomment"><div class="comment cmt"><p>Probability that each input neuron of each layer is not dropped (For neuron drop-out)
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <p class="shortcomment cmt">All accumulated delta weights of layers
+</p><div class="fullcomment"><div class="comment cmt"><p>All accumulated delta weights of layers
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>all accumulated delta weights
+</p></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.network.Network#into_:" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="into_:(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
+      <a id="into_:(ScalarMatrix):ScalarMatrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: into_$colon" class="name">into_:</span><span class="params">(<span name="x">x: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Forward computation for training
+</p><div class="fullcomment"><div class="comment cmt"><p>Forward computation for training
+</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.network.Network#toJSON" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="toJSON:play.api.libs.json.JsObject"></a>
       <a id="toJSON:JsObject"></a>
@@ -185,8 +160,26 @@
         <span class="name">toJSON</span><span class="result">: <span class="extype" name="play.api.libs.json.JsObject">JsObject</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Serialize network to JSON</p><div class="fullcomment"><div class="comment cmt"><p>Serialize network to JSON</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>JsObject
+      <p class="shortcomment cmt">Serialize network to JSON
+</p><div class="fullcomment"><div class="comment cmt"><p>Serialize network to JSON
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>JsObject of this network
 </p></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.network.Network#updateBy" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="updateBy(err:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
+      <a id="updateBy(ScalarMatrix):ScalarMatrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">updateBy</span><span class="params">(<span name="err">err: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Backpropagation algorithm
+</p><div class="fullcomment"><div class="comment cmt"><p>Backpropagation algorithm
+</p></div><dl class="paramcmts block"><dt class="param">err</dt><dd class="cmt"><p>backpropagated error from error function
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
     </li></ol>
             </div>
 
@@ -266,7 +259,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>)</span><span class="result">: (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>
+        <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>)</span><span class="result">: (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
@@ -314,7 +307,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
@@ -444,20 +437,20 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.network.Network#on" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="on(x:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
-      <a id="on(ScalarMatrix):ScalarMatrix"></a>
+    </li><li name="kr.ac.kaist.ir.deep.network.Network#of" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="of(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
+      <a id="of(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">on</span><span class="params">(<span name="x">x: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">of</span><span class="params">(<span name="x">x: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Sugar: Forward computation for validation.</p><div class="fullcomment"><div class="comment cmt"><p>Sugar: Forward computation for validation. Calls apply(x)
-</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>of input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
+</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
@@ -556,7 +549,7 @@
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.Function1">
-              <h3>Inherited from (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></h3>
+              <h3>Inherited from (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

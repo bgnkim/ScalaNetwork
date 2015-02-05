@@ -39,10 +39,10 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Trait of Layer : Reconstructable
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Trait</u> of Layer that can be used for autoencoder
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a href="ReconBasicLayer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.ReconBasicLayer">ReconBasicLayer</a></div>
@@ -87,39 +87,24 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="kr.ac.kaist.ir.deep.layer.Layer#!" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="!(error:kr.ac.kaist.ir.deep.function.ScalarMatrix,input:kr.ac.kaist.ir.deep.function.ScalarMatrix,output:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
-      <a id="!(ScalarMatrix,ScalarMatrix,ScalarMatrix):ScalarMatrix"></a>
+              <ol><li name="kr.ac.kaist.ir.deep.layer.Layer#W" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="W:IndexedSeq[kr.ac.kaist.ir.deep.fn.ScalarMatrix]"></a>
+      <a id="W:IndexedSeq[ScalarMatrix]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
-        <span class="kind">def</span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang" class="name">!</span><span class="params">(<span name="error">error: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>, <span name="input">input: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>, <span name="output">output: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">W</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Backward computation.</p><div class="fullcomment"><div class="comment cmt"><p>Backward computation.</p><p>Let this layer have function F composed with function <code> X(x) = W.x + b </code>
-and higher layer have function G.</p><p>Weight is updated with: <code>dG/dW</code>
-and propagate <code>dG/dx</code></p><p>For the computation, we only used denominator layout. (cf. Wikipedia Page of Matrix Computation)
-For the computation rules, see &quot;Matrix Cookbook&quot; from MIT.</p></div><dl class="paramcmts block"><dt class="param">error</dt><dd class="cmt"><p>to be propagated ( <code>dG / dF</code> is propagated from higher layer )</p></dd><dt class="param">input</dt><dd class="cmt"><p>of this layer (in this case, <code>x = entry of dX / dw</code>)</p></dd><dt class="param">output</dt><dd class="cmt"><p>of this layer (in this case, <code>y</code>)</p></dd><dt>returns</dt><dd class="cmt"><p>propagated error (in this case, <code>dG/dx</code> )
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Definition Classes</dt><dd><a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.layer.Layer#W" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="W:Seq[kr.ac.kaist.ir.deep.function.ScalarMatrix]"></a>
-      <a id="W:Seq[ScalarMatrix]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">W</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">weights for update</p><div class="fullcomment"><div class="comment cmt"><p>weights for update</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>weights
+      <p class="shortcomment cmt">weights for update
+</p><div class="fullcomment"><div class="comment cmt"><p>weights for update
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>weights
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.layer.Layer#act" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="act:kr.ac.kaist.ir.deep.function.Activation"></a>
+      <a id="act:kr.ac.kaist.ir.deep.fn.Activation"></a>
       <a id="act:Activation"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -127,12 +112,12 @@ For the computation rules, see &quot;Matrix Cookbook&quot; from MIT.</p></div><d
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">act</span><span class="result">: <a href="../function/Activation.html" class="extype" name="kr.ac.kaist.ir.deep.function.Activation">Activation</a></span>
+        <span class="name">act</span><span class="result">: <a href="../fn/Activation.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Activation">Activation</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Activation Function</p><div class="fullcomment"><div class="comment cmt"><p>Activation Function</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.layer.Layer#apply" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="apply(x:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
+      <a id="apply(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="apply(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -140,55 +125,60 @@ For the computation rules, see &quot;Matrix Cookbook&quot; from MIT.</p></div><d
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="x">x: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">apply</span><span class="params">(<span name="x">x: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Forward computation</p><div class="fullcomment"><div class="comment cmt"><p>Forward computation</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>of input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
+      <p class="shortcomment cmt">Forward computation
+</p><div class="fullcomment"><div class="comment cmt"><p>Forward computation
+</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a> → Function1</dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.layer.Layer#dW" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="dW:Seq[kr.ac.kaist.ir.deep.function.ScalarMatrix]"></a>
-      <a id="dW:Seq[ScalarMatrix]"></a>
+      <a id="dW:IndexedSeq[kr.ac.kaist.ir.deep.fn.ScalarMatrix]"></a>
+      <a id="dW:IndexedSeq[ScalarMatrix]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
-        <span class="kind">def</span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">dW</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>]</span>
+        <span class="name">dW</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">accumulated delta values</p><div class="fullcomment"><div class="comment cmt"><p>accumulated delta values</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>delta-weight
+      <p class="shortcomment cmt">accumulated delta values
+</p><div class="fullcomment"><div class="comment cmt"><p>accumulated delta values
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>delta-weight
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.layer.Reconstructable#rec_!" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="rec_!(error:kr.ac.kaist.ir.deep.function.ScalarMatrix,input:kr.ac.kaist.ir.deep.function.ScalarMatrix,output:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
-      <a id="rec_!(ScalarMatrix,ScalarMatrix,ScalarMatrix):ScalarMatrix"></a>
+    </li><li name="kr.ac.kaist.ir.deep.layer.Reconstructable#decodeBy_:" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="decodeBy_:(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
+      <a id="decodeBy_:(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: rec_$bang" class="name">rec_!</span><span class="params">(<span name="error">error: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>, <span name="input">input: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>, <span name="output">output: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span title="gt4s: decodeBy_$colon" class="name">decodeBy_:</span><span class="params">(<span name="x">x: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Backpropagation of reconstruction.</p><div class="fullcomment"><div class="comment cmt"><p>Backpropagation of reconstruction. For the information about backpropagation calculation, see <a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">kr.ac.kaist.ir.deep.layer.Layer</a></p></div><dl class="paramcmts block"><dt class="param">error</dt><dd class="cmt"><p>to be propagated</p></dd><dt class="param">input</dt><dd class="cmt"><p>of this layer</p></dd><dt class="param">output</dt><dd class="cmt"><p>is final reconstruction output of this layer</p></dd><dt>returns</dt><dd class="cmt"><p>propagated error
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.layer.Reconstructable#rec_&gt;&gt;:" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="rec_&gt;&gt;:(x:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
-      <a id="rec_&gt;&gt;:(ScalarMatrix):ScalarMatrix"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: rec_$greater$greater$colon" class="name">rec_&gt;&gt;:</span><span class="params">(<span name="x">x: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Sugar: Forward computation + reconstruction
-</p><div class="fullcomment"><div class="comment cmt"><p>Sugar: Forward computation + reconstruction
-</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>of hidden layer output matrix</p></dd><dt>returns</dt><dd class="cmt"><p>tuple of reconstruction output
+      <p class="shortcomment cmt">Sugar: reconstruction
+</p><div class="fullcomment"><div class="comment cmt"><p>Sugar: reconstruction
+</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>hidden layer output matrix</p></dd><dt>returns</dt><dd class="cmt"><p>tuple of reconstruction output
 </p></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.layer.Reconstructable#decodeUpdateBy" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="decodeUpdateBy(error:kr.ac.kaist.ir.deep.fn.ScalarMatrix,input:kr.ac.kaist.ir.deep.fn.ScalarMatrix,output:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
+      <a id="decodeUpdateBy(ScalarMatrix,ScalarMatrix,ScalarMatrix):ScalarMatrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">decodeUpdateBy</span><span class="params">(<span name="error">error: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>, <span name="input">input: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>, <span name="output">output: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Backpropagation of reconstruction.</p><div class="fullcomment"><div class="comment cmt"><p>Backpropagation of reconstruction. For the information about backpropagation calculation, see <a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">kr.ac.kaist.ir.deep.layer.Layer</a>
+</p></div><dl class="paramcmts block"><dt class="param">error</dt><dd class="cmt"><p>error matrix to be propagated</p></dd><dt class="param">input</dt><dd class="cmt"><p>input of this layer</p></dd><dt class="param">output</dt><dd class="cmt"><p>final reconstruction output of this layer</p></dd><dt>returns</dt><dd class="cmt"><p>propagated error
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.layer.Layer#toJSON" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="toJSON:play.api.libs.json.JsObject"></a>
       <a id="toJSON:JsObject"></a>
@@ -201,8 +191,28 @@ For the computation rules, see &quot;Matrix Cookbook&quot; from MIT.</p></div><d
         <span class="name">toJSON</span><span class="result">: <span class="extype" name="play.api.libs.json.JsObject">JsObject</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Translate this layer into JSON object (in Play! framework)</p><div class="fullcomment"><div class="comment cmt"><p>Translate this layer into JSON object (in Play! framework)</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>JSON object describes this layer
+      <p class="shortcomment cmt">Translate this layer into JSON object (in Play! framework)
+</p><div class="fullcomment"><div class="comment cmt"><p>Translate this layer into JSON object (in Play! framework)
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>JSON object describes this layer
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.layer.Layer#updateBy" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="updateBy(error:kr.ac.kaist.ir.deep.fn.ScalarMatrix,input:kr.ac.kaist.ir.deep.fn.ScalarMatrix,output:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
+      <a id="updateBy(ScalarMatrix,ScalarMatrix,ScalarMatrix):ScalarMatrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">updateBy</span><span class="params">(<span name="error">error: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>, <span name="input">input: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>, <span name="output">output: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Backward computation.</p><div class="fullcomment"><div class="comment cmt"><p>Backward computation.
+</p></div><dl class="paramcmts block"><dt class="param">error</dt><dd class="cmt"><p>to be propagated ( <code>dG / dF</code> is propagated from higher layer )</p></dd><dt class="param">input</dt><dd class="cmt"><p>of this layer (in this case, <code>x = entry of dX / dw</code>)</p></dd><dt class="param">output</dt><dd class="cmt"><p>of this layer (in this case, <code>y</code>)</p></dd><dt>returns</dt><dd class="cmt"><p>propagated error (in this case, <code>dG/dx</code> )
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Definition Classes</dt><dd><a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></dd><dt>Note</dt><dd><span class="cmt"><p></p><p>Let this layer have function F composed with function <code> X(x) = W.x + b </code>
+and higher layer have function G.</p><p>Weight is updated with: <code>dG/dW</code>
+and propagate <code>dG/dx</code></p><p>For the computation, we only used denominator layout. (cf. Wikipedia Page of Matrix Computation)
+For the computation rules, see &quot;Matrix Cookbook&quot; from MIT.</p></span></dd></dl></div>
     </li></ol>
             </div>
 
@@ -273,21 +283,6 @@ For the computation rules, see &quot;Matrix Cookbook&quot; from MIT.</p></div><d
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.layer.Layer#&gt;&gt;:" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&gt;&gt;:(x:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
-      <a id="&gt;&gt;:(ScalarMatrix):ScalarMatrix"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $greater$greater$colon" class="name">&gt;&gt;:</span><span class="params">(<span name="x">x: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Sugar: Forward computation.</p><div class="fullcomment"><div class="comment cmt"><p>Sugar: Forward computation. Calls apply(x)
-</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>of input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Definition Classes</dt><dd><a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></dd></dl></div>
     </li><li name="scala.Function1#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="andThen[A](g:R=&gt;A):T1=&gt;A"></a>
       <a id="andThen[A]((ScalarMatrix)⇒A):(ScalarMatrix)⇒A"></a>
@@ -297,7 +292,7 @@ For the computation rules, see &quot;Matrix Cookbook&quot; from MIT.</p></div><d
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>)</span><span class="result">: (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>
+        <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>)</span><span class="result">: (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
@@ -345,7 +340,7 @@ For the computation rules, see &quot;Matrix Cookbook&quot; from MIT.</p></div><d
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
@@ -423,6 +418,21 @@ For the computation rules, see &quot;Matrix Cookbook&quot; from MIT.</p></div><d
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.layer.Layer#into_:" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="into_:(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
+      <a id="into_:(ScalarMatrix):ScalarMatrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: into_$colon" class="name">into_:</span><span class="params">(<span name="x">x: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Sugar: Forward computation.</p><div class="fullcomment"><div class="comment cmt"><p>Sugar: Forward computation. Calls apply(x)
+</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Definition Classes</dt><dd><a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -574,7 +584,7 @@ For the computation rules, see &quot;Matrix Cookbook&quot; from MIT.</p></div><d
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.Function1">
-              <h3>Inherited from (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></h3>
+              <h3>Inherited from (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

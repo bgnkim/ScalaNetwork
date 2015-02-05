@@ -39,7 +39,10 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Criteria: When to stop training</p></div><dl class="paramcmts block"><dt class="param">maxIter</dt><dd class="cmt"><p>is maximum mini-batch iteration count (default 100,000)</p></dd><dt class="param">patience</dt><dd class="cmt"><p>is default patience count (default 5,000)</p></dd><dt class="param">patienceStep</dt><dd class="cmt"><p>is default step for patience (default x2)</p></dd><dt class="param">improveThreshold</dt><dd class="cmt"><p>is threshold for marked as &quot;improved&quot; (default 95% = 0.95)</p></dd><dt class="param">lossThreshold</dt><dd class="cmt"><p>is maximum-tolerant loss value. (default 0.0001)</p></dd><dt class="param">validationFreq</dt><dd class="cmt"><p>is step count for validation (default 100)
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Criteria</u>: When to stop training</p><p>This case class defines when to stop training. Training stops if one of the following condition is satisfied.</p><ul><li>#Iteration ≥ maxIter<ul><li>#Iteration ≥ current patience value, which is calculated by <code>max(patience, bestIteration * patienceStep)</code></li><li>Amount of loss &lt; lossThreshold</li></ul></li></ul><p>Validation is done for each <code>validationFreq</code> iterations,
+and whenever current/best loss ratio below improveThreshold,
+that iteration is marked as best iteration.
+</p></div><dl class="paramcmts block"><dt class="param">maxIter</dt><dd class="cmt"><p><u>maximum mini-batch</u> iteration count <code>(default 100,000)</code></p></dd><dt class="param">patience</dt><dd class="cmt"><p><u>default</u> patience count <code>(default 5,000)</code></p></dd><dt class="param">patienceStep</dt><dd class="cmt"><p><u>multiplier</u> for calculating patience <code>(default x2)</code></p></dd><dt class="param">improveThreshold</dt><dd class="cmt"><p><u>threshold</u> that iteration is marked as &quot;improved&quot; <code>(default 95% = 0.95)</code></p></dd><dt class="param">lossThreshold</dt><dd class="cmt"><p><u>maximum-tolerant</u> loss value. <code>(default 0.0001)</code></p></dd><dt class="param">validationFreq</dt><dd class="cmt"><p><u>step</u> count for validation <code>(default 100)</code>
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -92,7 +95,7 @@
         <span class="name">StoppingCriteria</span><span class="params">(<span name="maxIter">maxIter: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100000</span></span>, <span name="patience">patience: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">5000</span></span>, <span name="patienceStep">patienceStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="improveThreshold">improveThreshold: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.995</span></span>, <span name="lossThreshold">lossThreshold: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">1.0E-4</span></span>, <span name="validationFreq">validationFreq: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">maxIter</dt><dd class="cmt"><p>is maximum mini-batch iteration count (default 100,000)</p></dd><dt class="param">patience</dt><dd class="cmt"><p>is default patience count (default 5,000)</p></dd><dt class="param">patienceStep</dt><dd class="cmt"><p>is default step for patience (default x2)</p></dd><dt class="param">improveThreshold</dt><dd class="cmt"><p>is threshold for marked as &quot;improved&quot; (default 95% = 0.95)</p></dd><dt class="param">lossThreshold</dt><dd class="cmt"><p>is maximum-tolerant loss value. (default 0.0001)</p></dd><dt class="param">validationFreq</dt><dd class="cmt"><p>is step count for validation (default 100)
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">maxIter</dt><dd class="cmt"><p><u>maximum mini-batch</u> iteration count <code>(default 100,000)</code></p></dd><dt class="param">patience</dt><dd class="cmt"><p><u>default</u> patience count <code>(default 5,000)</code></p></dd><dt class="param">patienceStep</dt><dd class="cmt"><p><u>multiplier</u> for calculating patience <code>(default x2)</code></p></dd><dt class="param">improveThreshold</dt><dd class="cmt"><p><u>threshold</u> that iteration is marked as &quot;improved&quot; <code>(default 95% = 0.95)</code></p></dd><dt class="param">lossThreshold</dt><dd class="cmt"><p><u>maximum-tolerant</u> loss value. <code>(default 0.0001)</code></p></dd><dt class="param">validationFreq</dt><dd class="cmt"><p><u>step</u> count for validation <code>(default 100)</code>
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -245,7 +248,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.StoppingCriteria#improveThreshold" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="kr.ac.kaist.ir.deep.train.StoppingCriteria#improveThreshold" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="improveThreshold:Double"></a>
       <a id="improveThreshold:Double"></a>
       <h4 class="signature">
@@ -257,7 +260,7 @@
         <span class="name">improveThreshold</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">is threshold for marked as &quot;improved&quot; (default 95% = 0.</p><div class="fullcomment"><div class="comment cmt"><p>is threshold for marked as &quot;improved&quot; (default 95% = 0.95)</p></div></div>
+      <p class="shortcomment cmt"><u>threshold</u> that iteration is marked as &quot;improved&quot; <code>(default 95% = 0.95)</code></p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -283,7 +286,7 @@
         <span class="name">lossThreshold</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">is maximum-tolerant loss value.</p><div class="fullcomment"><div class="comment cmt"><p>is maximum-tolerant loss value. (default 0.0001)</p></div></div>
+      <p class="shortcomment cmt"><u>maximum-tolerant</u> loss value.</p><div class="fullcomment"><div class="comment cmt"><p><u>maximum-tolerant</u> loss value. <code>(default 0.0001)</code></p></div></div>
     </li><li name="kr.ac.kaist.ir.deep.train.StoppingCriteria#maxIter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="maxIter:Int"></a>
       <a id="maxIter:Int"></a>
@@ -296,7 +299,7 @@
         <span class="name">maxIter</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">is maximum mini-batch iteration count (default 100,000)</p>
+      <p class="shortcomment cmt"><u>maximum mini-batch</u> iteration count <code>(default 100,000)</code></p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -348,7 +351,7 @@
         <span class="name">patience</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">is default patience count (default 5,000)</p>
+      <p class="shortcomment cmt"><u>default</u> patience count <code>(default 5,000)</code></p>
     </li><li name="kr.ac.kaist.ir.deep.train.StoppingCriteria#patienceStep" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="patienceStep:Int"></a>
       <a id="patienceStep:Int"></a>
@@ -361,7 +364,7 @@
         <span class="name">patienceStep</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">is default step for patience (default x2)</p>
+      <p class="shortcomment cmt"><u>multiplier</u> for calculating patience <code>(default x2)</code></p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -387,7 +390,7 @@
         <span class="name">validationFreq</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">is step count for validation (default 100)
+      <p class="shortcomment cmt"><u>step</u> count for validation <code>(default 100)</code>
 </p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>

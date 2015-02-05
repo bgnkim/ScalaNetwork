@@ -39,7 +39,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Package object for tree</p><p>Created by bydelta on 2015-01-14.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Package object for DAG
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -82,71 +82,59 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="kr.ac.kaist.ir.deep.rec.BinaryTree" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="BinaryTree[T]extendspackage.Tree[T]withProductwithSerializable"></a>
-      <a id="BinaryTree[T]:BinaryTree[T]"></a>
+              <ol><li name="kr.ac.kaist.ir.deep.rec.DAG" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DAGextendsNode"></a>
+      <a id="DAG:DAG"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">case class</span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="package$$BinaryTree.html"><span class="name">BinaryTree</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree.T">T</span></span>, <span name="left">left: <a href="package$$Tree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.Tree">Tree</a>[<span class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree.T">T</span>]</span>, <span name="right">right: <a href="package$$Tree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.Tree">Tree</a>[<span class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree.T">T</span>]</span>)</span><span class="result"> extends <a href="package$$Tree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.Tree">Tree</a>[<span class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree.T">T</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="DAG.html"><span class="name">DAG</span></a><span class="result"> extends <a href="Node.html" class="extype" name="kr.ac.kaist.ir.deep.rec.Node">Node</a></span>
       </span>
       </h4>
-      <p class="comment cmt">Tree : Binary</p>
-    </li><li name="kr.ac.kaist.ir.deep.rec.Leaf" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Leaf[T]extendspackage.Tree[T]withProductwithSerializable"></a>
-      <a id="Leaf[T]:Leaf[T]"></a>
+      <p class="comment cmt"><u>Graph</u>: Directed Acyclic Graph</p>
+    </li><li name="kr.ac.kaist.ir.deep.rec.InternalNode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InternalNodeextendsNode"></a>
+      <a id="InternalNode:InternalNode"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">case class</span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="package$$Leaf.html"><span class="name">Leaf</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="kr.ac.kaist.ir.deep.rec.Leaf.T">T</span></span>)</span><span class="result"> extends <a href="package$$Tree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.Tree">Tree</a>[<span class="extype" name="kr.ac.kaist.ir.deep.rec.Leaf.T">T</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="InternalNode.html"><span class="name">InternalNode</span></a><span class="result"> extends <a href="Node.html" class="extype" name="kr.ac.kaist.ir.deep.rec.Node">Node</a></span>
       </span>
       </h4>
-      <p class="comment cmt">Tree : Leaf node</p>
-    </li><li name="kr.ac.kaist.ir.deep.rec.Tree" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Tree[T]extendsSerializable"></a>
-      <a id="Tree[T]:Tree[T]"></a>
+      <p class="comment cmt"><u>Node</u> for internal structure (non-terminal)
+</p>
+    </li><li name="kr.ac.kaist.ir.deep.rec.Node" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NodeextendsSerializable"></a>
+      <a id="Node:Node"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="package$$Tree.html"><span class="name">Tree</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Node.html"><span class="name">Node</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
-      <p class="comment cmt">Trait: Tree</p>
-    </li><li name="kr.ac.kaist.ir.deep.rec.TreeOp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TreeOpextendsSerializable"></a>
-      <a id="TreeOp:TreeOp"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="package$$TreeOp.html"><span class="name">TreeOp</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">Tree Operation</p>
-    </li><li name="kr.ac.kaist.ir.deep.rec.VectorTree" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="VectorTree=kr.ac.kaist.ir.deep.rec.package.Tree[kr.ac.kaist.ir.deep.function.ScalarMatrix]"></a>
-      <a id="VectorTree:VectorTree"></a>
+      <p class="comment cmt"><u>Trait</u> that describes a node in DAG.</p>
+    </li><li name="kr.ac.kaist.ir.deep.rec.TerminalNode" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TerminalNodeextendsNode"></a>
+      <a id="TerminalNode:TerminalNode"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">type</span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">VectorTree</span><span class="result"> = <a href="package$$Tree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.Tree">Tree</a>[<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>]</span>
+        <a href="TerminalNode.html"><span class="name">TerminalNode</span></a><span class="result"> extends <a href="Node.html" class="extype" name="kr.ac.kaist.ir.deep.rec.Node">Node</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Tree of Vectors</p>
+      <p class="comment cmt"><u>Node of DAG</u> whose position is terminal.</p>
     </li></ol>
             </div>
 

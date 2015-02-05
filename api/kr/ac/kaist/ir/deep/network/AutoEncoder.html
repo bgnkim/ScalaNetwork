@@ -39,9 +39,10 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Network: Single-layer Autoencoder</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Network</u>: Single-layer Autoencoder
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -80,7 +81,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(layer:kr.ac.kaist.ir.deep.layer.Reconstructable,presence:kr.ac.kaist.ir.deep.function.Probability):kr.ac.kaist.ir.deep.network.AutoEncoder"></a>
+      <a id="&lt;init&gt;(layer:kr.ac.kaist.ir.deep.layer.Reconstructable,presence:kr.ac.kaist.ir.deep.fn.Probability):kr.ac.kaist.ir.deep.network.AutoEncoder"></a>
       <a id="&lt;init&gt;:AutoEncoder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -88,10 +89,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">AutoEncoder</span><span class="params">(<span name="layer">layer: <a href="../layer/Reconstructable.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Reconstructable">Reconstructable</a></span>, <span name="presence">presence: <a href="../function/package.html#Probability=Double" class="extmbr" name="kr.ac.kaist.ir.deep.function.Probability">Probability</a> = <span class="symbol">1.0</span></span>)</span>
+        <span class="name">AutoEncoder</span><span class="params">(<span name="layer">layer: <a href="../layer/Reconstructable.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Reconstructable">Reconstructable</a></span>, <span name="presence">presence: <a href="../fn/package.html#Probability=Double" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Probability">Probability</a> = <span class="symbol">1.0</span></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">layer</dt><dd class="cmt"><p>for this network</p></dd><dt class="param">presence</dt><dd class="cmt"><p>is the probability of non-dropped neurons (for drop-out training). (default : 100% = 1.0)
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">layer</dt><dd class="cmt"><p>A <u>reconstructable</u> layer for this network</p></dd><dt class="param">presence</dt><dd class="cmt"><p>the probability of non-dropped neurons (for drop-out training). <code>(default : 100% = 1.0)</code>
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -102,21 +103,7 @@
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#!" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!(err:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
-      <a id="!(ScalarMatrix):ScalarMatrix"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $bang" class="name">!</span><span class="params">(<span name="err">err: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Backpropagation algorithm</p><div class="fullcomment"><div class="comment cmt"><p>Backpropagation algorithm</p></div><dl class="paramcmts block"><dt class="param">err</dt><dd class="cmt"><p>backpropagated error from error function
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
-    </li><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -181,35 +168,21 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#&gt;&gt;:" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&gt;&gt;:(x:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
-      <a id="&gt;&gt;:(ScalarMatrix):ScalarMatrix"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $greater$greater$colon" class="name">&gt;&gt;:</span><span class="params">(<span name="x">x: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Forward computation for training.</p><div class="fullcomment"><div class="comment cmt"><p>Forward computation for training.
-If drop-out is used, we need to drop-out entry of input vector.
-</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>of input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#W" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="W:Seq[kr.ac.kaist.ir.deep.function.ScalarMatrix]"></a>
-      <a id="W:Seq[ScalarMatrix]"></a>
+      <a id="W:IndexedSeq[kr.ac.kaist.ir.deep.fn.ScalarMatrix]"></a>
+      <a id="W:IndexedSeq[ScalarMatrix]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">def</span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">W</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>]</span>
+        <span class="name">W</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">All weights of layers</p><div class="fullcomment"><div class="comment cmt"><p>All weights of layers</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>all weights of layers
+      <p class="shortcomment cmt">All weights of layers
+</p><div class="fullcomment"><div class="comment cmt"><p>All weights of layers
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>all weights of layers
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
     </li><li name="scala.Function1#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="andThen[A](g:R=&gt;A):T1=&gt;A"></a>
@@ -220,7 +193,7 @@ If drop-out is used, we need to drop-out entry of input vector.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>)</span><span class="result">: (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>
+        <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>)</span><span class="result">: (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
@@ -228,7 +201,7 @@ If drop-out is used, we need to drop-out entry of input vector.
               
         </dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(in:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
+      <a id="apply(in:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="apply(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -236,13 +209,13 @@ If drop-out is used, we need to drop-out entry of input vector.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="in">in: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">apply</span><span class="params">(<span name="in">in: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Compute output of neural network with given input (without reconstruction)
 If drop-out is used, to average drop-out effect, we need to multiply output by presence probability.</p><div class="fullcomment"><div class="comment cmt"><p>Compute output of neural network with given input (without reconstruction)
 If drop-out is used, to average drop-out effect, we need to multiply output by presence probability.
-</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>is an input vector</p></dd><dt>returns</dt><dd class="cmt"><p>output of the vector
+</p></div><dl class="paramcmts block"><dt class="param">in</dt><dd class="cmt"><p>an input vector</p></dd><dt>returns</dt><dd class="cmt"><p>output of the vector
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → Function1</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
@@ -285,7 +258,7 @@ If drop-out is used, to average drop-out effect, we need to multiply output by p
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
@@ -293,21 +266,23 @@ If drop-out is used, to average drop-out effect, we need to multiply output by p
               
         </dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#dW" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="dW:Seq[kr.ac.kaist.ir.deep.function.ScalarMatrix]"></a>
-      <a id="dW:Seq[ScalarMatrix]"></a>
+      <a id="dW:IndexedSeq[kr.ac.kaist.ir.deep.fn.ScalarMatrix]"></a>
+      <a id="dW:IndexedSeq[ScalarMatrix]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">def</span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">dW</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>]</span>
+        <span class="name">dW</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">All accumulated delta weights of layers</p><div class="fullcomment"><div class="comment cmt"><p>All accumulated delta weights of layers</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>all accumulated delta weights
+      <p class="shortcomment cmt">All accumulated delta weights of layers
+</p><div class="fullcomment"><div class="comment cmt"><p>All accumulated delta weights of layers
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>all accumulated delta weights
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#decode" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="decode(x:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
+      <a id="decode(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="decode(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -315,15 +290,15 @@ If drop-out is used, to average drop-out effect, we need to multiply output by p
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">decode</span><span class="params">(<span name="x">x: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">decode</span><span class="params">(<span name="x">x: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Decode computation for training.</p><div class="fullcomment"><div class="comment cmt"><p>Decode computation for training.
 If drop-out is used, we need to drop-out entry of input vector.
-</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>of hidden values</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
+</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>hidden values</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#decode_!" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="decode_!(err:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
+      <a id="decode_!(err:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="decode_!(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -331,13 +306,15 @@ If drop-out is used, we need to drop-out entry of input vector.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: decode_$bang" class="name">decode_!</span><span class="params">(<span name="err">err: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span title="gt4s: decode_$bang" class="name">decode_!</span><span class="params">(<span name="err">err: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Backpropagation algorithm for decoding phrase</p><div class="fullcomment"><div class="comment cmt"><p>Backpropagation algorithm for decoding phrase</p></div><dl class="paramcmts block"><dt class="param">err</dt><dd class="cmt"><p>backpropagated error from error function
+      <p class="shortcomment cmt">Backpropagation algorithm for decoding phrase
+</p><div class="fullcomment"><div class="comment cmt"><p>Backpropagation algorithm for decoding phrase
+</p></div><dl class="paramcmts block"><dt class="param">err</dt><dd class="cmt"><p>backpropagated error from error function
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#encode" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="encode(x:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
+      <a id="encode(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="encode(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -345,15 +322,15 @@ If drop-out is used, we need to drop-out entry of input vector.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">encode</span><span class="params">(<span name="x">x: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">encode</span><span class="params">(<span name="x">x: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Encode computation for training.</p><div class="fullcomment"><div class="comment cmt"><p>Encode computation for training.
 If drop-out is used, we need to drop-out entry of input vector.
-</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>of input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>hidden values
+</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>hidden values
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#encode_!" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="encode_!(err:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
+      <a id="encode_!(err:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="encode_!(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -361,10 +338,12 @@ If drop-out is used, we need to drop-out entry of input vector.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: encode_$bang" class="name">encode_!</span><span class="params">(<span name="err">err: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span title="gt4s: encode_$bang" class="name">encode_!</span><span class="params">(<span name="err">err: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Backpropagation algorithm for encoding phrase</p><div class="fullcomment"><div class="comment cmt"><p>Backpropagation algorithm for encoding phrase</p></div><dl class="paramcmts block"><dt class="param">err</dt><dd class="cmt"><p>backpropagated error from error function
+      <p class="shortcomment cmt">Backpropagation algorithm for encoding phrase
+</p><div class="fullcomment"><div class="comment cmt"><p>Backpropagation algorithm for encoding phrase
+</p></div><dl class="paramcmts block"><dt class="param">err</dt><dd class="cmt"><p>backpropagated error from error function
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
@@ -438,7 +417,7 @@ If drop-out is used, we need to drop-out entry of input vector.
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#input" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="input:Seq[kr.ac.kaist.ir.deep.function.ScalarMatrix]"></a>
+      <a id="input:Seq[kr.ac.kaist.ir.deep.fn.ScalarMatrix]"></a>
       <a id="input:Seq[ScalarMatrix]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -446,10 +425,26 @@ If drop-out is used, we need to drop-out entry of input vector.
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">input</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>]</span>
+        <span class="name">input</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Collected input &amp; output of each layer</p><div class="fullcomment"><div class="comment cmt"><p>Collected input &amp; output of each layer</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#into_:" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="into_:(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
+      <a id="into_:(ScalarMatrix):ScalarMatrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: into_$colon" class="name">into_:</span><span class="params">(<span name="x">x: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Forward computation for training.</p><div class="fullcomment"><div class="comment cmt"><p>Forward computation for training.
+If drop-out is used, we need to drop-out entry of input vector.
+</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -502,37 +497,23 @@ If drop-out is used, we need to drop-out entry of input vector.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#on" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="on(x:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
-      <a id="on(ScalarMatrix):ScalarMatrix"></a>
+    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#of" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="of(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
+      <a id="of(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">on</span><span class="params">(<span name="x">x: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">of</span><span class="params">(<span name="x">x: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Sugar: Forward computation for validation.</p><div class="fullcomment"><div class="comment cmt"><p>Sugar: Forward computation for validation. Calls apply(x)
-</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>of input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
+</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#presence" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="presence:kr.ac.kaist.ir.deep.function.Probability"></a>
-      <a id="presence:Probability"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">presence</span><span class="result">: <a href="../function/package.html#Probability=Double" class="extmbr" name="kr.ac.kaist.ir.deep.function.Probability">Probability</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">is the probability of non-dropped neurons (for drop-out training).</p><div class="fullcomment"><div class="comment cmt"><p>is the probability of non-dropped neurons (for drop-out training). (default : 100% = 1.0)
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#reconstruct" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="reconstruct(x:kr.ac.kaist.ir.deep.function.ScalarMatrix):kr.ac.kaist.ir.deep.function.ScalarMatrix"></a>
+      <a id="reconstruct(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="reconstruct(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -540,12 +521,12 @@ If drop-out is used, we need to drop-out entry of input vector.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">reconstruct</span><span class="params">(<span name="x">x: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">reconstruct</span><span class="params">(<span name="x">x: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Reconstruct the input
-</p><div class="fullcomment"><div class="comment cmt"><p>Reconstruct the input
-</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>to be reconstructed.</p></dd><dt>returns</dt><dd class="cmt"><p>reconstruction of x.
+      <p class="shortcomment cmt">Reconstruct the given hidden value
+</p><div class="fullcomment"><div class="comment cmt"><p>Reconstruct the given hidden value
+</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>hidden value to be reconstructed.</p></dd><dt>returns</dt><dd class="cmt"><p>reconstruction value.
 </p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
@@ -572,7 +553,9 @@ If drop-out is used, we need to drop-out entry of input vector.
         <span class="name">toJSON</span><span class="result">: <span class="extype" name="play.api.libs.json.JsObject">JsObject</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Serialize network to JSON</p><div class="fullcomment"><div class="comment cmt"><p>Serialize network to JSON</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>JsObject
+      <p class="shortcomment cmt">Serialize network to JSON
+</p><div class="fullcomment"><div class="comment cmt"><p>Serialize network to JSON
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>JsObject of this network
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
     </li><li name="scala.Function1#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
@@ -587,6 +570,22 @@ If drop-out is used, we need to drop-out entry of input vector.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1 → AnyRef → Any</dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#updateBy" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="updateBy(err:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
+      <a id="updateBy(ScalarMatrix):ScalarMatrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">updateBy</span><span class="params">(<span name="err">err: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Backpropagation algorithm
+</p><div class="fullcomment"><div class="comment cmt"><p>Backpropagation algorithm
+</p></div><dl class="paramcmts block"><dt class="param">err</dt><dd class="cmt"><p>backpropagated error from error function
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -660,7 +659,7 @@ If drop-out is used, we need to drop-out entry of input vector.
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
             </div><div class="parent" name="scala.Function1">
-              <h3>Inherited from (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a></h3>
+              <h3>Inherited from (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

@@ -39,7 +39,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Package for training</p><p>Created by bydelta on 2015-01-02.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Package for training.
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -82,8 +82,22 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="kr.ac.kaist.ir.deep.train.Corruption" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Corruptionextendskr.ac.kaist.ir.deep.function.ScalarMatrix=&gt;kr.ac.kaist.ir.deep.function.ScalarMatrixwithSerializable"></a>
+              <ol><li name="kr.ac.kaist.ir.deep.train.AEType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AETypeextendsManipulationType[kr.ac.kaist.ir.deep.fn.ScalarMatrix,Null]"></a>
+      <a id="AEType:AEType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AEType.html"><span class="name">AEType</span></a><span class="result"> extends <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>, <span class="extype" name="scala.Null">Null</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>Input Operation</u> : Vector as Input &amp; Auto Encoder Training (no output type)
+</p>
+    </li><li name="kr.ac.kaist.ir.deep.train.Corruption" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Corruptionextendskr.ac.kaist.ir.deep.fn.ScalarMatrix=&gt;kr.ac.kaist.ir.deep.fn.ScalarMatrixwithSerializable"></a>
       <a id="Corruption:Corruption"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -91,10 +105,23 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="package$$Corruption.html"><span class="name">Corruption</span></a><span class="result"> extends (<a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../function/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.function.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.function.ScalarMatrix">ScalarMatrix</a> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="package$$Corruption.html"><span class="name">Corruption</span></a><span class="result"> extends (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Type of Corruption</p>
+    </li><li name="kr.ac.kaist.ir.deep.train.DAGType" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="DAGTypeextendsManipulationType[kr.ac.kaist.ir.deep.rec.DAG,Null]"></a>
+      <a id="DAGType:DAGType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DAGType.html"><span class="name">DAGType</span></a><span class="result"> extends <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<a href="../rec/DAG.html" class="extype" name="kr.ac.kaist.ir.deep.rec.DAG">DAG</a>, <span class="extype" name="scala.Null">Null</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>Trait of Input Operation</u> : VectorTree as Input.</p>
     </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="DistBeliefCriteriaextendsTrainingCriteriawithProductwithSerializable"></a>
       <a id="DistBeliefCriteria:DistBeliefCriteria"></a>
@@ -107,7 +134,20 @@
         <a href="package$$DistBeliefCriteria.html"><span class="name">DistBeliefCriteria</span></a><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="validationSize">validationSize: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">20</span></span>, <span name="updateStep">updateStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="fetchStep">fetchStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">10</span></span>, <span name="numCores">numCores: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
-      <p class="comment cmt">Criteria: How to train (for <a href="style/DistBeliefTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.style.DistBeliefTrainStyle">kr.ac.kaist.ir.deep.train.style.DistBeliefTrainStyle</a>)</p>
+      <p class="comment cmt"><u>Criteria</u>: How to train (for <a href="DistBeliefTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a>)</p>
+    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DistBeliefTrainStyle[IN,OUT]extendsTrainStyle[IN,OUT]"></a>
+      <a id="DistBeliefTrainStyle[IN,OUT]:DistBeliefTrainStyle[IN,OUT]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DistBeliefTrainStyle.html"><span class="name">DistBeliefTrainStyle</span></a><span class="tparams">[<span name="IN">IN</span>, <span name="OUT">OUT</span>]</span><span class="result"> extends <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a>[<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>Train Style</u> : Semi-DistBelief Style, Spark-based.</p>
     </li><li name="kr.ac.kaist.ir.deep.train.DroppingCorruption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="DroppingCorruptionextendspackage.CorruptionwithProductwithSerializable"></a>
       <a id="DroppingCorruption:DroppingCorruption"></a>
@@ -120,7 +160,7 @@
         <a href="package$$DroppingCorruption.html"><span class="name">DroppingCorruption</span></a><span class="params">(<span name="presence">presence: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.95</span></span>)</span><span class="result"> extends <a href="package$$Corruption.html" class="extype" name="kr.ac.kaist.ir.deep.train.Corruption">Corruption</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
-      <p class="comment cmt">Input Corruption: Drop input as zero.</p>
+      <p class="comment cmt"><u>Input Corruption</u>: Drop input as zero.</p>
     </li><li name="kr.ac.kaist.ir.deep.train.GaussianCorruption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="GaussianCorruptionextendspackage.CorruptionwithProductwithSerializable"></a>
       <a id="GaussianCorruption:GaussianCorruption"></a>
@@ -133,7 +173,34 @@
         <a href="package$$GaussianCorruption.html"><span class="name">GaussianCorruption</span></a><span class="params">(<span name="mean">mean: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.0</span></span>, <span name="variance">variance: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.1</span></span>)</span><span class="result"> extends <a href="package$$Corruption.html" class="extype" name="kr.ac.kaist.ir.deep.train.Corruption">Corruption</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
-      <p class="comment cmt">Input Corruption: Gaussian</p>
+      <p class="comment cmt"><u>Input Corruption</u>: Gaussian
+</p>
+    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ManipulationType[IN,OUT]extendsSerializable"></a>
+      <a id="ManipulationType[IN,OUT]:ManipulationType[IN,OUT]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ManipulationType.html"><span class="name">ManipulationType</span></a><span class="tparams">[<span name="IN">IN</span>, <span name="OUT">OUT</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>Trait</u> that describes how to convert input into corrupted matrix</p>
+    </li><li name="kr.ac.kaist.ir.deep.train.RAEType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RAETypeextendsDAGType"></a>
+      <a id="RAEType:RAEType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RAEType.html"><span class="name">RAEType</span></a><span class="result"> extends <a href="DAGType.html" class="extype" name="kr.ac.kaist.ir.deep.train.DAGType">DAGType</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>Input Operation</u> : VectorTree as Input &amp; Recursive Auto-Encoder Training (no output type)</p>
     </li><li name="kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="SimpleTrainingCriteriaextendsTrainingCriteriawithProductwithSerializable"></a>
       <a id="SimpleTrainingCriteria:SimpleTrainingCriteria"></a>
@@ -146,7 +213,21 @@
         <a href="package$$SimpleTrainingCriteria.html"><span class="name">SimpleTrainingCriteria</span></a><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="validationSize">validationSize: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">20</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
-      <p class="comment cmt">Criteria: How to train (for <a href="style/SingleThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.style.SingleThreadTrainStyle">kr.ac.kaist.ir.deep.train.style.SingleThreadTrainStyle</a>)</p>
+      <p class="comment cmt"><u>Criteria</u>: How to train (for <a href="SingleThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle">SingleThreadTrainStyle</a>)</p>
+    </li><li name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SingleThreadTrainStyle[IN,OUT]extendsTrainStyle[IN,OUT]"></a>
+      <a id="SingleThreadTrainStyle[IN,OUT]:SingleThreadTrainStyle[IN,OUT]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SingleThreadTrainStyle.html"><span class="name">SingleThreadTrainStyle</span></a><span class="tparams">[<span name="IN">IN</span>, <span name="OUT">OUT</span>]</span><span class="result"> extends <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a>[<span class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle.OUT">OUT</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>Trainer</u> : Stochastic-Style, Single-Threaded
+</p>
     </li><li name="kr.ac.kaist.ir.deep.train.StoppingCriteria" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="StoppingCriteriaextendsSerializablewithProduct"></a>
       <a id="StoppingCriteria:StoppingCriteria"></a>
@@ -159,21 +240,33 @@
         <a href="package$$StoppingCriteria.html"><span class="name">StoppingCriteria</span></a><span class="params">(<span name="maxIter">maxIter: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100000</span></span>, <span name="patience">patience: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">5000</span></span>, <span name="patienceStep">patienceStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="improveThreshold">improveThreshold: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.995</span></span>, <span name="lossThreshold">lossThreshold: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">1.0E-4</span></span>, <span name="validationFreq">validationFreq: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span> with <span class="extype" name="scala.Product">Product</span></span>
       </span>
       </h4>
-      <p class="comment cmt">Criteria: When to stop training</p>
+      <p class="comment cmt"><u>Criteria</u>: When to stop training</p>
+    </li><li name="kr.ac.kaist.ir.deep.train.TrainStyle" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TrainStyle[IN,OUT]extendsSerializable"></a>
+      <a id="TrainStyle[IN,OUT]:TrainStyle[IN,OUT]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TrainStyle.html"><span class="name">TrainStyle</span></a><span class="tparams">[<span name="IN">IN</span>, <span name="OUT">OUT</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>Trait</u> that describes style of training</p>
     </li><li name="kr.ac.kaist.ir.deep.train.Trainer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Trainer[IN]extendsSerializable"></a>
-      <a id="Trainer[IN]:Trainer[IN]"></a>
+      <a id="Trainer[IN,OUT]extendsSerializable"></a>
+      <a id="Trainer[IN,OUT]:Trainer[IN,OUT]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="Trainer.html"><span class="name">Trainer</span></a><span class="tparams">[<span name="IN">IN</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Trainer.html"><span class="name">Trainer</span></a><span class="tparams">[<span name="IN">IN</span>, <span name="OUT">OUT</span>]</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
-      <p class="comment cmt">General Trainer
-</p>
+      <p class="comment cmt"><u>General</u> Trainer Implementation.</p>
     </li><li name="kr.ac.kaist.ir.deep.train.TrainingCriteria" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="TrainingCriteriaextendsSerializable"></a>
       <a id="TrainingCriteria:TrainingCriteria"></a>
@@ -186,7 +279,34 @@
         <a href="TrainingCriteria.html"><span class="name">TrainingCriteria</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
-      <p class="comment cmt">Trait : Training Criteria
+      <p class="comment cmt"><u>Trait</u> that describes Training Criteria
+</p>
+    </li><li name="kr.ac.kaist.ir.deep.train.URAEType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="URAETypeextendsDAGType"></a>
+      <a id="URAEType:URAEType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="URAEType.html"><span class="name">URAEType</span></a><span class="result"> extends <a href="DAGType.html" class="extype" name="kr.ac.kaist.ir.deep.train.DAGType">DAGType</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>Input Operation</u> : VectorTree as Input &amp; Unfolding Recursive Auto Encoder Training (no output type)</p>
+    </li><li name="kr.ac.kaist.ir.deep.train.VectorType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="VectorTypeextendsManipulationType[kr.ac.kaist.ir.deep.fn.ScalarMatrix,kr.ac.kaist.ir.deep.fn.ScalarMatrix]"></a>
+      <a id="VectorType:VectorType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="VectorType.html"><span class="name">VectorType</span></a><span class="result"> extends <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>, <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>Input Operation</u> : Vector as Input and output
 </p>
     </li></ol>
             </div>
@@ -207,34 +327,8 @@
         <a href="package$$NoCorruption$.html"><span class="name">NoCorruption</span></a><span class="result"> extends <a href="package$$Corruption.html" class="extype" name="kr.ac.kaist.ir.deep.train.Corruption">Corruption</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
-      <p class="comment cmt">Input Corruption: None
+      <p class="comment cmt"><u>Input Corruption</u>: Never corrupts input
 </p>
-    </li><li name="kr.ac.kaist.ir.deep.train.op" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="op"></a>
-      <a id="op:op"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">package</span>
-      </span>
-      <span class="symbol">
-        <a href="op/package.html"><span class="name">op</span></a>
-      </span>
-      </h4>
-      
-    </li><li name="kr.ac.kaist.ir.deep.train.style" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="style"></a>
-      <a id="style:style"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">package</span>
-      </span>
-      <span class="symbol">
-        <a href="style/package.html"><span class="name">style</span></a>
-      </span>
-      </h4>
-      
     </li></ol>
             </div>
 
