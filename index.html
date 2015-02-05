@@ -1,34 +1,38 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Scalanetwork by nearbydelta</title>
+    <meta name="description" content="Scalanetwork : A Neural network implementation with Scala">
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <title>Scalanetwork</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Scalanetwork</h1>
-        <p>A Neural network implementation with Scala</p>
-        <p class="view"><a href="https://github.com/nearbydelta/ScalaNetwork">View the Project on GitHub <small>nearbydelta/ScalaNetwork</small></a></p>
-        <ul>
-          <li><a href="https://github.com/nearbydelta/ScalaNetwork/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/nearbydelta/ScalaNetwork/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/nearbydelta/ScalaNetwork">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/nearbydelta/ScalaNetwork">View on GitHub</a>
+
+          <h1 id="project_title">Scalanetwork</h1>
+          <h2 id="project_tagline">A Neural network implementation with Scala</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/nearbydelta/ScalaNetwork/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/nearbydelta/ScalaNetwork/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <h1>
-<a id="scalanetwork-014-snapshot" class="anchor" href="#scalanetwork-014-snapshot" aria-hidden="true"><span class="octicon octicon-link"></span></a>ScalaNetwork 0.1.4-SNAPSHOT</h1>
+<a id="scalanetwork-017" class="anchor" href="#scalanetwork-017" aria-hidden="true"><span class="octicon octicon-link"></span></a>ScalaNetwork 0.1.7</h1>
 
 <p>A <em>Neural Network implementation</em> with Scala, <a href="https://github.com/scalanlp/breeze">Breeze</a> &amp; <a href="http://spark.apache.org">Spark</a></p>
 
@@ -57,10 +61,10 @@
 
 <ul>
 <li>
-<em>Recursive</em> Auto Encoder (RAE) <sup>[TEST-IN-PROGRESS]</sup>
+<em>Recursive</em> Auto Encoder (RAE) <sup>[EXPERIMENTAL]</sup>
 </li>
 <li>
-<em>Recursive</em> General Neural Network (Including Recursive Neural Tensor Network, RNTN) <sup>[TEST-IN-PROGRESS]</sup>
+<em>Recursive</em> General Neural Network (Including Recursive Neural Tensor Network, RNTN) <sup>[EXPERIMENTAL]</sup>
 </li>
 </ul>
 
@@ -89,6 +93,7 @@
 <p>ScalaNetwork supports following activation functions:</p>
 
 <ul>
+<li>Linear</li>
 <li>Sigmoid</li>
 <li>HyperbolicTangent</li>
 <li>Rectifier</li>
@@ -106,20 +111,19 @@
 <p>Currently ScalaNetwork supports Scala version 2.10 ~ 2.11.</p>
 
 <ul>
-<li>Stable Release is 0.1.3</li>
-<li>Snapshot Release is 0.1.4-SNAPSHOT</li>
+<li>Stable Release is 0.1.7</li>
 </ul>
 
 <p>If you are using SBT, add a dependency as described below:</p>
 
-<div class="highlight highlight-scala"><pre>libraryDependencies <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>kr.ac.kaist.ir<span class="pl-pds">"</span></span> <span class="pl-k">%%</span> <span class="pl-s1"><span class="pl-pds">"</span>scalanetwork<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s1"><span class="pl-pds">"</span>0.1.3<span class="pl-pds">"</span></span></pre></div>
+<div class="highlight highlight-scala"><pre>libraryDependencies <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>kr.ac.kaist.ir<span class="pl-pds">"</span></span> <span class="pl-k">%%</span> <span class="pl-s1"><span class="pl-pds">"</span>scalanetwork<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s1"><span class="pl-pds">"</span>0.1.7<span class="pl-pds">"</span></span></pre></div>
 
 <p>If you are using Maven, add a dependency as described below:</p>
 
 <div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
   &lt;<span class="pl-ent">groupId</span>&gt;kr.ac.kaist.ir&lt;/<span class="pl-ent">groupId</span>&gt;
   &lt;<span class="pl-ent">artifactId</span>&gt;scalanetwork_${your.scala.version}&lt;/<span class="pl-ent">artifactId</span>&gt;
-  &lt;<span class="pl-ent">version</span>&gt;0.1.3&lt;/<span class="pl-ent">version</span>&gt;
+  &lt;<span class="pl-ent">version</span>&gt;0.1.7&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <h2>
@@ -129,19 +133,19 @@
 
 <div class="highlight highlight-scala"><pre><span class="pl-c">// Define 2 -&gt; 4 -&gt; 1 Layered, Fully connected network.</span>
 <span class="pl-k">val</span> <span class="pl-en">net</span> <span class="pl-k">=</span> <span class="pl-en">Network</span>(<span class="pl-en">Sigmoid</span>, <span class="pl-c1">2</span>, <span class="pl-c1">4</span>, <span class="pl-c1">1</span>)
+<span class="pl-c">// Define Manipulation Type. VectorType, AEType, RAEType, and URAEType.</span>
+<span class="pl-k">val</span> <span class="pl-en">operation</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">VectorType</span>(
+   corrupt <span class="pl-k">=</span> <span class="pl-en">GaussianCorruption</span>(variance <span class="pl-k">=</span> <span class="pl-c1">0.1</span>)
+)
 <span class="pl-c">// Define Training Style. SingleThreadTrainStyle vs DistBeliefTrainStyle</span>
-<span class="pl-k">val</span> <span class="pl-en">style</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">SingleThreadTrainStyle</span>[<span class="pl-en">ScalarMatrix</span>](
+<span class="pl-k">val</span> <span class="pl-en">style</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">SingleThreadTrainStyle</span>(
   net <span class="pl-k">=</span> net,
   algorithm <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">StochasticGradientDescent</span>(l2decay <span class="pl-k">=</span> <span class="pl-c1">0.0001</span>),
+  make <span class="pl-k">=</span> operation,
   param <span class="pl-k">=</span> <span class="pl-en">SimpleTrainingCriteria</span>(miniBatch <span class="pl-k">=</span> <span class="pl-c1">8</span>))
-<span class="pl-c">// Define Input Operation. ScalarVector vs TreeRAE vs TreeRecursive</span>
-<span class="pl-k">val</span> <span class="pl-en">operation</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">ScalarVector</span>(
-  corrupt <span class="pl-k">=</span> <span class="pl-en">GaussianCorruption</span>(variance <span class="pl-k">=</span> <span class="pl-c1">0.1</span>)
-)
 <span class="pl-c">// Define Trainer</span>
 <span class="pl-k">val</span> <span class="pl-en">train</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trainer</span>(
   style <span class="pl-k">=</span> style,
-  make <span class="pl-k">=</span> operation,
   stops <span class="pl-k">=</span> <span class="pl-en">StoppingCriteria</span>(maxIter <span class="pl-k">=</span> <span class="pl-c1">100000</span>))
 <span class="pl-c">// Do Train</span>
 train.train(set, valid)</pre></div>
@@ -202,25 +206,15 @@ i.e. 1 - (neuron drop-out probability for drop-out training). Default is 1.</p>
 <p>Before choose Training Style, you must specify algorithm and training criteria.</p>
 
 <div class="highlight highlight-scala"><pre><span class="pl-c">/* Algorithms */</span>
-
 <span class="pl-k">new</span> <span class="pl-en">StochasticGradientDescent</span>(rate<span class="pl-k">=</span><span class="pl-c1">0.8</span>, l1decay<span class="pl-k">=</span><span class="pl-c1">0.0</span>, l2decay<span class="pl-k">=</span><span class="pl-c1">0.0001</span>, momentum<span class="pl-k">=</span><span class="pl-c1">0.0001</span>)
 <span class="pl-k">new</span> <span class="pl-en">AdaGrad</span>(rate<span class="pl-k">=</span><span class="pl-c1">0.6</span>, l1decay<span class="pl-k">=</span><span class="pl-c1">0.0</span>, l2decay<span class="pl-k">=</span><span class="pl-c1">0.0001</span>)
-<span class="pl-k">new</span> <span class="pl-en">AdaDelta</span>(l1decay<span class="pl-k">=</span><span class="pl-c1">0.0</span>, l2decay<span class="pl-k">=</span><span class="pl-c1">0.0001</span>, decay<span class="pl-k">=</span><span class="pl-c1">0.95</span>, epsilon<span class="pl-k">=</span><span class="pl-c1">1e-6</span>)
+<span class="pl-k">new</span> <span class="pl-en">AdaDelta</span>(l1decay<span class="pl-k">=</span><span class="pl-c1">0.0</span>, l2decay<span class="pl-k">=</span><span class="pl-c1">0.0001</span>, decay<span class="pl-k">=</span><span class="pl-c1">0.95</span>, epsilon<span class="pl-k">=</span><span class="pl-c1">1e-6</span>)</pre></div>
 
-<span class="pl-c">/* Training Criteria */</span>
+<div class="highlight highlight-scala"><pre><span class="pl-c">/* Training Criteria */</span>
 <span class="pl-en">SimpleTrainingCriteria</span>(miniBatch<span class="pl-k">=</span><span class="pl-c1">100</span>, validationSize<span class="pl-k">=</span><span class="pl-c1">20</span>)
 <span class="pl-en">DistBeliefCriteria</span>(miniBatch<span class="pl-k">=</span><span class="pl-c1">100</span>, validationSize<span class="pl-k">=</span><span class="pl-c1">20</span>, updateStep<span class="pl-k">=</span><span class="pl-c1">2</span>, fetchStep<span class="pl-k">=</span><span class="pl-c1">10</span>, numCores<span class="pl-k">=</span><span class="pl-c1">1</span>)</pre></div>
 
 <p>Validation size sets the number of elements used for validation phrase.</p>
-
-<h3>
-<a id="training-style" class="anchor" href="#training-style" aria-hidden="true"><span class="octicon octicon-link"></span></a>Training Style</h3>
-
-<p>You can choose the training style of the network.</p>
-
-<div class="highlight highlight-scala"><pre><span class="pl-c">/* Styles */</span>
-<span class="pl-k">new</span> <span class="pl-en">SingleThreadTrainStyle</span>(net, algorithm, param)
-<span class="pl-k">new</span> <span class="pl-en">DistBeliefTrainStyle</span>(net, sparkContext, algorithm, param<span class="pl-k">:</span><span class="pl-en">DistBeliefCriteria</span>)</pre></div>
 
 <h3>
 <a id="input-options" class="anchor" href="#input-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Input Options</h3>
@@ -230,25 +224,34 @@ i.e. 1 - (neuron drop-out probability for drop-out training). Default is 1.</p>
 <div class="highlight highlight-scala"><pre><span class="pl-c">/* Corruptions */</span>
 <span class="pl-en">NoCorruption</span>
 <span class="pl-en">DroppingCorruption</span>(presence<span class="pl-k">=</span><span class="pl-c1">0.95</span>)
-<span class="pl-en">GaussianCorruption</span>(mean<span class="pl-k">=</span><span class="pl-c1">0</span>, variance<span class="pl-k">=</span><span class="pl-c1">0.1</span>)
+<span class="pl-en">GaussianCorruption</span>(mean<span class="pl-k">=</span><span class="pl-c1">0</span>, variance<span class="pl-k">=</span><span class="pl-c1">0.1</span>)</pre></div>
 
-<span class="pl-c">/* Objective Functions */</span>
+<div class="highlight highlight-scala"><pre><span class="pl-c">/* Objective Functions */</span>
 <span class="pl-en">SquaredErr</span>
-<span class="pl-en">CrossEntropyErr</span> <span class="pl-c">// Which is Logistic Err</span>
+<span class="pl-en">CrossEntropyErr</span> <span class="pl-c">// Which is Logistic Err</span></pre></div>
 
-<span class="pl-c">/* Vector Input */</span>
-<span class="pl-k">new</span> <span class="pl-en">ScalarVector</span>(corrupt, objective)
+<div class="highlight highlight-scala"><pre><span class="pl-c">/* Manipulation Type : Vector input, Vector output */</span>
+<span class="pl-c">// General Neural Network type</span>
+<span class="pl-k">new</span> <span class="pl-en">VectorType</span>(corrupt, objective)
+<span class="pl-c">// General AutoEncoder type</span>
+<span class="pl-k">new</span> <span class="pl-en">AEType</span>(corrupt, objective)
 
-<span class="pl-c">/* Tree Input */</span>
+<span class="pl-c">/* Manipulation Type : Tree input, Null output (AutoEncoder) */</span>
 <span class="pl-c">// Train network as RAE style. </span>
 <span class="pl-c">// Every internal node regarded as reconstruction its direct children (not all leaves).</span>
-<span class="pl-k">new</span> <span class="pl-en">TreeRAE</span>(corrupt, objective)
-<span class="pl-c">// Train network as Recursive Network style(for RNTN). </span>
-<span class="pl-c">// Forward propagation is done on whole tree at once, and then propagate back.</span>
-<span class="pl-k">new</span> <span class="pl-en">TreeRecursive</span>(corrupt, objective)
+<span class="pl-k">new</span> <span class="pl-en">RAEType</span>(corrupt, objective)
 <span class="pl-c">// Experimental: Train network as URAE style. </span>
 <span class="pl-c">// With same structure, network should reconstruct all leaves from root.</span>
-<span class="pl-k">new</span> <span class="pl-en">TreeURAE</span>(corrupt, objective)</pre></div>
+<span class="pl-k">new</span> <span class="pl-en">URAEType</span>(corrupt, objective)</pre></div>
+
+<h3>
+<a id="training-style" class="anchor" href="#training-style" aria-hidden="true"><span class="octicon octicon-link"></span></a>Training Style</h3>
+
+<p>You can choose the training style of the network.</p>
+
+<div class="highlight highlight-scala"><pre><span class="pl-c">/* Styles */</span>
+<span class="pl-k">new</span> <span class="pl-en">SingleThreadTrainStyle</span>(net, algorithm, mnpl<span class="pl-k">:</span><span class="pl-en">ManipulationType</span>, param)
+<span class="pl-k">new</span> <span class="pl-en">DistBeliefTrainStyle</span>(net, sparkContext, algorithm, mnpl<span class="pl-k">:</span><span class="pl-en">ManipulationType</span>, param<span class="pl-k">:</span><span class="pl-en">DistBeliefCriteria</span>)</pre></div>
 
 <h3>
 <a id="training-1" class="anchor" href="#training-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Training</h3>
@@ -260,7 +263,7 @@ i.e. 1 - (neuron drop-out probability for drop-out training). Default is 1.</p>
   improveThreshold<span class="pl-k">=</span><span class="pl-c1">0.95</span>, lossThreshold<span class="pl-k">=</span><span class="pl-c1">1e-4</span>, validationFreq<span class="pl-k">=</span><span class="pl-c1">100</span>)
 
 <span class="pl-c">/* Trainer */</span>
-<span class="pl-k">new</span> <span class="pl-en">Trainer</span>(style <span class="pl-k">=</span> style, make <span class="pl-k">=</span> operation, stops <span class="pl-k">=</span> <span class="pl-en">StoppingCriteria</span>())</pre></div>
+<span class="pl-k">new</span> <span class="pl-en">Trainer</span>(style <span class="pl-k">=</span> style, stops <span class="pl-k">=</span> <span class="pl-en">StoppingCriteria</span>())</pre></div>
 
 <ul>
 <li>
@@ -278,16 +281,16 @@ To be regarded as improved, loss should be less than (best loss) * improveThresh
 <p>Training is done by <code>train</code> method.</p>
 
 <div class="highlight highlight-scala"><pre><span class="pl-c">// If training and validation set are the same</span>
-trainer.train(<span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">ScalarMatrix</span>)])
-trainer.train(<span class="pl-st">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">ScalarMatrix</span>)]) <span class="pl-c">// With generator.</span>
+trainer.train(<span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)])
+trainer.train(<span class="pl-st">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)]) <span class="pl-c">// With generator.</span>
 
 <span class="pl-c">// If they are different</span>
-trainer.train(<span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">ScalarMatrix</span>)], <span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">ScalarMatrix</span>)])
-trainer.train(<span class="pl-st">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">ScalarMatrix</span>)], <span class="pl-st">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">ScalarMatrix</span>)])
+trainer.train(<span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)], <span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)])
+trainer.train(<span class="pl-st">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)], <span class="pl-st">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)])
 
 <span class="pl-c">// If you are using RDD</span>
-trainer.train(<span class="pl-en">RDD</span>[(<span class="pl-en">IN</span>, <span class="pl-en">ScalarMatrix</span>)])
-trainer.train(<span class="pl-en">RDD</span>[(<span class="pl-en">IN</span>, <span class="pl-en">ScalarMatrix</span>)], <span class="pl-en">RDD</span>[(<span class="pl-en">IN</span>, <span class="pl-en">ScalarMatrix</span>)])</pre></div>
+trainer.train(<span class="pl-en">RDD</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)])
+trainer.train(<span class="pl-en">RDD</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)], <span class="pl-en">RDD</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)])</pre></div>
 
 <p>If you are using RDD, ScalaNetwork automatically caches your input sequence.</p>
 
@@ -297,26 +300,32 @@ trainer.train(<span class="pl-en">RDD</span>[(<span class="pl-en">IN</span>, <sp
 <p>ScalaNetwork will support these implementations:</p>
 
 <ul>
-<li>Unfolded Recursive Auto Encoder (URAE)</li>
+<li>Manipulation Type : Word</li>
+<li>Input-dependent Weight</li>
 </ul>
 
 <p>Also ScalaNetwork will support these features:</p>
 
 <ul>
-<li>Input-dependent Weight</li>
+<li>Recursive Neural Tensor Network (RNTN)</li>
 </ul>
 
 <h2>
 <a id="current-status" class="anchor" href="#current-status" aria-hidden="true"><span class="octicon octicon-link"></span></a>Current Status</h2>
 
-<p>Next version(v0.2) will support URAE</p>
+<p>Next version(v0.2) will support Word(String) manipulation type</p>
       </section>
     </div>
-    <footer>
-      <p>Project maintained by <a href="https://github.com/nearbydelta">nearbydelta</a></p>
-      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
-    </footer>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Scalanetwork maintained by <a href="https://github.com/nearbydelta">nearbydelta</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
     
+
   </body>
 </html>
