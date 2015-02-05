@@ -91,7 +91,7 @@ class AutoEncoder(private val layer: Reconstructable,
 
     layer updateBy(err, in, hidden)
   }
-  
+
   /**
    * Forward computation for training.
    * If drop-out is used, we need to drop-out entry of input vector.
@@ -127,7 +127,7 @@ class AutoEncoder(private val layer: Reconstructable,
     input = Seq(output, hidden) ++: input
     output
   }
-  
+
   /**
    * Sugar: Forward computation for validation. Calls apply(x)
    *

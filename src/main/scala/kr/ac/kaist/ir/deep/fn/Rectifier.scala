@@ -6,7 +6,7 @@ package kr.ac.kaist.ir.deep.fn
  * @note `rectifier(x) = x if x > 0, otherwise 0`
  * @example
  * {{{val fx = Rectifier(0.0)
- *   val diff = Rectifier.derivative(fx)}}}
+ *        val diff = Rectifier.derivative(fx)}}}
  */
 object Rectifier extends Activation {
   /**

@@ -36,8 +36,8 @@ class AdaDelta(protected override val l1decay: Double = 0.0000,
     if (gradSq.isEmpty) {
       delta foreach {
         matx ⇒
-          gradSq.append(ScalarMatrix $0(matx.rows, matx.cols))
-          deltaSq.append(ScalarMatrix $0(matx.rows, matx.cols))
+          gradSq += ScalarMatrix.$0(matx.rows, matx.cols)
+          deltaSq += ScalarMatrix.$0(matx.rows, matx.cols)
       }
     }
 

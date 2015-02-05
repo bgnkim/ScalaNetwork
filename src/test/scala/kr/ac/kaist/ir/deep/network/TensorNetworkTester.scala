@@ -20,7 +20,7 @@ class TensorNetworkTester extends Specification {
   console.activateOptions()
   val logger = Logger.getRootLogger
   logger.addAppender(console)
-  
+
   val layer = new SplitTensorLayer((2, 1) → 4, Sigmoid)
   "Split3TensorLayer" should {
     "have 3 weights" in {

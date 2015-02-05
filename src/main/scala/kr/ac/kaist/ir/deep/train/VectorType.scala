@@ -11,8 +11,8 @@ import kr.ac.kaist.ir.deep.network.Network
  *
  * @example
  * {{{var make = new VectorType(error = CrossEntropyErr)
- *       var corruptedIn = make corrupted in
- *       var out = make onewayTrip (net, corruptedIn)}}}
+ *            var corruptedIn = make corrupted in
+ *            var out = make onewayTrip (net, corruptedIn)}}}
  */
 class VectorType(override protected[train] val corrupt: Corruption = NoCorruption,
                  override protected[train] val error: Objective = SquaredErr)

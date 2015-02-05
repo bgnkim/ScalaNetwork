@@ -18,8 +18,8 @@ import org.apache.spark.annotation.AlphaComponent
  *
  * @example
  * {{{var make = new URAEType(error = CrossEntropyErr)
- *       var corruptedIn = make corrupted in
- *       var out = make onewayTrip (net, corruptedIn)}}}
+ *            var corruptedIn = make corrupted in
+ *            var out = make onewayTrip (net, corruptedIn)}}}
  */
 @AlphaComponent
 class URAEType(override protected[train] val corrupt: Corruption = NoCorruption,

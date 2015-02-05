@@ -20,7 +20,7 @@ class NetworkTester extends Specification {
   console.activateOptions()
   val logger = Logger.getRootLogger
   logger.addAppender(console)
-  
+
   val layer = new ReconBasicLayer(4 → 5, Sigmoid)
   "ReconBasicLayer" should {
     "have 3 weights" in {

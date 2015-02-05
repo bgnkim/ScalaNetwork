@@ -16,25 +16,25 @@ import scala.annotation.tailrec
  * @example
  * {{{val net:Network = ...
  *
- *     // Define Manipulation Type. VectorType, AEType, RAEType and URAEType.
- *     val operation = new VectorType(
- *        corrupt = GaussianCorruption(variance = 0.1)
- *     )
+ *          // Define Manipulation Type. VectorType, AEType, RAEType and URAEType.
+ *          val operation = new VectorType(
+ *             corrupt = GaussianCorruption(variance = 0.1)
+ *          )
  *
- *    // Define Training Style. SingleThreadTrainStyle vs DistBeliefTrainStyle
- *     val style = new SingleThreadTrainStyle(
- *       net = net,
- *       algorithm = new StochasticGradientDescent(l2decay = 0.0001),
- *        make = operation,
- *       param = SimpleTrainingCriteria(miniBatch = 8))
+ *         // Define Training Style. SingleThreadTrainStyle vs DistBeliefTrainStyle
+ *          val style = new SingleThreadTrainStyle(
+ *            net = net,
+ *            algorithm = new StochasticGradientDescent(l2decay = 0.0001),
+ *             make = operation,
+ *            param = SimpleTrainingCriteria(miniBatch = 8))
  *
- *    // Define Trainer
- *    val train = new Trainer(
- *       style = style,
- *       stops = StoppingCriteria(maxIter = 100000))
+ *         // Define Trainer
+ *         val train = new Trainer(
+ *            style = style,
+ *            stops = StoppingCriteria(maxIter = 100000))
  *
- *    // Do Train
- *    train.train(set, valid)}}}
+ *         // Do Train
+ *         train.train(set, valid)}}}
  *
  * @note To train an autoencoder, you can provide same training set as validation set.
  *
@@ -46,7 +46,7 @@ import scala.annotation.tailrec
  * @tparam IN the type of input. 
  *            Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and [[kr.ac.kaist.ir.deep.rec.DAG]] are supported
  * @tparam OUT the type of output
- *             Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and [[scala.Null]] are supported
+ *             Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and Null are supported
  */
 class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
                        protected val stops: StoppingCriteria = StoppingCriteria())
@@ -183,7 +183,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
     while (!isUpdateFinished) {
       Thread sleep 100
     }
-    
+
     net.W := bestParam
   }
 

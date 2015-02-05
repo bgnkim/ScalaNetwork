@@ -18,7 +18,7 @@ trait ManipulationType[IN, OUT] extends Serializable {
   protected[train] val error: Objective
 
   // We didn't assign a "network" value, because of dist-belief training style.
-  
+
   /**
    * Corrupt input
    *

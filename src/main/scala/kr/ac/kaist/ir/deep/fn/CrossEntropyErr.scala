@@ -8,8 +8,8 @@ import breeze.linalg.{DenseMatrix, sum}
  * @note This objective function prefer 0/1 output
  * @example
  * {{{val output = net(input)
- *   val err = CrossEntropyErr(real, output)
- *   val diff = CrossEntropyErr.derivative(real, output)
+ *        val err = CrossEntropyErr(real, output)
+ *        val diff = CrossEntropyErr.derivative(real, output)
  * }}}
  */
 object CrossEntropyErr extends Objective {

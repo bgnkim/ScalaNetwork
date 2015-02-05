@@ -120,10 +120,7 @@ package object network {
      */
     def BasicNetwork(obj: JsObject): BasicNetwork = {
       val layers = ArrayBuffer[Layer]()
-      (obj \ "layers").as[JsArray].value.foreach {
-        obj ⇒
-          layers.append(Layer(obj))
-      }
+      layers ++= (obj \ "layers").as[JsArray].value.map(Layer.apply)
       new BasicNetwork(layers)
     }
 
@@ -135,8 +132,8 @@ package object network {
      */
     def apply(act: Activation, layerSizes: Int*): Network = {
       val layers = ArrayBuffer[Layer]()
-      layerSizes.indices.tail.foreach {
-        i ⇒ layers.append(new BasicLayer(layerSizes(i - 1) → layerSizes(i), act))
+      layers ++= layerSizes.indices.tail.map {
+        i ⇒ new BasicLayer(layerSizes(i - 1) → layerSizes(i), act)
       }
       new BasicNetwork(layers)
     }

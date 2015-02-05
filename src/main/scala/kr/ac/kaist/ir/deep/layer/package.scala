@@ -30,19 +30,19 @@ package object layer {
      * <p>Backward computation.</p>
      *
      * @note <p>
-     * Let this layer have function F composed with function <code> X(x) = W.x + b </code>
-     * and higher layer have function G.
-     * </p>
+     *       Let this layer have function F composed with function <code> X(x) = W.x + b </code>
+     *       and higher layer have function G.
+     *       </p>
      *
-     * <p>
-     * Weight is updated with: <code>dG/dW</code>
-     * and propagate <code>dG/dx</code>
-     * </p>
+     *       <p>
+     *       Weight is updated with: <code>dG/dW</code>
+     *       and propagate <code>dG/dx</code>
+     *       </p>
      *
-     * <p>
-     * For the computation, we only used denominator layout. (cf. Wikipedia Page of Matrix Computation)
-     * For the computation rules, see "Matrix Cookbook" from MIT.
-     * </p>
+     *       <p>
+     *       For the computation, we only used denominator layout. (cf. Wikipedia Page of Matrix Computation)
+     *       For the computation rules, see "Matrix Cookbook" from MIT.
+     *       </p>
      *
      * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
      * @param input of this layer (in this case, <code>x = entry of dX / dw</code>)

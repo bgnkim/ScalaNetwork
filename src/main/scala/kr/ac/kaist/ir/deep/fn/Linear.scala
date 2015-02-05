@@ -8,7 +8,7 @@ import breeze.linalg.DenseMatrix
  * @note `linear(x) = x`
  * @example
   * {{{val fx = Linear(0.0)
- *       val diff = Linear.derivative(fx)}}}
+ *                 val diff = Linear.derivative(fx)}}}
  */
 object Linear extends Activation {
   /**

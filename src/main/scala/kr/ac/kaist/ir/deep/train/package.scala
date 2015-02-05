@@ -22,7 +22,7 @@ package object train {
    *
    * @example 
    * {{{var corrupt = DroppingCorruption(presence = 0.99)
-   *  var corrupted = corrupt(vector)}}}
+   *       var corrupted = corrupt(vector)}}}
    */
   case class DroppingCorruption(presence: Double = 0.95) extends Corruption {
     /**
@@ -43,7 +43,7 @@ package object train {
    *
    * @example 
    * {{{var corrupt = GaussianCorruption(variance = 0.1)
-   *  var corrupted = corrupt(vector)}}}
+   *       var corrupted = corrupt(vector)}}}
    */
   case class GaussianCorruption(mean: Double = 0.0, variance: Double = 0.1) extends Corruption {
     /**
@@ -124,7 +124,7 @@ package object train {
    *
    * @example 
    * {{{var corrupt = NoCorruption(variance = 0.1)
-   *  var corrupted = corrupt(vector)}}}
+   *       var corrupted = corrupt(vector)}}}
    */
   case object NoCorruption extends Corruption {
 
@@ -135,4 +135,5 @@ package object train {
      */
     override def apply(v1: ScalarMatrix) = v1.copy
   }
+
 }

@@ -8,13 +8,13 @@ import scala.collection.mutable.ArrayBuffer
  * __Layer__: Basic, Fully-connected Rank 3 Tensor Layer.
  *
  * @note <pre>
- * v0 = a column vector concatenate v2 after v1 (v11, v12, ... v1in1, v21, ...)
- * Q = Rank 3 Tensor with size out, in1 × in2 is its entry.
- * L = Rank 3 Tensor with size out, 1 × (in1 + in2) is its entry.
- * b = out × 1 matrix.
+ *       v0 = a column vector concatenate v2 after v1 (v11, v12, ... v1in1, v21, ...)
+ *       Q = Rank 3 Tensor with size out, in1 × in2 is its entry.
+ *       L = Rank 3 Tensor with size out, 1 × (in1 + in2) is its entry.
+ *       b = out × 1 matrix.
  *
- * output = f( v1'.Q.v2 + L.v0 + b )
- * </pre>
+ *       output = f( v1'.Q.v2 + L.v0 + b )
+ *       </pre>
  *
  * @param fanIns is the number of input. (vector1, vector2, entire).
  * @param fanOut is the number of output
@@ -35,37 +35,37 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
   protected final val fanInB = fanIns._2
   protected final val fanIn = fanIns._3
   /* Initialize weight */
-  protected val quadratic: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
-  protected val linear: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
-  protected val bias: ScalarMatrix = if (const != null) const else act.initialize(fanIn, fanOut, fanOut, 1)
+  protected final val quadratic: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
+  protected final val linear: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
+  protected final val bias: ScalarMatrix = if (const != null) const else act.initialize(fanIn, fanOut, fanOut, 1)
   /* Weight-Update Stand-by */
-  protected val dQ: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
-  protected val dL: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
-  protected val db = ScalarMatrix $0(fanOut, 1)
+  protected final val dQ: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
+  protected final val dL: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
+  protected final val db = ScalarMatrix $0(fanOut, 1)
 
   /* Initialization */
   if (quad.nonEmpty) {
-    quadratic.appendAll(quad)
+    quadratic ++= quad
     quadratic.foreach {
-      matx ⇒ dQ.append(ScalarMatrix $0(matx.rows, matx.cols))
+      matx ⇒ dQ += ScalarMatrix.$0(matx.rows, matx.cols)
     }
   } else (0 until fanOut) foreach {
     _ ⇒
-      quadratic.append(act.initialize(fanIn, fanOut, fanInA, fanInB))
-      dQ.append(ScalarMatrix $0(fanInA, fanInB))
+      quadratic += act.initialize(fanIn, fanOut, fanInA, fanInB)
+      dQ += ScalarMatrix.$0(fanInA, fanInB)
   }
 
   if (lin.nonEmpty) {
-    linear.appendAll(lin)
+    linear ++= lin
     linear.foreach {
-      matx ⇒ dL.append(ScalarMatrix $0(matx.rows, matx.cols))
+      matx ⇒ dL += ScalarMatrix.$0(matx.rows, matx.cols)
     }
   } else (0 until fanOut) map {
     _ ⇒
-      linear.append(act.initialize(fanIn, fanOut, 1, fanIn))
-      dL.append(ScalarMatrix $0(1, fanIn))
+      linear += act.initialize(fanIn, fanOut, 1, fanIn)
+      dL += ScalarMatrix.$0(1, fanIn)
   }
-  
+
   /**
    * Retrieve first input
    *
@@ -126,19 +126,19 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
    * <p>Backward computation.</p>
    *
    * @note <p>
-   * Let this layer have function F composed with function <code> X(x) = x1'.Q.x2 + L.x + b </code>
-   * and higher layer have function G. (Each output is treated as separately except propagation)
-   * </p>
+   *       Let this layer have function F composed with function <code> X(x) = x1'.Q.x2 + L.x + b </code>
+   *       and higher layer have function G. (Each output is treated as separately except propagation)
+   *       </p>
    *
-   * <p>
-   * Weight is updated with: <code>dG/dW</code>
-   * and propagate <code>dG/dx</code>
-   * </p>
+   *       <p>
+   *       Weight is updated with: <code>dG/dW</code>
+   *       and propagate <code>dG/dx</code>
+   *       </p>
    *
-   * <p>
-   * For the computation, we only used denominator layout. (cf. Wikipedia Page of Matrix Computation)
-   * For the computation rules, see "Matrix Cookbook" from MIT.
-   * </p>
+   *       <p>
+   *       For the computation, we only used denominator layout. (cf. Wikipedia Page of Matrix Computation)
+   *       For the computation rules, see "Matrix Cookbook" from MIT.
+   *       </p>
    *
    * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
    * @param input of this layer (in this case, <code>x = entry of dX / dw</code>)
@@ -188,7 +188,7 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
          * They are scalar, so dG/dQ = dG/dX * dX/dQ.
          */
         val dXdQ: ScalarMatrix = inA * inB.t //d tr(axb)/dx = a'b'
-        val dGdQ: ScalarMatrix = dXdQ :* dGdX
+      val dGdQ: ScalarMatrix = dXdQ :* dGdX
         dQ(id) += dGdQ
 
         // For bias, input is always 1. We only need dG/dX
@@ -213,8 +213,8 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
          * Since dG/dX is scalar, we obtain dG/dx by scalar multiplication.
          */
         val dXdxQ1: ScalarMatrix = inB.t * quadratic(id).t //d tr(ax')/dx = d tr(x'a)/dx = a'
-        val dXdxQ2: ScalarMatrix = inA.t * quadratic(id) //d tr(ax)/dx = d tr(xa)/dx = a
-        val dXdxQ: ScalarMatrix = dXdxQ1 col_+ dXdxQ2
+      val dXdxQ2: ScalarMatrix = inA.t * quadratic(id) //d tr(ax)/dx = d tr(xa)/dx = a
+      val dXdxQ: ScalarMatrix = dXdxQ1 col_+ dXdxQ2
         val dGdxQ: ScalarMatrix = dXdxQ :* dGdX
 
         val dGdx: ScalarMatrix = dGdxL + dGdxQ

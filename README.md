@@ -53,12 +53,11 @@ Here is some examples for basic usage. If you want to extend this package or use
 Currently ScalaNetwork supports Scala version 2.10 ~ 2.11.
 
 * Stable Release is 0.1.7
-* Snapshot Release is 0.1.7-SNAPSHOT
  
 If you are using SBT, add a dependency as described below:
 
 ```scala
-libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "0.1.6"
+libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "0.1.7"
 ```
 
 If you are using Maven, add a dependency as described below:
@@ -66,7 +65,7 @@ If you are using Maven, add a dependency as described below:
 <dependency>
   <groupId>kr.ac.kaist.ir</groupId>
   <artifactId>scalanetwork_${your.scala.version}</artifactId>
-  <version>0.1.6</version>
+  <version>0.1.7</version>
 </dependency>
 ```
 

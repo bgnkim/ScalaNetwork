@@ -31,7 +31,7 @@ class StochasticGradientDescent(rate: Double = 0.03,
   override def apply(delta: IndexedSeq[ScalarMatrix], weight: IndexedSeq[ScalarMatrix]): Unit = {
     if (lastDelta.isEmpty) {
       delta foreach {
-        matx ⇒ lastDelta.append(ScalarMatrix $0(matx.rows, matx.cols))
+        matx ⇒ lastDelta += ScalarMatrix.$0(matx.rows, matx.cols)
       }
     }
 

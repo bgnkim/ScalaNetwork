@@ -18,13 +18,13 @@ class DropoutLayer(protected val presence: Probability = 1.0) extends Layer {
    *
    * @return weights
    */
-  override lazy val W: IndexedSeq[ScalarMatrix] = IndexedSeq.empty
+  override val W: IndexedSeq[ScalarMatrix] = IndexedSeq.empty
   /**
    * accumulated delta values
    *
    * @return delta-weight
    */
-  override lazy val dW: IndexedSeq[ScalarMatrix] = IndexedSeq.empty
+  override val dW: IndexedSeq[ScalarMatrix] = IndexedSeq.empty
   /** Null activation */
   protected override val act = null
   /* On-off matrix */

@@ -8,7 +8,7 @@ import breeze.numerics._
  * @note `softplus(x) = log[1 + exp(x)]`
  * @example
  * {{{val fx = Softplus(0.0)
- *   val diff = Softplus.derivative(fx)}}}
+ *        val diff = Softplus.derivative(fx)}}}
  */
 object Softplus extends Activation {
   /**

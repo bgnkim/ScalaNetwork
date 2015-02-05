@@ -33,7 +33,7 @@ class BasicNetwork(private val layers: IndexedSeq[Layer])
    * @return output of the vector
    */
   override def apply(in: ScalarMatrix): ScalarMatrix =
-    // We don't have to store this value
+  // We don't have to store this value
     layers.indices.foldLeft(in) {
       (input, id) ⇒ layers(id)(input)
     }

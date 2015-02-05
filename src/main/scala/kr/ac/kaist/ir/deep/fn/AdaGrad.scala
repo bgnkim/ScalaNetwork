@@ -32,7 +32,7 @@ class AdaGrad(rate: Double = 0.6,
   override def apply(delta: IndexedSeq[ScalarMatrix], weight: IndexedSeq[ScalarMatrix]): Unit = {
     if (history.isEmpty) {
       delta foreach {
-        matx ⇒ history.append(ScalarMatrix $0(matx.rows, matx.cols))
+        matx ⇒ history += ScalarMatrix.$0(matx.rows, matx.cols)
       }
     }
 

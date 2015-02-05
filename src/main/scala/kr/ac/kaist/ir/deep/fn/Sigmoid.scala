@@ -8,7 +8,7 @@ import breeze.numerics._
  * @note {{{sigmoid(x) = 1 / [exp(-x) + 1]}}}
  * @example 
  * {{{val fx = Sigmoid(0.0)
- *   val diff = Sigmoid.derivative(fx)}}}
+ *        val diff = Sigmoid.derivative(fx)}}}
  */
 object Sigmoid extends Activation {
   /**

@@ -40,7 +40,7 @@ package object fn {
     def row_+(y: ScalarMatrix): ScalarMatrix = {
       DenseMatrix.vertcat(x, y)
     }
-    
+
     /**
      * Add __given matrix__ to last columns.
      *
@@ -154,4 +154,5 @@ package object fn {
       w foreach { matx ⇒ matx :/= x}
     }
   }
+
 }

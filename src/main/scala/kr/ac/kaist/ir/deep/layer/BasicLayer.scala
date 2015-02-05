@@ -21,22 +21,14 @@ class BasicLayer(IO: (Int, Int),
   /** Number of output */
   protected final val fanOut = IO._2
   /* Initialize weight */
-  protected val weight = if (w != null) w else act.initialize(fanIn, fanOut)
-  protected val bias = if (b != null) b else act.initialize(fanIn, fanOut, fanOut, 1)
+  protected final val weight = if (w != null) w else act.initialize(fanIn, fanOut)
+  protected final val bias = if (b != null) b else act.initialize(fanIn, fanOut, fanOut, 1)
   /* Weight-Update Accumulator */
-  protected val delta = ScalarMatrix $0(fanOut, fanIn)
-  protected val dbias = ScalarMatrix $0(fanOut, 1)
-  /**
-   * weights for update
-   *
-   * @return weights
-   */
+  protected final val delta = ScalarMatrix $0(fanOut, fanIn)
+  protected final val dbias = ScalarMatrix $0(fanOut, 1)
+  /** weights for update */
   override val W: IndexedSeq[ScalarMatrix] = IndexedSeq(weight, bias)
-  /**
-   * accumulated delta values
-   *
-   * @return delta-weight
-   */
+  /** accumulated delta values */
   override val dW: IndexedSeq[ScalarMatrix] = IndexedSeq(delta, dbias)
 
   /**

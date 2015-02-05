@@ -7,13 +7,13 @@ import play.api.libs.json.{JsArray, JsObject, Json}
  * __Layer__: Basic, Fully-connected Rank 3 Tensor Layer.
  *
  * @note <pre>
- * v0 = a column vector
- * Q = Rank 3 Tensor with size out, in × in is its entry.
- * L = Rank 3 Tensor with size out, 1 × in is its entry.
- * b = out × 1 matrix.
+ *       v0 = a column vector
+ *       Q = Rank 3 Tensor with size out, in × in is its entry.
+ *       L = Rank 3 Tensor with size out, 1 × in is its entry.
+ *       b = out × 1 matrix.
  *
- * output = f( v0'.Q.v0 + L.v0 + b )
- * </pre>
+ *       output = f( v0'.Q.v0 + L.v0 + b )
+ *       </pre>
  *
  * @param IO is a tuple of the number of input and output, i.e. (2 → 4)
  * @param act is an activation function to be applied

@@ -7,8 +7,8 @@ import breeze.linalg.sum
  *
  * @example
  * {{{val output = net(input)
- *   val err = SquaredErr(real, output)
- *   val diff = SquaredErr.derivative(real, output)
+ *        val err = SquaredErr(real, output)
+ *        val diff = SquaredErr.derivative(real, output)
  * }}}
  */
 object SquaredErr extends Objective {

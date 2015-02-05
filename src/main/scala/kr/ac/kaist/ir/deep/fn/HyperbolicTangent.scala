@@ -8,7 +8,7 @@ import breeze.numerics._
  * @note `tanh(x) = sinh(x) / cosh(x)`
  * @example
  * {{{val fx = HyperbolicTangent(0.0)
- *   val diff = HyperbolicTangent.derivative(fx) }}}
+ *        val diff = HyperbolicTangent.derivative(fx) }}}
  */
 object HyperbolicTangent extends Activation {
   /**
