@@ -28,11 +28,16 @@ trait WeightUpdater extends ((IndexedSeq[ScalarMatrix], IndexedSeq[ScalarMatrix]
    * @param seq the __sequence__ of weight matrices
    * @return the total weight loss of this sequence
    */
-  def loss(seq: Seq[ScalarMatrix]) =
-    seq.foldLeft(0.0) {
-      (err, obj) ⇒
-        val l1loss = sum(abs(obj)) * l1decay
-        val l2loss = sum(pow(obj, 2)) * l2decay
-        err + l1loss + l2loss
+  def loss(seq: Seq[ScalarMatrix]) = {
+    var i = 0
+    var err = 0.0
+    while (i < seq.size) {
+      val obj = seq(i)
+      val l1loss = sum(abs(obj)) * l1decay
+      val l2loss = sum(pow(obj, 2)) * l2decay
+      err += l1loss + l2loss
+      i += 1
     }
+    err
+  }
 }

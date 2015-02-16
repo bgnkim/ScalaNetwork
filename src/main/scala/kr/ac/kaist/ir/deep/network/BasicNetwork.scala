@@ -32,11 +32,16 @@ class BasicNetwork(private val layers: IndexedSeq[Layer])
    * @param in an input vector
    * @return output of the vector
    */
-  override def apply(in: ScalarMatrix): ScalarMatrix =
-  // We don't have to store this value
-    layers.indices.foldLeft(in) {
-      (input, id) ⇒ layers(id)(input)
+  override def apply(in: ScalarMatrix): ScalarMatrix = {
+    // We don't have to store this value
+    var id = 0
+    var input = in
+    while (id < layers.size) {
+      input = layers(id)(input)
+      id += 1
     }
+    input
+  }
 
   /**
    * Serialize network to JSON
@@ -54,13 +59,15 @@ class BasicNetwork(private val layers: IndexedSeq[Layer])
    * @param err backpropagated error from error function
    */
   protected[deep] override def updateBy(err: ScalarMatrix) = {
-    val error = layers.indices.foldRight(err) {
-      (id, e) ⇒
-        val l = layers(id)
-        val out = input.head
-        input = input.tail
-        val in = input.head
-        l updateBy(e, in, out)
+    var id = layers.size - 1
+    var error = err
+    while (id >= 0) {
+      val l = layers(id)
+      val out = input.head
+      input = input.tail
+      val in = input.head
+      error = l updateBy(error, in, out)
+      id -= 1
     }
 
     // Clean-up last entry
@@ -77,9 +84,12 @@ class BasicNetwork(private val layers: IndexedSeq[Layer])
    */
   protected[deep] override def into_:(x: ScalarMatrix): ScalarMatrix = {
     // We have to store this value
-    input = layers.indices.foldLeft(Seq(x.copy)) {
-      (seq, id) ⇒ (seq.head into_: layers(id)) +: seq
-    } ++: input
+    var id = 0
+    input = x.copy +: input
+    while (id < layers.size) {
+      input = (input.head into_: layers(id)) +: input
+      id += 1
+    }
     input.head
   }
 }

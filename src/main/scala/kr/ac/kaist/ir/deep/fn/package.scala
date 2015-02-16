@@ -101,15 +101,25 @@ package object fn {
      *
      * @param x __scalar__ to be assigned for every cell
      */
-    def :=(x: Scalar) = w.par foreach {
-      _ := x
-    }
+    def :=(x: Scalar) = {
+      var i = w.size - 1
+      while (i >= 0) {
+        w(i) := x
+        i -= 1
+      }
+    } 
 
     /**
      * Assign matrices 
      * @param w2 to be assigned
      */
-    def :=(w2: IndexedSeq[ScalarMatrix]) = w.indices.par foreach { id ⇒ w(id) := w2(id)}
+    def :=(w2: IndexedSeq[ScalarMatrix]) = {
+      var i = w.size - 1
+      while (i >= 0) {
+        w(i) := w2(i)
+        i -= 1
+      }
+    }
 
     /**
      * Add onto another matrices if they are exists, otherwise copy these matrices.
@@ -120,8 +130,10 @@ package object fn {
     def copy_+(w2: IndexedSeq[ScalarMatrix]) =
       if (w2.isEmpty) copy
       else {
-        w.indices.par foreach {
-          id ⇒ w2(id) :+= w(id)
+        var i = w.size - 1
+        while (i >= 0) {
+          w2(i) :+= w(i)
+          i -= 1
         }
         w2
       }
@@ -141,7 +153,11 @@ package object fn {
      * @param w2 __matrix sequence__ to be added
      */
     def :+=(w2: IndexedSeq[ScalarMatrix]) = {
-      w.indices.par foreach { id ⇒ w(id) :+= w2(id)}
+      var i = w.size - 1
+      while (i >= 0) {
+        w(i) :+= w2(i)
+        i -= 1
+      }
       w
     }
 
@@ -151,7 +167,11 @@ package object fn {
      * @param x __scalar__ as a divider.
      */
     def :/=(x: Scalar) = {
-      w foreach { matx ⇒ matx :/= x}
+      var i = w.size - 1
+      while (i >= 0) {
+        w(i) :/= x
+        i -= 1
+      }
     }
   }
 

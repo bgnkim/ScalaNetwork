@@ -51,10 +51,15 @@ class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network
    * @param in an input vector
    * @return output of the vector
    */
-  override def apply(in: ScalarMatrix): ScalarMatrix =
-    encoders.foldLeft(in) {
-      (x, enc) ⇒ enc(x)
+  override def apply(in: ScalarMatrix): ScalarMatrix = {
+    var i = 0
+    var x = in
+    while (i < encoders.size) {
+      x = encoders(i)(x)
+      i += 1
     }
+    x
+  }
 
   /**
    * Sugar: Forward computation for training. Calls apply(x)
@@ -62,18 +67,28 @@ class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network
    * @param x input matrix
    * @return output matrix
    */
-  protected[deep] override def into_:(x: ScalarMatrix): ScalarMatrix =
-    encoders.foldLeft(x) {
-      (in, enc) ⇒ in into_: enc
+  protected[deep] override def into_:(x: ScalarMatrix): ScalarMatrix = {
+    var i = 0
+    var in = x
+    while (i < encoders.size) {
+      in = in into_: encoders(i)
+      i += 1
     }
+    in
+  }
 
   /**
    * Backpropagation algorithm
    *
    * @param err backpropagated error from error function
    */
-  protected[deep] override def updateBy(err: ScalarMatrix): ScalarMatrix =
-    encoders.foldRight(err) {
-      (enc, err) ⇒ enc updateBy err
+  protected[deep] override def updateBy(err: ScalarMatrix): ScalarMatrix = {
+    var i = encoders.size - 1
+    var x = err
+    while (i >= 0) {
+      x = encoders(i) updateBy err
+      i -= 1
     }
+    x
+  }
 }

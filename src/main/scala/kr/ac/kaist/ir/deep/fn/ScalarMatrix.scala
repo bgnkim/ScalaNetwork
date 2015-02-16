@@ -42,21 +42,17 @@ object ScalarMatrix {
    */
   def restore(arr: IndexedSeq[IndexedSeq[Scalar]]): ScalarMatrix = {
     val res = $0(arr.size, arr(0).size)
-    arr.indices.par foreach {
-      r ⇒ arr(r).indices.par foreach {
-        c ⇒ res.update(r, c, arr(r)(c))
+    var r = 0
+    while (r < arr.size) {
+      var c = 0
+      while (c < arr(r).size) {
+        res.update(r, c, arr(r)(c))
+        c += 1
       }
+      r += 1
     }
     res
   }
-
-  /**
-   * Generates full-zero matrix of given size
-   *
-   * @param size __(#row, #col) pair__ of matrix size, such as (2, 3)
-   * @return Matrix with initialized by zero
-   */
-  def $0(size: (Int, Int)): ScalarMatrix = DenseMatrix.zeros[Scalar](size._1, size._2)
 
   /**
    * Make a column vector with given sequence.
@@ -72,5 +68,13 @@ object ScalarMatrix {
    * @return an empty matrix
    */
   def empty: ScalarMatrix = ScalarMatrix $0(0, 0)
+
+  /**
+   * Generates full-zero matrix of given size
+   *
+   * @param size __(#row, #col) pair__ of matrix size, such as (2, 3)
+   * @return Matrix with initialized by zero
+   */
+  def $0(size: (Int, Int)): ScalarMatrix = DenseMatrix.zeros[Scalar](size._1, size._2)
 }
 

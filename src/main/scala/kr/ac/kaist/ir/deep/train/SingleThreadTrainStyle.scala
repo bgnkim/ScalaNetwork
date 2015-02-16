@@ -10,7 +10,7 @@ import kr.ac.kaist.ir.deep.network.Network
  * @param algorithm Weight __update algorithm__ to be applied
  * @param make __Input Operation__ that supervises how to manipulate input as matrices.
  *             This also controls how to compute actual network. (default: [[VectorType]])
- * @param param __Training criteria__ (default: [[kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria]])
+ * @param param __Training criteria__ (default: [[SimpleTrainingCriteria]])
  */
 class SingleThreadTrainStyle[IN, OUT](protected[train] override val net: Network,
                                       protected[train] override val algorithm: WeightUpdater,
@@ -39,9 +39,9 @@ class SingleThreadTrainStyle[IN, OUT](protected[train] override val net: Network
    * Do mini-batch
    */
   override protected[train] def batch(): Unit = {
-    val seq = trainingSet(param.miniBatch).par.map {
+    val seq = trainingSet(param.miniBatch).map {
       pair ⇒ (make corrupted pair._1) → pair._2
-    }.seq
+    }
     make roundTrip(net, seq)
   }
 }

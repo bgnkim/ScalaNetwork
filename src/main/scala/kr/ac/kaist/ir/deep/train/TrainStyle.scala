@@ -2,6 +2,9 @@ package kr.ac.kaist.ir.deep.train
 
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.network.Network
+import org.apache.log4j.Logger
+
+import scala.concurrent.Future
 
 /**
  * __Trait__ that describes style of training
@@ -22,8 +25,10 @@ trait TrainStyle[IN, OUT] extends Serializable {
   protected[train] val algorithm: WeightUpdater
   /** Set of input manipulations */
   protected[train] val make: ManipulationType[IN, OUT]
+  /** Logger */
+  @transient protected val logger = Logger.getLogger(this.getClass)
   /** Training Set */
-  protected[train] var trainingSet: Int ⇒ Seq[Pair] = null
+  protected[train] var trainingSet: Int ⇒ Iterator[Pair] = null
 
   /**
    * Fetch weights
@@ -47,9 +52,9 @@ trait TrainStyle[IN, OUT] extends Serializable {
   /**
    * Indicates whether the asynchrononus update is finished or not.
    *
-   * @return boolean flag of update
+   * @return future object of update
    */
-  protected[train] def isUpdateFinished: Boolean = true
+  protected[train] def isUpdateFinished: Future[_] = null
 
   /**
    * Implicit weight operation

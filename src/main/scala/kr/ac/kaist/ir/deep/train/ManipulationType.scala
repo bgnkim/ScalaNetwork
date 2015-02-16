@@ -33,7 +33,7 @@ trait ManipulationType[IN, OUT] extends Serializable {
    * @param net A network that gets input
    * @param seq Sequence of (Input, Real output) for error computation.
    */
-  def roundTrip(net: Network, seq: Seq[(IN, OUT)]): Unit
+  def roundTrip(net: Network, seq: Iterator[(IN, OUT)]): Unit
 
   /**
    * Apply given single input as one-way forward trip.
@@ -58,5 +58,5 @@ trait ManipulationType[IN, OUT] extends Serializable {
    * @param validation Sequence of (Input, Real output) for error computation.
    * @return error of this network
    */
-  def lossOf(net: Network, validation: Seq[(IN, OUT)]): Scalar
+  def lossOf(net: Network, validation: Iterator[(IN, OUT)]): Scalar
 }

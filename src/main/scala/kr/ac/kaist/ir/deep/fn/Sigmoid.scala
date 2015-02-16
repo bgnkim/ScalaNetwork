@@ -21,10 +21,11 @@ object Sigmoid extends Activation {
     // Because fx is n by 1 matrix, generate n by n matrix
     val res = ScalarMatrix $0(fx.rows, fx.rows)
     // Output is diagonal matrix, with dfi(xi)/dxi.
-    (0 until fx.rows).par foreach {
-      r ⇒
-        val x = fx(r, 0)
-        res.update((r, r), x * (1.0 - x))
+    var r = 0
+    while (r < fx.rows) {
+      val x = fx(r, 0)
+      res.update((r, r), x * (1.0 - x))
+      r += 1
     }
     res
   }
@@ -48,7 +49,7 @@ object Sigmoid extends Activation {
    */
   override def initialize(fanIn: Int, fanOut: Int, rows: Int = 0, cols: Int = 0): ScalarMatrix = {
     val range = Math.sqrt(6.0 / (fanIn + fanOut)) * 4.0
-    val pmMatx = ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :- 0.5
+    val pmMatx: ScalarMatrix = ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :- 0.5
     pmMatx :* (2.0 * range)
   }
 }

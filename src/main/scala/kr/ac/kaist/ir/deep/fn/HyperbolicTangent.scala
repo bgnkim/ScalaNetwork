@@ -21,10 +21,11 @@ object HyperbolicTangent extends Activation {
     // Because fx is n by 1 matrix, generate n by n matrix
     val res = ScalarMatrix $0(fx.rows, fx.rows)
     // Output is diagonal matrix, with dfi(xi)/dxi.
-    (0 until fx.rows).par foreach {
-      r ⇒
-        val x = fx(r, 0)
-        res.update((r, r), 1.0 - x * x)
+    var r = 0
+    while (r < fx.rows) {
+      val x = fx(r, 0)
+      res.update((r, r), 1.0 - x * x)
+      r += 1
     }
     res
   }

@@ -19,10 +19,11 @@ object Rectifier extends Activation {
     // Because fx is n by 1 matrix, generate n by n matrix
     val res = ScalarMatrix $0(fx.rows, fx.rows)
     // Output is diagonal matrix, with dfi(xi)/dxi.
-    (0 until fx.rows).par foreach {
-      r ⇒
-        val x = fx(r, 0)
-        res.update((r, r), if (x > 0) 1.0 else 0.0)
+    var r = 0
+    while (r < fx.rows) {
+      val x = fx(r, 0)
+      res.update((r, r), if (x > 0) 1.0 else 0.0)
+      r += 1
     }
     res
   }
@@ -35,7 +36,11 @@ object Rectifier extends Activation {
    */
   override def apply(x: ScalarMatrix): ScalarMatrix = {
     val res = x.copy
-    x foreachKey { key ⇒ if (x(key) < 0) res.update(key, 0.0)}
+    val iter = x.keysIterator
+    while (iter.hasNext) {
+      val key = iter.next()
+      if (x(key) < 0) res.update(key, 0.0)
+    }
     res
   }
 }

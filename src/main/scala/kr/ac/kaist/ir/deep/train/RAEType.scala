@@ -3,12 +3,10 @@ package kr.ac.kaist.ir.deep.train
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.network.Network
 import kr.ac.kaist.ir.deep.rec.DAG
-import org.apache.spark.annotation.AlphaComponent
 
 /**
  * __Input Operation__ : VectorTree as Input & Recursive Auto-Encoder Training (no output type)
  *
- * ::Experimental::
  * @note We recommend that you should not apply this method to non-AutoEncoder tasks
  * @note This implementation designed as a replica of the traditional RAE in
  *       [[http://ai.stanford.edu/~ang/papers/emnlp11-RecursiveAutoencodersSentimentDistributions.pdf this paper]]
@@ -21,7 +19,6 @@ import org.apache.spark.annotation.AlphaComponent
  *            var corruptedIn = make corrupted in
  *            var out = make onewayTrip (net, corruptedIn)}}}
  */
-@AlphaComponent
 class RAEType(override protected[train] val corrupt: Corruption = NoCorruption,
               override protected[train] val error: Objective = SquaredErr)
   extends DAGType {
@@ -32,9 +29,10 @@ class RAEType(override protected[train] val corrupt: Corruption = NoCorruption,
    * @param net A network that gets input
    * @param seq Sequence of (Input, Real output) for error computation.
    */
-  def roundTrip(net: Network, seq: Seq[(DAG, Null)]): Unit =
-    seq foreach {
-      _._1 forward {
+  def roundTrip(net: Network, seq: Iterator[(DAG, Null)]): Unit = {
+    while (seq.hasNext) {
+      val pair = seq.next()
+      pair._1 forward {
         x ⇒
           val err = error.derivative(x, x into_: net)
           net updateBy err
@@ -42,6 +40,7 @@ class RAEType(override protected[train] val corrupt: Corruption = NoCorruption,
           net(x)
       }
     }
+  }
 
   /**
    * Apply given input and compute the error
@@ -50,19 +49,20 @@ class RAEType(override protected[train] val corrupt: Corruption = NoCorruption,
    * @param validation Sequence of (Input, Real output) for error computation.
    * @return error of this network
    */
-  override def lossOf(net: Network, validation: Seq[(DAG, Null)]): Scalar =
-    validation.map {
-      pair ⇒
-        val in = pair._1
-        var sum = 0.0
-        in forward {
-          x ⇒
-            sum += error(x, net of x)
-            //propagate hidden-layer value
-            net(x)
-        }
-        sum
-    }.sum
+  override def lossOf(net: Network, validation: Iterator[(DAG, Null)]): Scalar = {
+    var sum = 0.0
+    while (validation.hasNext) {
+      val pair = validation.next()
+      val in = pair._1
+      in forward {
+        x ⇒
+          sum += error(x, net of x)
+          //propagate hidden-layer value
+          net(x)
+      }
+    }
+    sum
+  }
 
   /**
    * Make validation output

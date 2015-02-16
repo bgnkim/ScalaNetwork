@@ -27,44 +27,56 @@ class AdaDelta(protected override val l1decay: Double = 0.0000,
   private val deltaSq = ArrayBuffer[ScalarMatrix]()
 
   /**
-   * Execute the algorithm for given __sequence of Δweight__ and sequence of __weights__
+   * Execute the algorithm for given __sequence of Δ(weight)__ and sequence of __weights__
    *
-   * @param delta the __sequence of accumulated Δweight__
+   * @param delta the __sequence of accumulated Δ(weight)__
    * @param weight the __sequence of current weights__
    */
   override def apply(delta: IndexedSeq[ScalarMatrix], weight: IndexedSeq[ScalarMatrix]): Unit = {
     if (gradSq.isEmpty) {
-      delta foreach {
-        matx ⇒
-          gradSq += ScalarMatrix.$0(matx.rows, matx.cols)
-          deltaSq += ScalarMatrix.$0(matx.rows, matx.cols)
+      gradSq.sizeHint(delta)
+      deltaSq.sizeHint(delta)
+
+      var i = 0
+      while (i < delta.length) {
+        val matx = delta(i)
+        i += 1
+
+        gradSq += ScalarMatrix.$0(matx.rows, matx.cols)
+        deltaSq += ScalarMatrix.$0(matx.rows, matx.cols)
       }
     }
 
-    delta.indices.par foreach {
-      id ⇒
-        val w = weight(id)
-        val deltaW = delta(id)
+    var id = delta.length - 1
+    while (id >= 0) {
+      val w = weight(id)
+      val deltaW = delta(id)
 
-        val deltaL1 = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0}
-        val deltaL2 = w * (l2decay * 2)
-        val deltaLoss = deltaW + deltaL1 + deltaL2
+      val deltaL1 = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0}
+      val deltaL2 = w * (l2decay * 2)
+      val deltaLoss: ScalarMatrix = deltaW + deltaL1 + deltaL2
 
-        val gradSq_id = gradSq(id)
-        val deltaSq_id = deltaSq(id)
+      val gradSq_id = gradSq(id)
+      val deltaSq_id = deltaSq(id)
 
-        gradSq_id :*= decay
-        gradSq_id += (pow(deltaLoss, 2) :* (1.0 - decay))
+      gradSq_id :*= decay
+      gradSq_id += (pow(deltaLoss, 2) :* (1.0 - decay))
 
-        val adjusted = ScalarMatrix $0(gradSq_id.rows, gradSq_id.cols)
-        gradSq_id foreachKey { key ⇒ adjusted.update(key, Math.sqrt(deltaSq_id(key) + epsilon) / Math.sqrt(gradSq_id(key) + epsilon))}
+      val adjusted = ScalarMatrix $0(gradSq_id.rows, gradSq_id.cols)
+      val iter = gradSq_id.keysIterator
+      while (iter.hasNext) {
+        val key = iter.next()
+        adjusted.update(key, Math.sqrt(deltaSq_id(key) + epsilon) / Math.sqrt(gradSq_id(key) + epsilon))
+      }
 
-        val d = deltaLoss :* adjusted
+      val d = deltaLoss :* adjusted
 
-        w -= d
+      w -= d
 
-        deltaSq_id :*= decay
-        deltaSq_id += (pow(d, 2) :* (1.0 - decay))
+      deltaSq_id :*= decay
+      deltaSq_id += (pow(d, 2) :* (1.0 - decay))
+
+      id -= 1
     }
   }
 }

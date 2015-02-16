@@ -3,6 +3,8 @@ package kr.ac.kaist.ir.deep.rec
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.train.Corruption
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
  * __Graph__: Directed Acyclic Graph
  *
@@ -17,14 +19,18 @@ class DAG(val finals: Seq[Node]) extends Node {
    * @return the result
    */
   override def forward(fn: ScalarMatrix ⇒ ScalarMatrix): ScalarMatrix = {
-    finals.foldLeft(null.asInstanceOf[ScalarMatrix]) {
-      (last, curr) ⇒
-        val res = curr.forward(fn)
+    val iter = finals.iterator
+    var last: ScalarMatrix = null
+    while (iter.hasNext) {
+      val curr = iter.next()
+      val res = curr.forward(fn)
+      last = 
         if (last != null)
           last row_+ res
         else
           res
     }
+    last
   }
 
   /**
@@ -37,16 +43,18 @@ class DAG(val finals: Seq[Node]) extends Node {
   def backward(err: ScalarMatrix,
                fn: ScalarMatrix ⇒ ScalarMatrix): Seq[TerminalNode] = {
     val rSize = err.rows / finals.size
-    val res = finals.foldRight((err, Seq[TerminalNode]())) {
-      (curr, pair) ⇒
-        val e = pair._1
-        val seq = pair._2
-        val splited = spliter(e, rSize)
-        val seq2 = curr.backward(splited._2, fn)
-        //pass left part
-        (splited._1, seq2 ++ seq)
+    val iter = finals.reverseIterator
+    var e = err
+    var seq = ArrayBuffer[TerminalNode]()
+    while (iter.hasNext) {
+      val curr = iter.next()
+      val splited = spliter(e, rSize)
+      val seq2 = curr.backward(splited._2, fn)
+      //pass left part
+      e = splited._1
+      seq ++= seq2
     }
-    res._2
+    seq
   }
 
   /**

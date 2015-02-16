@@ -30,31 +30,36 @@ class StochasticGradientDescent(rate: Double = 0.03,
    */
   override def apply(delta: IndexedSeq[ScalarMatrix], weight: IndexedSeq[ScalarMatrix]): Unit = {
     if (lastDelta.isEmpty) {
-      delta foreach {
-        matx ⇒ lastDelta += ScalarMatrix.$0(matx.rows, matx.cols)
+      lastDelta.sizeHint(delta)
+      var i = 0
+      while (i < delta.size) {
+        val matx = delta(i)
+        lastDelta += ScalarMatrix.$0(matx.rows, matx.cols)
+        i += 1
       }
     }
 
-    delta.indices.par foreach {
-      id ⇒
-        val w = weight(id)
-        val deltaW = delta(id)
+    var id = delta.size - 1
+    while (id >= 0) {
+      val w = weight(id)
+      val deltaW = delta(id)
 
-        val deltaL1 = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0}
-        val deltaL2 = w :* (l2decay * 2)
-        val deltaLoss = deltaW + deltaL1 + deltaL2
-        val adapted = deltaLoss :* rate
+      val deltaL1 = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0}
+      val deltaL2 = w :* (l2decay * 2)
+      val deltaLoss: ScalarMatrix = deltaW + deltaL1 + deltaL2
+      val adapted: ScalarMatrix = deltaLoss :* rate
 
-        val dw = if (lastDelta.nonEmpty) {
-          val moment = lastDelta(id) :* momentum
-          moment - adapted
-        } else {
-          -adapted
-        }
+      val dw = if (lastDelta.nonEmpty) {
+        val moment: ScalarMatrix = lastDelta(id) :* momentum
+        moment - adapted
+      } else {
+        -adapted
+      }
 
-        w += dw
-        deltaW := 0.0
-        lastDelta.update(id, dw)
+      w += dw
+      deltaW := 0.0
+      lastDelta.update(id, dw)
+      id -= 1
     }
   }
 }

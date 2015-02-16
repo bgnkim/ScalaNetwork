@@ -6,8 +6,8 @@ import kr.ac.kaist.ir.deep.network.Network
 /**
  * __Input Operation__ : Vector as Input and output
  *
- * @param corrupt Corruption that supervises how to corrupt the input matrix. (Default : [[kr.ac.kaist.ir.deep.train.NoCorruption]])
- * @param error An objective function (Default: [[kr.ac.kaist.ir.deep.fn.SquaredErr]])
+ * @param corrupt Corruption that supervises how to corrupt the input matrix. (Default : [[NoCorruption]])
+ * @param error An objective function (Default: [[SquaredErr]])
  *
  * @example
  * {{{var make = new VectorType(error = CrossEntropyErr)
@@ -32,15 +32,16 @@ class VectorType(override protected[train] val corrupt: Corruption = NoCorruptio
    * @param net A network that gets input
    * @param seq Sequence of (Input, Real output) for error computation.
    */
-  def roundTrip(net: Network, seq: Seq[(ScalarMatrix, ScalarMatrix)]): Unit =
-    seq foreach {
-      pair ⇒
-        val in = pair._1
-        val real = pair._2
-        val out = in into_: net
-        val err: ScalarMatrix = error.derivative(real, out)
-        net updateBy err
+  def roundTrip(net: Network, seq: Iterator[(ScalarMatrix, ScalarMatrix)]): Unit = {
+    while (seq.hasNext) {
+      val pair = seq.next()
+      val in = pair._1
+      val real = pair._2
+      val out = in into_: net
+      val err: ScalarMatrix = error.derivative(real, out)
+      net updateBy err
     }
+  }
 
   /**
    * Apply given input and compute the error
@@ -49,14 +50,17 @@ class VectorType(override protected[train] val corrupt: Corruption = NoCorruptio
    * @param validation Sequence of (Input, Real output) for error computation.
    * @return error of this network
    */
-  override def lossOf(net: Network, validation: Seq[(ScalarMatrix, ScalarMatrix)]): Scalar =
-    validation.map {
-      pair ⇒
-        val in = pair._1
-        val real = pair._2
-        val out = net of in
-        error(real, out)
-    }.sum
+  override def lossOf(net: Network, validation: Iterator[(ScalarMatrix, ScalarMatrix)]): Scalar = {
+    var sum = 0.0
+    while (validation.hasNext) {
+      val pair = validation.next()
+      val in = pair._1
+      val real = pair._2
+      val out = net of in
+      sum += error(real, out)
+    }
+    sum
+  }
 
   /**
    * Apply given single input as one-way forward trip.

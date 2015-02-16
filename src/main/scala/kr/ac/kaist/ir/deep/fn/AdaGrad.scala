@@ -31,26 +31,32 @@ class AdaGrad(rate: Double = 0.6,
    */
   override def apply(delta: IndexedSeq[ScalarMatrix], weight: IndexedSeq[ScalarMatrix]): Unit = {
     if (history.isEmpty) {
-      delta foreach {
-        matx ⇒ history += ScalarMatrix.$0(matx.rows, matx.cols)
+      history.sizeHint(delta)
+
+      var i = 0
+      while (i < delta.size) {
+        val matx = delta(i)
+        i += 1
+        history += ScalarMatrix.$0(matx.rows, matx.cols)
       }
     }
 
-    delta.indices.par foreach {
-      id ⇒
-        val w = weight(id)
-        val deltaW = delta(id)
+    var id = delta.size - 1
+    while (id >= 0) {
+      val w = weight(id)
+      val deltaW = delta(id)
 
-        val deltaL1 = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0}
-        val deltaL2 = w * (l2decay * 2)
-        val deltaLoss = deltaW + deltaL1 + deltaL2
+      val deltaL1 = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0}
+      val deltaL2 = w * (l2decay * 2)
+      val deltaLoss: ScalarMatrix = deltaW + deltaL1 + deltaL2
 
-        history(id) :+= pow(deltaLoss, 2)
+      history(id) :+= pow(deltaLoss, 2)
 
-        val adapted = history(id) mapValues { x ⇒ rate / Math.sqrt(x)}
-        val d = deltaLoss :* adapted
+      val adapted = history(id) mapValues { x ⇒ rate / Math.sqrt(x)}
+      val d = deltaLoss :* adapted
 
-        w -= d
+      w -= d
+      id -= 1
     }
   }
 }

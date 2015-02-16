@@ -5,6 +5,8 @@ import org.apache.log4j.Logger
 import org.apache.spark.rdd.RDD
 
 import scala.annotation.tailrec
+import scala.concurrent.Await
+import scala.concurrent.duration._
 
 
 /**
@@ -43,10 +45,10 @@ import scala.annotation.tailrec
  *              and the other is [[DistBeliefTrainStyle]].
  * @param stops __Stopping Criteria__ that controls the threshold for stopping. (Default : [[StoppingCriteria]])
  *
- * @tparam IN the type of input. 
- *            Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and [[kr.ac.kaist.ir.deep.rec.DAG]] are supported
+ * @tparam IN the type of input.
+ *            Currently, [[ScalarMatrix]] and DAG are supported
  * @tparam OUT the type of output
- *             Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and Null are supported
+ *             Currently, [[ScalarMatrix]] and Null are supported
  */
 class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
                        protected val stops: StoppingCriteria = StoppingCriteria())
@@ -58,7 +60,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
   /** Logger */
   @transient protected val logger = Logger.getLogger(this.getClass)
   /** Validation Set */
-  protected var testSet: Int ⇒ Seq[Pair] = null
+  protected var testSet: Int ⇒ Iterator[Pair] = null
   /** Best Parameter History */
   @transient protected var bestParam: IndexedSeq[ScalarMatrix] = null
   /** Best Loss Iteration Number */
@@ -70,7 +72,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    * @param set __Random Sequence Generator__ of training set
    * @return Training error (loss)
    */
-  def train(set: Int ⇒ Seq[Pair]): Scalar = train(set, set)
+  def train(set: Int ⇒ Iterator[Pair]): Scalar = train(set, set)
 
   /**
    * Train given sequence, and validate with given sequence.
@@ -80,7 +82,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    */
   def train(set: Seq[Pair]): Scalar = {
     val index = () ⇒ Math.floor(Math.random() * set.size).toInt
-    val randomizer = (n: Int) ⇒ (0 until n) map { _ ⇒ set(index())}
+    val randomizer = (n: Int) ⇒ (0 until n).map { _ ⇒ set(index())}.iterator
     train(randomizer, randomizer)
   }
 
@@ -94,8 +96,8 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
   def train(set: Seq[Pair],
             validation: Seq[Pair]): Scalar = {
     val index = () ⇒ Math.floor(Math.random() * set.size).toInt
-    val randomizer = (n: Int) ⇒ (0 until n) map { _ ⇒ set(index())}
-    val topN = (n: Int) ⇒ validation.slice(0, n)
+    val randomizer = (n: Int) ⇒ (0 until n).map { _ ⇒ set(index())}.iterator
+    val topN = (n: Int) ⇒ validation.slice(0, n).iterator
     train(randomizer, topN)
   }
 
@@ -106,8 +108,8 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    * @param validation Sequence Generator of validation set
    * @return Training error (loss)
    */
-  def train(set: Int ⇒ Seq[Pair],
-            validation: Int ⇒ Seq[Pair]) = {
+  def train(set: Int ⇒ Iterator[Pair],
+            validation: Int ⇒ Iterator[Pair]) = {
     trainingSet = set
     testSet = validation
 
@@ -127,7 +129,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
   def train(set: RDD[Pair]): Scalar = {
     train({
       val cached = set.cache()
-      x: Int ⇒ cached.takeSample(withReplacement = true, num = x).toSeq
+      x: Int ⇒ cached.takeSample(withReplacement = true, num = x).iterator
     })
   }
 
@@ -140,10 +142,10 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
   def train(set: RDD[Pair], validation: RDD[Pair]): Scalar = {
     train({
       val cached = set.cache()
-      x: Int ⇒ cached.takeSample(withReplacement = true, num = x).toSeq
+      x: Int ⇒ cached.takeSample(withReplacement = true, num = x).iterator
     }, {
       val cached = validation.cache()
-      x: Int ⇒ cached.takeSample(withReplacement = true, num = x).toSeq
+      x: Int ⇒ cached.takeSample(withReplacement = true, num = x).iterator
     })
   }
 
@@ -180,8 +182,12 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    */
   protected final def restoreParams() = {
     // Wait for finish of update, to prohibit race condition.
-    while (!isUpdateFinished) {
-      Thread sleep 100
+    if (isUpdateFinished != null) {
+      try {
+        Await.ready(isUpdateFinished, 5.minutes)
+      } catch {
+        case _: Throwable ⇒
+      }
     }
 
     net.W := bestParam

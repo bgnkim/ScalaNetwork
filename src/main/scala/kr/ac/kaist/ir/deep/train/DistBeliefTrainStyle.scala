@@ -1,12 +1,14 @@
 package kr.ac.kaist.ir.deep.train
 
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.network.Network
+import kr.ac.kaist.ir.deep.network._
 import org.apache.spark.SparkContext
+import org.apache.spark.SparkContext._
 import org.apache.spark.storage.StorageLevel
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
+import scala.concurrent.duration._
 
 /**
  * __Train Style__ : Semi-DistBelief Style, Spark-based.
@@ -18,7 +20,7 @@ import scala.concurrent._
  * @param sc A __spark context__ that network will be distributed
  * @param make __Input Operation__ that supervises how to manipulate input as matrices.
  *             This also controls how to compute actual network. (default: [[VectorType]])
- * @param param __DistBelief-style__ Training criteria (default: [[kr.ac.kaist.ir.deep.train.DistBeliefCriteria]])
+ * @param param __DistBelief-style__ Training criteria (default: [[DistBeliefCriteria]])
  */
 class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
                                     protected[train] override val algorithm: WeightUpdater,
@@ -34,9 +36,9 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
   }
 
   /** Flag for fetch : Is fetching? */
-  @transient protected var fetchFlag: Boolean = false
+  @transient protected var fetchFlag: Future[Unit] = null
   /** Flag for update : Is updating? */
-  @transient protected var updateFlag: Boolean = false
+  @transient protected var updateFlag: Future[Unit] = null
 
   /**
    * Fetch weights
@@ -44,15 +46,17 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
    * @param iter current iteration
    */
   override protected[train] def fetch(iter: Int): Unit =
-    if (iter % param.fetchStep == 0 && !fetchFlag) {
-      fetchFlag = true
-      future {
-        val weights = sc.broadcast(net.W)
-        networks foreach (_._2.W := weights.value)
-        weights.destroy()
-      } onComplete {
-        _ ⇒ fetchFlag = false
+    if (iter % param.fetchStep == 0) {
+      if (fetchFlag != null && !fetchFlag.isCompleted) {
+        logger warn s"Fetch command arrived before previous fetch is done. Need more steps between fetch commands!"
       }
+
+      fetchFlag =
+        future {
+          val weights = sc.broadcast(net.W)
+          networks foreach (_._2.W := weights.value)
+          weights.destroy()
+        }
     }
 
   /**
@@ -61,57 +65,64 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
    * @param iter current iteration
    */
   override protected[train] def update(iter: Int): Unit =
-    if (iter % param.updateStep == 0 && !updateFlag) {
-      updateFlag = true
-      future {
-        val dWUpdate = networks.aggregate(IndexedSeq[ScalarMatrix]())({
-          (seq, pair) ⇒
-            val copiedNet = pair._2
-            val out = copiedNet.dW copy_+ seq
-            copiedNet.dW := 0.0
-            out
-        }, {
-          case (dW1, dW2) if dW2.isEmpty ⇒ dW1
-          case (dW1, dW2) if dW1.isEmpty ⇒ dW2
-          case (dW1, dW2) ⇒
-            dW1 :+= dW2
-        })
-
-        dWUpdate :/= (param.numCores * param.miniBatch).toDouble
-        net.W -= dWUpdate
-      } onComplete {
-        _ ⇒ updateFlag = false
+    if (iter % param.updateStep == 0) {
+      if (updateFlag != null && !updateFlag.isCompleted) {
+        logger warn s"Update command arrived before previous update is done. Need more steps between update commands!"
       }
+
+      updateFlag =
+        future {
+          val dWUpdate = networks.aggregate(IndexedSeq[ScalarMatrix]())({
+            (seq, pair) ⇒
+              val copiedNet = pair._2
+              val out = copiedNet.dW copy_+ seq
+              copiedNet.dW := 0.0
+              out
+          }, {
+            case (dW1, dW2) if dW2.isEmpty ⇒ dW1
+            case (dW1, dW2) if dW1.isEmpty ⇒ dW2
+            case (dW1, dW2) ⇒
+              dW1 :+= dW2
+          })
+
+          dWUpdate :/= (param.numCores * param.miniBatch).toDouble
+          net.W -= dWUpdate
+        }
     }
 
   /**
    * Indicates whether the asynchrononus update is finished or not.
    *
-   * @return boolean flag of update
+   * @return future object of update
    */
-  override protected[train] def isUpdateFinished: Boolean = updateFlag
+  override protected[train] def isUpdateFinished: Future[_] = updateFlag
 
   /**
    * Do mini-batch
    */
   override protected[train] def batch(): Unit = {
-    val sets = (0 until param.numCores) map {
-      _ ⇒ sc.broadcast(trainingSet(param.miniBatch))
-    }
+    val sets = sc.broadcast(trainingSet(param.miniBatch * param.numCores)
+      .sliding(param.miniBatch, param.miniBatch).toSeq)
 
-    networks foreachPartition {
+    val x = networks.foreachPartitionAsync {
       _ foreach {
         rddPair ⇒
           val copiedNet = rddPair._2
-          val seq = sets(rddPair._1).value.map {
+          val seq = sets.value(rddPair._1).map {
             pair ⇒ (make corrupted pair._1) → pair._2
-          }.seq
+          }.iterator
           make roundTrip(copiedNet, seq)
       }
     }
 
-    sets map {
-      _.destroy()
+    x.onComplete {
+      _ ⇒ sets.destroy()
+    }
+
+    try {
+      Await.ready(x, 30.seconds)
+    } catch {
+      case _: Throwable ⇒
     }
   }
 }

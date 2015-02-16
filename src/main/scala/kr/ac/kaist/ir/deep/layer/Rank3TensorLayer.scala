@@ -163,62 +163,66 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
      */
     val dGdXAll: ScalarMatrix = dFdX * error
 
-    (0 until fanOut).foldLeft(ScalarMatrix $0(fanIn, 1)) {
-      (acc, id) ⇒
-        // This is scalar
-        val dGdX = dGdXAll(id, 0)
+    val acc = ScalarMatrix $0(fanIn, 1)
+    var id = 0
+    while (id < fanOut) {
+      // This is scalar
+      val dGdX = dGdXAll(id, 0)
 
-        /*
-         * Chain Rule (Linear weight case) : dG/dW_ij = tr[ ( dG/dX ).t * dX/dW_ij ].
-         *
-         * dX/dW_ij is a fan-Out dimension column vector with all zero but (i, 1) = X_j.
-         * Thus, tr(.) can be omitted, and dG/dW_ij = (dX/dW_ij).t * dG/dX
-         * Then {j-th column of dG/dW} = X_j * dG/dX = dG/dX * X_j.
-         *
-         * Therefore dG/dW = dG/dX * X.t
-         */
-        val dGdL: ScalarMatrix = input.t :* dGdX // Because dGdX is scalar, dGdX * X.t = X.t * dGdX
-        dL(id) += dGdL
+      /*
+       * Chain Rule (Linear weight case) : dG/dW_ij = tr[ ( dG/dX ).t * dX/dW_ij ].
+       *
+       * dX/dW_ij is a fan-Out dimension column vector with all zero but (i, 1) = X_j.
+       * Thus, tr(.) can be omitted, and dG/dW_ij = (dX/dW_ij).t * dG/dX
+       * Then {j-th column of dG/dW} = X_j * dG/dX = dG/dX * X_j.
+       *
+       * Therefore dG/dW = dG/dX * X.t
+       */
+      val dGdL: ScalarMatrix = input.t :* dGdX // Because dGdX is scalar, dGdX * X.t = X.t * dGdX
+      dL(id) += dGdL
 
-        /*
-         * Chain Rule (Quadratic weight case) : dG/dQ_ij = tr[ ( dG/dX ).t * dX/dQ_ij ].
-         *
-         * Because X = inA.t * Q * inB, dX/dQ = inA * inB.t
-         * Therefore dX/dQ_ij = (inA * inB.t)_ij, and so dG/dQ_ij = (dG/dX).t * dX/dQ_ij.
-         * They are scalar, so dG/dQ = dG/dX * dX/dQ.
-         */
-        val dXdQ: ScalarMatrix = inA * inB.t //d tr(axb)/dx = a'b'
+      /*
+       * Chain Rule (Quadratic weight case) : dG/dQ_ij = tr[ ( dG/dX ).t * dX/dQ_ij ].
+       *
+       * Because X = inA.t * Q * inB, dX/dQ = inA * inB.t
+       * Therefore dX/dQ_ij = (inA * inB.t)_ij, and so dG/dQ_ij = (dG/dX).t * dX/dQ_ij.
+       * They are scalar, so dG/dQ = dG/dX * dX/dQ.
+       */
+      val dXdQ: ScalarMatrix = inA * inB.t //d tr(axb)/dx = a'b'
       val dGdQ: ScalarMatrix = dXdQ :* dGdX
-        dQ(id) += dGdQ
+      dQ(id) += dGdQ
 
-        // For bias, input is always 1. We only need dG/dX
-        db(id, 0) += dGdX
+      // For bias, input is always 1. We only need dG/dX
+      db(id, 0) += dGdX
 
-        /*
-         * Chain Rule (Linear weight part) : dG/dx_ij = tr[ ( dG/dX ).t * dX/dx_ij ].
-         *
-         * X is column vector. Thus j is always 1, so dX/dx_i is a W_?i.
-         * Hence dG/dx_i = tr[ (dG/dX).t * dX/dx_ij ] = (W_?i).t * dG/dX.
-         *
-         * Thus dG/dx = W.t * dG/dX
-         */
-        val dGdxL: ScalarMatrix = linear(id).t * dGdX
+      /*
+       * Chain Rule (Linear weight part) : dG/dx_ij = tr[ ( dG/dX ).t * dX/dx_ij ].
+       *
+       * X is column vector. Thus j is always 1, so dX/dx_i is a W_?i.
+       * Hence dG/dx_i = tr[ (dG/dX).t * dX/dx_ij ] = (W_?i).t * dG/dX.
+       *
+       * Thus dG/dx = W.t * dG/dX
+       */
+      val dGdxL: ScalarMatrix = linear(id).t * dGdX
 
-        /*
-         * Chain Rule (Quadratic weight part) : dG/dx_ij = tr[ ( dG/dX ).t * dX/dx_ij ].
-         *
-         * Note that X is a column vector with inA as upper part, inB as lower part.
-         * Because X = inA.t * Q * inB, dX/dxA = inB.t * Q.t and dX/dxB = inA.t * Q
-         * Therefore dX/dx is obtained by concatnating them.
-         * Since dG/dX is scalar, we obtain dG/dx by scalar multiplication.
-         */
-        val dXdxQ1: ScalarMatrix = inB.t * quadratic(id).t //d tr(ax')/dx = d tr(x'a)/dx = a'
+      /*
+       * Chain Rule (Quadratic weight part) : dG/dx_ij = tr[ ( dG/dX ).t * dX/dx_ij ].
+       *
+       * Note that X is a column vector with inA as upper part, inB as lower part.
+       * Because X = inA.t * Q * inB, dX/dxA = inB.t * Q.t and dX/dxB = inA.t * Q
+       * Therefore dX/dx is obtained by concatnating them.
+       * Since dG/dX is scalar, we obtain dG/dx by scalar multiplication.
+       */
+      val dXdxQ1: ScalarMatrix = inB.t * quadratic(id).t //d tr(ax')/dx = d tr(x'a)/dx = a'
       val dXdxQ2: ScalarMatrix = inA.t * quadratic(id) //d tr(ax)/dx = d tr(xa)/dx = a
       val dXdxQ: ScalarMatrix = dXdxQ1 col_+ dXdxQ2
-        val dGdxQ: ScalarMatrix = dXdxQ :* dGdX
+      val dGdxQ: ScalarMatrix = dXdxQ :* dGdX
 
-        val dGdx: ScalarMatrix = dGdxL + dGdxQ
-        acc += dGdx
+      val dGdx: ScalarMatrix = dGdxL + dGdxQ
+      acc += dGdx
+
+      id += 1
     }
+    acc
   }
 }
