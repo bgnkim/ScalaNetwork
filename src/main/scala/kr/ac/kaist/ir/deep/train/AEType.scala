@@ -32,9 +32,12 @@ class AEType(override protected[train] val corrupt: Corruption = NoCorruption,
    * @param net A network that gets input
    * @param seq Sequence of (Input, Real output) for error computation.
    */
-  def roundTrip(net: Network, seq: Iterator[(ScalarMatrix, Null)]): Unit = {
-    while (seq.hasNext) {
-      val pair = seq.next()
+  def roundTrip(net: Network, seq: Array[(ScalarMatrix, Null)]): Unit = {
+    var i = 0
+    while (i < seq.size) {
+      val pair = seq(i)
+      i += 1
+
       val in = pair._1
       val out = in into_: net
       val err: ScalarMatrix = error.derivative(in, out)
@@ -49,10 +52,13 @@ class AEType(override protected[train] val corrupt: Corruption = NoCorruption,
    * @param validation Sequence of (Input, Real output) for error computation.
    * @return error of this network
    */
-  override def lossOf(net: Network, validation: Iterator[(ScalarMatrix, Null)]): Scalar = {
+  override def lossOf(net: Network, validation: Array[(ScalarMatrix, Null)]): Scalar = {
     var sum = 0.0
-    while (validation.hasNext) {
-      val pair = validation.next()
+    var i = 0
+    while (i < validation.size) {
+      val pair = validation(i)
+      i += 1
+      
       val in = pair._1
       val out = net of in
       sum += error(in, out)

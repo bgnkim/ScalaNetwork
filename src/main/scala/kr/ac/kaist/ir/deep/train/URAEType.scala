@@ -29,19 +29,25 @@ class URAEType(override protected[train] val corrupt: Corruption = NoCorruption,
    * @param net A network that gets input
    * @param seq Sequence of (Input, Real output) for error computation.
    */
-  def roundTrip(net: Network, seq: Iterator[(DAG, Null)]): Unit =
+  def roundTrip(net: Network, seq: Array[(DAG, Null)]): Unit =
     net match {
       case net: AutoEncoder ⇒
-        while (seq.hasNext) {
-          val pair = seq.next()
+        var i = 0
+        while (i < seq.size) {
+          val pair = seq(i)
+          i += 1
+          
           val in = pair._1
           // Encode phrase of Reconstruction
           val out = in forward net.encode
 
           // Decode phrase of reconstruction
-          val terminals = in.backward(out, net.decode).iterator
-          while (terminals.hasNext) {
-            val leaf = terminals.next()
+          val terminals = in.backward(out, net.decode)
+          var j = 0
+          while (j < terminals.size) {
+            val leaf = terminals(j)
+            j += 1
+            
             leaf.out = error.derivative(leaf.out, leaf.x)
           }
 
@@ -61,20 +67,25 @@ class URAEType(override protected[train] val corrupt: Corruption = NoCorruption,
    * @param validation Sequence of (Input, Real output) for error computation.
    * @return error of this network
    */
-  override def lossOf(net: Network, validation: Iterator[(DAG, Null)]): Scalar =
+  override def lossOf(net: Network, validation: Array[(DAG, Null)]): Scalar =
     net match {
       case net: AutoEncoder ⇒
         var sum = 0.0
-        while (validation.hasNext) {
-          val pair = validation.next()
+        var i = 0
+        while (i < validation.size) {
+          val pair = validation(i)
+          i += 1
+
           val in = pair._1
           // Encode phrase of Reconstruction
           val out = in forward net.apply
 
           // Decode phrase of reconstruction
-          val terminals = in.backward(out, net.reconstruct).iterator
-          while (terminals.hasNext) {
-            val leaf = terminals.next()
+          val terminals = in.backward(out, net.reconstruct)
+          var j = 0
+          while (j < terminals.size) {
+            val leaf = terminals(j)
+            j += 1
             sum += error(leaf.out, leaf.x)
           }
         }
@@ -97,9 +108,12 @@ class URAEType(override protected[train] val corrupt: Corruption = NoCorruption,
         val out = in forward net.apply
 
         // Decode phrase of reconstruction
-        val terminals = in.backward(out, net.reconstruct).iterator
-        while (terminals.hasNext) {
-          val leaf = terminals.next()
+        val terminals = in.backward(out, net.reconstruct)
+        var i = 0
+        while (i < terminals.size) {
+          val leaf = terminals(i)
+          i += 1
+
           string append s"IN: ${leaf.x.mkString} URAE → OUT: ${leaf.out.mkString};"
         }
         string.mkString

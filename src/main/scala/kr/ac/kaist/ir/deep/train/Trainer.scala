@@ -60,7 +60,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
   /** Logger */
   @transient protected val logger = Logger.getLogger(this.getClass)
   /** Validation Set */
-  protected var testSet: Int ⇒ Iterator[Pair] = null
+  protected var testSet: Int ⇒ Array[Pair] = null
   /** Best Parameter History */
   @transient protected var bestParam: IndexedSeq[ScalarMatrix] = null
   /** Best Loss Iteration Number */
@@ -72,7 +72,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    * @param set __Random Sequence Generator__ of training set
    * @return Training error (loss)
    */
-  def train(set: Int ⇒ Iterator[Pair]): Scalar = train(set, set)
+  def train(set: Int ⇒ Array[Pair]): Scalar = train(set, set)
 
   /**
    * Train given sequence, and validate with given sequence.
@@ -82,7 +82,15 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    */
   def train(set: Seq[Pair]): Scalar = {
     val index = () ⇒ Math.floor(Math.random() * set.size).toInt
-    val randomizer = (n: Int) ⇒ (0 until n).map { _ ⇒ set(index())}.iterator
+    val randomizer = (n: Int) ⇒ {
+      val array = new Array[Pair](n)
+      var i = 0
+      while (i < n) {
+        array.update(i, set(index()))
+        i += 1
+      }
+      array
+    }
     train(randomizer, randomizer)
   }
 
@@ -96,8 +104,16 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
   def train(set: Seq[Pair],
             validation: Seq[Pair]): Scalar = {
     val index = () ⇒ Math.floor(Math.random() * set.size).toInt
-    val randomizer = (n: Int) ⇒ (0 until n).map { _ ⇒ set(index())}.iterator
-    val topN = (n: Int) ⇒ validation.slice(0, n).iterator
+    val randomizer = (n: Int) ⇒ {
+      val array = new Array[Pair](n)
+      var i = 0
+      while (i < n) {
+        array.update(i, set(index()))
+        i += 1
+      }
+      array
+    }
+    val topN = (n: Int) ⇒ validation.slice(0, n).toArray
     train(randomizer, topN)
   }
 
@@ -108,8 +124,8 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    * @param validation Sequence Generator of validation set
    * @return Training error (loss)
    */
-  def train(set: Int ⇒ Iterator[Pair],
-            validation: Int ⇒ Iterator[Pair]) = {
+  def train(set: Int ⇒ Array[Pair],
+            validation: Int ⇒ Array[Pair]) = {
     trainingSet = set
     testSet = validation
 
@@ -129,7 +145,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
   def train(set: RDD[Pair]): Scalar = {
     train({
       val cached = set.cache()
-      x: Int ⇒ cached.takeSample(withReplacement = true, num = x).iterator
+      x: Int ⇒ cached.takeSample(withReplacement = true, num = x)
     })
   }
 
@@ -141,11 +157,9 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    */
   def train(set: RDD[Pair], validation: RDD[Pair]): Scalar = {
     train({
-      val cached = set.cache()
-      x: Int ⇒ cached.takeSample(withReplacement = true, num = x).iterator
+      x: Int ⇒ set.takeSample(withReplacement = true, num = x)
     }, {
-      val cached = validation.cache()
-      x: Int ⇒ cached.takeSample(withReplacement = true, num = x).iterator
+      x: Int ⇒ validation.takeSample(withReplacement = true, num = x)
     })
   }
 

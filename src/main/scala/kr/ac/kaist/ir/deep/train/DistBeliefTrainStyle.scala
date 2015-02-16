@@ -110,7 +110,7 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
           val copiedNet = rddPair._2
           val seq = sets.value(rddPair._1).map {
             pair ⇒ (make corrupted pair._1) → pair._2
-          }.iterator
+          }
           make roundTrip(copiedNet, seq)
       }
     }

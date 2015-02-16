@@ -28,7 +28,7 @@ trait TrainStyle[IN, OUT] extends Serializable {
   /** Logger */
   @transient protected val logger = Logger.getLogger(this.getClass)
   /** Training Set */
-  protected[train] var trainingSet: Int ⇒ Iterator[Pair] = null
+  protected[train] var trainingSet: Int ⇒ Array[Pair] = null
 
   /**
    * Fetch weights
