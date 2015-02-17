@@ -5,6 +5,7 @@ import org.apache.log4j.Logger
 import org.apache.spark.rdd.RDD
 
 import scala.annotation.tailrec
+import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
@@ -60,7 +61,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
   /** Logger */
   @transient protected val logger = Logger.getLogger(this.getClass)
   /** Validation Set */
-  protected var testSet: Int ⇒ Array[Pair] = null
+  protected var testSet: Int ⇒ Seq[Pair] = null
   /** Best Parameter History */
   @transient protected var bestParam: IndexedSeq[ScalarMatrix] = null
   /** Best Loss Iteration Number */
@@ -72,7 +73,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    * @param set __Random Sequence Generator__ of training set
    * @return Training error (loss)
    */
-  def train(set: Int ⇒ Array[Pair]): Scalar = train(set, set)
+  def train(set: Int ⇒ Seq[Pair]): Scalar = train(set, set)
 
   /**
    * Train given sequence, and validate with given sequence.
@@ -83,10 +84,12 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
   def train(set: Seq[Pair]): Scalar = {
     val index = () ⇒ Math.floor(Math.random() * set.size).toInt
     val randomizer = (n: Int) ⇒ {
-      val array = new Array[Pair](n)
+      val array = ArrayBuffer[Pair]()
+      array.sizeHint(n)
+      
       var i = 0
       while (i < n) {
-        array.update(i, set(index()))
+        array += set(index())
         i += 1
       }
       array
@@ -105,15 +108,17 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
             validation: Seq[Pair]): Scalar = {
     val index = () ⇒ Math.floor(Math.random() * set.size).toInt
     val randomizer = (n: Int) ⇒ {
-      val array = new Array[Pair](n)
+      val array = ArrayBuffer[Pair]()
+      array.sizeHint(n)
+      
       var i = 0
       while (i < n) {
-        array.update(i, set(index()))
+        array += set(index())
         i += 1
       }
       array
     }
-    val topN = (n: Int) ⇒ validation.slice(0, n).toArray
+    val topN = (n: Int) ⇒ validation.slice(0, n)
     train(randomizer, topN)
   }
 
@@ -124,8 +129,8 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    * @param validation Sequence Generator of validation set
    * @return Training error (loss)
    */
-  def train(set: Int ⇒ Array[Pair],
-            validation: Int ⇒ Array[Pair]) = {
+  def train(set: Int ⇒ Seq[Pair],
+            validation: Int ⇒ Seq[Pair]) = {
     trainingSet = set
     testSet = validation
 
@@ -145,7 +150,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
   def train(set: RDD[Pair]): Scalar = {
     train({
       val cached = set.cache()
-      x: Int ⇒ cached.takeSample(withReplacement = true, num = x)
+      x: Int ⇒ cached.takeSample(withReplacement = true, num = x).toSeq
     })
   }
 
@@ -157,9 +162,9 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    */
   def train(set: RDD[Pair], validation: RDD[Pair]): Scalar = {
     train({
-      x: Int ⇒ set.takeSample(withReplacement = true, num = x)
+      x: Int ⇒ set.takeSample(withReplacement = true, num = x).toSeq
     }, {
-      x: Int ⇒ validation.takeSample(withReplacement = true, num = x)
+      x: Int ⇒ validation.takeSample(withReplacement = true, num = x).toSeq
     })
   }
 
@@ -169,8 +174,15 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    * @return validation error
    */
   protected def validationError() = {
-    val t = testSet(param.validationSize)
-    make.lossOf(net, t) / t.size
+    var t = testSet(param.validationSize)
+    val size = t.size
+    val lossOf = make.lossOf(net) _
+    var sum = 0.0
+    while (t.nonEmpty) {
+      sum += lossOf(t.head) / size
+      t = t.tail
+    }
+    sum
   }
 
   /**

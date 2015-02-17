@@ -2,9 +2,8 @@ package kr.ac.kaist.ir.deep.train
 
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.network._
-import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
-import org.apache.spark.storage.StorageLevel
+import org.apache.spark.{AccumulatorParam, SparkContext}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
@@ -28,13 +27,11 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
                                     protected[train] override val make: ManipulationType[IN, OUT] = new VectorType(),
                                     protected[train] override val param: DistBeliefCriteria = DistBeliefCriteria())
   extends TrainStyle[IN, OUT] {
+  /** Accumulator variable for networks */
+  protected val accNet = sc.accumulator(net.dW)(WeightAccumulator)
+  private val zeros = net.dW.map(_.copy)
   /** Spark distributed networks */
-  @transient protected val networks = {
-    val pairs = net copy param.numCores
-    sc.makeRDD(pairs.indices map { id ⇒ id → pairs(id)}, param.numCores)
-      .persist(StorageLevel.MEMORY_ONLY).cache()
-  }
-
+  protected var bcNet = sc.broadcast(net.copy)
   /** Flag for fetch : Is fetching? */
   @transient protected var fetchFlag: Future[Unit] = null
   /** Flag for update : Is updating? */
@@ -53,9 +50,9 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
 
       fetchFlag =
         future {
-          val weights = sc.broadcast(net.W)
-          networks foreach (_._2.W := weights.value)
-          weights.destroy()
+          val oldNet = bcNet
+          bcNet = sc.broadcast(net.copy)
+          oldNet.destroy()
         }
     }
 
@@ -72,18 +69,8 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
 
       updateFlag =
         future {
-          val dWUpdate = networks.aggregate(IndexedSeq[ScalarMatrix]())({
-            (seq, pair) ⇒
-              val copiedNet = pair._2
-              val out = copiedNet.dW copy_+ seq
-              copiedNet.dW := 0.0
-              out
-          }, {
-            case (dW1, dW2) if dW2.isEmpty ⇒ dW1
-            case (dW1, dW2) if dW1.isEmpty ⇒ dW2
-            case (dW1, dW2) ⇒
-              dW1 :+= dW2
-          })
+          val dWUpdate = accNet.value
+          accNet.setValue(zeros)
 
           dWUpdate :/= (param.numCores * param.miniBatch).toDouble
           net.W -= dWUpdate
@@ -101,28 +88,31 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
    * Do mini-batch
    */
   override protected[train] def batch(): Unit = {
-    val sets = sc.broadcast(trainingSet(param.miniBatch * param.numCores)
-      .sliding(param.miniBatch, param.miniBatch).toSeq)
+    val size = param.numCores * param.miniBatch
+    val rddSet = sc.parallelize(trainingSet(size), param.numCores)
 
-    val x = networks.foreachPartitionAsync {
-      _ foreach {
-        rddPair ⇒
-          val copiedNet = rddPair._2
-          val seq = sets.value(rddPair._1).map {
-            pair ⇒ (make corrupted pair._1) → pair._2
-          }
-          make roundTrip(copiedNet, seq)
-      }
-    }
-
-    x.onComplete {
-      _ ⇒ sets.destroy()
+    val x = rddSet.foreachPartitionAsync {
+      part ⇒
+        val netCopy = bcNet.value.copy
+        while (part.hasNext) {
+          val pair = part.next()
+          make.roundTrip(netCopy, make corrupted pair._1, pair._2)
+        }
+        accNet += netCopy.dW 
     }
 
     try {
-      Await.ready(x, 30.seconds)
+      Await.ready(x, (size * 5).seconds)
     } catch {
       case _: Throwable ⇒
     }
   }
+}
+
+object WeightAccumulator extends AccumulatorParam[IndexedSeq[ScalarMatrix]] {
+  override def addInPlace(r1: IndexedSeq[ScalarMatrix], r2: IndexedSeq[ScalarMatrix]): IndexedSeq[ScalarMatrix] = {
+    r1 :+= r2
+  }
+
+  override def zero(initialValue: IndexedSeq[ScalarMatrix]): IndexedSeq[ScalarMatrix] = initialValue.map(_.copy)
 }

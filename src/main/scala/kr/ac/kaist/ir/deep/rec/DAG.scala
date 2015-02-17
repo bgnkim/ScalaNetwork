@@ -11,7 +11,7 @@ import scala.collection.mutable.ArrayBuffer
  * This class collects all the output results, and just concatenate it.
  * Therefore this class does not directly apply given functions.
  */
-class DAG(val finals: Array[Node]) extends Node {
+class DAG(val finals: Seq[Node]) extends Node {
   /**
    * Forward computation of DAG
    *
@@ -19,11 +19,11 @@ class DAG(val finals: Array[Node]) extends Node {
    * @return the result
    */
   override def forward(fn: ScalarMatrix ⇒ ScalarMatrix): ScalarMatrix = {
-    var i = 0
+    var i = finals
     var last: ScalarMatrix = null
-    while (i < finals.size) {
-      val curr = finals(i)
-      i += 1
+    while (i.nonEmpty) {
+      val curr = i.head
+      i = i.tail
       
       val res = curr.forward(fn)
       last = 
@@ -45,12 +45,12 @@ class DAG(val finals: Array[Node]) extends Node {
   def backward(err: ScalarMatrix,
                fn: ScalarMatrix ⇒ ScalarMatrix): Seq[TerminalNode] = {
     val rSize = err.rows / finals.size
-    var i = finals.size - 1
+    var i = finals.reverse
     var e = err
     var seq = ArrayBuffer[TerminalNode]()
-    while (i >= 0) {
-      val curr = finals(i)
-      i -= 1
+    while (i.nonEmpty) {
+      val curr = i.head
+      i = i.tail
       
       val splited = spliter(e, rSize)
       val seq2 = curr.backward(splited._2, fn)

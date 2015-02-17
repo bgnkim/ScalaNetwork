@@ -27,21 +27,16 @@ class RAEType(override protected[train] val corrupt: Corruption = NoCorruption,
    * Apply & Back-prop given single input
    *
    * @param net A network that gets input
-   * @param seq Sequence of (Input, Real output) for error computation.
+   * @param in Input for error computation.
+   * @param real Real Output for error computation.
    */
-  def roundTrip(net: Network, seq: Array[(DAG, Null)]): Unit = {
-    var i = 0
-    while (i < seq.size) {
-      val pair = seq(i)
-      i += 1
-
-      pair._1 forward {
-        x ⇒
-          val err = error.derivative(x, x into_: net)
-          net updateBy err
-          // propagate hidden-layer value
-          net(x)
-      }
+  def roundTrip(net: Network, in: DAG, real: Null): Unit = {
+    in forward {
+      x ⇒
+        val err = error.derivative(x, x into_: net)
+        net updateBy err
+        // propagate hidden-layer value
+        net(x)
     }
   }
 
@@ -49,23 +44,17 @@ class RAEType(override protected[train] val corrupt: Corruption = NoCorruption,
    * Apply given input and compute the error
    *
    * @param net A network that gets input  
-   * @param validation Sequence of (Input, Real output) for error computation.
+   * @param pair (Input, Real output) for error computation.
    * @return error of this network
    */
-  override def lossOf(net: Network, validation: Array[(DAG, Null)]): Scalar = {
+  def lossOf(net: Network)(pair: (DAG, Null)): Scalar = {
     var sum = 0.0
-    var i = 0
-    while (i < validation.size) {
-      val pair = validation(i)
-      i += 1
-
-      val in = pair._1
-      in forward {
-        x ⇒
-          sum += error(x, net of x)
-          //propagate hidden-layer value
-          net(x)
-      }
+    val in = pair._1
+    in forward {
+      x ⇒
+        sum += error(x, net of x)
+        //propagate hidden-layer value
+        net(x)
     }
     sum
   }

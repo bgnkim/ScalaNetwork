@@ -27,67 +27,53 @@ class URAEType(override protected[train] val corrupt: Corruption = NoCorruption,
    * Apply & Back-prop given single input
    *
    * @param net A network that gets input
-   * @param seq Sequence of (Input, Real output) for error computation.
+   * @param in Input for error computation.
+   * @param real Real Output for error computation.
    */
-  def roundTrip(net: Network, seq: Array[(DAG, Null)]): Unit =
+  def roundTrip(net: Network, in: DAG, real: Null): Unit =
     net match {
       case net: AutoEncoder ⇒
-        var i = 0
-        while (i < seq.size) {
-          val pair = seq(i)
-          i += 1
-          
-          val in = pair._1
-          // Encode phrase of Reconstruction
-          val out = in forward net.encode
+        val out = in forward net.encode
 
-          // Decode phrase of reconstruction
-          val terminals = in.backward(out, net.decode)
-          var j = 0
-          while (j < terminals.size) {
-            val leaf = terminals(j)
-            j += 1
-            
-            leaf.out = error.derivative(leaf.out, leaf.x)
-          }
+        // Decode phrase of reconstruction
+        var terminals = in.backward(out, net.decode)
+        while (terminals.nonEmpty) {
+          val leaf = terminals.head
+          terminals = terminals.tail
 
-          // Error propagation for decoder
-          val err = in forward net.decode_!
-
-          // Error propagation for encoder
-          in backward(err, net.encode_!)
+          leaf.out = error.derivative(leaf.out, leaf.x)
         }
+
+        // Error propagation for decoder
+        val err = in forward net.decode_!
+
+        // Error propagation for encoder
+        in backward(err, net.encode_!)
     }
 
 
   /**
    * Apply given input and compute the error
    *
-   * @param net A network that gets input  
-   * @param validation Sequence of (Input, Real output) for error computation.
+   * @param net A network that gets input
+   * @param pair (Input, Real output) for error computation.
    * @return error of this network
    */
-  override def lossOf(net: Network, validation: Array[(DAG, Null)]): Scalar =
+  def lossOf(net: Network)(pair: (DAG, Null)): Scalar =
     net match {
       case net: AutoEncoder ⇒
         var sum = 0.0
-        var i = 0
-        while (i < validation.size) {
-          val pair = validation(i)
-          i += 1
+        val in = pair._1
+        // Encode phrase of Reconstruction
+        val out = in forward net.apply
 
-          val in = pair._1
-          // Encode phrase of Reconstruction
-          val out = in forward net.apply
-
-          // Decode phrase of reconstruction
-          val terminals = in.backward(out, net.reconstruct)
-          var j = 0
-          while (j < terminals.size) {
-            val leaf = terminals(j)
-            j += 1
-            sum += error(leaf.out, leaf.x)
-          }
+        // Decode phrase of reconstruction
+        var terminals = in.backward(out, net.reconstruct)
+        val size = terminals.size
+        while (terminals.nonEmpty) {
+          val leaf = terminals.head
+          terminals = terminals.tail
+          sum += error(leaf.out, leaf.x)
         }
         sum
       case _ ⇒ 0.0
@@ -108,11 +94,10 @@ class URAEType(override protected[train] val corrupt: Corruption = NoCorruption,
         val out = in forward net.apply
 
         // Decode phrase of reconstruction
-        val terminals = in.backward(out, net.reconstruct)
-        var i = 0
-        while (i < terminals.size) {
-          val leaf = terminals(i)
-          i += 1
+        var terminals = in.backward(out, net.reconstruct)
+        while (terminals.nonEmpty) {
+          val leaf = terminals.head
+          terminals = terminals.tail
 
           string append s"IN: ${leaf.x.mkString} URAE → OUT: ${leaf.out.mkString};"
         }

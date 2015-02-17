@@ -30,42 +30,27 @@ class VectorType(override protected[train] val corrupt: Corruption = NoCorruptio
    * Apply & Back-prop given single input
    *
    * @param net A network that gets input
-   * @param seq Sequence of (Input, Real output) for error computation.
+   * @param in Input for error computation.
+   * @param real Real Output for error computation.
    */
-  def roundTrip(net: Network, seq: Array[(ScalarMatrix, ScalarMatrix)]): Unit = {
-    var i = 0
-    while (i < seq.size) {
-      val pair = seq(i)
-      i += 1
-
-      val in = pair._1
-      val real = pair._2
-      val out = in into_: net
-      val err: ScalarMatrix = error.derivative(real, out)
-      net updateBy err
-    }
+  def roundTrip(net: Network, in: ScalarMatrix, real: ScalarMatrix): Unit = {
+    val out = in into_: net
+    val err: ScalarMatrix = error.derivative(real, out)
+    net updateBy err
   }
 
   /**
    * Apply given input and compute the error
    *
-   * @param net A network that gets input  
-   * @param validation Sequence of (Input, Real output) for error computation.
+   * @param net A network that gets input
+   * @param pair (Input, Real output) for error computation.
    * @return error of this network
    */
-  override def lossOf(net: Network, validation: Array[(ScalarMatrix, ScalarMatrix)]): Scalar = {
-    var sum = 0.0
-    var i = 0
-    while (i < validation.size) {
-      val pair = validation(i)
-      i += 1
-
-      val in = pair._1
-      val real = pair._2
-      val out = net of in
-      sum += error(real, out)
-    }
-    sum
+  override def lossOf(net: Network)(pair: (ScalarMatrix, ScalarMatrix)): Scalar = {
+    val in = pair._1
+    val real = pair._2
+    val out = net of in
+    error(real, out)
   }
 
   /**

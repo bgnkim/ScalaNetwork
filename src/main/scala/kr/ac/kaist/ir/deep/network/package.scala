@@ -70,12 +70,11 @@ package object network {
     /**
      * Copy given network by given amount
      *
-     * @param n the number of copies (default: 1)
      * @return Sequence of copied network (Not linked)
      */
-    def copy(n: Int = 1) = {
+    def copy = {
       val json = net.toJSON
-      (1 to n) map { _ ⇒ Network(json)}
+      Network(json)
     }
   }
 

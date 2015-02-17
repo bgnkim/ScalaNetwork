@@ -39,9 +39,11 @@ class SingleThreadTrainStyle[IN, OUT](protected[train] override val net: Network
    * Do mini-batch
    */
   override protected[train] def batch(): Unit = {
-    val seq = trainingSet(param.miniBatch).map {
-      pair ⇒ (make corrupted pair._1) → pair._2
+    var seq = trainingSet(param.miniBatch)
+    while (seq.nonEmpty) {
+      val pair = seq.head
+      seq = seq.tail
+      make roundTrip(net, make corrupted pair._1, pair._2)
     }
-    make roundTrip(net, seq)
   }
 }

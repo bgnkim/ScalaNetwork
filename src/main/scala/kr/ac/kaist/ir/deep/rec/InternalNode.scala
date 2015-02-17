@@ -17,11 +17,11 @@ class InternalNode(val req: Seq[Node]) extends Node {
    * @return the result
    */
   override def forward(fn: ScalarMatrix ⇒ ScalarMatrix): ScalarMatrix = {
-    var i = 0
+    var i = req
     var last: ScalarMatrix = null
-    while (i < req.size) {
-      val curr = req(i)
-      i += 1
+    while (i.nonEmpty) {
+      val curr = i.head
+      i = i.tail
 
       val res = curr.forward(fn)
       last = 
@@ -43,12 +43,12 @@ class InternalNode(val req: Seq[Node]) extends Node {
   def backward(err: ScalarMatrix, fn: ScalarMatrix ⇒ ScalarMatrix): Seq[TerminalNode] = {
     val error = fn(err)
     val rSize = error.rows / req.size
-    var i = req.size - 1
-    var e = err
+    var i = req.reverse // Reverse ordering.
+    var e = error
     var seq = ArrayBuffer[TerminalNode]()
-    while (i >= 0) {
-      val curr = req(i)
-      i -= 1
+    while (i.nonEmpty) {
+      val curr = i.head
+      i = i.tail
       
       val splited = spliter(e, rSize)
       val seq2 = curr.backward(splited._2, fn)
