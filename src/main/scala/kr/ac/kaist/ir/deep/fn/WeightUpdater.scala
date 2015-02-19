@@ -30,7 +30,7 @@ trait WeightUpdater extends ((IndexedSeq[ScalarMatrix], IndexedSeq[ScalarMatrix]
    */
   def loss(seq: Seq[ScalarMatrix]) = {
     var i = 0
-    var err = 0.0
+    var err = 0.0f
     while (i < seq.size) {
       val obj = seq(i)
       val l1loss = sum(abs(obj)) * l1decay

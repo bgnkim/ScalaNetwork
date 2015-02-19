@@ -24,7 +24,7 @@ package object train {
    * {{{var corrupt = DroppingCorruption(presence = 0.99)
    *       var corrupted = corrupt(vector)}}}
    */
-  case class DroppingCorruption(presence: Double = 0.95) extends Corruption {
+  case class DroppingCorruption(presence: Float = 0.95f) extends Corruption {
     /**
      * Do corruption
      *
@@ -32,7 +32,7 @@ package object train {
      * @return corrupted vector
      */
     override def apply(v1: ScalarMatrix): ScalarMatrix =
-      v1 mapValues { x ⇒ if (Math.random() > presence) 0.0 else x}
+      v1 mapValues { x ⇒ if (Math.random() > presence) 0.0f else x}
   }
 
   /**
@@ -58,7 +58,7 @@ package object train {
      * @return corrupted vector
      */
     override def apply(v1: ScalarMatrix): ScalarMatrix =
-      v1 mapValues { x ⇒ x + distro.draw()}
+      v1 mapValues { x ⇒ x + distro.draw().toFloat}
   }
 
   /**
@@ -84,8 +84,8 @@ package object train {
   case class StoppingCriteria(maxIter: Int = 100000,
                               patience: Int = 5000,
                               patienceStep: Int = 2,
-                              improveThreshold: Double = 0.995,
-                              lossThreshold: Double = 0.0001,
+                              improveThreshold: Float = 0.995f,
+                              lossThreshold: Float = 0.0001f,
                               validationFreq: Int = 100)
     extends Serializable
 

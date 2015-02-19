@@ -24,7 +24,7 @@ object HyperbolicTangent extends Activation {
     var r = 0
     while (r < fx.rows) {
       val x = fx(r, 0)
-      res.update((r, r), 1.0 - x * x)
+      res.update((r, r), 1.0f - x * x)
       r += 1
     }
     res
@@ -48,8 +48,8 @@ object HyperbolicTangent extends Activation {
    * @return the initialized weight matrix
    */
   override def initialize(fanIn: Int, fanOut: Int, rows: Int = 0, cols: Int = 0): ScalarMatrix = {
-    val range = Math.sqrt(6.0 / (fanIn + fanOut))
-    val pmMatx: ScalarMatrix = ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :- 0.5
-    pmMatx :* (2.0 * range)
+    val range = Math.sqrt(6.0 / (fanIn + fanOut)).toFloat
+    val pmMatx: ScalarMatrix = ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :- 0.5f
+    pmMatx :* (2.0f * range)
   }
 }

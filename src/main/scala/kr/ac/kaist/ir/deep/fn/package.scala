@@ -8,9 +8,9 @@ import play.api.libs.json.{JsArray, JsNumber}
  */
 package object fn {
   /** Type of scalar **/
-  type Scalar = Double
+  type Scalar = Float
   /** Type of probability **/
-  type Probability = Double
+  type Probability = Float
   /** Type of Neuron Input **/
   type ScalarMatrix = DenseMatrix[Scalar]
   /** Define Alias **/
@@ -60,7 +60,7 @@ package object fn {
       val c = x.cols
       JsArray((0 until r) map {
         i ⇒ JsArray((0 until c) map {
-          j ⇒ JsNumber(x(i, j))
+          j ⇒ JsNumber(x(i, j).toDouble)
         })
       })
     }
@@ -87,7 +87,7 @@ package object fn {
      *
      * @return probability between 0 and 1
      */
-    def safe = if (0.0 <= x && x <= 1.0) x else if (x < 0.0) 0.0 else 1.0
+    def safe = if (0.0 <= x && x <= 1.0) x else if (x < 0.0) 0.0f else 1.0f
   }
 
   /**

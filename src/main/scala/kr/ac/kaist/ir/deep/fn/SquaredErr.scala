@@ -1,6 +1,7 @@
 package kr.ac.kaist.ir.deep.fn
 
 import breeze.linalg.sum
+import breeze.numerics.pow
 
 /**
  * __Objective Function__: Sum of Squared Error
@@ -30,7 +31,6 @@ object SquaredErr extends Objective {
    */
   override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar = {
     val diff = real - output
-    val sqdiff = diff :^ 2.0
-    sum(sqdiff)
+    sum(pow(diff, 2.0f))
   }
 }

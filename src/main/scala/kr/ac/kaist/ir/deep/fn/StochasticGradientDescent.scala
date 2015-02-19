@@ -14,10 +14,10 @@ import scala.collection.mutable.ArrayBuffer
  *
  * @example {{{val algorithm = new StochasticGradientDescent(l2decay = 0.0001)}}}
  */
-class StochasticGradientDescent(rate: Double = 0.03,
-                                protected override val l1decay: Double = 0.0000,
-                                protected override val l2decay: Double = 0.0001,
-                                momentum: Double = 0.0001)
+class StochasticGradientDescent(rate: Scalar = 0.03f,
+                                protected override val l1decay: Scalar = 0.0000f,
+                                protected override val l2decay: Scalar = 0.0001f,
+                                momentum: Scalar = 0.0001f)
   extends WeightUpdater {
   /** the last update of parameters */
   private val lastDelta = ArrayBuffer[ScalarMatrix]()
@@ -44,7 +44,7 @@ class StochasticGradientDescent(rate: Double = 0.03,
       val w = weight(id)
       val deltaW = delta(id)
 
-      val deltaL1 = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0}
+      val deltaL1 = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0f}
       val deltaL2 = w :* (l2decay * 2)
       val deltaLoss: ScalarMatrix = deltaW + deltaL1 + deltaL2
       val adapted: ScalarMatrix = deltaLoss :* rate
@@ -57,7 +57,7 @@ class StochasticGradientDescent(rate: Double = 0.03,
       }
 
       w += dw
-      deltaW := 0.0
+      deltaW := 0.0f
       lastDelta.update(id, dw)
       id -= 1
     }

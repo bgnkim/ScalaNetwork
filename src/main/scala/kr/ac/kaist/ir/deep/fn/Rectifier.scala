@@ -22,7 +22,7 @@ object Rectifier extends Activation {
     var r = 0
     while (r < fx.rows) {
       val x = fx(r, 0)
-      res.update((r, r), if (x > 0) 1.0 else 0.0)
+      res.update((r, r), if (x > 0) 1.0f else 0.0f)
       r += 1
     }
     res
@@ -39,7 +39,7 @@ object Rectifier extends Activation {
     val iter = x.keysIterator
     while (iter.hasNext) {
       val key = iter.next()
-      if (x(key) < 0) res.update(key, 0.0)
+      if (x(key) < 0) res.update(key, 0.0f)
     }
     res
   }

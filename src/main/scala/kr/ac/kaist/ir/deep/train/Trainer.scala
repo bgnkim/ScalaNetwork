@@ -177,7 +177,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
     var t = testSet(param.validationSize)
     val size = t.size
     val lossOf = make.lossOf(net) _
-    var sum = 0.0
+    var sum = 0.0f
     while (t.nonEmpty) {
       sum += lossOf(t.head) / size
       t = t.tail
@@ -229,7 +229,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    */
   @tailrec
   protected final def trainBatch(iter: Int = 0,
-                                 prevloss: Double = Double.MaxValue,
+                                 prevloss: Scalar = Float.MaxValue,
                                  patience: Int = stops.patience): Scalar = {
     fetch(iter)
     batch()

@@ -60,17 +60,17 @@ class NetworkTester extends Specification {
       }
     }
 
-    val encoder = new AutoEncoder(layer, 0.9995)
+    val encoder = new AutoEncoder(layer, 0.9995f)
     val style = new SingleThreadTrainStyle(
       net = encoder,
       make = new AEType(),
-      algorithm = new StochasticGradientDescent(rate = 0.8, l2decay = 0.0001),
+      algorithm = new StochasticGradientDescent(rate = 0.8f, l2decay = 0.0001f),
       param = SimpleTrainingCriteria(miniBatch = 8))
     val trainer = new Trainer(style = style,
       stops = StoppingCriteria(maxIter = 100000))
 
     "properly trained" in {
-      trainer.train(set, set) must be_<(0.3)
+      trainer.train(set, set) must be_<(0.3f)
     }
   }
 
@@ -81,7 +81,7 @@ class NetworkTester extends Specification {
         y ⇒ (0 until 100) map {
           _ ⇒ {
             val m = DenseMatrix.create[Scalar](2, 1, Array(x, y))
-            val n = DenseMatrix.create[Scalar](1, 1, Array(if (x == y) 0.0 else 1.0))
+            val n = DenseMatrix.create[Scalar](1, 1, Array(if (x == y) 0.0f else 1.0f))
             (m, n)
           }
         }
@@ -92,7 +92,7 @@ class NetworkTester extends Specification {
       x ⇒ (0 to 1) map {
         y ⇒ {
           val m = DenseMatrix.create[Scalar](2, 1, Array(x, y))
-          val n = DenseMatrix.create[Scalar](1, 1, Array(if (x == y) 0.0 else 1.0))
+          val n = DenseMatrix.create[Scalar](1, 1, Array(if (x == y) 0.0f else 1.0f))
           (m, n)
         }
       }
@@ -104,7 +104,7 @@ class NetworkTester extends Specification {
     )
     val style = new SingleThreadTrainStyle(
       net = net,
-      algorithm = new AdaDelta(decay = 0.9, l2decay = 0.0),
+      algorithm = new AdaDelta(decay = 0.9f, l2decay = 0.0f),
       make = operation,
       //algorithm = new AdaGrad(l2decay = 0.0001),
       //algorithm = GradientDescent(rate = 0.8, l2decay = 0.0001),
@@ -114,7 +114,7 @@ class NetworkTester extends Specification {
       stops = StoppingCriteria(maxIter = 100000))
 
     "properly trained" in {
-      train.train(set, valid) must be_<(0.3)
+      train.train(set, valid) must be_<(0.3f)
     }
   }
 }

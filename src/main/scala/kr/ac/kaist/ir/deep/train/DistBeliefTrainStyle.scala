@@ -72,7 +72,7 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
           val dWUpdate = accNet.value
           accNet.setValue(zeros)
 
-          dWUpdate :/= (param.numCores * param.miniBatch).toDouble
+          dWUpdate :/= (param.numCores * param.miniBatch).toFloat
           net.W -= dWUpdate
         }
     }

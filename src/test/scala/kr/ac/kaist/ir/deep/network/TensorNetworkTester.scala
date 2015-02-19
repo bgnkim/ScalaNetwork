@@ -69,7 +69,7 @@ class TensorNetworkTester extends Specification {
           z ⇒ (0 until 100) map {
             _ ⇒ {
               val m = DenseMatrix.create[Scalar](3, 1, Array(x, y, z))
-              val n = DenseMatrix.create[Scalar](4, 1, Array((x + y + 1 - z) / 3.0, (x + 1 - y + z) / 3.0, (z + 1 - x + y) / 3.0, (x + y + z) / 3.0))
+              val n = DenseMatrix.create[Scalar](4, 1, Array((x + y + 1 - z) / 3.0f, (x + 1 - y + z) / 3.0f, (z + 1 - x + y) / 3.0f, (x + y + z) / 3.0f))
               (m, n)
             }
           }
@@ -82,7 +82,7 @@ class TensorNetworkTester extends Specification {
         y ⇒ (0 to 1) map {
           z ⇒ {
             val m = DenseMatrix.create[Scalar](3, 1, Array(x, y, z))
-            val n = DenseMatrix.create[Scalar](4, 1, Array((x + y + 1 - z) / 3.0, (x + 1 - y + z) / 3.0, (z + 1 - x + y) / 3.0, (x + y + z) / 3.0))
+            val n = DenseMatrix.create[Scalar](4, 1, Array((x + y + 1 - z) / 3.0f, (x + 1 - y + z) / 3.0f, (z + 1 - x + y) / 3.0f, (x + y + z) / 3.0f))
             (m, n)
           }
         }
@@ -92,14 +92,14 @@ class TensorNetworkTester extends Specification {
     val net = new BasicNetwork(IndexedSeq(layer))
     val style = new SingleThreadTrainStyle[ScalarMatrix, ScalarMatrix](
       net = net,
-      algorithm = new StochasticGradientDescent(rate = 0.8, l2decay = 0.0001),
+      algorithm = new StochasticGradientDescent(rate = 0.8f, l2decay = 0.0001f),
       param = SimpleTrainingCriteria(miniBatch = 8)
     )
     val train = new Trainer(style = style,
       stops = StoppingCriteria(maxIter = 100000))
 
     "properly trained" in {
-      train.train(set, valid) must be_<(0.4)
+      train.train(set, valid) must be_<(0.4f)
     }
   }
 }

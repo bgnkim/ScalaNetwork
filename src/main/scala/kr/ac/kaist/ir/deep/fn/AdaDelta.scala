@@ -16,10 +16,10 @@ import scala.collection.mutable.ArrayBuffer
  *
  * @example {{{val algorithm = new AdaDelta(l2decay = 0.0001)}}}
  */
-class AdaDelta(protected override val l1decay: Double = 0.0000,
-               protected override val l2decay: Double = 0.0001,
-               private val decay: Double = 0.95,
-               private val epsilon: Double = 1e-6)
+class AdaDelta(protected override val l1decay: Scalar = 0.0000f,
+               protected override val l2decay: Scalar = 0.0001f,
+               private val decay: Scalar = 0.95f,
+               private val epsilon: Scalar = 1e-6f)
   extends WeightUpdater {
   /** accumulated history of gradients */
   private val gradSq = ArrayBuffer[ScalarMatrix]()
@@ -52,7 +52,7 @@ class AdaDelta(protected override val l1decay: Double = 0.0000,
       val w = weight(id)
       val deltaW = delta(id)
 
-      val deltaL1 = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0}
+      val deltaL1 = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0f}
       val deltaL2 = w * (l2decay * 2)
       val deltaLoss: ScalarMatrix = deltaW + deltaL1 + deltaL2
 
@@ -60,13 +60,14 @@ class AdaDelta(protected override val l1decay: Double = 0.0000,
       val deltaSq_id = deltaSq(id)
 
       gradSq_id :*= decay
-      gradSq_id += (pow(deltaLoss, 2) :* (1.0 - decay))
+      gradSq_id += (pow(deltaLoss, 2.0f) :* (1.0f - decay))
 
       val adjusted = ScalarMatrix $0(gradSq_id.rows, gradSq_id.cols)
       val iter = gradSq_id.keysIterator
       while (iter.hasNext) {
         val key = iter.next()
-        adjusted.update(key, Math.sqrt(deltaSq_id(key) + epsilon) / Math.sqrt(gradSq_id(key) + epsilon))
+        val value = Math.sqrt(deltaSq_id(key) + epsilon) / Math.sqrt(gradSq_id(key) + epsilon)
+        adjusted.update(key, value.toFloat)
       }
 
       val d = deltaLoss :* adjusted
@@ -74,7 +75,7 @@ class AdaDelta(protected override val l1decay: Double = 0.0000,
       w -= d
 
       deltaSq_id :*= decay
-      deltaSq_id += (pow(d, 2) :* (1.0 - decay))
+      deltaSq_id += (pow(d, 2.0f) :* (1.0f - decay))
 
       id -= 1
     }

@@ -31,7 +31,7 @@ class SingleThreadTrainStyle[IN, OUT](protected[train] override val net: Network
    * @param iter current iteration
    */
   override protected[train] def update(iter: Int): Unit = {
-    net.dW :/= param.miniBatch.toDouble
+    net.dW :/= param.miniBatch.toFloat
     net.W -= net.dW
   }
 

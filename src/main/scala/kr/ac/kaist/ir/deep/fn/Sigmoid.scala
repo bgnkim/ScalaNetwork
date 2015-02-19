@@ -24,7 +24,7 @@ object Sigmoid extends Activation {
     var r = 0
     while (r < fx.rows) {
       val x = fx(r, 0)
-      res.update((r, r), x * (1.0 - x))
+      res.update((r, r), x * (1.0f - x))
       r += 1
     }
     res
@@ -36,7 +36,22 @@ object Sigmoid extends Activation {
    * @param x the __input__ matrix. ''Before application, input should be summed already.''
    * @return value of `f(x)`
    */
-  override def apply(x: ScalarMatrix): ScalarMatrix = sigmoid(x)
+  override def apply(x: ScalarMatrix): ScalarMatrix = {
+    // Because fx is n by 1 matrix, generate n by n matrix
+    val res = ScalarMatrix $0(x.rows, x.cols)
+    // Output is diagonal matrix, with dfi(xi)/dxi.
+    var r = 0
+    while (r < x.rows) {
+      var c = 0
+      while (c < x.cols) {
+        val expx = exp(-x(r, c))
+        res.update((r, c), 1.0f / (1.0f + expx))
+        c += 1
+      }
+      r += 1
+    }
+    res
+  }
 
   /**
    * Initialize the weight matrix
@@ -48,8 +63,8 @@ object Sigmoid extends Activation {
    * @return the initialized weight matrix
    */
   override def initialize(fanIn: Int, fanOut: Int, rows: Int = 0, cols: Int = 0): ScalarMatrix = {
-    val range = Math.sqrt(6.0 / (fanIn + fanOut)) * 4.0
-    val pmMatx: ScalarMatrix = ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :- 0.5
-    pmMatx :* (2.0 * range)
+    val range = (Math.sqrt(6.0 / (fanIn + fanOut)) * 4.0).toFloat
+    val pmMatx: ScalarMatrix = ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :- 0.5f
+    pmMatx :* (2.0f * range)
   }
 }

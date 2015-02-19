@@ -1,5 +1,7 @@
 package kr.ac.kaist.ir.deep.fn
 
+import java.util.concurrent.ThreadLocalRandom
+
 import breeze.linalg.DenseMatrix
 
 /**
@@ -23,7 +25,7 @@ object ScalarMatrix {
    * @return Matrix with initialized by random number
    */
   def of(size: (Int, Int)): ScalarMatrix =
-    DenseMatrix.tabulate[Scalar](size._1, size._2)((_, _) ⇒ Math.random())
+    DenseMatrix.tabulate[Scalar](size._1, size._2)((_, _) ⇒ ThreadLocalRandom.current().nextFloat())
 
   /**
    * Generate full 0-1 matrix of given size. __Probability of 1's occurrence__ is given.
@@ -32,7 +34,9 @@ object ScalarMatrix {
    * @return generated matrix
    */
   def $01(pair: (Int, Int, Probability)): ScalarMatrix =
-    DenseMatrix.tabulate[Scalar](pair._1, pair._2)((_, _) ⇒ if (Math.random() > pair._3) 0.0 else 1.0)
+    DenseMatrix.tabulate[Scalar](pair._1, pair._2)(
+      (_, _) ⇒ if (ThreadLocalRandom.current().nextFloat() > pair._3) 0.0f else 1.0f
+    )
 
   /**
    * Restore a matrix from JSON seq.
@@ -60,7 +64,7 @@ object ScalarMatrix {
    * @param seq Sequence of entries, from (1,1) to (size, 1).
    * @return column vector with given sequence
    */
-  def apply(seq: Double*): ScalarMatrix = DenseMatrix.create(seq.size, 1, seq.toArray)
+  def apply(seq: Float*): ScalarMatrix = DenseMatrix.create(seq.size, 1, seq.toArray)
 
   /**
    * An empty matrix for RAE training.

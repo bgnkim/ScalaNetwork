@@ -11,7 +11,7 @@ import play.api.libs.json.Json
  * @param presence the probability of non-dropped neurons (for drop-out training). `(default : 100% = 1.0)`
  */
 class AutoEncoder(private val layer: Reconstructable,
-                  private val presence: Probability = 1.0)
+                  private val presence: Probability = 1.0f)
   extends Network {
   /**
    * All weights of layers

@@ -24,7 +24,7 @@ object Softplus extends Activation {
     var r = 0
     while (r < fx.rows) {
       val expx = exp(fx(r, 0))
-      res.update((r, r), (expx - 1.0) / expx)
+      res.update((r, r), (expx - 1.0f) / expx)
       r += 1
     }
     res
@@ -38,7 +38,7 @@ object Softplus extends Activation {
    */
   override def apply(x: ScalarMatrix): ScalarMatrix = {
     val expx = exp(x)
-    val plus1 = expx :+ 1.0
+    val plus1 = expx :+ 1.0f
     log(plus1)
   }
 }

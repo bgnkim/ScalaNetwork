@@ -4,7 +4,7 @@ import breeze.linalg.DenseMatrix
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.layer.ReconBasicLayer
 import kr.ac.kaist.ir.deep.network.AutoEncoder
-import kr.ac.kaist.ir.deep.rec.{DAG, InternalNode, TerminalNode}
+import kr.ac.kaist.ir.deep.rec.{BinaryTree, Leaf}
 import org.apache.log4j.{ConsoleAppender, Level, Logger, PatternLayout}
 import org.specs2.mutable.Specification
 
@@ -25,12 +25,12 @@ class URAETrainerTest extends Specification {
       y ⇒ (0 to 1) flatMap {
         z ⇒ (0 until 100) map {
           _ ⇒ {
-            val nodeX = new TerminalNode(DenseMatrix.create[Scalar](2, 1, Array(x, y)))
-            val nodeY = new TerminalNode(DenseMatrix.create[Scalar](2, 1, Array(y, z)))
-            val nodeZ = new TerminalNode(DenseMatrix.create[Scalar](2, 1, Array(z, x)))
-            val int1 = new InternalNode(Seq(nodeX, nodeY))
-            val int2 = new InternalNode(Seq(int1, nodeZ))
-            (new DAG(Seq(int2)), null)
+            val nodeX = new Leaf(DenseMatrix.create[Scalar](2, 1, Array(x, y)))
+            val nodeY = new Leaf(DenseMatrix.create[Scalar](2, 1, Array(y, z)))
+            val nodeZ = new Leaf(DenseMatrix.create[Scalar](2, 1, Array(z, x)))
+            val int1 = new BinaryTree(nodeX, nodeY)
+            val int2 = new BinaryTree(int1, nodeZ)
+            (int2, null)
           }
         }
       }
@@ -41,12 +41,12 @@ class URAETrainerTest extends Specification {
     x ⇒ (0 to 1) flatMap {
       y ⇒ (0 to 1) map {
         z ⇒ {
-          val nodeX = new TerminalNode(DenseMatrix.create[Scalar](2, 1, Array(x, y)))
-          val nodeY = new TerminalNode(DenseMatrix.create[Scalar](2, 1, Array(y, z)))
-          val nodeZ = new TerminalNode(DenseMatrix.create[Scalar](2, 1, Array(z, x)))
-          val int1 = new InternalNode(Seq(nodeX, nodeY))
-          val int2 = new InternalNode(Seq(int1, nodeZ))
-          (new DAG(Seq(int2)), null)
+          val nodeX = new Leaf(DenseMatrix.create[Scalar](2, 1, Array(x, y)))
+          val nodeY = new Leaf(DenseMatrix.create[Scalar](2, 1, Array(y, z)))
+          val nodeZ = new Leaf(DenseMatrix.create[Scalar](2, 1, Array(z, x)))
+          val int1 = new BinaryTree(nodeX, nodeY)
+          val int2 = new BinaryTree(int1, nodeZ)
+          (int2, null)
         }
       }
     }
@@ -57,7 +57,7 @@ class URAETrainerTest extends Specification {
     val net = new AutoEncoder(layer)
     val style = new SingleThreadTrainStyle(
       net = net,
-      algorithm = new StochasticGradientDescent(rate = 0.01, l2decay = 0.001),
+      algorithm = new StochasticGradientDescent(rate = 0.7f, l2decay = 0.001f),
       make = new URAEType(),
       param = SimpleTrainingCriteria(miniBatch = 16, validationSize = 10))
     val train = new Trainer(
@@ -65,7 +65,7 @@ class URAETrainerTest extends Specification {
       stops = StoppingCriteria(patience = 100000, maxIter = 100000))
 
     "properly trained" in {
-      train.train(set, valid) must be_<(0.4)
+      train.train(set, valid) must be_<(0.4f)
     }
   }
 }

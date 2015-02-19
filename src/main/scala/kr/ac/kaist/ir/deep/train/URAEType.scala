@@ -2,11 +2,13 @@ package kr.ac.kaist.ir.deep.train
 
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.network.{AutoEncoder, Network}
-import kr.ac.kaist.ir.deep.rec.DAG
+import kr.ac.kaist.ir.deep.rec.BinaryTree
+import org.apache.spark.annotation.Experimental
 
 /**
  * __Input Operation__ : VectorTree as Input & Unfolding Recursive Auto Encoder Training (no output type)
  *
+ * ::Experimental::
  * @note This cannot be applied into non-AutoEncoder tasks
  * @note This is designed for Unfolding RAE, in
  *       [[http://ai.stanford.edu/~ang/papers/nips11-DynamicPoolingUnfoldingRecursiveAutoencoders.pdf this paper]]
@@ -19,9 +21,10 @@ import kr.ac.kaist.ir.deep.rec.DAG
  *            var corruptedIn = make corrupted in
  *            var out = make onewayTrip (net, corruptedIn)}}}
  */
+@Experimental
 class URAEType(override protected[train] val corrupt: Corruption = NoCorruption,
                override protected[train] val error: Objective = SquaredErr)
-  extends DAGType {
+  extends TreeType {
 
   /**
    * Apply & Back-prop given single input
@@ -30,7 +33,7 @@ class URAEType(override protected[train] val corrupt: Corruption = NoCorruption,
    * @param in Input for error computation.
    * @param real Real Output for error computation.
    */
-  def roundTrip(net: Network, in: DAG, real: Null): Unit =
+  def roundTrip(net: Network, in: BinaryTree, real: Null): Unit =
     net match {
       case net: AutoEncoder ⇒
         val out = in forward net.encode
@@ -59,10 +62,10 @@ class URAEType(override protected[train] val corrupt: Corruption = NoCorruption,
    * @param pair (Input, Real output) for error computation.
    * @return error of this network
    */
-  def lossOf(net: Network)(pair: (DAG, Null)): Scalar =
+  def lossOf(net: Network)(pair: (BinaryTree, Null)): Scalar =
     net match {
       case net: AutoEncoder ⇒
-        var sum = 0.0
+        var sum = 0.0f
         val in = pair._1
         // Encode phrase of Reconstruction
         val out = in forward net.apply
@@ -76,7 +79,7 @@ class URAEType(override protected[train] val corrupt: Corruption = NoCorruption,
           sum += error(leaf.out, leaf.x)
         }
         sum
-      case _ ⇒ 0.0
+      case _ ⇒ 0.0f
     }
 
 
@@ -85,7 +88,7 @@ class URAEType(override protected[train] val corrupt: Corruption = NoCorruption,
    *
    * @return input as string
    */
-  def stringOf(net: Network, pair: (DAG, Null)): String =
+  def stringOf(net: Network, pair: (BinaryTree, Null)): String =
     net match {
       case net: AutoEncoder ⇒
         val string = StringBuilder.newBuilder

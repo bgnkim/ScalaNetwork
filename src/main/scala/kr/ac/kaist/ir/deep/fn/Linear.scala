@@ -17,7 +17,7 @@ object Linear extends Activation {
    * @param fx the __output__ of this function
    * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
    */
-  override def derivative(fx: ScalarMatrix): ScalarMatrix = DenseMatrix.eye[Double](fx.rows)
+  override def derivative(fx: ScalarMatrix): ScalarMatrix = DenseMatrix.eye[Scalar](fx.rows)
 
   /**
    * Compute mapping for `x`

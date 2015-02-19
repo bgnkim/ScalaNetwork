@@ -16,12 +16,13 @@ object CrossEntropyErr extends Objective {
   /**
    * Entropy function
    */
-  val entropy = (r: Scalar, o: Scalar) ⇒ (if (r != 0.0) -r * Math.log(o) else 0.0) + (if (r != 1.0) -(1.0 - r) * Math.log(1.0 - o) else 0.0)
+  val entropy = (r: Scalar, o: Scalar) ⇒
+    (if (r != 0.0f) -r * Math.log(o).toFloat else 0.0f) + (if (r != 1.0f) -(1.0f - r) * Math.log(1.0f - o).toFloat else 0.0f)
 
   /**
    * Derivative of Entropy function
    */
-  val entropyDiff = (r: Scalar, o: Scalar) ⇒ (r - o) / (o * (o - 1.0))
+  val entropyDiff = (r: Scalar, o: Scalar) ⇒ (r - o) / (o * (o - 1.0f))
 
   /**
    * Compute differentiation value of this objective function at `x = r - o`

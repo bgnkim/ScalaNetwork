@@ -16,9 +16,9 @@ import scala.collection.mutable.ArrayBuffer
  *
  * @example {{{val algorithm = new AdaGrad(l2decay = 0.0001)}}}
  */
-class AdaGrad(rate: Double = 0.6,
-              protected override val l1decay: Double = 0.0000,
-              protected override val l2decay: Double = 0.0001)
+class AdaGrad(rate: Scalar = 0.6f,
+              protected override val l1decay: Scalar = 0.0000f,
+              protected override val l2decay: Scalar = 0.0001f)
   extends WeightUpdater {
   /** accumulated history of parameter updates */
   private val history = ArrayBuffer[ScalarMatrix]()
@@ -46,13 +46,13 @@ class AdaGrad(rate: Double = 0.6,
       val w = weight(id)
       val deltaW = delta(id)
 
-      val deltaL1 = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0}
+      val deltaL1 = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0f}
       val deltaL2 = w * (l2decay * 2)
       val deltaLoss: ScalarMatrix = deltaW + deltaL1 + deltaL2
 
       history(id) :+= pow(deltaLoss, 2)
 
-      val adapted = history(id) mapValues { x ⇒ rate / Math.sqrt(x)}
+      val adapted = history(id) mapValues { x ⇒ (rate / Math.sqrt(x)).toFloat}
       val d = deltaLoss :* adapted
 
       w -= d

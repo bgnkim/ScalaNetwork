@@ -4,17 +4,17 @@ import kr.ac.kaist.ir.deep.fn.ScalarMatrix
 import kr.ac.kaist.ir.deep.train.Corruption
 
 /**
- * __Node of DAG__ whose position is terminal.
+ * __Node of BinaryTree__ whose position is terminal.
  *
  * This node does not do any computation.
  *
  * @param x original value matrix
  */
-class TerminalNode(val x: ScalarMatrix) extends Node {
+class Leaf(val x: ScalarMatrix) extends Node {
   var out: ScalarMatrix = x
 
   /**
-   * Forward computation of DAG
+   * Forward computation of Binary Tree
    *
    * @param fn function to be applied
    * @return the result
@@ -22,13 +22,13 @@ class TerminalNode(val x: ScalarMatrix) extends Node {
   override def forward(fn: ScalarMatrix ⇒ ScalarMatrix): ScalarMatrix = out
 
   /**
-   * Backward computation of DAG
+   * Backward computation of Binary Tree
    *
    * @param err Matrix to be propagated
    * @param fn function to be applied
    * @return Sequence of terminal nodes              
    */
-  def backward(err: ScalarMatrix, fn: ScalarMatrix ⇒ ScalarMatrix): Seq[TerminalNode] = {
+  def backward(err: ScalarMatrix, fn: ScalarMatrix ⇒ ScalarMatrix): Seq[Leaf] = {
     out = err
     Seq(this)
   }
@@ -37,8 +37,8 @@ class TerminalNode(val x: ScalarMatrix) extends Node {
    * Corrupt this node
    * *
    * @param corrupt Corruption function to be applied
-   * @return Corrupted DAG
+   * @return Corrupted Binary Tree
    */
   override def through(corrupt: Corruption): Node =
-    new TerminalNode(corrupt(x))
+    new Leaf(corrupt(x))
 }

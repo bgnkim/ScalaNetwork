@@ -1,4 +1,4 @@
-ScalaNetwork 0.1.7
+ScalaNetwork 0.1.8
 ====================
 
 A *Neural Network implementation* with Scala, [Breeze](https://github.com/scalanlp/breeze) & [Spark](http://spark.apache.org)
@@ -18,8 +18,9 @@ ScalaNetwork supports following layered neural network implementation:
 
 Also you can implement following Recursive Network via training tools.
 
-* *Recursive* Auto Encoder (RAE) <sup>[EXPERIMENTAL]</sup>
-* *Recursive* General Neural Network (Including Recursive Neural Tensor Network, RNTN) <sup>[EXPERIMENTAL]</sup>
+* Traditional *Recursive* Auto Encoder (RAE)
+* Standard *Recursive* Auto Encoder (RAE)
+* Unfolding *Recursive* Auto Encoder (RAE) <sup>[EXPERIMENTAL]</sup>
 
 ## Training Methodology
 

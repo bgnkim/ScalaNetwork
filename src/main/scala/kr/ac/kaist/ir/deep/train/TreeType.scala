@@ -7,7 +7,7 @@ import kr.ac.kaist.ir.deep.rec._
 /**
  * __Trait of Input Operation__ : VectorTree as Input. This is an '''Abstract Implementation'''
  */
-trait DAGType extends ManipulationType[DAG, Null] {
+trait TreeType extends ManipulationType[BinaryTree, Null] {
 
   /**
    * Corrupt input
@@ -15,7 +15,7 @@ trait DAGType extends ManipulationType[DAG, Null] {
    * @param x input to be corrupted
    * @return corrupted input
    */
-  override def corrupted(x: DAG): DAG = x through corrupt
+  override def corrupted(x: BinaryTree): BinaryTree = (x through corrupt).asInstanceOf[BinaryTree]
 
   /**
    * Apply given single input as one-way forward trip.
@@ -24,6 +24,6 @@ trait DAGType extends ManipulationType[DAG, Null] {
    * @param x input to be computed
    * @return output of the network.
    */
-  override def onewayTrip(net: Network, x: DAG): ScalarMatrix =
+  override def onewayTrip(net: Network, x: BinaryTree): ScalarMatrix =
     x forward net.of
 }
