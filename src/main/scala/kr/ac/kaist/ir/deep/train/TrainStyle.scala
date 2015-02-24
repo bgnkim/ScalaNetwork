@@ -3,6 +3,7 @@ package kr.ac.kaist.ir.deep.train
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.network.Network
 import org.apache.log4j.Logger
+import org.apache.spark.rdd.RDD
 
 import scala.concurrent.Future
 
@@ -17,44 +18,88 @@ import scala.concurrent.Future
 trait TrainStyle[IN, OUT] extends Serializable {
   /** Training Pair Type */
   type Pair = (IN, OUT)
+  /** Sampler Type */
+  type Sampler = (IN, Int) ⇒ Seq[OUT]
   /** Training parameters */
-  protected[train] val param: TrainingCriteria
+  val param: TrainingCriteria
   /** Network */
-  protected[train] val net: Network
+  val net: Network
   /** Algorithm */
-  protected[train] val algorithm: WeightUpdater
+  val algorithm: WeightUpdater
   /** Set of input manipulations */
-  protected[train] val make: ManipulationType[IN, OUT]
+  val make: ManipulationType[IN, OUT]
   /** Logger */
   @transient protected val logger = Logger.getLogger(this.getClass)
-  /** Training Set */
-  protected[train] var trainingSet: Int ⇒ Seq[Pair] = null
 
+  /**
+   * Calculate validation error
+   *
+   * @return validation error
+   */
+  def validationError(): Scalar
+
+  /**
+   * Iterate over given number of test instances
+   * @param n number of random sampled instances
+   * @param fn iteratee function
+   */
+  def foreachTestSet(n: Int)(fn: Pair ⇒ Unit): Unit
+
+  /**
+   * Set training instances 
+   * @param set Sequence of training set
+   */
+  def setPositiveTrainingReference(set: Seq[Pair]): Unit
+
+  /**
+   * Set training instances
+   * @param set RDD of training set
+   */
+  def setPositiveTrainingReference(set: RDD[Pair]): Unit
+
+  /**
+   * Set negative sampling method.
+   * @param set Sampler function
+   */
+  def setNegativeSampler(set: (IN, Int) ⇒ Seq[OUT]): Unit
+
+  /**
+   * Set testing instances 
+   * @param set Sequence of testing set
+   */
+  def setTestReference(set: Seq[Pair]): Unit
+
+  /**
+   * Set testing instances
+   * @param set RDD of testing set
+   */
+  def setTestReference(set: RDD[Pair]): Unit
+  
   /**
    * Fetch weights
    *
    * @param iter current iteration
    */
-  protected[train] def fetch(iter: Int): Unit
+  def fetch(iter: Int): Unit
 
   /**
    * Do mini-batch
    */
-  protected[train] def batch(): Unit
+  def batch(): Unit
 
   /**
    * Send update of weights
    *
    * @param iter current iteration
    */
-  protected[train] def update(iter: Int): Unit
+  def update(iter: Int): Unit
 
   /**
    * Indicates whether the asynchrononus update is finished or not.
    *
    * @return future object of update
    */
-  protected[train] def isUpdateFinished: Future[_] = null
+  def isUpdateFinished: Future[_] = null
 
   /**
    * Implicit weight operation

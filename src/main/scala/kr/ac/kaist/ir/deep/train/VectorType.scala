@@ -14,8 +14,8 @@ import kr.ac.kaist.ir.deep.network.Network
  *            var corruptedIn = make corrupted in
  *            var out = make onewayTrip (net, corruptedIn)}}}
  */
-class VectorType(override protected[train] val corrupt: Corruption = NoCorruption,
-                 override protected[train] val error: Objective = SquaredErr)
+class VectorType(override val corrupt: Corruption = NoCorruption,
+                 override val error: Objective = SquaredErr)
   extends ManipulationType[ScalarMatrix, ScalarMatrix] {
 
   /**
@@ -32,11 +32,16 @@ class VectorType(override protected[train] val corrupt: Corruption = NoCorruptio
    * @param net A network that gets input
    * @param in Input for error computation.
    * @param real Real Output for error computation.
+   * @param isPositive Boolean that indicates whether this example is positive or not.
    */
-  def roundTrip(net: Network, in: ScalarMatrix, real: ScalarMatrix): Unit = {
+  def roundTrip(net: Network, in: ScalarMatrix, real: ScalarMatrix, isPositive: Boolean = true): Unit = {
     val out = in into_: net
     val err: ScalarMatrix = error.derivative(real, out)
-    net updateBy err
+    if (isPositive) {
+      net updateBy err
+    } else {
+      net updateBy (-err)
+    }
   }
 
   /**

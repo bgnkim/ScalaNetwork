@@ -2,8 +2,11 @@ package kr.ac.kaist.ir.deep.train
 
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.network._
+import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
-import org.apache.spark.{AccumulatorParam, SparkContext}
+import org.apache.spark.broadcast.Broadcast
+import org.apache.spark.rdd.RDD
+import org.apache.spark.storage.StorageLevel
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
@@ -21,11 +24,11 @@ import scala.concurrent.duration._
  *             This also controls how to compute actual network. (default: [[VectorType]])
  * @param param __DistBelief-style__ Training criteria (default: [[DistBeliefCriteria]])
  */
-class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
-                                    protected[train] override val algorithm: WeightUpdater,
-                                    @transient protected val sc: SparkContext,
-                                    protected[train] override val make: ManipulationType[IN, OUT] = new VectorType(),
-                                    protected[train] override val param: DistBeliefCriteria = DistBeliefCriteria())
+class DistBeliefTrainStyle[IN, OUT](override val net: Network,
+                                    override val algorithm: WeightUpdater,
+                                    @transient val sc: SparkContext,
+                                    override val make: ManipulationType[IN, OUT] = new VectorType(),
+                                    override val param: DistBeliefCriteria = DistBeliefCriteria())
   extends TrainStyle[IN, OUT] {
   /** Accumulator variable for networks */
   protected val accNet = sc.accumulator(net.dW)(WeightAccumulator)
@@ -37,12 +40,23 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
   /** Flag for update : Is updating? */
   @transient protected var updateFlag: Future[Unit] = null
 
+  /** Training set */
+  private var trainingSet: RDD[Pair] = null
+  /** Fraction of mini-batch */
+  private var trainingFraction: Float = 0.0f
+  /** Negative Sampler */
+  private var negativeSampler: Broadcast[Sampler] = sc.broadcast(null)
+  /** Test Set */
+  private var testSet: RDD[Pair] = null
+  /** Size of test set */
+  private var testSize: Float = 0.0f
+  
   /**
    * Fetch weights
    *
    * @param iter current iteration
    */
-  override protected[train] def fetch(iter: Int): Unit =
+  override def fetch(iter: Int): Unit =
     if (iter % param.fetchStep == 0) {
       if (fetchFlag != null && !fetchFlag.isCompleted) {
         logger warn s"Fetch command arrived before previous fetch is done. Need more steps between fetch commands!"
@@ -61,7 +75,7 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
    *
    * @param iter current iteration
    */
-  override protected[train] def update(iter: Int): Unit =
+  override def update(iter: Int): Unit =
     if (iter % param.updateStep == 0) {
       if (updateFlag != null && !updateFlag.isCompleted) {
         logger warn s"Update command arrived before previous update is done. Need more steps between update commands!"
@@ -82,23 +96,41 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
    *
    * @return future object of update
    */
-  override protected[train] def isUpdateFinished: Future[_] = updateFlag
+  override def isUpdateFinished: Future[_] = updateFlag
 
   /**
    * Do mini-batch
    */
-  override protected[train] def batch(): Unit = {
+  override def batch(): Unit = {
     val size = param.numCores * param.miniBatch
-    val rddSet = sc.parallelize(trainingSet(size), param.numCores)
+    val rddSet = trainingSet.sample(withReplacement = true, fraction = trainingFraction)
 
-    val x = rddSet.foreachPartitionAsync {
-      part ⇒
-        val netCopy = bcNet.value.copy
-        while (part.hasNext) {
-          val pair = part.next()
-          make.roundTrip(netCopy, make corrupted pair._1, pair._2)
-        }
-        accNet += netCopy.dW 
+    val x = future {
+      rddSet.foreachPartition {
+        val sampler = negativeSampler.value
+        val useNeg = sampler != null && param.negSamplingRatio > 0
+        part ⇒
+          val netCopy = bcNet.value.copy
+          while (part.hasNext) {
+            val pair = part.next()
+            make.roundTrip(netCopy, make corrupted pair._1, pair._2)
+
+            if (useNeg) {
+              var samples = sampler(pair._1, param.negSamplingRatio)
+              while (samples.nonEmpty) {
+                val neg = samples.head
+                samples = samples.tail
+
+                make.roundTrip(netCopy, make corrupted pair._1, neg, isPositive = false)
+              }
+            }
+          }
+          accNet += netCopy.dW
+      }
+    }
+
+    x.onComplete {
+      _ ⇒ rddSet.unpersist()
     }
 
     try {
@@ -107,12 +139,83 @@ class DistBeliefTrainStyle[IN, OUT](protected[train] override val net: Network,
       case _: Throwable ⇒
     }
   }
-}
 
-object WeightAccumulator extends AccumulatorParam[IndexedSeq[ScalarMatrix]] {
-  override def addInPlace(r1: IndexedSeq[ScalarMatrix], r2: IndexedSeq[ScalarMatrix]): IndexedSeq[ScalarMatrix] = {
-    r1 :+= r2
+
+  /**
+   * Set training instances 
+   * @param set Sequence of training set
+   */
+  override def setPositiveTrainingReference(set: Seq[(IN, OUT)]): Unit = {
+    trainingSet = sc.parallelize(set, param.numCores).persist(StorageLevel.DISK_ONLY_2)
+    trainingFraction = set.size.toFloat / param.miniBatch
   }
 
-  override def zero(initialValue: IndexedSeq[ScalarMatrix]): IndexedSeq[ScalarMatrix] = initialValue.map(_.copy)
+  /**
+   * Set training instances
+   * @param set RDD of training set
+   */
+  override def setPositiveTrainingReference(set: RDD[(IN, OUT)]): Unit = {
+    trainingSet = set.repartition(param.numCores).persist(StorageLevel.DISK_ONLY_2)
+    trainingFraction = set.count().toFloat / param.miniBatch
+  }
+
+  /**
+   * Set negative sampling method.
+   * @param set Sampler function
+   */
+  override def setNegativeSampler(set: Sampler): Unit = {
+    negativeSampler.destroy()
+    negativeSampler = sc.broadcast(set)
+  }
+
+  /**
+   * Set testing instances 
+   * @param set Sequence of testing set
+   */
+  override def setTestReference(set: Seq[(IN, OUT)]): Unit = {
+    testSet = sc.parallelize(set, param.numCores).persist(StorageLevel.DISK_ONLY_2)
+    testSize = set.size.toFloat
+  }
+
+  /**
+   * Set testing instances
+   * @param set RDD of testing set
+   */
+  override def setTestReference(set: RDD[(IN, OUT)]): Unit = {
+    testSet = set.repartition(param.numCores).persist(StorageLevel.DISK_ONLY_2)
+    testSize = testSet.count().toFloat
+  }
+
+  /**
+   * Iterate over given number of test instances 
+   * @param n number of random sampled instances
+   * @param fn iteratee function
+   */
+  override def foreachTestSet(n: Int)(fn: ((IN, OUT)) ⇒ Unit): Unit = {
+    var seq = testSet.takeSample(withReplacement = true, num = n)
+    while (seq.nonEmpty) {
+      fn(seq.head)
+      seq = seq.tail
+    }
+  }
+
+  /**
+   * Calculate validation error
+   *
+   * @return validation error
+   */
+  def validationError() = {
+    val loss = sc.accumulator(0.0f)
+    val lossOf = make.lossOf(net) _
+    testSet.foreachPartition {
+      iter ⇒
+        var sum = 0.0f
+        while (iter.hasNext) {
+          sum += lossOf(iter.next()) / testSize
+        }
+        loss += sum
+    }
+
+    loss.value
+  }
 }

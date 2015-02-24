@@ -2,6 +2,7 @@ package kr.ac.kaist.ir.deep
 
 import breeze.stats.distributions.Gaussian
 import kr.ac.kaist.ir.deep.fn._
+import org.apache.spark.AccumulatorParam
 
 /**
  * Package for training.
@@ -16,13 +17,13 @@ package object train {
    *
    * If network uses drop-out training, we recommend that you do not use this.
    *
-   * @note If the presence probability is `P%`, then this corruption leaves `P%` entries of the matrix 
+   * @note If the presence probability is `P%`, then this corruption leaves `P%` entries of the matrix
    *
    * @param presence probability of __not-dropped__. `(default 95% = 0.95)`
    *
-   * @example 
+   * @example
    * {{{var corrupt = DroppingCorruption(presence = 0.99)
-   *       var corrupted = corrupt(vector)}}}
+   *        var corrupted = corrupt(vector)}}}
    */
   case class DroppingCorruption(presence: Float = 0.95f) extends Corruption {
     /**
@@ -34,14 +35,14 @@ package object train {
     override def apply(v1: ScalarMatrix): ScalarMatrix =
       v1 mapValues { x ⇒ if (Math.random() > presence) 0.0f else x}
   }
-
+  
   /**
    * __Input Corruption__: Gaussian
    *
    * @param mean __Mean__ of noise `(default 0.0)`
    * @param variance __Variance__ of noise `(default 0.1)`
    *
-   * @example 
+   * @example
    * {{{var corrupt = GaussianCorruption(variance = 0.1)
    *       var corrupted = corrupt(vector)}}}
    */
@@ -70,7 +71,7 @@ package object train {
    - #Iteration ≥ current patience value, which is calculated by `max(patience, bestIteration * patienceStep)`
    - Amount of loss < lossThreshold
    *
-   * Validation is done for each `validationFreq` iterations, 
+   * Validation is done for each `validationFreq` iterations,
    * and whenever current/best loss ratio below improveThreshold,
    * that iteration is marked as best iteration.
    *
@@ -96,17 +97,20 @@ package object train {
    *
    * @param miniBatch size of __mini-batch__ `(default 100)`
    * @param validationSize size of __validation set__ to be generated `(default 20)`
+   * @param negSamplingRatio ratio of negative samples per positive instance. `(default 0)`
    */
   case class SimpleTrainingCriteria(override val miniBatch: Int = 100,
-                                    override val validationSize: Int = 20) extends TrainingCriteria
+                                    override val validationSize: Int = 20,
+                                    override val negSamplingRatio: Int = 0) extends TrainingCriteria
 
   /**
    * __Criteria__: How to train (for [[DistBeliefTrainStyle]])
    *
-   * This case class defines how to train the network. Training parameter is defined in this class. 
+   * This case class defines how to train the network. Training parameter is defined in this class.
    *
    * @param miniBatch size of __mini-batch__ `(default 100)`
    * @param validationSize size of __validation set__ to be generated `(default 20)`
+   * @param negSamplingRatio ratio of negative samples per positive instance. `(default 0)`
    * @param updateStep number of __numCores × mini-batches__ between update `(default 2)`
    * @param fetchStep number of __numCores × mini-batches__ between fetching `(default 10)`
    * @param numCores number of __v-cores__ in the spark cluster. `(default 1)`
@@ -115,9 +119,32 @@ package object train {
    */
   case class DistBeliefCriteria(override val miniBatch: Int = 100,
                                 override val validationSize: Int = 20,
+                                override val negSamplingRatio: Int = 0,
                                 updateStep: Int = 2,
                                 fetchStep: Int = 10,
                                 numCores: Int = 1) extends TrainingCriteria
+
+  /**
+   * Accumulator Param object for DistBelief Train Style.
+   */
+  object WeightAccumulator extends AccumulatorParam[IndexedSeq[ScalarMatrix]] {
+    /**
+     * Add in place function
+     * @param r1 left hand side
+     * @param r2 right hand side
+     * @return r1 + r2 in r1
+     */
+    override def addInPlace(r1: IndexedSeq[ScalarMatrix], r2: IndexedSeq[ScalarMatrix]): IndexedSeq[ScalarMatrix] = {
+      r1 :+= r2
+    }
+
+    /**
+     * Zero value
+     * @param initialValue initial value
+     * @return initial zero value.
+     */
+    override def zero(initialValue: IndexedSeq[ScalarMatrix]): IndexedSeq[ScalarMatrix] = initialValue.map(_.copy)
+  }
 
   /**
    * __Input Corruption__: Never corrupts input

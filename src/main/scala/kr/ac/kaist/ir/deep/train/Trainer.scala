@@ -5,7 +5,6 @@ import org.apache.log4j.Logger
 import org.apache.spark.rdd.RDD
 
 import scala.annotation.tailrec
-import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
@@ -60,8 +59,6 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
 
   /** Logger */
   @transient protected val logger = Logger.getLogger(this.getClass)
-  /** Validation Set */
-  protected var testSet: Int ⇒ Seq[Pair] = null
   /** Best Parameter History */
   @transient protected var bestParam: IndexedSeq[ScalarMatrix] = null
   /** Best Loss Iteration Number */
@@ -70,32 +67,10 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
   /**
    * Train given sequence, and validate with given sequence.
    *
-   * @param set __Random Sequence Generator__ of training set
-   * @return Training error (loss)
-   */
-  def train(set: Int ⇒ Seq[Pair]): Scalar = train(set, set)
-
-  /**
-   * Train given sequence, and validate with given sequence.
-   *
    * @param set Full Sequence of training set
    * @return Training error (loss)
    */
-  def train(set: Seq[Pair]): Scalar = {
-    val index = () ⇒ Math.floor(Math.random() * set.size).toInt
-    val randomizer = (n: Int) ⇒ {
-      val array = ArrayBuffer[Pair]()
-      array.sizeHint(n)
-      
-      var i = 0
-      while (i < n) {
-        array += set(index())
-        i += 1
-      }
-      array
-    }
-    train(randomizer, randomizer)
-  }
+  def train(set: Seq[Pair]): Scalar = train(set, set)
 
   /**
    * Train given sequence, and validate with another sequence.
@@ -106,33 +81,8 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    */
   def train(set: Seq[Pair],
             validation: Seq[Pair]): Scalar = {
-    val index = () ⇒ Math.floor(Math.random() * set.size).toInt
-    val randomizer = (n: Int) ⇒ {
-      val array = ArrayBuffer[Pair]()
-      array.sizeHint(n)
-      
-      var i = 0
-      while (i < n) {
-        array += set(index())
-        i += 1
-      }
-      array
-    }
-    val topN = (n: Int) ⇒ validation.slice(0, n)
-    train(randomizer, topN)
-  }
-
-  /**
-   * Train given sequence, and validate with another sequence.
-   *
-   * @param set __Randomized Sequence Generator__ of training set
-   * @param validation Sequence Generator of validation set
-   * @return Training error (loss)
-   */
-  def train(set: Int ⇒ Seq[Pair],
-            validation: Int ⇒ Seq[Pair]) = {
-    trainingSet = set
-    testSet = validation
+    setPositiveTrainingReference(set)
+    setTestReference(validation)
 
     saveParams()
     val err = trainBatch()
@@ -147,12 +97,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    *
    * @param set RDD of training set
    */
-  def train(set: RDD[Pair]): Scalar = {
-    train({
-      val cached = set.cache()
-      x: Int ⇒ cached.takeSample(withReplacement = true, num = x).toSeq
-    })
-  }
+  def train(set: RDD[Pair]): Scalar = train(set, set)
 
   /**
    * Train using given RDD sequence. 
@@ -161,28 +106,25 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    * @param validation RDD of validation set
    */
   def train(set: RDD[Pair], validation: RDD[Pair]): Scalar = {
-    train({
-      x: Int ⇒ set.takeSample(withReplacement = true, num = x).toSeq
-    }, {
-      x: Int ⇒ validation.takeSample(withReplacement = true, num = x).toSeq
-    })
+    setPositiveTrainingReference(set)
+    setTestReference(validation)
+
+    saveParams()
+    val err = trainBatch()
+    restoreParams()
+    printValidation()
+
+    err
   }
 
+
   /**
-   * Calculate validation error
-   *
-   * @return validation error
+   * Set negative sampling method.
+   * @param set Sampler function
    */
-  protected def validationError() = {
-    var t = testSet(param.validationSize)
-    val size = t.size
-    val lossOf = make.lossOf(net) _
-    var sum = 0.0f
-    while (t.nonEmpty) {
-      sum += lossOf(t.head) / size
-      t = t.tail
-    }
-    sum
+  def setNegativeSampler(set: Sampler) = {
+    require(make.isInstanceOf[VectorType], "Currently, only 'VectorType' manipulation supports negative sampling.")
+    style.setNegativeSampler(set)
   }
 
   /**
@@ -190,9 +132,8 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    */
   protected def printValidation() = {
     logger info s"BEST ITERATION $bestIter : W = ${net.W map (_.mkString) mkString " | "}"
-    testSet(5).map {
-      item ⇒
-        logger info make.stringOf(net, item)
+    foreachTestSet(5) {
+      item ⇒ logger info make.stringOf(net, item)
     }
   }
 

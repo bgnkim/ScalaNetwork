@@ -8,4 +8,6 @@ trait TrainingCriteria extends Serializable {
   val miniBatch: Int
   /** Size of validation */
   val validationSize: Int
+  /** Sampling rate of negative examples per positive examples. */
+  val negSamplingRatio: Int
 }

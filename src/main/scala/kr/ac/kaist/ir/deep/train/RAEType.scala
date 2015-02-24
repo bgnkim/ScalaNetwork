@@ -19,8 +19,8 @@ import kr.ac.kaist.ir.deep.rec.BinaryTree
  *            var corruptedIn = make corrupted in
  *            var out = make onewayTrip (net, corruptedIn)}}}
  */
-class RAEType(override protected[train] val corrupt: Corruption = NoCorruption,
-              override protected[train] val error: Objective = SquaredErr)
+class RAEType(override val corrupt: Corruption = NoCorruption,
+              override val error: Objective = SquaredErr)
   extends TreeType {
 
   /**
@@ -29,8 +29,10 @@ class RAEType(override protected[train] val corrupt: Corruption = NoCorruption,
    * @param net A network that gets input
    * @param in Input for error computation.
    * @param real Real Output for error computation.
+   * @param isPositive *(Unused)* Boolean that indicates whether this example is positive or not.
+   *                   We don't need this because RAE does not get negative input.
    */
-  def roundTrip(net: Network, in: BinaryTree, real: Null): Unit = {
+  def roundTrip(net: Network, in: BinaryTree, real: Null, isPositive: Boolean = true): Unit = {
     in forward {
       x ⇒
         val err = error.derivative(x, x into_: net)

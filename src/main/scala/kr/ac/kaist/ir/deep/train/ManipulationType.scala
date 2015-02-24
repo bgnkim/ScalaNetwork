@@ -13,9 +13,9 @@ import kr.ac.kaist.ir.deep.network.Network
  */
 trait ManipulationType[IN, OUT] extends Serializable {
   /** Corruption function */
-  protected[train] val corrupt: Corruption
+  val corrupt: Corruption
   /** Objective function */
-  protected[train] val error: Objective
+  val error: Objective
 
   // We didn't assign a "network" value, because of dist-belief training style.
 
@@ -33,8 +33,9 @@ trait ManipulationType[IN, OUT] extends Serializable {
    * @param net A network that gets input
    * @param in Input for error computation.
    * @param real Real output for error computation.
+   * @param isPositive Boolean that indicates whether this example is positive or not.             
    */
-  def roundTrip(net: Network, in: IN, real: OUT): Unit
+  def roundTrip(net: Network, in: IN, real: OUT, isPositive: Boolean = true): Unit
 
   /**
    * Apply given single input as one-way forward trip.
@@ -48,6 +49,8 @@ trait ManipulationType[IN, OUT] extends Serializable {
   /**
    * Make validation output
    *
+   * @param net A network that gets input
+   * @param in (Input, Real output) pair for computation
    * @return input as string
    */
   def stringOf(net: Network, in: (IN, OUT)): String

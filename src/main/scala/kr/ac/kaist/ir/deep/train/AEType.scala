@@ -14,8 +14,8 @@ import kr.ac.kaist.ir.deep.network.Network
  *                       var corruptedIn = make corrupted in
  *                       var out = make onewayTrip (net, corruptedIn)}}}
  */
-class AEType(override protected[train] val corrupt: Corruption = NoCorruption,
-             override protected[train] val error: Objective = SquaredErr)
+class AEType(override val corrupt: Corruption = NoCorruption,
+             override val error: Objective = SquaredErr)
   extends ManipulationType[ScalarMatrix, Null] {
 
   /**
@@ -32,8 +32,10 @@ class AEType(override protected[train] val corrupt: Corruption = NoCorruption,
    * @param net A network that gets input
    * @param in Input for error computation.
    * @param real Real Output for error computation.
+   * @param isPositive *(Unused)* Boolean that indicates whether this example is positive or not.
+   *                   We don't need this because AE does not get negative input.
    */
-  def roundTrip(net: Network, in: ScalarMatrix, real: Null): Unit = {
+  def roundTrip(net: Network, in: ScalarMatrix, real: Null, isPositive: Boolean = true): Unit = {
     val out = in into_: net
     val err: ScalarMatrix = error.derivative(in, out)
     net updateBy err
