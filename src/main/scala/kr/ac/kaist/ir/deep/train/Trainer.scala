@@ -120,6 +120,9 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
 
   /**
    * Set negative sampling method.
+   *
+   * @note If you use this feature with RDD & DistBeliefTrainStyle, please be aware that given Sampler function
+   *       will be broadcast through Spark. That is, you should broadcast large variables which sampler use.
    * @param set Sampler function
    */
   def setNegativeSampler(set: Sampler) = {
@@ -179,6 +182,9 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
     var nPatience = patience
 
     val nLoss = if ((iter + 1) % stops.validationFreq == 0) {
+      // Pending until batch finished
+      stopUntilBatchFinished()
+      
       logger debug s"ITERATION $iter : W = ${net.W map (_.mkString) mkString " | "}"
       val train = validationError()
       val weight = algorithm loss net.W

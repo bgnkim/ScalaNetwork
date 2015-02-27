@@ -8,9 +8,10 @@ import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
 
+import scala.annotation.tailrec
+import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
-import scala.concurrent.duration._
 
 /**
  * __Train Style__ : Semi-DistBelief Style, Spark-based.
@@ -32,6 +33,9 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
   extends TrainStyle[IN, OUT] {
   /** Accumulator variable for networks */
   protected val accNet = sc.accumulator(net.dW)(WeightAccumulator)
+  /** Flag for batch : Is Batch remaining? */
+  @transient protected val batchFlag = ArrayBuffer[Future[Unit]]()
+  /** Zero value for accumulator */
   private val zeros = net.dW.map(_.copy)
   /** Spark distributed networks */
   protected var bcNet = sc.broadcast(net.copy)
@@ -39,7 +43,6 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
   @transient protected var fetchFlag: Future[Unit] = null
   /** Flag for update : Is updating? */
   @transient protected var updateFlag: Future[Unit] = null
-
   /** Training set */
   private var trainingSet: RDD[Pair] = null
   /** Fraction of mini-batch */
@@ -64,6 +67,12 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
 
       fetchFlag =
         future {
+          // Because DistBelief submit fetching job after n_fetch steps,
+          // submit this fetch after already submitted jobs are done.
+          // This does not block others because batch can be submitted anyway, 
+          // and that batch does not affect this thread. 
+          stopUntilBatchFinished()
+          
           val oldNet = bcNet
           bcNet = sc.broadcast(net.copy)
           oldNet.destroy()
@@ -83,6 +92,12 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
 
       updateFlag =
         future {
+          // Because DistBelief submit updating job after n_update steps,
+          // Submit this update after already submitted jobs are done.
+          // This does not block others because batch can be submitted anyway, 
+          // and that batch does not affect this thread. 
+          stopUntilBatchFinished()
+          
           val dWUpdate = accNet.value
           accNet.setValue(zeros)
 
@@ -129,12 +144,16 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
       }
     }
 
+    batchFlag += x
+
     x.onComplete {
-      _ ⇒ rddSet.unpersist()
+      _ ⇒
+        rddSet.unpersist()
+        batchFlag -= x
     }
 
     try {
-      Await.ready(x, (size * 5).seconds)
+      Await.ready(x, param.submitInterval)
     } catch {
       case _: Throwable ⇒
     }
@@ -142,7 +161,15 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
 
 
   /**
-   * Set training instances 
+   * Non-blocking pending, until all assigned batches are finished
+   */
+  override def stopUntilBatchFinished(): Unit = {
+    val f = Future.sequence(batchFlag)
+    nonBlockPending(f)
+  }
+
+  /**
+   * Set training instances
    * @param set Sequence of training set
    */
   override def setPositiveTrainingReference(set: Seq[(IN, OUT)]): Unit = {
@@ -169,7 +196,7 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
   }
 
   /**
-   * Set testing instances 
+   * Set testing instances
    * @param set Sequence of testing set
    */
   override def setTestReference(set: Seq[(IN, OUT)]): Unit = {
@@ -187,7 +214,7 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
   }
 
   /**
-   * Iterate over given number of test instances 
+   * Iterate over given number of test instances
    * @param n number of random sampled instances
    * @param fn iteratee function
    */
@@ -217,5 +244,16 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
     }
 
     loss.value
+  }
+
+  /**
+   * Tail-recursive version of non-block pending
+   * @param f Future object to wait
+   */
+  @tailrec
+  private def nonBlockPending(f: Future[_]): Unit = try {
+    Await.ready(f, param.submitInterval)
+  } catch {
+    case _: TimeoutException ⇒ nonBlockPending(f)
   }
 }

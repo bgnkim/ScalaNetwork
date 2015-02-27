@@ -4,6 +4,8 @@ import breeze.stats.distributions.Gaussian
 import kr.ac.kaist.ir.deep.fn._
 import org.apache.spark.AccumulatorParam
 
+import scala.concurrent.duration._
+
 /**
  * Package for training.
  */
@@ -111,8 +113,9 @@ package object train {
    * @param miniBatch size of __mini-batch__ `(default 100)`
    * @param validationSize size of __validation set__ to be generated `(default 20)`
    * @param negSamplingRatio ratio of negative samples per positive instance. `(default 0)`
-   * @param updateStep number of __numCores × mini-batches__ between update `(default 2)`
-   * @param fetchStep number of __numCores × mini-batches__ between fetching `(default 10)`
+   * @param submitInterval Time interval between batch submission. `(default 1.minute)`
+   * @param updateStep number of __mini-batches__ between update `(default 2)`
+   * @param fetchStep number of __mini-batches__ between fetching `(default 10)`
    * @param numCores number of __v-cores__ in the spark cluster. `(default 1)`
    *
    * @note We recommend set numCores as similar as possible with allocated spark v-cores.
@@ -120,6 +123,7 @@ package object train {
   case class DistBeliefCriteria(override val miniBatch: Int = 100,
                                 override val validationSize: Int = 20,
                                 override val negSamplingRatio: Int = 0,
+                                submitInterval: Duration = 1.minute,
                                 updateStep: Int = 2,
                                 fetchStep: Int = 10,
                                 numCores: Int = 1) extends TrainingCriteria

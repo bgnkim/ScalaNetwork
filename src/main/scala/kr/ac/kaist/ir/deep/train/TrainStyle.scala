@@ -95,11 +95,16 @@ trait TrainStyle[IN, OUT] extends Serializable {
   def update(iter: Int): Unit
 
   /**
-   * Indicates whether the asynchrononus update is finished or not.
+   * Indicates whether the asynchronous update is finished or not.
    *
    * @return future object of update
    */
   def isUpdateFinished: Future[_] = null
+
+  /**
+   * Non-blocking pending, until all assigned batches are finished
+   */
+  def stopUntilBatchFinished(): Unit = {}
 
   /**
    * Implicit weight operation
