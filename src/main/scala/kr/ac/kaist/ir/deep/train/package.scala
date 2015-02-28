@@ -4,6 +4,7 @@ import breeze.stats.distributions.Gaussian
 import kr.ac.kaist.ir.deep.fn._
 import org.apache.spark.AccumulatorParam
 
+import scala.annotation.tailrec
 import scala.concurrent.duration._
 
 /**
@@ -147,7 +148,40 @@ package object train {
      * @param initialValue initial value
      * @return initial zero value.
      */
-    override def zero(initialValue: IndexedSeq[ScalarMatrix]): IndexedSeq[ScalarMatrix] = initialValue.map(_.copy)
+    override def zero(initialValue: IndexedSeq[ScalarMatrix]): IndexedSeq[ScalarMatrix] =
+      initialValue.map {
+        matx ⇒
+          ScalarMatrix $0(matx.rows, matx.cols)
+      }
+  }
+
+  /**
+   * Non-blocking await 
+   */
+  object AsyncAwait extends Serializable {
+
+    import scala.concurrent.ExecutionContext.Implicits.global
+    import scala.concurrent._
+    
+    /**
+     * Tail-recursive version of non-block pending
+     * @param f Future object to wait
+     * @param interval Duration object specifying waiting time.
+     */
+    @tailrec
+    final def ready(f: Future[_], interval: Duration): Unit = try {
+      Await.ready(f, interval)
+    } catch {
+      case _: TimeoutException ⇒ ready(f, interval)
+    }
+
+    /**
+     * Tail-recursive version of non-block pending
+     * @param interval Duration object specifying waiting time.
+     * @param f Future objects to wait
+     */
+    final def readyAll(interval: Duration, f: Future[Any]*): Unit =
+      ready(Future.sequence(f.seq), interval)
   }
 
   /**

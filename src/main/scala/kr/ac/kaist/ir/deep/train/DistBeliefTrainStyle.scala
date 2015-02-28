@@ -8,10 +8,10 @@ import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
 
-import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
+import scala.concurrent.duration._
 
 /**
  * __Train Style__ : Semi-DistBelief Style, Spark-based.
@@ -35,8 +35,6 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
   protected val accNet = sc.accumulator(net.dW)(WeightAccumulator)
   /** Flag for batch : Is Batch remaining? */
   @transient protected val batchFlag = ArrayBuffer[Future[Unit]]()
-  /** Zero value for accumulator */
-  private val zeros = net.dW.map(_.copy)
   /** Spark distributed networks */
   protected var bcNet = sc.broadcast(net.copy)
   /** Flag for fetch : Is fetching? */
@@ -94,17 +92,23 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
         future {
           // Because DistBelief submit updating job after n_update steps,
           // Submit this update after already submitted jobs are done.
-          // This does not block others because batch can be submitted anyway, 
-          // and that batch does not affect this thread. 
+          // This does not block others because batch can be submitted anyway,
+          // and that batch does not affect this thread.
           stopUntilBatchFinished()
-          
+
           val dWUpdate = accNet.value
-          accNet.setValue(zeros)
+          accNet.setValue(accNet.zero)
 
           dWUpdate :/= (param.numCores * param.miniBatch).toFloat
           net.W -= dWUpdate
         }
     }
+
+  /**
+   * Non-blocking pending, until all assigned batches are finished
+   */
+  override def stopUntilBatchFinished(): Unit =
+    AsyncAwait.readyAll(param.submitInterval, batchFlag: _*)
 
   /**
    * Indicates whether the asynchrononus update is finished or not.
@@ -117,7 +121,6 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
    * Do mini-batch
    */
   override def batch(): Unit = {
-    val size = param.numCores * param.miniBatch
     val rddSet = trainingSet.sample(withReplacement = true, fraction = trainingFraction)
 
     val x = future {
@@ -126,20 +129,25 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
         val useNeg = sampler != null && param.negSamplingRatio > 0
         part ⇒
           val netCopy = bcNet.value.copy
-          while (part.hasNext) {
-            val pair = part.next()
-            make.roundTrip(netCopy, make corrupted pair._1, pair._2)
 
-            if (useNeg) {
-              var samples = sampler(pair._1, param.negSamplingRatio)
-              while (samples.nonEmpty) {
-                val neg = samples.head
-                samples = samples.tail
+          val f = part.map {
+            pair ⇒
+              future {
+                make.roundTrip(netCopy, make corrupted pair._1, pair._2)
 
-                make.roundTrip(netCopy, make corrupted pair._1, neg, isPositive = false)
+                if (useNeg) {
+                  var samples = sampler(pair._1, param.negSamplingRatio)
+                  while (samples.nonEmpty) {
+                    val neg = samples.head
+                    samples = samples.tail
+
+                    make.roundTrip(netCopy, make corrupted pair._1, neg, isPositive = false)
+                  }
+                }
               }
-            }
-          }
+          }.toSeq
+
+          AsyncAwait.readyAll(1.second, f: _*)
           accNet += netCopy.dW
       }
     }
@@ -157,15 +165,6 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
     } catch {
       case _: Throwable ⇒
     }
-  }
-
-
-  /**
-   * Non-blocking pending, until all assigned batches are finished
-   */
-  override def stopUntilBatchFinished(): Unit = {
-    val f = Future.sequence(batchFlag)
-    nonBlockPending(f)
   }
 
   /**
@@ -244,16 +243,5 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
     }
 
     loss.value
-  }
-
-  /**
-   * Tail-recursive version of non-block pending
-   * @param f Future object to wait
-   */
-  @tailrec
-  private def nonBlockPending(f: Future[_]): Unit = try {
-    Await.ready(f, param.submitInterval)
-  } catch {
-    case _: TimeoutException ⇒ nonBlockPending(f)
   }
 }

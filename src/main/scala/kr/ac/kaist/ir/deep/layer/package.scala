@@ -86,7 +86,7 @@ package object layer {
    */
   object Layer {
     /** Sequence of supported activation functions */
-    private val acts = Seq(Sigmoid, HyperbolicTangent, Rectifier, Softplus)
+    private val acts = Seq(Sigmoid, HyperbolicTangent, Rectifier, Softplus, Linear, HardSigmoid, HardTanh)
 
     /**
      * Load layer from JsObject
@@ -106,6 +106,9 @@ package object layer {
       val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[Scalar]]]
 
       (obj \ "type").as[String] match {
+        case "NormLayer" ⇒
+          val factor = (obj \ "factor").as[Scalar]
+          new NormalizeLayer(factor)
         case "DropoutLayer" ⇒
           val presence = (obj \ "presence").as[Probability]
           new DropoutLayer(presence)

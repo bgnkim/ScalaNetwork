@@ -1,8 +1,7 @@
 package kr.ac.kaist.ir.deep.train
 
-import breeze.linalg.sum
-import breeze.numerics.{pow, sqrt}
 import kr.ac.kaist.ir.deep.fn._
+import kr.ac.kaist.ir.deep.layer.NormalizeLayer
 import kr.ac.kaist.ir.deep.network.Network
 import kr.ac.kaist.ir.deep.rec.BinaryTree
 
@@ -24,6 +23,8 @@ import kr.ac.kaist.ir.deep.rec.BinaryTree
 class StandardRAEType(override val corrupt: Corruption = NoCorruption,
                       override val error: Objective = SquaredErr)
   extends TreeType {
+  /** Normalization layer */
+  val normalizeLayer = new NormalizeLayer()
 
   /**
    * Apply & Back-prop given single input
@@ -38,40 +39,14 @@ class StandardRAEType(override val corrupt: Corruption = NoCorruption,
     in forward {
       x ⇒
         val out = x into_: net
-
-        // normalize the output
-        val xSq = pow(out, 2.0f)
-        val lenSq = sum(xSq)
-        val len: Scalar = sqrt(lenSq)
-        val normalized = out :/ len
-
-        // Note that length is the function of x_i.
-        // Let z_i := x_i / len(x_i).
-        // Then d z_i / d x_i = (len^2 - x_i^2) / len^3,
-        //      d z_j / d x_i = - x_i * x_j / len^3
-        val rows = xSq.rows
-        val dZdX = ScalarMatrix $0(rows, rows)
-        var r = 0
-        while (r < rows) {
-          //dZ_r
-          var c = 0
-          while (c < rows) {
-            if (r == c) {
-              //dX_c
-              dZdX.update(r, c, (lenSq - xSq(r, 0)) / (len * lenSq))
-            } else {
-              dZdX.update(r, c, (-out(r, 0) * out(c, 0)) / (len * lenSq))
-            }
-            c += 1
-          }
-          r += 1
-        }
+        val zOut = out into_: normalizeLayer
 
         // un-normalize the error
-        val normalErr = error.derivative(x, normalized)
-        val err = dZdX * normalErr
+        val normalErr = error.derivative(x, zOut)
+        val err = normalizeLayer.updateBy(normalErr, out, zOut)
 
         net updateBy err
+
         // propagate hidden-layer value
         net(x)
     }
@@ -90,8 +65,7 @@ class StandardRAEType(override val corrupt: Corruption = NoCorruption,
     in forward {
       x ⇒
         val out = net of x
-        val len = sqrt(sum(pow(out, 2.0f)))
-        val normalized = out :/ len
+        val normalized = normalizeLayer(out)
         total += error(x, normalized)
         //propagate hidden-layer value
         net(x)
@@ -109,8 +83,7 @@ class StandardRAEType(override val corrupt: Corruption = NoCorruption,
     pair._1 forward {
       x ⇒
         val out = net of x
-        val len = sqrt(sum(pow(out, 2.0f)))
-        val normalized: ScalarMatrix = out :/ len
+        val normalized = normalizeLayer(out)
         val hid = net(x)
         string append s"IN: ${x.mkString} RAE → OUT: ${normalized.mkString}, HDN: ${hid.mkString}; "
         // propagate hidden-layer value
