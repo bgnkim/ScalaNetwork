@@ -1,4 +1,4 @@
-ScalaNetwork 0.1.8
+ScalaNetwork 0.1.9
 ====================
 
 A *Neural Network implementation* with Scala, [Breeze](https://github.com/scalanlp/breeze) & [Spark](http://spark.apache.org)
@@ -35,6 +35,8 @@ ScalaNetwork supports following environments:
 * Single-Threaded Training Environment.
 * Spark-based Distributed Environment, with modified version of Downpour SGD in [DistBelief](http://research.google.com/archive/large_deep_networks_nips2012.html)
 
+Also you can add negative examples with `Trainer.setNegativeSampler()`.
+
 ## Activation Function
 
 ScalaNetwork supports following activation functions:
@@ -53,12 +55,12 @@ Here is some examples for basic usage. If you want to extend this package or use
 
 Currently ScalaNetwork supports Scala version 2.10 ~ 2.11.
 
-* Stable Release is 0.1.7
+* Stable Release is 0.1.9
  
 If you are using SBT, add a dependency as described below:
 
 ```scala
-libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "0.1.7"
+libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "0.1.9"
 ```
 
 If you are using Maven, add a dependency as described below:
@@ -66,7 +68,7 @@ If you are using Maven, add a dependency as described below:
 <dependency>
   <groupId>kr.ac.kaist.ir</groupId>
   <artifactId>scalanetwork_${your.scala.version}</artifactId>
-  <version>0.1.7</version>
+  <version>0.1.9</version>
 </dependency>
 ```
 
@@ -152,8 +154,10 @@ new AdaDelta(l1decay=0.0, l2decay=0.0001, decay=0.95, epsilon=1e-6)
 ```
 ```scala
 /* Training Criteria */
-SimpleTrainingCriteria(miniBatch=100, validationSize=20)
-DistBeliefCriteria(miniBatch=100, validationSize=20, updateStep=2, fetchStep=10, numCores=1)
+import scala.concurrent.duration._
+SimpleTrainingCriteria(miniBatch=100, validationSize=20, negSamplingRatio=0)
+DistBeliefCriteria(miniBatch=100, validationSize=20, negSamplingRatio=0, submitInterval=1.seconds,
+  updateStep=2, fetchStep=10, numCores=1)
 ```
 
 Validation size sets the number of elements used for validation phrase.
