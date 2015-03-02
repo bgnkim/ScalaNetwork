@@ -46,7 +46,7 @@ Therefore &quot;layers&quot; can be composed together.
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="BasicLayer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.BasicLayer">BasicLayer</a>, <a href="DropoutLayer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.DropoutLayer">DropoutLayer</a>, <a href="FullTensorLayer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.FullTensorLayer">FullTensorLayer</a>, <a href="Rank3TensorLayer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Rank3TensorLayer">Rank3TensorLayer</a>, <a href="ReconBasicLayer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.ReconBasicLayer">ReconBasicLayer</a>, <a href="Reconstructable.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Reconstructable">Reconstructable</a>, <a href="SplitTensorLayer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.SplitTensorLayer">SplitTensorLayer</a></div>
+          <div class="subClasses hiddenContent"><a href="BasicLayer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.BasicLayer">BasicLayer</a>, <a href="DropoutLayer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.DropoutLayer">DropoutLayer</a>, <a href="FullTensorLayer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.FullTensorLayer">FullTensorLayer</a>, <a href="NormalizeLayer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.NormalizeLayer">NormalizeLayer</a>, <a href="Rank3TensorLayer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Rank3TensorLayer">Rank3TensorLayer</a>, <a href="ReconBasicLayer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.ReconBasicLayer">ReconBasicLayer</a>, <a href="Reconstructable.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Reconstructable">Reconstructable</a>, <a href="SplitTensorLayer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.SplitTensorLayer">SplitTensorLayer</a></div>
         </div></div>
         
 
@@ -179,10 +179,10 @@ Therefore &quot;layers&quot; can be composed together.
       </h4>
       <p class="shortcomment cmt">Backward computation.</p><div class="fullcomment"><div class="comment cmt"><p>Backward computation.
 </p></div><dl class="paramcmts block"><dt class="param">error</dt><dd class="cmt"><p>to be propagated ( <code>dG / dF</code> is propagated from higher layer )</p></dd><dt class="param">input</dt><dd class="cmt"><p>of this layer (in this case, <code>x = entry of dX / dw</code>)</p></dd><dt class="param">output</dt><dd class="cmt"><p>of this layer (in this case, <code>y</code>)</p></dd><dt>returns</dt><dd class="cmt"><p>propagated error (in this case, <code>dG/dx</code> )
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Note</dt><dd><span class="cmt"><p></p><p>Let this layer have function F composed with function <code> X(x) = W.x + b </code>
-and higher layer have function G.</p><p>Weight is updated with: <code>dG/dW</code>
-and propagate <code>dG/dx</code></p><p>For the computation, we only used denominator layout. (cf. Wikipedia Page of Matrix Computation)
-For the computation rules, see &quot;Matrix Cookbook&quot; from MIT.</p></span></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Note</dt><dd><span class="cmt"><p></p><p>      Let this layer have function F composed with function <code> X(x) = W.x + b </code>
+      and higher layer have function G.</p><p>      Weight is updated with: <code>dG/dW</code>
+      and propagate <code>dG/dx</code></p><p>      For the computation, we only used denominator layout. (cf. Wikipedia Page of Matrix Computation)
+      For the computation rules, see &quot;Matrix Cookbook&quot; from MIT.</p></span></dd></dl></div>
     </li></ol>
             </div>
 

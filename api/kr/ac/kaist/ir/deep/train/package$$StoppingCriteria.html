@@ -35,7 +35,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">StoppingCriteria</span><span class="params">(<span name="maxIter">maxIter: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100000</span></span>, <span name="patience">patience: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">5000</span></span>, <span name="patienceStep">patienceStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="improveThreshold">improveThreshold: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.995</span></span>, <span name="lossThreshold">lossThreshold: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">1.0E-4</span></span>, <span name="validationFreq">validationFreq: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span> with <span class="extype" name="scala.Product">Product</span></span>
+        <span class="name">StoppingCriteria</span><span class="params">(<span name="maxIter">maxIter: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100000</span></span>, <span name="patience">patience: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">5000</span></span>, <span name="patienceStep">patienceStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="improveThreshold">improveThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.995</span></span>, <span name="lossThreshold">lossThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0E-4</span></span>, <span name="validationFreq">validationFreq: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span> with <span class="extype" name="scala.Product">Product</span></span>
       </span>
       </h4>
       
@@ -84,7 +84,7 @@ that iteration is marked as best iteration.
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="kr.ac.kaist.ir.deep.train.StoppingCriteria#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(maxIter:Int,patience:Int,patienceStep:Int,improveThreshold:Double,lossThreshold:Double,validationFreq:Int):kr.ac.kaist.ir.deep.train.package.StoppingCriteria"></a>
+      <a id="&lt;init&gt;(maxIter:Int,patience:Int,patienceStep:Int,improveThreshold:Float,lossThreshold:Float,validationFreq:Int):kr.ac.kaist.ir.deep.train.package.StoppingCriteria"></a>
       <a id="&lt;init&gt;:StoppingCriteria"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -92,7 +92,7 @@ that iteration is marked as best iteration.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">StoppingCriteria</span><span class="params">(<span name="maxIter">maxIter: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100000</span></span>, <span name="patience">patience: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">5000</span></span>, <span name="patienceStep">patienceStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="improveThreshold">improveThreshold: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">0.995</span></span>, <span name="lossThreshold">lossThreshold: <span class="extype" name="scala.Double">Double</span> = <span class="symbol">1.0E-4</span></span>, <span name="validationFreq">validationFreq: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>)</span>
+        <span class="name">StoppingCriteria</span><span class="params">(<span name="maxIter">maxIter: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100000</span></span>, <span name="patience">patience: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">5000</span></span>, <span name="patienceStep">patienceStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="improveThreshold">improveThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.995</span></span>, <span name="lossThreshold">lossThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0E-4</span></span>, <span name="validationFreq">validationFreq: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">maxIter</dt><dd class="cmt"><p><u>maximum mini-batch</u> iteration count <code>(default 100,000)</code></p></dd><dt class="param">patience</dt><dd class="cmt"><p><u>default</u> patience count <code>(default 5,000)</code></p></dd><dt class="param">patienceStep</dt><dd class="cmt"><p><u>multiplier</u> for calculating patience <code>(default x2)</code></p></dd><dt class="param">improveThreshold</dt><dd class="cmt"><p><u>threshold</u> that iteration is marked as &quot;improved&quot; <code>(default 95% = 0.95)</code></p></dd><dt class="param">lossThreshold</dt><dd class="cmt"><p><u>maximum-tolerant</u> loss value. <code>(default 0.0001)</code></p></dd><dt class="param">validationFreq</dt><dd class="cmt"><p><u>step</u> count for validation <code>(default 100)</code>
@@ -249,15 +249,15 @@ that iteration is marked as best iteration.
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.StoppingCriteria#improveThreshold" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="improveThreshold:Double"></a>
-      <a id="improveThreshold:Double"></a>
+      <a id="improveThreshold:Float"></a>
+      <a id="improveThreshold:Float"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">improveThreshold</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+        <span class="name">improveThreshold</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt"><u>threshold</u> that iteration is marked as &quot;improved&quot; <code>(default 95% = 0.95)</code></p>
@@ -275,15 +275,15 @@ that iteration is marked as best iteration.
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.StoppingCriteria#lossThreshold" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="lossThreshold:Double"></a>
-      <a id="lossThreshold:Double"></a>
+      <a id="lossThreshold:Float"></a>
+      <a id="lossThreshold:Float"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">lossThreshold</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+        <span class="name">lossThreshold</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt"><u>maximum-tolerant</u> loss value.</p><div class="fullcomment"><div class="comment cmt"><p><u>maximum-tolerant</u> loss value. <code>(default 0.0001)</code></p></div></div>
