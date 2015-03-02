@@ -32,7 +32,7 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a id="scalanetwork-017" class="anchor" href="#scalanetwork-017" aria-hidden="true"><span class="octicon octicon-link"></span></a>ScalaNetwork 0.1.7</h1>
+<a id="scalanetwork-019" class="anchor" href="#scalanetwork-019" aria-hidden="true"><span class="octicon octicon-link"></span></a>ScalaNetwork 0.1.9</h1>
 
 <p>A <em>Neural Network implementation</em> with Scala, <a href="https://github.com/scalanlp/breeze">Breeze</a> &amp; <a href="http://spark.apache.org">Spark</a></p>
 
@@ -60,11 +60,9 @@
 <p>Also you can implement following Recursive Network via training tools.</p>
 
 <ul>
-<li>
-<em>Recursive</em> Auto Encoder (RAE) <sup>[EXPERIMENTAL]</sup>
-</li>
-<li>
-<em>Recursive</em> General Neural Network (Including Recursive Neural Tensor Network, RNTN) <sup>[EXPERIMENTAL]</sup>
+<li>Traditional <em>Recursive</em> Auto Encoder (RAE)</li>
+<li>Standard <em>Recursive</em> Auto Encoder (RAE)</li>
+<li>Unfolding <em>Recursive</em> Auto Encoder (RAE) <sup>[EXPERIMENTAL]</sup>
 </li>
 </ul>
 
@@ -86,6 +84,8 @@
 <li>Spark-based Distributed Environment, with modified version of Downpour SGD in <a href="http://research.google.com/archive/large_deep_networks_nips2012.html">DistBelief</a>
 </li>
 </ul>
+
+<p>Also you can add negative examples with <code>Trainer.setNegativeSampler()</code>.</p>
 
 <h2>
 <a id="activation-function" class="anchor" href="#activation-function" aria-hidden="true"><span class="octicon octicon-link"></span></a>Activation Function</h2>
@@ -111,19 +111,19 @@
 <p>Currently ScalaNetwork supports Scala version 2.10 ~ 2.11.</p>
 
 <ul>
-<li>Stable Release is 0.1.7</li>
+<li>Stable Release is 0.1.9</li>
 </ul>
 
 <p>If you are using SBT, add a dependency as described below:</p>
 
-<div class="highlight highlight-scala"><pre>libraryDependencies <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>kr.ac.kaist.ir<span class="pl-pds">"</span></span> <span class="pl-k">%%</span> <span class="pl-s1"><span class="pl-pds">"</span>scalanetwork<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s1"><span class="pl-pds">"</span>0.1.7<span class="pl-pds">"</span></span></pre></div>
+<div class="highlight highlight-scala"><pre>libraryDependencies <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>kr.ac.kaist.ir<span class="pl-pds">"</span></span> <span class="pl-k">%%</span> <span class="pl-s1"><span class="pl-pds">"</span>scalanetwork<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s1"><span class="pl-pds">"</span>0.1.9<span class="pl-pds">"</span></span></pre></div>
 
 <p>If you are using Maven, add a dependency as described below:</p>
 
 <div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
   &lt;<span class="pl-ent">groupId</span>&gt;kr.ac.kaist.ir&lt;/<span class="pl-ent">groupId</span>&gt;
   &lt;<span class="pl-ent">artifactId</span>&gt;scalanetwork_${your.scala.version}&lt;/<span class="pl-ent">artifactId</span>&gt;
-  &lt;<span class="pl-ent">version</span>&gt;0.1.7&lt;/<span class="pl-ent">version</span>&gt;
+  &lt;<span class="pl-ent">version</span>&gt;0.1.9&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <h2>
@@ -211,8 +211,10 @@ i.e. 1 - (neuron drop-out probability for drop-out training). Default is 1.</p>
 <span class="pl-k">new</span> <span class="pl-en">AdaDelta</span>(l1decay<span class="pl-k">=</span><span class="pl-c1">0.0</span>, l2decay<span class="pl-k">=</span><span class="pl-c1">0.0001</span>, decay<span class="pl-k">=</span><span class="pl-c1">0.95</span>, epsilon<span class="pl-k">=</span><span class="pl-c1">1e-6</span>)</pre></div>
 
 <div class="highlight highlight-scala"><pre><span class="pl-c">/* Training Criteria */</span>
-<span class="pl-en">SimpleTrainingCriteria</span>(miniBatch<span class="pl-k">=</span><span class="pl-c1">100</span>, validationSize<span class="pl-k">=</span><span class="pl-c1">20</span>)
-<span class="pl-en">DistBeliefCriteria</span>(miniBatch<span class="pl-k">=</span><span class="pl-c1">100</span>, validationSize<span class="pl-k">=</span><span class="pl-c1">20</span>, updateStep<span class="pl-k">=</span><span class="pl-c1">2</span>, fetchStep<span class="pl-k">=</span><span class="pl-c1">10</span>, numCores<span class="pl-k">=</span><span class="pl-c1">1</span>)</pre></div>
+<span class="pl-k">import</span> <span class="pl-v">scala.concurrent.duration.</span><span class="pl-v">_</span>
+<span class="pl-en">SimpleTrainingCriteria</span>(miniBatch<span class="pl-k">=</span><span class="pl-c1">100</span>, validationSize<span class="pl-k">=</span><span class="pl-c1">20</span>, negSamplingRatio<span class="pl-k">=</span><span class="pl-c1">0</span>)
+<span class="pl-en">DistBeliefCriteria</span>(miniBatch<span class="pl-k">=</span><span class="pl-c1">100</span>, validationSize<span class="pl-k">=</span><span class="pl-c1">20</span>, negSamplingRatio<span class="pl-k">=</span><span class="pl-c1">0</span>, submitInterval<span class="pl-k">=</span><span class="pl-c1">1.</span>seconds,
+  updateStep<span class="pl-k">=</span><span class="pl-c1">2</span>, fetchStep<span class="pl-k">=</span><span class="pl-c1">10</span>, numCores<span class="pl-k">=</span><span class="pl-c1">1</span>)</pre></div>
 
 <p>Validation size sets the number of elements used for validation phrase.</p>
 
