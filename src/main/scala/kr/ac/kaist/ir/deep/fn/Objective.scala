@@ -34,6 +34,8 @@ trait Objective extends ((ScalarMatrix, ScalarMatrix) ⇒ Scalar) with Serializa
  *
  * This has a heavy computation. If you want to use lighter one, use [[DotProductErr]]
  *
+ * @note This function returns 1 - cosine similarity, i.e. cosine dissimiarlity.
+ *
  * @example
  * {{{val output = net(input)
  *         val err = CosineErr(real, output)
@@ -61,12 +63,13 @@ object CosineErr extends Objective {
       (r, c) ⇒
         val x = output(r, c)
         val a = real(r, c)
-        // The nominator of derivative is,
+        // The nominator of derivative of cosine similarity is,
         // a(lenOut^2 - x^2) - x(dot - a*x)
         // = a*lenOut^2 - x*dot
         val nominator = a * lenOutSq - x * dotValue
 
-        nominator / denominator
+        // We need derivative of 1 - cosine.
+        -(nominator / denominator)
     }
   }
 
@@ -80,7 +83,7 @@ object CosineErr extends Objective {
   override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar = {
     val norm = len(real) * len(output)
     val dotValue: Scalar = real dot output
-    dotValue / norm
+    1.0f - (dotValue / norm)
   }
 
   /**
@@ -139,6 +142,8 @@ object CrossEntropyErr extends Objective {
 /**
  * __Objective Function__: Dot-product Error
  *
+ * @note This function computes additive inverse of dot product, i.e. dot-product dissimiarity.
+ *
  * @example
  * {{{val output = net(input)
  *         val err = DotProductErr(real, output)
@@ -153,7 +158,7 @@ object DotProductErr extends Objective {
    * @param output the computed __output of the network__, `o`
    * @return differentiation value at `f(x)=fx`, which is __a column vector__
    */
-  override def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = real
+  override def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = -real
 
   /**
    * Compute error (loss)
@@ -162,7 +167,7 @@ object DotProductErr extends Objective {
    * @param output the computed __output of the network__
    * @return the error
    */
-  override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar = real dot output
+  override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar = -(real dot output).asInstanceOf[Scalar]
 }
 
 /**
@@ -194,5 +199,47 @@ object SquaredErr extends Objective {
   override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar = {
     val diff = real - output
     sum(pow(diff, 2.0f))
+  }
+}
+
+/**
+ * __Objective Function__: Sum of Absolute Error
+ *
+ * @note In mathematics, L,,1,,-distance is called ''Manhattan distance.''
+ *
+ * @example
+ * {{{val output = net(input)
+ *          val err = ManhattanErr(real, output)
+ *          val diff = ManhattanErr.derivative(real, output)
+ * }}}
+ */
+object ManhattanErr extends Objective {
+  /**
+   * Compute differentiation value of this objective function w.r.t output o
+   *
+   * @param real the expected __real output__, `r`
+   * @param output the computed __output of the network__, `o`
+   * @return differentiation value at `f(x)=fx`, which is __a column vector__
+   */
+  override def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix =
+    DenseMatrix.tabulate(real.rows, real.cols) {
+      (r, c) ⇒
+        val target = real(r, c)
+        val x = output(r, c)
+        if (target > x) 1.0f
+        else if (target < x) -1.0f
+        else 0.0f
+    }
+
+  /**
+   * Compute error (loss)
+   *
+   * @param real the expected __real output__
+   * @param output the computed __output of the network__
+   * @return the error
+   */
+  override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar = {
+    val diff = real - output
+    sum(abs(diff))
   }
 }
