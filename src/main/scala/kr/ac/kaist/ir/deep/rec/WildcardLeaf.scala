@@ -4,16 +4,20 @@ import kr.ac.kaist.ir.deep.fn.ScalarMatrix
 import kr.ac.kaist.ir.deep.train.Corruption
 
 /**
- * __Trait__ that describes a node in BinaryTree.
+ * __Node of BinaryTree__ whose position is terminal.
+ *
+ * This node does not do any computation.
+ *
+ * @param id ID of wildcard entry
  */
-trait Node extends Serializable {
+class WildcardLeaf(val id: Int) extends Node {
   /**
    * Forward computation of Binary Tree
    *
    * @param fn function to be applied
    * @return the result
    */
-  def forward(fn: ScalarMatrix ⇒ ScalarMatrix): ScalarMatrix
+  override def forward(fn: ScalarMatrix ⇒ ScalarMatrix): ScalarMatrix = null
 
   /**
    * Backward computation of Binary Tree
@@ -22,7 +26,7 @@ trait Node extends Serializable {
    * @param fn function to be applied
    * @return Sequence of terminal nodes              
    */
-  def backward(err: ScalarMatrix, fn: ScalarMatrix ⇒ ScalarMatrix): Seq[Leaf]
+  def backward(err: ScalarMatrix, fn: ScalarMatrix ⇒ ScalarMatrix): Seq[Leaf] = Seq()
 
   /**
    * Corrupt this node
@@ -30,12 +34,12 @@ trait Node extends Serializable {
    * @param corrupt Corruption function to be applied
    * @return Corrupted Binary Tree
    */
-  def through(corrupt: Corruption): Node
+  override def through(corrupt: Corruption): Node = this
 
   /**
    * Replace wildcard node
    * @param resolve Wildcard Resolver function
    * @return new Node without wildcard
    */
-  def ?(resolve: Int ⇒ Node): Node
+  override def ?(resolve: (Int) ⇒ Node): Node = resolve(id)
 }

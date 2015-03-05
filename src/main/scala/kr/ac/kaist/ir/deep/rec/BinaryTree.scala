@@ -44,4 +44,19 @@ class BinaryTree(val left: Node, right: Node) extends Node {
    */
   override def through(corrupt: Corruption): Node =
     new BinaryTree(left through corrupt, right through corrupt)
+
+  /**
+   * Replace wildcard node
+   * @param resolve Wildcard Resolver function
+   * @return new Node without wildcard
+   */
+  override def ?(resolve: (Int) ⇒ Node): Node = {
+    val newLeft = left ? resolve
+    val newRight = right ? resolve
+
+    if (left.equals(newLeft) && right.equals(newRight))
+      this
+    else
+      new BinaryTree(newLeft, newRight)
+  }
 }

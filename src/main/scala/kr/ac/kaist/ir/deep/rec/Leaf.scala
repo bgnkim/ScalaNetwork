@@ -41,4 +41,11 @@ class Leaf(val x: ScalarMatrix) extends Node {
    */
   override def through(corrupt: Corruption): Node =
     new Leaf(corrupt(x))
+
+  /**
+   * Replace wildcard node
+   * @param resolve Wildcard Resolver function
+   * @return new Node without wildcard
+   */
+  override def ?(resolve: (Int) ⇒ Node): Node = this
 }
