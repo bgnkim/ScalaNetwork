@@ -19,7 +19,7 @@ trait TrainStyle[IN, OUT] extends Serializable {
   /** Training Pair Type */
   type Pair = (IN, OUT)
   /** Sampler Type */
-  type Sampler = (IN, Int) ⇒ Seq[OUT]
+  type Sampler = Int ⇒ Seq[OUT]
   /** Training parameters */
   val param: TrainingCriteria
   /** Network */
@@ -59,9 +59,15 @@ trait TrainStyle[IN, OUT] extends Serializable {
 
   /**
    * Set negative sampling method.
-   * @param set Sampler function
+   * @param set all training outputs that will be used for negative training
    */
-  def setNegativeSampler(set: (IN, Int) ⇒ Seq[OUT]): Unit
+  def setNegativeTrainingReference(set: Seq[OUT]): Unit
+
+  /**
+   * Set negative sampling method.
+   * @param set all training outputs that will be used for negative training
+   */
+  def setNegativeTrainingReference(set: RDD[OUT]): Unit
 
   /**
    * Set testing instances 

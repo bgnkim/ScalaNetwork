@@ -1,10 +1,11 @@
 package kr.ac.kaist.ir.deep.train
 
+import java.util.concurrent.ThreadLocalRandom
+
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.network._
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
-import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
 
@@ -12,6 +13,7 @@ import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import scala.concurrent.duration._
+import scala.reflect._
 
 /**
  * __Train Style__ : Semi-DistBelief Style, Spark-based.
@@ -25,11 +27,11 @@ import scala.concurrent.duration._
  *             This also controls how to compute actual network. (default: [[VectorType]])
  * @param param __DistBelief-style__ Training criteria (default: [[DistBeliefCriteria]])
  */
-class DistBeliefTrainStyle[IN, OUT](override val net: Network,
-                                    override val algorithm: WeightUpdater,
-                                    @transient val sc: SparkContext,
-                                    override val make: ManipulationType[IN, OUT] = new VectorType(),
-                                    override val param: DistBeliefCriteria = DistBeliefCriteria())
+class DistBeliefTrainStyle[IN:ClassTag, OUT:ClassTag](override val net: Network,
+                                                      override val algorithm: WeightUpdater,
+                                                      @transient val sc: SparkContext,
+                                                      override val make: ManipulationType[IN, OUT] = new VectorType(),
+                                                      override val param: DistBeliefCriteria = DistBeliefCriteria())
   extends TrainStyle[IN, OUT] {
   /** Accumulator variable for networks */
   protected val accNet = sc.accumulator(net.dW)(WeightAccumulator)
@@ -46,7 +48,7 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
   /** Fraction of mini-batch */
   private var trainingFraction: Float = 0.0f
   /** Negative Sampler */
-  private var negativeSampler: Broadcast[Sampler] = sc.broadcast(null)
+  private var negOutUniverse: RDD[OUT] = null
   /** Test Set */
   private var testSet: RDD[Pair] = null
   /** Size of test set */
@@ -88,6 +90,13 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
         logger warn s"Update command arrived before previous update is done. Need more steps between update commands!"
       }
 
+      // Repartition negative samples.
+      future {
+        val old = negOutUniverse
+        negOutUniverse = old.repartition(param.numCores)
+        old.unpersist()
+      }
+
       updateFlag =
         future {
           // Because DistBelief submit updating job after n_update steps,
@@ -122,11 +131,35 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
    */
   override def batch(): Unit = {
     val rddSet = trainingSet.sample(withReplacement = true, fraction = trainingFraction)
+    val trainPair = if(negOutUniverse != null){
+      rddSet.zipPartitions(negOutUniverse){
+        val rand = ThreadLocalRandom.current()
+
+        (itPair, itNeg) ⇒
+          var (orig, copy) = itNeg.duplicate
+          itPair.map{
+            pair ⇒
+              val seq = (1 to param.negSamplingRatio).map{
+                _ ⇒
+                  do{
+                    copy.next()
+                    if(!copy.hasNext) {
+                      val (orig2, copy2) = orig.duplicate
+                      orig = orig2
+                      copy = copy2
+                    }
+                  }while(rand.nextFloat() < 0.3f)
+
+                  copy.next()
+              }.toSeq
+              (pair._1, pair._2, seq)
+          }
+      }
+    }else rddSet.map(p ⇒ (p._1, p._2, Seq.empty[OUT]))
 
     val x = future {
-      rddSet.foreachPartition {
-        val sampler = negativeSampler.value
-        val useNeg = sampler != null && param.negSamplingRatio > 0
+      trainPair.foreachPartition {
+        val useNeg = param.negSamplingRatio > 0
         part ⇒
           val netCopy = bcNet.value.copy
 
@@ -135,14 +168,13 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
               future {
                 make.roundTrip(netCopy, make corrupted pair._1, pair._2)
 
-                if (useNeg) {
-                  var samples = sampler(pair._1, param.negSamplingRatio)
-                  while (samples.nonEmpty) {
-                    val neg = samples.head
-                    samples = samples.tail
+                var samples = pair._3
+                while (samples.nonEmpty) {
+                  val neg = samples.head
+                  samples = samples.tail
 
+                  if(make.different(neg, pair._2))
                     make.roundTrip(netCopy, make corrupted pair._1, neg, isPositive = false)
-                  }
                 }
               }
           }.toSeq
@@ -173,7 +205,7 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
    */
   override def setPositiveTrainingReference(set: Seq[(IN, OUT)]): Unit = {
     trainingSet = sc.parallelize(set, param.numCores).persist(StorageLevel.DISK_ONLY_2)
-    trainingFraction = set.size.toFloat / param.miniBatch
+    trainingFraction = param.miniBatch / set.size.toFloat
   }
 
   /**
@@ -182,16 +214,23 @@ class DistBeliefTrainStyle[IN, OUT](override val net: Network,
    */
   override def setPositiveTrainingReference(set: RDD[(IN, OUT)]): Unit = {
     trainingSet = set.repartition(param.numCores).persist(StorageLevel.DISK_ONLY_2)
-    trainingFraction = set.count().toFloat / param.miniBatch
+    trainingFraction = param.miniBatch / set.count().toFloat
   }
 
   /**
    * Set negative sampling method.
-   * @param set Sampler function
+   * @param set all training outputs that will be used for negative training
    */
-  override def setNegativeSampler(set: Sampler): Unit = {
-    negativeSampler.destroy()
-    negativeSampler = sc.broadcast(set)
+  override def setNegativeTrainingReference(set: Seq[OUT]): Unit = {
+    negOutUniverse = sc.parallelize(set, param.numCores).persist(StorageLevel.DISK_ONLY_2)
+  }
+
+  /**
+   * Set negative sampling method.
+   * @param set all training outputs that will be used for negative training
+   */
+  override def setNegativeTrainingReference(set: RDD[OUT]): Unit = {
+    negOutUniverse = set.repartition(param.numCores).persist(StorageLevel.DISK_ONLY_2)
   }
 
   /**

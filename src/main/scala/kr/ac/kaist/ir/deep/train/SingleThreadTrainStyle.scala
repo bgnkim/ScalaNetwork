@@ -3,6 +3,7 @@ package kr.ac.kaist.ir.deep.train
 import kr.ac.kaist.ir.deep.fn.{WeightSeqOp, WeightUpdater}
 import kr.ac.kaist.ir.deep.network.Network
 import org.apache.spark.rdd.RDD
+import org.apache.spark.storage.StorageLevel
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -24,7 +25,7 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
   /** Training set */
   private var trainingSet: Int ⇒ Seq[Pair] = null
   /** Negative Sampler */
-  private var negativeSampler: Sampler = null
+  private var negOutUniverse: Int ⇒ Seq[OUT] = null
   /** Test Set */
   private var testSet: Int ⇒ Seq[Pair] = null
 
@@ -50,7 +51,7 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
    */
   override def batch(): Unit = {
     var seq = trainingSet(param.miniBatch)
-    if (param.negSamplingRatio == 0 || negativeSampler == null) {
+    if (param.negSamplingRatio == 0 || negOutUniverse == null) {
       while (seq.nonEmpty) {
         val pair = seq.head
         seq = seq.tail
@@ -62,7 +63,7 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
         seq = seq.tail
         make roundTrip(net, make corrupted pair._1, pair._2)
 
-        var samples = negativeSampler(pair._1, param.negSamplingRatio)
+        var samples = negOutUniverse(param.negSamplingRatio)
         while (samples.nonEmpty) {
           val neg = samples.head
           samples = samples.tail
@@ -100,11 +101,30 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
   }
 
   /**
-   * Set negative sampling method. 
-   * @param set Sampler function
+   * Set negative sampling method.
+   * @param set all training outputs that will be used for negative training
    */
-  override def setNegativeSampler(set: Sampler): Unit = {
-    negativeSampler = set
+  override def setNegativeTrainingReference(set: Seq[OUT]): Unit = {
+    val index = () ⇒ Math.floor(Math.random() * set.size).toInt
+    negOutUniverse = (n: Int) ⇒ {
+      val array = ArrayBuffer[OUT]()
+      array.sizeHint(n)
+
+      var i = 0
+      while (i < n) {
+        array += set(index())
+        i += 1
+      }
+      array
+    }
+  }
+
+  /**
+   * Set negative sampling method.
+   * @param set all training outputs that will be used for negative training
+   */
+  override def setNegativeTrainingReference(set: RDD[OUT]): Unit = {
+    negOutUniverse = (n: Int) ⇒ set.takeSample(withReplacement = true, num = n).toSeq
   }
 
   /**

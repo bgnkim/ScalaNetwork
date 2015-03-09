@@ -121,13 +121,11 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
   /**
    * Set negative sampling method.
    *
-   * @note If you use this feature with RDD & DistBeliefTrainStyle, please be aware that given Sampler function
-   *       will be broadcast through Spark. That is, you should broadcast large variables which sampler use.
-   * @param set Sampler function
+   * @param set all training outputs that will be used for negative training
    */
-  def setNegativeSampler(set: Sampler) = {
+  def setNegativeTrainingReference(set: RDD[OUT]) = {
     require(make.isInstanceOf[VectorType], "Currently, only 'VectorType' manipulation supports negative sampling.")
-    style.setNegativeSampler(set)
+    style.setNegativeTrainingReference(set)
   }
 
   /**

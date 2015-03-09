@@ -63,4 +63,12 @@ trait ManipulationType[IN, OUT] extends Serializable {
    * @return error of this network
    */
   def lossOf(net: Network)(pair: (IN, OUT)): Scalar
+
+  /**
+   * Check whether given two are same or not.
+   * @param x Out-type object
+   * @param y Out-type object
+   * @return True if they are different.
+   */
+  def different(x: OUT, y: OUT): Boolean = true
 }

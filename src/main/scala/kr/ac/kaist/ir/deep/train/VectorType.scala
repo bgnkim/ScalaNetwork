@@ -1,5 +1,6 @@
 package kr.ac.kaist.ir.deep.train
 
+import breeze.linalg.{any, all}
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.network.Network
 
@@ -78,4 +79,12 @@ class VectorType(override val corrupt: Corruption = NoCorruption,
     val out = net of in
     s"IN: ${in.mkString} EXP: ${real.mkString} → OUT: ${out.mkString}"
   }
+
+  /**
+   * Check whether given two are same or not.
+   * @param x Out-type object
+   * @param y Out-type object
+   * @return True if they are different.
+   */
+  override def different(x: ScalarMatrix, y: ScalarMatrix): Boolean = any(x :!= y)
 }

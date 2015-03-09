@@ -51,7 +51,7 @@ object CosineErr extends Objective {
    * @return differentiation value at `f(x)=fx`, which is __a column vector__
    */
   override def derivative(real: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
-    val dotValue: Scalar = real dot output
+    val dotValue: Scalar = sum(real :* output)
 
     val lenReal = len(real)
     val lenOut = len(output)
@@ -82,7 +82,7 @@ object CosineErr extends Objective {
    */
   override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar = {
     val norm = len(real) * len(output)
-    val dotValue: Scalar = real dot output
+    val dotValue: Scalar = sum(real :* output)
     1.0f - (dotValue / norm)
   }
 
@@ -167,7 +167,7 @@ object DotProductErr extends Objective {
    * @param output the computed __output of the network__
    * @return the error
    */
-  override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar = -(real dot output).asInstanceOf[Scalar]
+  override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar = - sum(real :* output)
 }
 
 /**
