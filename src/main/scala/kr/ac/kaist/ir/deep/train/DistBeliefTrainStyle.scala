@@ -36,7 +36,7 @@ class DistBeliefTrainStyle[IN:ClassTag, OUT:ClassTag](override val net: Network,
   /** Accumulator variable for networks */
   protected val accNet = sc.accumulator(net.dW)(WeightAccumulator)
   /** Flag for batch : Is Batch remaining? */
-  @transient protected val batchFlag = ArrayBuffer[Future[Unit]]()
+  @transient protected var batchFlag = ArrayBuffer[Future[Unit]]()
   /** Spark distributed networks */
   protected var bcNet = sc.broadcast(net.copy)
   /** Flag for fetch : Is fetching? */
@@ -116,8 +116,10 @@ class DistBeliefTrainStyle[IN:ClassTag, OUT:ClassTag](override val net: Network,
   /**
    * Non-blocking pending, until all assigned batches are finished
    */
-  override def stopUntilBatchFinished(): Unit =
+  override def stopUntilBatchFinished(): Unit = {
     AsyncAwait.readyAll(param.submitInterval, batchFlag: _*)
+    batchFlag = batchFlag.filterNot(_.isCompleted)
+  }
 
   /**
    * Indicates whether the asynchrononus update is finished or not.
@@ -159,11 +161,10 @@ class DistBeliefTrainStyle[IN:ClassTag, OUT:ClassTag](override val net: Network,
 
     val x = future {
       trainPair.foreachPartition {
-        val useNeg = param.negSamplingRatio > 0
         part ⇒
           val netCopy = bcNet.value.copy
 
-          val f = part.map {
+          val f = Future.traverse(part) {
             pair ⇒
               future {
                 make.roundTrip(netCopy, make corrupted pair._1, pair._2)
@@ -177,9 +178,9 @@ class DistBeliefTrainStyle[IN:ClassTag, OUT:ClassTag](override val net: Network,
                     make.roundTrip(netCopy, make corrupted pair._1, neg, isPositive = false)
                 }
               }
-          }.toSeq
+          }
 
-          AsyncAwait.readyAll(1.second, f: _*)
+          AsyncAwait.ready(f, 1.second)
           accNet += netCopy.dW
       }
     }
@@ -187,9 +188,7 @@ class DistBeliefTrainStyle[IN:ClassTag, OUT:ClassTag](override val net: Network,
     batchFlag += x
 
     x.onComplete {
-      _ ⇒
-        rddSet.unpersist()
-        batchFlag -= x
+      _ ⇒ rddSet.unpersist()
     }
 
     try {
