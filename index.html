@@ -1,38 +1,26 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en-us">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Scalanetwork : A Neural network implementation with Scala">
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Scalanetwork</title>
+    <meta charset="UTF-8">
+    <title>Scalanetwork by nearbydelta</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
+    <section class="page-header">
+      <h1 class="project-name">Scalanetwork</h1>
+      <h2 class="project-tagline">A Neural network implementation with Scala</h2>
+      <a href="https://github.com/nearbydelta/ScalaNetwork" class="btn">View on GitHub</a>
+      <a href="https://github.com/nearbydelta/ScalaNetwork/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/nearbydelta/ScalaNetwork/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/nearbydelta/ScalaNetwork">View on GitHub</a>
-
-          <h1 id="project_title">Scalanetwork</h1>
-          <h2 id="project_tagline">A Neural network implementation with Scala</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/nearbydelta/ScalaNetwork/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/nearbydelta/ScalaNetwork/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
-<a id="scalanetwork-019" class="anchor" href="#scalanetwork-019" aria-hidden="true"><span class="octicon octicon-link"></span></a>ScalaNetwork 0.1.9</h1>
+    <section class="main-content">
+      <h1>
+<a id="scalanetwork-0102" class="anchor" href="#scalanetwork-0102" aria-hidden="true"><span class="octicon octicon-link"></span></a>ScalaNetwork 0.10.2</h1>
 
 <p>A <em>Neural Network implementation</em> with Scala, <a href="https://github.com/scalanlp/breeze">Breeze</a> &amp; <a href="http://spark.apache.org">Spark</a></p>
 
@@ -98,6 +86,8 @@
 <li>HyperbolicTangent</li>
 <li>Rectifier</li>
 <li>Softplus</li>
+<li>HardSigmoid</li>
+<li>HardTanh</li>
 </ul>
 
 <h1>
@@ -111,19 +101,19 @@
 <p>Currently ScalaNetwork supports Scala version 2.10 ~ 2.11.</p>
 
 <ul>
-<li>Stable Release is 0.1.9</li>
+<li>Stable Release is 0.10.2</li>
 </ul>
 
 <p>If you are using SBT, add a dependency as described below:</p>
 
-<div class="highlight highlight-scala"><pre>libraryDependencies <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>kr.ac.kaist.ir<span class="pl-pds">"</span></span> <span class="pl-k">%%</span> <span class="pl-s1"><span class="pl-pds">"</span>scalanetwork<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s1"><span class="pl-pds">"</span>0.1.9<span class="pl-pds">"</span></span></pre></div>
+<div class="highlight highlight-scala"><pre>libraryDependencies <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>kr.ac.kaist.ir<span class="pl-pds">"</span></span> <span class="pl-k">%%</span> <span class="pl-s"><span class="pl-pds">"</span>scalanetwork<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s"><span class="pl-pds">"</span>0.10.2<span class="pl-pds">"</span></span></pre></div>
 
 <p>If you are using Maven, add a dependency as described below:</p>
 
 <div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
   &lt;<span class="pl-ent">groupId</span>&gt;kr.ac.kaist.ir&lt;/<span class="pl-ent">groupId</span>&gt;
   &lt;<span class="pl-ent">artifactId</span>&gt;scalanetwork_${your.scala.version}&lt;/<span class="pl-ent">artifactId</span>&gt;
-  &lt;<span class="pl-ent">version</span>&gt;0.1.9&lt;/<span class="pl-ent">version</span>&gt;
+  &lt;<span class="pl-ent">version</span>&gt;0.10.1&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <h2>
@@ -133,11 +123,11 @@
 
 <div class="highlight highlight-scala"><pre><span class="pl-c">// Define 2 -&gt; 4 -&gt; 1 Layered, Fully connected network.</span>
 <span class="pl-k">val</span> <span class="pl-en">net</span> <span class="pl-k">=</span> <span class="pl-en">Network</span>(<span class="pl-en">Sigmoid</span>, <span class="pl-c1">2</span>, <span class="pl-c1">4</span>, <span class="pl-c1">1</span>)
-<span class="pl-c">// Define Manipulation Type. VectorType, AEType, RAEType, and URAEType.</span>
+<span class="pl-c">// Define Manipulation Type. VectorType, AEType, RAEType, StandardRAEType, and URAEType.</span>
 <span class="pl-k">val</span> <span class="pl-en">operation</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">VectorType</span>(
    corrupt <span class="pl-k">=</span> <span class="pl-en">GaussianCorruption</span>(variance <span class="pl-k">=</span> <span class="pl-c1">0.1</span>)
 )
-<span class="pl-c">// Define Training Style. SingleThreadTrainStyle vs DistBeliefTrainStyle</span>
+<span class="pl-c">// Define Training Style. SingleThreadTrainStyle, MultiThreadTrainStyle, &amp; DistBeliefTrainStyle</span>
 <span class="pl-k">val</span> <span class="pl-en">style</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">SingleThreadTrainStyle</span>(
   net <span class="pl-k">=</span> net,
   algorithm <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">StochasticGradientDescent</span>(l2decay <span class="pl-k">=</span> <span class="pl-c1">0.0001</span>),
@@ -242,6 +232,7 @@ i.e. 1 - (neuron drop-out probability for drop-out training). Default is 1.</p>
 <span class="pl-c">// Train network as RAE style. </span>
 <span class="pl-c">// Every internal node regarded as reconstruction its direct children (not all leaves).</span>
 <span class="pl-k">new</span> <span class="pl-en">RAEType</span>(corrupt, objective)
+<span class="pl-k">new</span> <span class="pl-en">StandardRAEType</span>(corrupt, objective)
 <span class="pl-c">// Experimental: Train network as URAE style. </span>
 <span class="pl-c">// With same structure, network should reconstruct all leaves from root.</span>
 <span class="pl-k">new</span> <span class="pl-en">URAEType</span>(corrupt, objective)</pre></div>
@@ -253,6 +244,7 @@ i.e. 1 - (neuron drop-out probability for drop-out training). Default is 1.</p>
 
 <div class="highlight highlight-scala"><pre><span class="pl-c">/* Styles */</span>
 <span class="pl-k">new</span> <span class="pl-en">SingleThreadTrainStyle</span>(net, algorithm, mnpl<span class="pl-k">:</span><span class="pl-en">ManipulationType</span>, param)
+<span class="pl-k">new</span> <span class="pl-en">MultiThreadTrainStyle</span>(net, sparkContext, algorithm, mnpl<span class="pl-k">:</span><span class="pl-en">ManipulationType</span>, param<span class="pl-k">:</span><span class="pl-en">DistBeliefCriteria</span>)
 <span class="pl-k">new</span> <span class="pl-en">DistBeliefTrainStyle</span>(net, sparkContext, algorithm, mnpl<span class="pl-k">:</span><span class="pl-en">ManipulationType</span>, param<span class="pl-k">:</span><span class="pl-en">DistBeliefCriteria</span>)</pre></div>
 
 <h3>
@@ -261,34 +253,34 @@ i.e. 1 - (neuron drop-out probability for drop-out training). Default is 1.</p>
 <p>Training is done by <code>Trainer</code> class.</p>
 
 <div class="highlight highlight-scala"><pre><span class="pl-c">/* Stopping Criteria */</span>
-<span class="pl-en">StoppingCriteria</span>(maxIter <span class="pl-k">=</span> <span class="pl-c1">100000</span>, patience<span class="pl-k">=</span> <span class="pl-c1">5000</span>, patienceStep<span class="pl-k">=</span><span class="pl-c1">2</span>, 
-  improveThreshold<span class="pl-k">=</span><span class="pl-c1">0.95</span>, lossThreshold<span class="pl-k">=</span><span class="pl-c1">1e-4</span>, validationFreq<span class="pl-k">=</span><span class="pl-c1">100</span>)
+<span class="pl-en">StoppingCriteria</span>(maxIter <span class="pl-k">=</span> <span class="pl-c1">100000</span>, waitAfterUpdate<span class="pl-k">=</span><span class="pl-c1">2</span>,
+  improveThreshold<span class="pl-k">=</span><span class="pl-c1">0.95</span>, lossThreshold<span class="pl-k">=</span><span class="pl-c1">1e-4</span>, validationFreq<span class="pl-k">=</span><span class="pl-c1">1.0f</span>)
 
 <span class="pl-c">/* Trainer */</span>
-<span class="pl-k">new</span> <span class="pl-en">Trainer</span>(style <span class="pl-k">=</span> style, stops <span class="pl-k">=</span> <span class="pl-en">StoppingCriteria</span>())</pre></div>
+<span class="pl-k">new</span> <span class="pl-en">Trainer</span>(style <span class="pl-k">=</span> style, stops <span class="pl-k">=</span> <span class="pl-en">StoppingCriteria</span>(), name <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Trainer<span class="pl-pds">"</span></span>)</pre></div>
 
 <ul>
 <li>
-<strong>Patience</strong> and <strong>its step</strong> indicates wating time from the improvement. If network output improved on 100-th iteration, 
-the trainer waits until <code>Max(patience, 100 * patienceStep)</code>.</li>
+<strong>waitAfterUpdate</strong> indicates wating time from the improvement. If network output improved on 100-th iteration,
+the trainer waits until <code>Max(validationEpoch, 100 * patienceStep)</code>.</li>
 <li>
 <strong>Improve Threshold</strong> indicates bottom line for improvement. 
 To be regarded as improved, loss should be less than (best loss) * improveThreshold</li>
 <li>
 <strong>Loss threshold</strong> indicates maximum loss can be accepted.</li>
 <li>
-<strong>Validation Frequency</strong> sets the number of iterations between validations.</li>
+<strong>Validation Frequency</strong> sets the number of iterations between validations. (1 iteration does train all training examples)</li>
 </ul>
 
 <p>Training is done by <code>train</code> method.</p>
 
 <div class="highlight highlight-scala"><pre><span class="pl-c">// If training and validation set are the same</span>
 trainer.train(<span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)])
-trainer.train(<span class="pl-st">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)]) <span class="pl-c">// With generator.</span>
+trainer.train(<span class="pl-k">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)]) <span class="pl-c">// With generator.</span>
 
 <span class="pl-c">// If they are different</span>
 trainer.train(<span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)], <span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)])
-trainer.train(<span class="pl-st">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)], <span class="pl-st">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)])
+trainer.train(<span class="pl-k">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)], <span class="pl-k">Int</span> <span class="pl-k">=&gt;</span> <span class="pl-en">Seq</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)])
 
 <span class="pl-c">// If you are using RDD</span>
 trainer.train(<span class="pl-en">RDD</span>[(<span class="pl-en">IN</span>, <span class="pl-en">OUT</span>)])
@@ -296,38 +288,17 @@ trainer.train(<span class="pl-en">RDD</span>[(<span class="pl-en">IN</span>, <sp
 
 <p>If you are using RDD, ScalaNetwork automatically caches your input sequence.</p>
 
-<h1>
-<a id="blueprint" class="anchor" href="#blueprint" aria-hidden="true"><span class="octicon octicon-link"></span></a>Blueprint</h1>
+<p>Also you can add negative examples, using <code>trainer.setNegativeTrainingReference()</code></p>
 
-<p>ScalaNetwork will support these implementations:</p>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/nearbydelta/ScalaNetwork">Scalanetwork</a> is maintained by <a href="https://github.com/nearbydelta">nearbydelta</a>.</span>
 
-<ul>
-<li>Manipulation Type : Word</li>
-<li>Input-dependent Weight</li>
-</ul>
-
-<p>Also ScalaNetwork will support these features:</p>
-
-<ul>
-<li>Recursive Neural Tensor Network (RNTN)</li>
-</ul>
-
-<h2>
-<a id="current-status" class="anchor" href="#current-status" aria-hidden="true"><span class="octicon octicon-link"></span></a>Current Status</h2>
-
-<p>Next version(v0.2) will support Word(String) manipulation type</p>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Scalanetwork maintained by <a href="https://github.com/nearbydelta">nearbydelta</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
 
-    
+    </section>
 
+  
   </body>
 </html>
+
