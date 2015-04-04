@@ -35,12 +35,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">DistBeliefCriteria</span><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="validationSize">validationSize: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">20</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="submitInterval">submitInterval: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span> = <span class="defval" name="scala.concurrent.duration.`package`.DurationInt(1).minute">...</span></span>, <span name="updateStep">updateStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="fetchStep">fetchStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">10</span></span>, <span name="numCores">numCores: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">DistBeliefCriteria</span><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="submitInterval">submitInterval: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span> = <span class="defval" name="scala.concurrent.duration.`package`.DurationInt(1).minute">...</span></span>, <span name="updateStep">updateStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="fetchStep">fetchStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">10</span></span>, <span name="numCores">numCores: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="storageLevel">storageLevel: <span class="extype" name="org.apache.spark.storage.StorageLevel">StorageLevel</span> = <span class="defval" name="org.apache.spark.storage.StorageLevel.DISK_ONLY_2">...</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Criteria</u>: How to train (for <a href="DistBeliefTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a>)</p><p>This case class defines how to train the network. Training parameter is defined in this class.
-</p></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></dd><dt class="param">validationSize</dt><dd class="cmt"><p>size of <u>validation set</u> to be generated <code>(default 20)</code></p></dd><dt class="param">negSamplingRatio</dt><dd class="cmt"><p>ratio of negative samples per positive instance. <code>(default 0)</code></p></dd><dt class="param">submitInterval</dt><dd class="cmt"><p>Time interval between batch submission. <code>(default 1.minute)</code></p></dd><dt class="param">updateStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between update <code>(default 2)</code></p></dd><dt class="param">fetchStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between fetching <code>(default 10)</code></p></dd><dt class="param">numCores</dt><dd class="cmt"><p>number of <u>v-cores</u> in the spark cluster. <code>(default 1)</code>
+</p></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></dd><dt class="param">negSamplingRatio</dt><dd class="cmt"><p>ratio of negative samples per positive instance. <code>(default 0)</code></p></dd><dt class="param">submitInterval</dt><dd class="cmt"><p>Time interval between batch submission. <code>(default 1.minute)</code></p></dd><dt class="param">updateStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between update <code>(default 2)</code></p></dd><dt class="param">fetchStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between fetching <code>(default 10)</code></p></dd><dt class="param">numCores</dt><dd class="cmt"><p>number of <u>v-cores</u> in the spark cluster. <code>(default 1)</code></p></dd><dt class="param">storageLevel</dt><dd class="cmt"><p>StorageLevel that will be used in Spark. <code>(default DISK_ONLY_2)</code>
 </p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>We recommend set numCores as similar as possible with allocated spark v-cores.
 </p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -83,7 +83,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(miniBatch:Int,validationSize:Int,negSamplingRatio:Int,submitInterval:scala.concurrent.duration.Duration,updateStep:Int,fetchStep:Int,numCores:Int):kr.ac.kaist.ir.deep.train.package.DistBeliefCriteria"></a>
+      <a id="&lt;init&gt;(miniBatch:Int,negSamplingRatio:Int,submitInterval:scala.concurrent.duration.Duration,updateStep:Int,fetchStep:Int,numCores:Int,storageLevel:org.apache.spark.storage.StorageLevel):kr.ac.kaist.ir.deep.train.package.DistBeliefCriteria"></a>
       <a id="&lt;init&gt;:DistBeliefCriteria"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -91,10 +91,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">DistBeliefCriteria</span><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="validationSize">validationSize: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">20</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="submitInterval">submitInterval: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span> = <span class="defval" name="scala.concurrent.duration.`package`.DurationInt(1).minute">...</span></span>, <span name="updateStep">updateStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="fetchStep">fetchStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">10</span></span>, <span name="numCores">numCores: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>)</span>
+        <span class="name">DistBeliefCriteria</span><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="submitInterval">submitInterval: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span> = <span class="defval" name="scala.concurrent.duration.`package`.DurationInt(1).minute">...</span></span>, <span name="updateStep">updateStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="fetchStep">fetchStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">10</span></span>, <span name="numCores">numCores: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="storageLevel">storageLevel: <span class="extype" name="org.apache.spark.storage.StorageLevel">StorageLevel</span> = <span class="defval" name="org.apache.spark.storage.StorageLevel.DISK_ONLY_2">...</span></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></dd><dt class="param">validationSize</dt><dd class="cmt"><p>size of <u>validation set</u> to be generated <code>(default 20)</code></p></dd><dt class="param">negSamplingRatio</dt><dd class="cmt"><p>ratio of negative samples per positive instance. <code>(default 0)</code></p></dd><dt class="param">submitInterval</dt><dd class="cmt"><p>Time interval between batch submission. <code>(default 1.minute)</code></p></dd><dt class="param">updateStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between update <code>(default 2)</code></p></dd><dt class="param">fetchStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between fetching <code>(default 10)</code></p></dd><dt class="param">numCores</dt><dd class="cmt"><p>number of <u>v-cores</u> in the spark cluster. <code>(default 1)</code>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></dd><dt class="param">negSamplingRatio</dt><dd class="cmt"><p>ratio of negative samples per positive instance. <code>(default 0)</code></p></dd><dt class="param">submitInterval</dt><dd class="cmt"><p>Time interval between batch submission. <code>(default 1.minute)</code></p></dd><dt class="param">updateStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between update <code>(default 2)</code></p></dd><dt class="param">fetchStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between fetching <code>(default 10)</code></p></dd><dt class="param">numCores</dt><dd class="cmt"><p>number of <u>v-cores</u> in the spark cluster. <code>(default 1)</code></p></dd><dt class="param">storageLevel</dt><dd class="cmt"><p>StorageLevel that will be used in Spark. <code>(default DISK_ONLY_2)</code>
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -350,7 +350,20 @@
         <span class="name">numCores</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">number of <u>v-cores</u> in the spark cluster.</p><div class="fullcomment"><div class="comment cmt"><p>number of <u>v-cores</u> in the spark cluster. <code>(default 1)</code>
+      <p class="shortcomment cmt">number of <u>v-cores</u> in the spark cluster.</p><div class="fullcomment"><div class="comment cmt"><p>number of <u>v-cores</u> in the spark cluster. <code>(default 1)</code></p></div></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#storageLevel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="storageLevel:org.apache.spark.storage.StorageLevel"></a>
+      <a id="storageLevel:StorageLevel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">storageLevel</span><span class="result">: <span class="extype" name="org.apache.spark.storage.StorageLevel">StorageLevel</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">StorageLevel that will be used in Spark.</p><div class="fullcomment"><div class="comment cmt"><p>StorageLevel that will be used in Spark. <code>(default DISK_ONLY_2)</code>
 </p></div></div>
     </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#submitInterval" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="submitInterval:scala.concurrent.duration.Duration"></a>
@@ -391,19 +404,6 @@
       </span>
       </h4>
       <p class="shortcomment cmt">number of <u>mini-batches</u> between update <code>(default 2)</code></p>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#validationSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="validationSize:Int"></a>
-      <a id="validationSize:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">validationSize</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">size of <u>validation set</u> to be generated <code>(default 20)</code></p><div class="fullcomment"><div class="comment cmt"><p>size of <u>validation set</u> to be generated <code>(default 20)</code></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria">DistBeliefCriteria</a> → <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

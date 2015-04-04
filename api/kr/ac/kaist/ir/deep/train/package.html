@@ -118,12 +118,12 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="package$$DistBeliefCriteria.html"><span class="name">DistBeliefCriteria</span></a><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="validationSize">validationSize: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">20</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="submitInterval">submitInterval: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span> = <span class="defval" name="scala.concurrent.duration.`package`.DurationInt(1).minute">...</span></span>, <span name="updateStep">updateStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="fetchStep">fetchStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">10</span></span>, <span name="numCores">numCores: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="package$$DistBeliefCriteria.html"><span class="name">DistBeliefCriteria</span></a><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="submitInterval">submitInterval: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span> = <span class="defval" name="scala.concurrent.duration.`package`.DurationInt(1).minute">...</span></span>, <span name="updateStep">updateStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="fetchStep">fetchStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">10</span></span>, <span name="numCores">numCores: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="storageLevel">storageLevel: <span class="extype" name="org.apache.spark.storage.StorageLevel">StorageLevel</span> = <span class="defval" name="org.apache.spark.storage.StorageLevel.DISK_ONLY_2">...</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt"><u>Criteria</u>: How to train (for <a href="DistBeliefTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a>)</p>
     </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="DistBeliefTrainStyle[IN,OUT]extendsTrainStyle[IN,OUT]"></a>
+      <a id="DistBeliefTrainStyle[IN,OUT]extendsMultiThreadTrainStyle[IN,OUT]"></a>
       <a id="DistBeliefTrainStyle[IN,OUT]:DistBeliefTrainStyle[IN,OUT]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -131,7 +131,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="DistBeliefTrainStyle.html"><span class="name">DistBeliefTrainStyle</span></a><span class="tparams">[<span name="IN">IN</span>, <span name="OUT">OUT</span>]</span><span class="result"> extends <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a>[<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>]</span>
+        <a href="DistBeliefTrainStyle.html"><span class="name">DistBeliefTrainStyle</span></a><span class="tparams">[<span name="IN">IN</span>, <span name="OUT">OUT</span>]</span><span class="result"> extends <a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a>[<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>]</span>
       </span>
       </h4>
       <p class="comment cmt"><u>Train Style</u> : Semi-DistBelief Style, Spark-based.</p>
@@ -175,6 +175,19 @@
       </span>
       </h4>
       <p class="comment cmt"><u>Trait</u> that describes how to convert input into corrupted matrix</p>
+    </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MultiThreadTrainStyle[IN,OUT]extendsTrainStyle[IN,OUT]"></a>
+      <a id="MultiThreadTrainStyle[IN,OUT]:MultiThreadTrainStyle[IN,OUT]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MultiThreadTrainStyle.html"><span class="name">MultiThreadTrainStyle</span></a><span class="tparams">[<span name="IN">IN</span>, <span name="OUT">OUT</span>]</span><span class="result"> extends <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a>[<span class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle.OUT">OUT</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>Trainer</u> : Stochastic-Style, Multi-Threaded using Spark.</p>
     </li><li name="kr.ac.kaist.ir.deep.train.RAEType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="RAETypeextendsTreeType"></a>
       <a id="RAEType:RAEType"></a>
@@ -189,6 +202,19 @@
       </h4>
       <p class="comment cmt"><u>Input Operation</u> : VectorTree as Input &amp; Recursive Auto-Encoder Training (no output type)
 </p>
+    </li><li name="kr.ac.kaist.ir.deep.train.RandomEqualPartitioner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RandomEqualPartitionerextendsPartitioner"></a>
+      <a id="RandomEqualPartitioner:RandomEqualPartitioner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RandomEqualPartitioner.html"><span class="name">RandomEqualPartitioner</span></a><span class="result"> extends <span class="extype" name="org.apache.spark.Partitioner">Partitioner</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Spark Partitioner that gives almost-equal partitions.</p>
     </li><li name="kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="SimpleTrainingCriteriaextendsTrainingCriteriawithProductwithSerializable"></a>
       <a id="SimpleTrainingCriteria:SimpleTrainingCriteria"></a>
@@ -198,7 +224,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="package$$SimpleTrainingCriteria.html"><span class="name">SimpleTrainingCriteria</span></a><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="validationSize">validationSize: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">20</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="package$$SimpleTrainingCriteria.html"><span class="name">SimpleTrainingCriteria</span></a><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt"><u>Criteria</u>: How to train (for <a href="SingleThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle">SingleThreadTrainStyle</a>)</p>
@@ -239,7 +265,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="package$$StoppingCriteria.html"><span class="name">StoppingCriteria</span></a><span class="params">(<span name="maxIter">maxIter: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100000</span></span>, <span name="patience">patience: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">5000</span></span>, <span name="patienceStep">patienceStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="improveThreshold">improveThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.995</span></span>, <span name="lossThreshold">lossThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0E-4</span></span>, <span name="validationFreq">validationFreq: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span> with <span class="extype" name="scala.Product">Product</span></span>
+        <a href="package$$StoppingCriteria.html"><span class="name">StoppingCriteria</span></a><span class="params">(<span name="maxIter">maxIter: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100000</span></span>, <span name="waitAfterUpdate">waitAfterUpdate: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="improveThreshold">improveThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.995</span></span>, <span name="lossThreshold">lossThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0E-4</span></span>, <span name="validationFreq">validationFreq: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span> with <span class="extype" name="scala.Product">Product</span></span>
       </span>
       </h4>
       <p class="comment cmt"><u>Criteria</u>: When to stop training</p>

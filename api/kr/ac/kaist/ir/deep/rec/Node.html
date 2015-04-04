@@ -45,7 +45,7 @@
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a>, <a href="Leaf.html" class="extype" name="kr.ac.kaist.ir.deep.rec.Leaf">Leaf</a></div>
+          <div class="subClasses hiddenContent"><a href="BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a>, <a href="Leaf.html" class="extype" name="kr.ac.kaist.ir.deep.rec.Leaf">Leaf</a>, <a href="WildcardLeaf.html" class="extype" name="kr.ac.kaist.ir.deep.rec.WildcardLeaf">WildcardLeaf</a></div>
         </div></div>
         
 
@@ -87,7 +87,21 @@
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="kr.ac.kaist.ir.deep.rec.Node#backward" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="kr.ac.kaist.ir.deep.rec.Node#?" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="?(resolve:Int=&gt;kr.ac.kaist.ir.deep.rec.Node):kr.ac.kaist.ir.deep.rec.Node"></a>
+      <a id="?((Int)⇒Node):Node"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $qmark" class="name">?</span><span class="params">(<span name="resolve">resolve: (<span class="extype" name="scala.Int">Int</span>) ⇒ <a href="" class="extype" name="kr.ac.kaist.ir.deep.rec.Node">Node</a></span>)</span><span class="result">: <a href="" class="extype" name="kr.ac.kaist.ir.deep.rec.Node">Node</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Replace wildcard node</p><div class="fullcomment"><div class="comment cmt"><p>Replace wildcard node</p></div><dl class="paramcmts block"><dt class="param">resolve</dt><dd class="cmt"><p>Wildcard Resolver function</p></dd><dt>returns</dt><dd class="cmt"><p>new Node without wildcard
+</p></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.rec.Node#backward" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="backward(err:kr.ac.kaist.ir.deep.fn.ScalarMatrix,fn:kr.ac.kaist.ir.deep.fn.ScalarMatrix=&gt;kr.ac.kaist.ir.deep.fn.ScalarMatrix):Seq[kr.ac.kaist.ir.deep.rec.Leaf]"></a>
       <a id="backward(ScalarMatrix,(ScalarMatrix)⇒ScalarMatrix):Seq[Leaf]"></a>
       <h4 class="signature">

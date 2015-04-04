@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>TreeType - kr.ac.kaist.ir.deep.train.TreeType</title>
-          <meta name="description" content="TreeType - kr.ac.kaist.ir.deep.train.TreeType" />
-          <meta name="keywords" content="TreeType kr.ac.kaist.ir.deep.train.TreeType" />
+          <title>RandomEqualPartitioner - kr.ac.kaist.ir.deep.train.RandomEqualPartitioner</title>
+          <meta name="description" content="RandomEqualPartitioner - kr.ac.kaist.ir.deep.train.RandomEqualPartitioner" />
+          <meta name="keywords" content="RandomEqualPartitioner kr.ac.kaist.ir.deep.train.RandomEqualPartitioner" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'kr.ac.kaist.ir.deep.train.TreeType';
+            var hash = 'kr.ac.kaist.ir.deep.train.RandomEqualPartitioner';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -24,28 +24,26 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../../../lib/trait_big.png" />
+        <img src="../../../../../../lib/class_big.png" />
         <p id="owner"><a href="../../../../../package.html" class="extype" name="kr">kr</a>.<a href="../../../../package.html" class="extype" name="kr.ac">ac</a>.<a href="../../../package.html" class="extype" name="kr.ac.kaist">kaist</a>.<a href="../../package.html" class="extype" name="kr.ac.kaist.ir">ir</a>.<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">deep</a>.<a href="package.html" class="extype" name="kr.ac.kaist.ir.deep.train">train</a></p>
-        <h1>TreeType</h1>
+        <h1>RandomEqualPartitioner</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">TreeType</span><span class="result"> extends <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a>, <span class="extype" name="scala.Null">Null</span>]</span>
+        <span class="name">RandomEqualPartitioner</span><span class="result"> extends <span class="extype" name="org.apache.spark.Partitioner">Partitioner</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Trait of Input Operation</u> : VectorTree as Input. This is an <b>Abstract Implementation</b>
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Spark Partitioner that gives almost-equal partitions.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Use this with RDD.zipWithUniqueId()
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a>, <span class="extype" name="scala.Null">Null</span>], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
-        </div><div class="toggleContainer block">
-          <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="RAEType.html" class="extype" name="kr.ac.kaist.ir.deep.train.RAEType">RAEType</a>, <a href="StandardRAEType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StandardRAEType">StandardRAEType</a>, <a href="URAEType.html" class="extype" name="kr.ac.kaist.ir.deep.train.URAEType">URAEType</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="org.apache.spark.Partitioner">Partitioner</span>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -63,7 +61,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="kr.ac.kaist.ir.deep.train.TreeType"><span>TreeType</span></li><li class="in" name="kr.ac.kaist.ir.deep.train.ManipulationType"><span>ManipulationType</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="kr.ac.kaist.ir.deep.train.RandomEqualPartitioner"><span>RandomEqualPartitioner</span></li><li class="in" name="org.apache.spark.Partitioner"><span>Partitioner</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -81,91 +79,31 @@
 
       <div id="template">
         <div id="allMembers">
-        
-
-        
-
-        <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="kr.ac.kaist.ir.deep.train.ManipulationType#corrupt" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="corrupt:kr.ac.kaist.ir.deep.train.Corruption"></a>
-      <a id="corrupt:Corruption"></a>
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="kr.ac.kaist.ir.deep.train.RandomEqualPartitioner#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(numPartition:Int):kr.ac.kaist.ir.deep.train.RandomEqualPartitioner"></a>
+      <a id="&lt;init&gt;:RandomEqualPartitioner"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
+        <span class="modifier"></span>
+        <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">corrupt</span><span class="result">: <a href="package$$Corruption.html" class="extype" name="kr.ac.kaist.ir.deep.train.Corruption">Corruption</a></span>
+        <span class="name">RandomEqualPartitioner</span><span class="params">(<span name="numPartition">numPartition: <span class="extype" name="scala.Int">Int</span></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Corruption function</p><div class="fullcomment"><div class="comment cmt"><p>Corruption function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#error" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="error:kr.ac.kaist.ir.deep.fn.Objective"></a>
-      <a id="error:Objective"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">error</span><span class="result">: <a href="../fn/Objective.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Objective">Objective</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Objective function</p><div class="fullcomment"><div class="comment cmt"><p>Objective function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#lossOf" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="lossOf(net:kr.ac.kaist.ir.deep.network.Network)(pair:(IN,OUT)):kr.ac.kaist.ir.deep.fn.Scalar"></a>
-      <a id="lossOf(Network)((BinaryTree,Null)):Scalar"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">lossOf</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>)</span><span class="params">(<span name="pair">pair: (<a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a>, <span class="extype" name="scala.Null">Null</span>)</span>)</span><span class="result">: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Apply given input and compute the error
-</p><div class="fullcomment"><div class="comment cmt"><p>Apply given input and compute the error
-</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">pair</dt><dd class="cmt"><p>(Input, Real output) for error computation.</p></dd><dt>returns</dt><dd class="cmt"><p>error of this network
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#roundTrip" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="roundTrip(net:kr.ac.kaist.ir.deep.network.Network,in:IN,real:OUT,isPositive:Boolean):Unit"></a>
-      <a id="roundTrip(Network,BinaryTree,Null,Boolean):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">roundTrip</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="in">in: <a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a></span>, <span name="real">real: <span class="extype" name="scala.Null">Null</span></span>, <span name="isPositive">isPositive: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Apply &amp; Back-prop given single input
-</p><div class="fullcomment"><div class="comment cmt"><p>Apply &amp; Back-prop given single input
-</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">in</dt><dd class="cmt"><p>Input for error computation.</p></dd><dt class="param">real</dt><dd class="cmt"><p>Real output for error computation.</p></dd><dt class="param">isPositive</dt><dd class="cmt"><p>Boolean that indicates whether this example is positive or not.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#stringOf" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="stringOf(net:kr.ac.kaist.ir.deep.network.Network,in:(IN,OUT)):String"></a>
-      <a id="stringOf(Network,(BinaryTree,Null)):String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">stringOf</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="in">in: (<a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a>, <span class="extype" name="scala.Null">Null</span>)</span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Make validation output
-</p><div class="fullcomment"><div class="comment cmt"><p>Make validation output
-</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">in</dt><dd class="cmt"><p>(Input, Real output) pair for computation</p></dd><dt>returns</dt><dd class="cmt"><p>input as string
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">numPartition</dt><dd class="cmt"><p>Number of partitions
+</p></dd></dl></div>
     </li></ol>
             </div>
 
+        
+
+        
+
         <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -263,36 +201,6 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.TreeType#corrupted" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="corrupted(x:kr.ac.kaist.ir.deep.rec.BinaryTree):kr.ac.kaist.ir.deep.rec.BinaryTree"></a>
-      <a id="corrupted(BinaryTree):BinaryTree"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">corrupted</span><span class="params">(<span name="x">x: <a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a></span>)</span><span class="result">: <a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Corrupt input
-</p><div class="fullcomment"><div class="comment cmt"><p>Corrupt input
-</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input to be corrupted</p></dd><dt>returns</dt><dd class="cmt"><p>corrupted input
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.TreeType">TreeType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#different" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="different(x:OUT,y:OUT):Boolean"></a>
-      <a id="different(Null,Null):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">different</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Null">Null</span></span>, <span name="y">y: <span class="extype" name="scala.Null">Null</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Check whether given two are same or not.</p><div class="fullcomment"><div class="comment cmt"><p>Check whether given two are same or not.</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>Out-type object</p></dd><dt class="param">y</dt><dd class="cmt"><p>Out-type object</p></dd><dt>returns</dt><dd class="cmt"><p>True if they are different.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -351,6 +259,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.RandomEqualPartitioner#getPartition" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getPartition(key:Any):Int"></a>
+      <a id="getPartition(Any):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getPartition</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.RandomEqualPartitioner">RandomEqualPartitioner</a> → Partitioner</dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -416,21 +337,46 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.TreeType#onewayTrip" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="onewayTrip(net:kr.ac.kaist.ir.deep.network.Network,x:kr.ac.kaist.ir.deep.rec.BinaryTree):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
-      <a id="onewayTrip(Network,BinaryTree):ScalarMatrix"></a>
+    </li><li name="kr.ac.kaist.ir.deep.train.RandomEqualPartitioner#numPartition" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="numPartition:Int"></a>
+      <a id="numPartition:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">numPartition</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Number of partitions
+</p>
+    </li><li name="kr.ac.kaist.ir.deep.train.RandomEqualPartitioner#numPartitions" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="numPartitions:Int"></a>
+      <a id="numPartitions:Int"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">onewayTrip</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="x">x: <a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">numPartitions</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Apply given single input as one-way forward trip.</p><div class="fullcomment"><div class="comment cmt"><p>Apply given single input as one-way forward trip.
-</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">x</dt><dd class="cmt"><p>input to be computed</p></dd><dt>returns</dt><dd class="cmt"><p>output of the network.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.TreeType">TreeType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.RandomEqualPartitioner">RandomEqualPartitioner</a> → Partitioner</dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.RandomEqualPartitioner#refreshRandom" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="refreshRandom():Unit"></a>
+      <a id="refreshRandom():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">refreshRandom</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -523,8 +469,8 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="kr.ac.kaist.ir.deep.train.ManipulationType">
-              <h3>Inherited from <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a>, <span class="extype" name="scala.Null">Null</span>]</h3>
+        <div class="parent" name="org.apache.spark.Partitioner">
+              <h3>Inherited from <span class="extype" name="org.apache.spark.Partitioner">Partitioner</span></h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">

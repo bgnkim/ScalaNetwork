@@ -46,7 +46,7 @@
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="DistBeliefTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a>, <a href="SingleThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle">SingleThreadTrainStyle</a></div>
+          <div class="subClasses hiddenContent"><a href="DistBeliefTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a>, <a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a>, <a href="SingleThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle">SingleThreadTrainStyle</a></div>
         </div></div>
         
 
@@ -100,15 +100,15 @@
       </h4>
       <p class="shortcomment cmt">Training Pair Type</p>
     </li><li name="kr.ac.kaist.ir.deep.train.TrainStyle.Sampler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Sampler=(IN,Int)=&gt;Seq[OUT]"></a>
-      <a id="Sampler:(IN,Int)⇒Seq[OUT]"></a>
+      <a id="Sampler=Int=&gt;Seq[OUT]"></a>
+      <a id="Sampler:(Int)⇒Seq[OUT]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Sampler</span><span class="result"> = (<span class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle.IN">IN</span>, <span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle.OUT">OUT</span>]</span>
+        <span class="name">Sampler</span><span class="result"> = (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle.OUT">OUT</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Sampler Type</p>
@@ -227,19 +227,33 @@
       </span>
       </h4>
       <p class="shortcomment cmt">Training parameters</p>
-    </li><li name="kr.ac.kaist.ir.deep.train.TrainStyle#setNegativeSampler" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="setNegativeSampler(set:(IN,Int)=&gt;Seq[OUT]):Unit"></a>
-      <a id="setNegativeSampler((IN,Int)⇒Seq[OUT]):Unit"></a>
+    </li><li name="kr.ac.kaist.ir.deep.train.TrainStyle#setNegativeTrainingReference" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="setNegativeTrainingReference(set:org.apache.spark.rdd.RDD[OUT]):Unit"></a>
+      <a id="setNegativeTrainingReference(RDD[OUT]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setNegativeSampler</span><span class="params">(<span name="set">set: (<span class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle.IN">IN</span>, <span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle.OUT">OUT</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">setNegativeTrainingReference</span><span class="params">(<span name="set">set: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle.OUT">OUT</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Set negative sampling method.</p><div class="fullcomment"><div class="comment cmt"><p>Set negative sampling method.</p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>Sampler function
+      <p class="shortcomment cmt">Set negative sampling method.</p><div class="fullcomment"><div class="comment cmt"><p>Set negative sampling method.</p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>all training outputs that will be used for negative training
+</p></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.TrainStyle#setNegativeTrainingReference" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="setNegativeTrainingReference(set:Seq[OUT]):Unit"></a>
+      <a id="setNegativeTrainingReference(Seq[OUT]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setNegativeTrainingReference</span><span class="params">(<span name="set">set: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle.OUT">OUT</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Set negative sampling method.</p><div class="fullcomment"><div class="comment cmt"><p>Set negative sampling method.</p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>all training outputs that will be used for negative training
 </p></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.TrainStyle#setPositiveTrainingReference" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="setPositiveTrainingReference(set:org.apache.spark.rdd.RDD[(IN,OUT)]):Unit"></a>
@@ -622,6 +636,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.TrainStyle#validationEpoch" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validationEpoch:Int"></a>
+      <a id="validationEpoch:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validationEpoch</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">size of training set</p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

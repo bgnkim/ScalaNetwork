@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>TreeType - kr.ac.kaist.ir.deep.train.TreeType</title>
-          <meta name="description" content="TreeType - kr.ac.kaist.ir.deep.train.TreeType" />
-          <meta name="keywords" content="TreeType kr.ac.kaist.ir.deep.train.TreeType" />
+          <title>CosineErr - kr.ac.kaist.ir.deep.fn.CosineErr</title>
+          <meta name="description" content="CosineErr - kr.ac.kaist.ir.deep.fn.CosineErr" />
+          <meta name="keywords" content="CosineErr kr.ac.kaist.ir.deep.fn.CosineErr" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'kr.ac.kaist.ir.deep.train.TreeType';
+            var hash = 'kr.ac.kaist.ir.deep.fn.CosineErr$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -22,30 +22,32 @@
    	  </script>
     
         </head>
-        <body class="type">
+        <body class="value">
       <div id="definition">
-        <img src="../../../../../../lib/trait_big.png" />
-        <p id="owner"><a href="../../../../../package.html" class="extype" name="kr">kr</a>.<a href="../../../../package.html" class="extype" name="kr.ac">ac</a>.<a href="../../../package.html" class="extype" name="kr.ac.kaist">kaist</a>.<a href="../../package.html" class="extype" name="kr.ac.kaist.ir">ir</a>.<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">deep</a>.<a href="package.html" class="extype" name="kr.ac.kaist.ir.deep.train">train</a></p>
-        <h1>TreeType</h1>
+        <img src="../../../../../../lib/object_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="kr">kr</a>.<a href="../../../../package.html" class="extype" name="kr.ac">ac</a>.<a href="../../../package.html" class="extype" name="kr.ac.kaist">kaist</a>.<a href="../../package.html" class="extype" name="kr.ac.kaist.ir">ir</a>.<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">deep</a>.<a href="package.html" class="extype" name="kr.ac.kaist.ir.deep.fn">fn</a></p>
+        <h1>CosineErr</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">TreeType</span><span class="result"> extends <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a>, <span class="extype" name="scala.Null">Null</span>]</span>
+        <span class="name">CosineErr</span><span class="result"> extends <a href="Objective.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Objective">Objective</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Trait of Input Operation</u> : VectorTree as Input. This is an <b>Abstract Implementation</b>
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Objective Function</u>: Cosine Similarity Error</p><p>This has a heavy computation. If you want to use lighter one, use <a href="DotProductErr$.html" class="extype" name="kr.ac.kaist.ir.deep.fn.DotProductErr">DotProductErr</a>
+</p></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="kw">val</span> output = net(input)
+<span class="kw">val</span> err = CosineErr(real, output)
+<span class="kw">val</span> diff = CosineErr.derivative(real, output)</pre></li></ol>
+            </div><dt>Note</dt><dd><span class="cmt"><p>This function returns 1 - cosine similarity, i.e. cosine dissimiarlity.
+</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a>, <span class="extype" name="scala.Null">Null</span>], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
-        </div><div class="toggleContainer block">
-          <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="RAEType.html" class="extype" name="kr.ac.kaist.ir.deep.train.RAEType">RAEType</a>, <a href="StandardRAEType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StandardRAEType">StandardRAEType</a>, <a href="URAEType.html" class="extype" name="kr.ac.kaist.ir.deep.train.URAEType">URAEType</a></div>
+          <div class="superTypes hiddenContent"><a href="Objective.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Objective">Objective</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, (<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>, <a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -63,7 +65,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="kr.ac.kaist.ir.deep.train.TreeType"><span>TreeType</span></li><li class="in" name="kr.ac.kaist.ir.deep.train.ManipulationType"><span>ManipulationType</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="kr.ac.kaist.ir.deep.fn.CosineErr"><span>CosineErr</span></li><li class="in" name="kr.ac.kaist.ir.deep.fn.Objective"><span>Objective</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Function2"><span>Function2</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -85,87 +87,10 @@
 
         
 
-        <div id="values" class="values members">
-              <h3>Abstract Value Members</h3>
-              <ol><li name="kr.ac.kaist.ir.deep.train.ManipulationType#corrupt" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="corrupt:kr.ac.kaist.ir.deep.train.Corruption"></a>
-      <a id="corrupt:Corruption"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">corrupt</span><span class="result">: <a href="package$$Corruption.html" class="extype" name="kr.ac.kaist.ir.deep.train.Corruption">Corruption</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Corruption function</p><div class="fullcomment"><div class="comment cmt"><p>Corruption function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#error" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="error:kr.ac.kaist.ir.deep.fn.Objective"></a>
-      <a id="error:Objective"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">error</span><span class="result">: <a href="../fn/Objective.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Objective">Objective</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Objective function</p><div class="fullcomment"><div class="comment cmt"><p>Objective function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#lossOf" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="lossOf(net:kr.ac.kaist.ir.deep.network.Network)(pair:(IN,OUT)):kr.ac.kaist.ir.deep.fn.Scalar"></a>
-      <a id="lossOf(Network)((BinaryTree,Null)):Scalar"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">lossOf</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>)</span><span class="params">(<span name="pair">pair: (<a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a>, <span class="extype" name="scala.Null">Null</span>)</span>)</span><span class="result">: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Apply given input and compute the error
-</p><div class="fullcomment"><div class="comment cmt"><p>Apply given input and compute the error
-</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">pair</dt><dd class="cmt"><p>(Input, Real output) for error computation.</p></dd><dt>returns</dt><dd class="cmt"><p>error of this network
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#roundTrip" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="roundTrip(net:kr.ac.kaist.ir.deep.network.Network,in:IN,real:OUT,isPositive:Boolean):Unit"></a>
-      <a id="roundTrip(Network,BinaryTree,Null,Boolean):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">roundTrip</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="in">in: <a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a></span>, <span name="real">real: <span class="extype" name="scala.Null">Null</span></span>, <span name="isPositive">isPositive: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Apply &amp; Back-prop given single input
-</p><div class="fullcomment"><div class="comment cmt"><p>Apply &amp; Back-prop given single input
-</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">in</dt><dd class="cmt"><p>Input for error computation.</p></dd><dt class="param">real</dt><dd class="cmt"><p>Real output for error computation.</p></dd><dt class="param">isPositive</dt><dd class="cmt"><p>Boolean that indicates whether this example is positive or not.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#stringOf" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="stringOf(net:kr.ac.kaist.ir.deep.network.Network,in:(IN,OUT)):String"></a>
-      <a id="stringOf(Network,(BinaryTree,Null)):String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">stringOf</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="in">in: (<a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a>, <span class="extype" name="scala.Null">Null</span>)</span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Make validation output
-</p><div class="fullcomment"><div class="comment cmt"><p>Make validation output
-</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">in</dt><dd class="cmt"><p>(Input, Real output) pair for computation</p></dd><dt>returns</dt><dd class="cmt"><p>input as string
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         <div id="values" class="values members">
-              <h3>Concrete Value Members</h3>
+              <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -231,6 +156,22 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.fn.CosineErr#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(real:kr.ac.kaist.ir.deep.fn.ScalarMatrix,output:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.Scalar"></a>
+      <a id="apply(ScalarMatrix,ScalarMatrix):Scalar"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="real">real: <a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>, <span name="output">output: <a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Compute error (loss)
+</p><div class="fullcomment"><div class="comment cmt"><p>Compute error (loss)
+</p></div><dl class="paramcmts block"><dt class="param">real</dt><dd class="cmt"><p>the expected <u>real output</u></p></dd><dt class="param">output</dt><dd class="cmt"><p>the computed <u>output of the network</u></p></dd><dt>returns</dt><dd class="cmt"><p>the error
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.fn.CosineErr">CosineErr</a> → <a href="Objective.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Objective">Objective</a> → Function2</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -263,36 +204,37 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.TreeType#corrupted" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="corrupted(x:kr.ac.kaist.ir.deep.rec.BinaryTree):kr.ac.kaist.ir.deep.rec.BinaryTree"></a>
-      <a id="corrupted(BinaryTree):BinaryTree"></a>
+    </li><li name="scala.Function2#curried" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="curried:T1=&gt;(T2=&gt;R)"></a>
+      <a id="curried:(ScalarMatrix)⇒(ScalarMatrix)⇒Scalar"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">corrupted</span><span class="params">(<span name="x">x: <a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a></span>)</span><span class="result">: <a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a></span>
+        <span class="name">curried</span><span class="result">: (<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ (<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Corrupt input
-</p><div class="fullcomment"><div class="comment cmt"><p>Corrupt input
-</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input to be corrupted</p></dd><dt>returns</dt><dd class="cmt"><p>corrupted input
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.TreeType">TreeType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#different" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="different(x:OUT,y:OUT):Boolean"></a>
-      <a id="different(Null,Null):Boolean"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function2</dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.fn.CosineErr#derivative" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="derivative(real:kr.ac.kaist.ir.deep.fn.ScalarMatrix,output:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
+      <a id="derivative(ScalarMatrix,ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">different</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Null">Null</span></span>, <span name="y">y: <span class="extype" name="scala.Null">Null</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">derivative</span><span class="params">(<span name="real">real: <a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>, <span name="output">output: <a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Check whether given two are same or not.</p><div class="fullcomment"><div class="comment cmt"><p>Check whether given two are same or not.</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>Out-type object</p></dd><dt class="param">y</dt><dd class="cmt"><p>Out-type object</p></dd><dt>returns</dt><dd class="cmt"><p>True if they are different.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
+      <p class="shortcomment cmt">Compute differentiation value of this objective function w.</p><div class="fullcomment"><div class="comment cmt"><p>Compute differentiation value of this objective function w.r.t output o
+</p></div><dl class="paramcmts block"><dt class="param">real</dt><dd class="cmt"><p>the expected <u>real output</u>, <code>r</code></p></dd><dt class="param">output</dt><dd class="cmt"><p>the computed <u>output of the network</u>, <code>o</code></p></dd><dt>returns</dt><dd class="cmt"><p>differentiation value at <code>f(x)=fx</code>, which is <u>a column vector</u>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.fn.CosineErr">CosineErr</a> → <a href="Objective.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Objective">Objective</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -416,21 +358,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.TreeType#onewayTrip" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="onewayTrip(net:kr.ac.kaist.ir.deep.network.Network,x:kr.ac.kaist.ir.deep.rec.BinaryTree):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
-      <a id="onewayTrip(Network,BinaryTree):ScalarMatrix"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">onewayTrip</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="x">x: <a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Apply given single input as one-way forward trip.</p><div class="fullcomment"><div class="comment cmt"><p>Apply given single input as one-way forward trip.
-</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">x</dt><dd class="cmt"><p>input to be computed</p></dd><dt>returns</dt><dd class="cmt"><p>output of the network.
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.TreeType">TreeType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -444,7 +371,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.Function2#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -456,7 +383,23 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function2 → AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Function2#tupled" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tupled:((T1,T2))=&gt;R"></a>
+      <a id="tupled:((ScalarMatrix,ScalarMatrix))⇒Scalar"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tupled</span><span class="result">: ((<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>, <a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>)) ⇒ <a href="package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function2</dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -523,12 +466,14 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="kr.ac.kaist.ir.deep.train.ManipulationType">
-              <h3>Inherited from <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a>, <span class="extype" name="scala.Null">Null</span>]</h3>
+        <div class="parent" name="kr.ac.kaist.ir.deep.fn.Objective">
+              <h3>Inherited from <a href="Objective.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Objective">Objective</a></h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.Function2">
+              <h3>Inherited from (<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>, <a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

@@ -107,7 +107,7 @@ train.train(set, valid)</pre></li></ol>
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="kr.ac.kaist.ir.deep.train.Trainer#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(style:kr.ac.kaist.ir.deep.train.TrainStyle[IN,OUT],stops:kr.ac.kaist.ir.deep.train.StoppingCriteria):kr.ac.kaist.ir.deep.train.Trainer[IN,OUT]"></a>
+      <a id="&lt;init&gt;(style:kr.ac.kaist.ir.deep.train.TrainStyle[IN,OUT],stops:kr.ac.kaist.ir.deep.train.StoppingCriteria,name:String):kr.ac.kaist.ir.deep.train.Trainer[IN,OUT]"></a>
       <a id="&lt;init&gt;:Trainer[IN,OUT]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -115,12 +115,12 @@ train.train(set, valid)</pre></li></ol>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Trainer</span><span class="params">(<span name="style">style: <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a>[<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>]</span>, <span name="stops">stops: <a href="package$$StoppingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.StoppingCriteria">StoppingCriteria</a> = <span class="defval" name="train.this.`package`.StoppingCriteria.apply(train.this.`package`.StoppingCriteria.apply$default$1, train.this.`package`.StoppingCriteria.apply$default$2, train.this.`package`.StoppingCriteria.apply$default$3, train.this.`package`.StoppingCriteria.apply$default$4, train.this.`package`.StoppingCriteria.apply$default$5, train.this.`package`.StoppingCriteria.apply$default$6)">...</span></span>)</span>
+        <span class="name">Trainer</span><span class="params">(<span name="style">style: <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a>[<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>]</span>, <span name="stops">stops: <a href="package$$StoppingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.StoppingCriteria">StoppingCriteria</a> = <span class="defval" name="train.this.`package`.StoppingCriteria.apply(train.this.`package`.StoppingCriteria.apply$default$1, train.this.`package`.StoppingCriteria.apply$default$2, train.this.`package`.StoppingCriteria.apply$default$3, train.this.`package`.StoppingCriteria.apply$default$4, train.this.`package`.StoppingCriteria.apply$default$5)">...</span></span>, <span name="name">name: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;Trainer&quot;</span></span>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">style</dt><dd class="cmt"><p><u>Training style</u> that supervises how to train. There are two styles,
              one is <a href="SingleThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle">SingleThreadTrainStyle</a>
-             and the other is <a href="DistBeliefTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a>.</p></dd><dt class="param">stops</dt><dd class="cmt"><p><u>Stopping Criteria</u> that controls the threshold for stopping. (Default : <a href="package$$StoppingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.StoppingCriteria">StoppingCriteria</a>)
+             and the other is <a href="DistBeliefTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a>.</p></dd><dt class="param">stops</dt><dd class="cmt"><p><u>Stopping Criteria</u> that controls the threshold for stopping. (Default : <a href="package$$StoppingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.StoppingCriteria">StoppingCriteria</a>)</p></dd><dt class="param">name</dt><dd class="cmt"><p>Name used for logging.
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -351,6 +351,19 @@ train.train(set, valid)</pre></li></ol>
       </span>
       </h4>
       <p class="shortcomment cmt">Logger</p><div class="fullcomment"><div class="comment cmt"><p>Logger</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.Trainer#name" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="name:String"></a>
+      <a id="name:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">name</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Name used for logging.</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -435,23 +448,22 @@ train.train(set, valid)</pre></li></ol>
       <p class="shortcomment cmt">Store best parameters
 </p><div class="fullcomment"><div class="comment cmt"><p>Store best parameters
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.Trainer#setNegativeSampler" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setNegativeSampler(set:(IN,Int)=&gt;Seq[OUT]):Unit"></a>
-      <a id="setNegativeSampler((IN,Int)⇒Seq[OUT]):Unit"></a>
+    </li><li name="kr.ac.kaist.ir.deep.train.Trainer#setNegativeTrainingReference" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setNegativeTrainingReference(set:org.apache.spark.rdd.RDD[OUT]):Unit"></a>
+      <a id="setNegativeTrainingReference(RDD[OUT]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setNegativeSampler</span><span class="params">(<span name="set">set: (<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.IN">IN</span>, <span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">setNegativeTrainingReference</span><span class="params">(<span name="set">set: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Set negative sampling method.</p><div class="fullcomment"><div class="comment cmt"><p>Set negative sampling method.
-</p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>Sampler function
-</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>If you use this feature with RDD &amp; DistBeliefTrainStyle, please be aware that given Sampler function
-      will be broadcast through Spark. That is, you should broadcast large variables which sampler use.</p></span></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.Trainer#stops" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>all training outputs that will be used for negative training
+</p></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.Trainer#stops" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="stops:kr.ac.kaist.ir.deep.train.StoppingCriteria"></a>
       <a id="stops:StoppingCriteria"></a>
       <h4 class="signature">
@@ -463,9 +475,8 @@ train.train(set, valid)</pre></li></ol>
         <span class="name">stops</span><span class="result">: <a href="package$$StoppingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.StoppingCriteria">StoppingCriteria</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"><u>Stopping Criteria</u> that controls the threshold for stopping.</p><div class="fullcomment"><div class="comment cmt"><p><u>Stopping Criteria</u> that controls the threshold for stopping. (Default : <a href="package$$StoppingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.StoppingCriteria">StoppingCriteria</a>)
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.Trainer#style" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <p class="shortcomment cmt"><u>Stopping Criteria</u> that controls the threshold for stopping.</p><div class="fullcomment"><div class="comment cmt"><p><u>Stopping Criteria</u> that controls the threshold for stopping. (Default : <a href="package$$StoppingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.StoppingCriteria">StoppingCriteria</a>)</p></div></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.Trainer#style" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="style:kr.ac.kaist.ir.deep.train.TrainStyle[IN,OUT]"></a>
       <a id="style:TrainStyle[IN,OUT]"></a>
       <h4 class="signature">
@@ -479,7 +490,7 @@ train.train(set, valid)</pre></li></ol>
       </h4>
       <p class="shortcomment cmt"><u>Training style</u> that supervises how to train.</p><div class="fullcomment"><div class="comment cmt"><p><u>Training style</u> that supervises how to train. There are two styles,
              one is <a href="SingleThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle">SingleThreadTrainStyle</a>
-             and the other is <a href="DistBeliefTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a>.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+             and the other is <a href="DistBeliefTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a>.</p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -567,7 +578,7 @@ train.train(set, valid)</pre></li></ol>
 </p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>Full Sequence of training set</p></dd><dt>returns</dt><dd class="cmt"><p>Training error (loss)
 </p></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.Trainer#trainBatch" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="trainBatch(iter:Int,prevloss:kr.ac.kaist.ir.deep.fn.Scalar,patience:Int):kr.ac.kaist.ir.deep.fn.Scalar"></a>
+      <a id="trainBatch(epoch:Int,prevloss:kr.ac.kaist.ir.deep.fn.Scalar,patience:Int):kr.ac.kaist.ir.deep.fn.Scalar"></a>
       <a id="trainBatch(Int,Scalar,Int):Scalar"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -575,16 +586,29 @@ train.train(set, valid)</pre></li></ol>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trainBatch</span><span class="params">(<span name="iter">iter: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="prevloss">prevloss: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a> = <span class="symbol">Float.MaxValue</span></span>, <span name="patience">patience: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="#stops:kr.ac.kaist.ir.deep.train.StoppingCriteria">stops.patience</a></span></span></span>)</span><span class="result">: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
+        <span class="name">trainBatch</span><span class="params">(<span name="epoch">epoch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="prevloss">prevloss: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a> = <span class="symbol">Float.MaxValue</span></span>, <span name="patience">patience: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="#validationPeriod:Int">validationPeriod * 5</a></span></span></span>)</span><span class="result">: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Tail Recursive : Train each batch
 </p><div class="fullcomment"><div class="comment cmt"><p>Tail Recursive : Train each batch
-</p></div><dl class="paramcmts block"><dt class="param">iter</dt><dd class="cmt"><p>current iteration</p></dd><dt class="param">prevloss</dt><dd class="cmt"><p>previous loss</p></dd><dt class="param">patience</dt><dd class="cmt"><p>current patience</p></dd><dt>returns</dt><dd class="cmt"><p>Total Loss when train is finished
+</p></div><dl class="paramcmts block"><dt class="param">epoch</dt><dd class="cmt"><p>current iteration epoch. (1 iteration = 1 validation freq)</p></dd><dt class="param">prevloss</dt><dd class="cmt"><p>previous loss</p></dd><dt class="param">patience</dt><dd class="cmt"><p>current patience, i.e. loop until at least this epoch.</p></dd><dt>returns</dt><dd class="cmt"><p>Total Loss when train is finished
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Annotations</dt><dd>
                 <span class="name">@tailrec</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.Trainer#validationPeriod" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="validationPeriod:Int"></a>
+      <a id="validationPeriod:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validationPeriod</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Period of validation</p><div class="fullcomment"><div class="comment cmt"><p>Period of validation</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
