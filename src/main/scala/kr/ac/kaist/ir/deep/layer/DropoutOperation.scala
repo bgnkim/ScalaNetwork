@@ -12,7 +12,7 @@ import play.api.libs.json.{JsObject, Json}
  *
  * @param presence The probability of the neuron is alive. `(Default: 1.0, 100%)`
  */
-class DropoutLayer(protected val presence: Probability = 1.0f) extends Layer {
+class DropoutOperation(protected val presence: Probability = 1.0f) extends Layer {
   /**
    * weights for update
    *

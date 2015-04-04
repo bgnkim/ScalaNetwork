@@ -3,6 +3,7 @@ package kr.ac.kaist.ir.deep
 import breeze.stats.distributions.Gaussian
 import kr.ac.kaist.ir.deep.fn._
 import org.apache.spark.AccumulatorParam
+import org.apache.spark.storage.StorageLevel
 
 import scala.annotation.tailrec
 import scala.concurrent.duration._
@@ -79,18 +80,18 @@ package object train {
    * that iteration is marked as best iteration.
    *
    * @param maxIter __maximum mini-batch__ iteration count `(default 100,000)`
-   * @param patience __default__ patience count `(default 5,000)`
-   * @param patienceStep __multiplier__ for calculating patience `(default x2)`
+   * @param waitAfterUpdate __multiplier__ for calculating patience `(default 2 := lastupdate# * 2)`
    * @param improveThreshold __threshold__ that iteration is marked as "improved" `(default 95% = 0.95)`
    * @param lossThreshold __maximum-tolerant__ loss value. `(default 0.0001)`
-   * @param validationFreq __step__ count for validation `(default 100)`
+   * @param validationFreq __multiplier__ used for count for validation. `(default 1.0f)`
+   *                       Validation checked whenever (validationFreq) * (#epoch for 1 training batch).
+   *                       where #epoch for 1 training batch = trainset.size / miniBatch.
    */
   case class StoppingCriteria(maxIter: Int = 100000,
-                              patience: Int = 5000,
-                              patienceStep: Int = 2,
+                              waitAfterUpdate: Int = 2,
                               improveThreshold: Float = 0.995f,
                               lossThreshold: Float = 0.0001f,
-                              validationFreq: Int = 100)
+                              validationFreq: Float = 1.0f)
     extends Serializable
 
   /**
@@ -99,11 +100,9 @@ package object train {
    * This case class defines how to train the network. Training parameter is defined in this class.
    *
    * @param miniBatch size of __mini-batch__ `(default 100)`
-   * @param validationSize size of __validation set__ to be generated `(default 20)`
    * @param negSamplingRatio ratio of negative samples per positive instance. `(default 0)`
    */
   case class SimpleTrainingCriteria(override val miniBatch: Int = 100,
-                                    override val validationSize: Int = 20,
                                     override val negSamplingRatio: Int = 0) extends TrainingCriteria
 
   /**
@@ -112,22 +111,22 @@ package object train {
    * This case class defines how to train the network. Training parameter is defined in this class.
    *
    * @param miniBatch size of __mini-batch__ `(default 100)`
-   * @param validationSize size of __validation set__ to be generated `(default 20)`
    * @param negSamplingRatio ratio of negative samples per positive instance. `(default 0)`
    * @param submitInterval Time interval between batch submission. `(default 1.minute)`
    * @param updateStep number of __mini-batches__ between update `(default 2)`
    * @param fetchStep number of __mini-batches__ between fetching `(default 10)`
    * @param numCores number of __v-cores__ in the spark cluster. `(default 1)`
+   * @param storageLevel StorageLevel that will be used in Spark. `(default DISK_ONLY_2)`
    *
    * @note We recommend set numCores as similar as possible with allocated spark v-cores.
    */
   case class DistBeliefCriteria(override val miniBatch: Int = 100,
-                                override val validationSize: Int = 20,
                                 override val negSamplingRatio: Int = 0,
                                 submitInterval: Duration = 1.minute,
                                 updateStep: Int = 2,
                                 fetchStep: Int = 10,
-                                numCores: Int = 1) extends TrainingCriteria
+                                numCores: Int = 1,
+                                storageLevel: StorageLevel = StorageLevel.DISK_ONLY_2) extends TrainingCriteria
 
   /**
    * Accumulator Param object for DistBelief Train Style.

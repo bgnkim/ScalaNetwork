@@ -103,18 +103,18 @@ package object layer {
         x ⇒ x.getClass.getSimpleName == actStr
       }).getOrElse(HyperbolicTangent)
 
-      val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[Scalar]]]
+      val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
 
       (obj \ "type").as[String] match {
         case "NormLayer" ⇒
           val factor = (obj \ "factor").as[Scalar]
-          new NormalizeLayer(factor)
+          new NormalizeOperation(factor)
         case "DropoutLayer" ⇒
           val presence = (obj \ "presence").as[Probability]
-          new DropoutLayer(presence)
+          new DropoutOperation(presence)
         case "BasicLayer" ⇒
-          val w = ScalarMatrix restore (obj \ "weight").as[IndexedSeq[IndexedSeq[Scalar]]]
-          (obj \ "reconst_bias").asOpt[IndexedSeq[IndexedSeq[Scalar]]] match {
+          val w = ScalarMatrix restore (obj \ "weight").as[IndexedSeq[IndexedSeq[String]]]
+          (obj \ "reconst_bias").asOpt[IndexedSeq[IndexedSeq[String]]] match {
             case Some(rb) ⇒
               new ReconBasicLayer(in.as[Int] → out, act, w, b, ScalarMatrix restore rb)
             case None ⇒
@@ -122,12 +122,12 @@ package object layer {
           }
         case "SplitTensorLayer" ⇒
           val tuple = in.as[Seq[Int]]
-          val quad = (obj \ "quadratic").as[Seq[IndexedSeq[IndexedSeq[Scalar]]]] map { x ⇒ ScalarMatrix restore x}
-          val linear = (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[Scalar]]]] map { x ⇒ ScalarMatrix restore x}
-          new SplitTensorLayer((tuple(0), tuple(1)) → out, act, quad, linear, b)
+          val quad = (obj \ "quadratic").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
+          val linear = (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
+          new SplitTensorLayer((tuple.head, tuple(1)) → out, act, quad, linear, b)
         case "FullTensorLayer" ⇒
-          val quad = (obj \ "quadratic").as[Seq[IndexedSeq[IndexedSeq[Scalar]]]] map { x ⇒ ScalarMatrix restore x}
-          val linear = (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[Scalar]]]] map { x ⇒ ScalarMatrix restore x}
+          val quad = (obj \ "quadratic").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
+          val linear = (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
           new FullTensorLayer(in.as[Int] → out, act, quad, linear, b)
       }
     }

@@ -10,7 +10,7 @@ import play.api.libs.json.{JsObject, Json}
  *
  * @param factor The multiplication factor of the normalized output `(Default 1.0)`
  */
-class NormalizeLayer(protected val factor: Scalar = 1.0f) extends Layer {
+class NormalizeOperation(protected val factor: Scalar = 1.0f) extends Layer {
   /**
    * weights for update
    *

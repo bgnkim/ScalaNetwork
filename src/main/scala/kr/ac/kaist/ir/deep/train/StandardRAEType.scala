@@ -1,7 +1,7 @@
 package kr.ac.kaist.ir.deep.train
 
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.layer.NormalizeLayer
+import kr.ac.kaist.ir.deep.layer.NormalizeOperation
 import kr.ac.kaist.ir.deep.network.Network
 import kr.ac.kaist.ir.deep.rec.BinaryTree
 
@@ -24,7 +24,7 @@ class StandardRAEType(override val corrupt: Corruption = NoCorruption,
                       override val error: Objective = SquaredErr)
   extends TreeType {
   /** Normalization layer */
-  val normalizeLayer = new NormalizeLayer()
+  val normalizeLayer = new NormalizeOperation()
 
   /**
    * Apply & Back-prop given single input

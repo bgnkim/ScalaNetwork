@@ -1,4 +1,4 @@
-ScalaNetwork 0.1.9
+ScalaNetwork 0.10.1
 ====================
 
 A *Neural Network implementation* with Scala, [Breeze](https://github.com/scalanlp/breeze) & [Spark](http://spark.apache.org)
@@ -46,6 +46,8 @@ ScalaNetwork supports following activation functions:
 * HyperbolicTangent
 * Rectifier
 * Softplus
+* HardSigmoid
+* HardTanh
 
 # Usage
 
@@ -55,12 +57,12 @@ Here is some examples for basic usage. If you want to extend this package or use
 
 Currently ScalaNetwork supports Scala version 2.10 ~ 2.11.
 
-* Stable Release is 0.1.9
+* Stable Release is 0.10.1
  
 If you are using SBT, add a dependency as described below:
 
 ```scala
-libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "0.1.9"
+libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "0.10.1"
 ```
 
 If you are using Maven, add a dependency as described below:
@@ -68,7 +70,7 @@ If you are using Maven, add a dependency as described below:
 <dependency>
   <groupId>kr.ac.kaist.ir</groupId>
   <artifactId>scalanetwork_${your.scala.version}</artifactId>
-  <version>0.1.9</version>
+  <version>0.10.1</version>
 </dependency>
 ```
 
@@ -78,11 +80,11 @@ If you are using Maven, add a dependency as described below:
 ```scala
 // Define 2 -> 4 -> 1 Layered, Fully connected network.
 val net = Network(Sigmoid, 2, 4, 1)
-// Define Manipulation Type. VectorType, AEType, RAEType, and URAEType.
+// Define Manipulation Type. VectorType, AEType, RAEType, StandardRAEType, and URAEType.
 val operation = new VectorType(
    corrupt = GaussianCorruption(variance = 0.1)
 )
-// Define Training Style. SingleThreadTrainStyle vs DistBeliefTrainStyle
+// Define Training Style. SingleThreadTrainStyle, MultiThreadTrainStyle, & DistBeliefTrainStyle
 val style = new SingleThreadTrainStyle(
   net = net,
   algorithm = new StochasticGradientDescent(l2decay = 0.0001),
@@ -187,6 +189,7 @@ new AEType(corrupt, objective)
 // Train network as RAE style. 
 // Every internal node regarded as reconstruction its direct children (not all leaves).
 new RAEType(corrupt, objective)
+new StandardRAEType(corrupt, objective)
 // Experimental: Train network as URAE style. 
 // With same structure, network should reconstruct all leaves from root.
 new URAEType(corrupt, objective)
@@ -198,6 +201,7 @@ You can choose the training style of the network.
 ```scala
 /* Styles */
 new SingleThreadTrainStyle(net, algorithm, mnpl:ManipulationType, param)
+new MultiThreadTrainStyle(net, sparkContext, algorithm, mnpl:ManipulationType, param:DistBeliefCriteria)
 new DistBeliefTrainStyle(net, sparkContext, algorithm, mnpl:ManipulationType, param:DistBeliefCriteria)
 ```
 
@@ -206,19 +210,19 @@ Training is done by `Trainer` class.
 
 ```scala
 /* Stopping Criteria */
-StoppingCriteria(maxIter = 100000, patience= 5000, patienceStep=2, 
-  improveThreshold=0.95, lossThreshold=1e-4, validationFreq=100)
+StoppingCriteria(maxIter = 100000, waitAfterUpdate=2,
+  improveThreshold=0.95, lossThreshold=1e-4, validationFreq=1.0f)
 
 /* Trainer */
-new Trainer(style = style, stops = StoppingCriteria())
+new Trainer(style = style, stops = StoppingCriteria(), name = "Trainer")
 ```
 
-* **Patience** and **its step** indicates wating time from the improvement. If network output improved on 100-th iteration, 
-  the trainer waits until `Max(patience, 100 * patienceStep)`.
+* **waitAfterUpdate** indicates wating time from the improvement. If network output improved on 100-th iteration,
+  the trainer waits until `Max(validationEpoch, 100 * patienceStep)`.
 * **Improve Threshold** indicates bottom line for improvement. 
   To be regarded as improved, loss should be less than (best loss) * improveThreshold
 * **Loss threshold** indicates maximum loss can be accepted.
-* **Validation Frequency** sets the number of iterations between validations.
+* **Validation Frequency** sets the number of iterations between validations. (1 iteration does train all training examples)
 
 Training is done by `train` method.
 
@@ -238,17 +242,4 @@ trainer.train(RDD[(IN, OUT)], RDD[(IN, OUT)])
 
 If you are using RDD, ScalaNetwork automatically caches your input sequence.
 
-# Blueprint
-
-ScalaNetwork will support these implementations:
-
-* Manipulation Type : Word
-* Input-dependent Weight
-
-Also ScalaNetwork will support these features:
-
-* Recursive Neural Tensor Network (RNTN)
-
-## Current Status
-
-Next version(v0.2) will support Word(String) manipulation type
+Also you can add negative examples, using `trainer.setNegativeTrainingReference()`

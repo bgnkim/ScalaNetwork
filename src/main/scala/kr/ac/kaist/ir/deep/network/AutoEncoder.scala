@@ -1,7 +1,7 @@
 package kr.ac.kaist.ir.deep.network
 
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.layer.{DropoutLayer, Reconstructable}
+import kr.ac.kaist.ir.deep.layer.{DropoutOperation, Reconstructable}
 import play.api.libs.json.Json
 
 /**
@@ -26,7 +26,7 @@ class AutoEncoder(private val layer: Reconstructable,
    */
   override val dW: IndexedSeq[ScalarMatrix] = layer.dW
   /** Dropout layer **/
-  private val dropout = new DropoutLayer(presence)
+  private val dropout = new DropoutOperation(presence)
   /** Collected input & output of each layer */
   protected[deep] var input: Seq[ScalarMatrix] = Seq()
 

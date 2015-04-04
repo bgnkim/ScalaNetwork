@@ -44,14 +44,16 @@ import scala.concurrent.duration._
  *              one is [[SingleThreadTrainStyle]]
  *              and the other is [[DistBeliefTrainStyle]].
  * @param stops __Stopping Criteria__ that controls the threshold for stopping. (Default : [[StoppingCriteria]])
+ * @param name Name used for logging.
  *
  * @tparam IN the type of input.
  *            Currently, [[ScalarMatrix]] and DAG are supported
  * @tparam OUT the type of output
  *             Currently, [[ScalarMatrix]] and Null are supported
  */
-class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
-                       protected val stops: StoppingCriteria = StoppingCriteria())
+class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
+                       val stops: StoppingCriteria = StoppingCriteria(),
+                       val name: String = "Trainer")
   extends Serializable {
   /** import everything in the style */
 
@@ -63,6 +65,8 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
   @transient protected var bestParam: IndexedSeq[ScalarMatrix] = null
   /** Best Loss Iteration Number */
   @transient protected var bestIter: Int = 0
+  /** Period of validation */
+  @transient protected var validationPeriod: Int = 0
 
   /**
    * Train given sequence, and validate with given sequence.
@@ -83,6 +87,8 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
             validation: Seq[Pair]): Scalar = {
     setPositiveTrainingReference(set)
     setTestReference(validation)
+
+    validationPeriod = (stops.validationFreq * style.validationEpoch).toInt
 
     saveParams()
     val err = trainBatch()
@@ -109,6 +115,8 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
     setPositiveTrainingReference(set)
     setTestReference(validation)
 
+    validationPeriod = (stops.validationFreq * style.validationEpoch).toInt
+
     saveParams()
     val err = trainBatch()
     restoreParams()
@@ -132,7 +140,7 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
    * Print validation result into logger
    */
   protected def printValidation() = {
-    logger info s"BEST ITERATION $bestIter : W = ${net.W map (_.mkString) mkString " | "}"
+    logger info s"($name) BEST ITERATION ${bestIter + 1}"
     foreachTestSet(5) {
       item ⇒ logger info make.stringOf(net, item)
     }
@@ -164,45 +172,49 @@ class Trainer[IN, OUT](protected val style: TrainStyle[IN, OUT],
   /**
    * Tail Recursive : Train each batch
    *
-   * @param iter current iteration
+   * @param epoch current iteration epoch. (1 iteration = 1 validation freq)
    * @param prevloss previous loss
-   * @param patience current patience
+   * @param patience current patience, i.e. loop until at least this epoch.
    * @return Total Loss when train is finished
    */
   @tailrec
-  protected final def trainBatch(iter: Int = 0,
+  protected final def trainBatch(epoch: Int = 0,
                                  prevloss: Scalar = Float.MaxValue,
-                                 patience: Int = stops.patience): Scalar = {
-    fetch(iter)
+                                 patience: Int = validationPeriod * 5): Scalar = {
+    fetch(epoch)
     batch()
-    update(iter)
+    update(epoch)
 
     var nPatience = patience
 
-    val nLoss = if ((iter + 1) % stops.validationFreq == 0) {
+    val nLoss = if ((epoch + 1) % validationPeriod == 0) {
       // Pending until batch finished
       stopUntilBatchFinished()
-      
-      logger debug s"ITERATION $iter : W = ${net.W map (_.mkString) mkString " | "}"
+
+      logger debug s"($name) ITERATION ${epoch + 1} : W = ${net.W map (_.mkString) mkString " | "}"
       val train = validationError()
       val weight = algorithm loss net.W
-      if (train + weight < prevloss * stops.improveThreshold) {
-        nPatience = Math.max(patience, iter * stops.patienceStep)
-        bestIter = iter
+      val improvement = (train + weight) / prevloss
+      if (improvement < stops.improveThreshold) {
+        nPatience = Math.max(patience, epoch * stops.waitAfterUpdate)
+        bestIter = epoch
         saveParams()
-        logger info f"Iteration $iter%6d, Validation = $train%.5f, WeightLoss = $weight%.5f"
+        val impr = 100.0 - improvement * 100.0
+
+        logger info f"($name) Ep ${epoch + 1}%6d, E = $train%.5f + W = $weight%.5f (▼ $impr%.4f %%) "
         train + weight
       } else {
+        logger info f"($name) Ep ${epoch + 1}%6d, NOT IMPROVED"
         prevloss
       }
     } else {
       prevloss
     }
 
-    if (iter < stops.maxIter && nPatience > iter && nLoss > stops.lossThreshold) {
-      trainBatch(iter + 1, nLoss, nPatience)
+    if (epoch < stops.maxIter && nPatience > epoch && nLoss > stops.lossThreshold) {
+      trainBatch(epoch + 1, nLoss, nPatience)
     } else {
-      logger.info(f"Finished $iter%6d, Error = $nLoss%.5f")
+      logger.info(f"($name) Finished ${epoch + 1}%6d, Error = $nLoss%.5f")
       nLoss
     }
   }

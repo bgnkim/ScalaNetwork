@@ -1,7 +1,7 @@
 package kr.ac.kaist.ir.deep
 
 import breeze.linalg.DenseMatrix
-import play.api.libs.json.{JsArray, JsNumber}
+import play.api.libs.json.{JsArray, JsString}
 
 /**
  * Package for various functions.
@@ -60,7 +60,7 @@ package object fn {
       val c = x.cols
       JsArray((0 until r) map {
         i ⇒ JsArray((0 until c) map {
-          j ⇒ JsNumber(x(i, j).toDouble)
+          j ⇒ JsString(f"${x(i, j)}%.8f")
         })
       })
     }

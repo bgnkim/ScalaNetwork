@@ -2,8 +2,8 @@ package kr.ac.kaist.ir.deep.train
 
 import kr.ac.kaist.ir.deep.fn.{WeightSeqOp, WeightUpdater}
 import kr.ac.kaist.ir.deep.network.Network
+import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-import org.apache.spark.storage.StorageLevel
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -28,6 +28,12 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
   private var negOutUniverse: Int ⇒ Seq[OUT] = null
   /** Test Set */
   private var testSet: Int ⇒ Seq[Pair] = null
+  /** Test Set iterator */
+  private var testSetMapper: (Pair ⇒ Unit) ⇒ Unit = null
+  /** Test Set Context. Null if testset is a local seq */
+  private var testSetSC: SparkContext = null
+  /** Size of test set */
+  private var testSize: Float = 0.0f
 
   /**
    * Fetch weights
@@ -90,6 +96,7 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
       }
       array
     }
+    validationEpoch = set.size / param.miniBatch
   }
 
   /**
@@ -98,6 +105,7 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
    */
   override def setPositiveTrainingReference(set: RDD[(IN, OUT)]): Unit = {
     trainingSet = (n: Int) ⇒ set.takeSample(withReplacement = true, num = n).toSeq
+    validationEpoch = (set.count() / param.miniBatch).toInt
   }
 
   /**
@@ -133,6 +141,15 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
    */
   override def setTestReference(set: Seq[(IN, OUT)]): Unit = {
     testSet = set.take
+    testSetMapper = (mapper: Pair ⇒ Unit) ⇒ {
+      var seq = set
+      while (seq.nonEmpty) {
+        mapper(seq.head)
+        seq = seq.tail
+      }
+    }
+    testSize = set.size
+    testSetSC = null
   }
 
   /**
@@ -141,6 +158,11 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
    */
   override def setTestReference(set: RDD[(IN, OUT)]): Unit = {
     testSet = (n: Int) ⇒ set.takeSample(withReplacement = true, num = n).toSeq
+    testSetMapper = (mapper: Pair ⇒ Unit) ⇒ {
+      set.foreach(mapper)
+    }
+    testSize = set.count()
+    testSetSC = set.context
   }
 
   /**
@@ -149,13 +171,26 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
    * @return validation error
    */
   def validationError() = {
-    val size = param.validationSize
     val lossOf = make.lossOf(net) _
-    var sum = 0.0f
-    foreachTestSet(size) {
-      item ⇒ sum += lossOf(item) / size
+
+    if (testSetSC == null) {
+      // If it is from general "local" sequence
+      var sum = 0.0f
+      testSetMapper {
+        item ⇒ sum += lossOf(item) / testSize
+      }
+      sum
+    } else {
+      // If it is from RDD
+      val sum = testSetSC.accumulator(0.0f)
+      val bcLoss = testSetSC.broadcast(lossOf)
+      testSetMapper {
+        item ⇒
+          sum += bcLoss.value(item) / testSize
+      }
+      bcLoss.destroy()
+      sum.value
     }
-    sum
   }
 
   /**

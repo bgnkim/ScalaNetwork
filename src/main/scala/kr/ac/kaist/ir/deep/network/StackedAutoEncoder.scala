@@ -18,7 +18,7 @@ class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network
    */
   override val dW: IndexedSeq[ScalarMatrix] = {
     val matrices = ArrayBuffer[ScalarMatrix]()
-    encoders.flatMap(_.dW).map(matrices.append(_))
+    encoders.flatMap(_.dW).foreach(matrices.append(_))
     matrices
   }
 
@@ -29,7 +29,7 @@ class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network
    */
   override val W: IndexedSeq[ScalarMatrix] = {
     val matrices = ArrayBuffer[ScalarMatrix]()
-    encoders.flatMap(_.W).map(matrices.append(_))
+    encoders.flatMap(_.W).foreach(matrices.append(_))
     matrices
   }
 
