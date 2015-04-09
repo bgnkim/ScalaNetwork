@@ -8,7 +8,7 @@ import play.api.libs.json.{JsArray, Json}
  * __Network__: A basic network implementation
  * @param layers __Sequence of layers__ of this network
  */
-class BasicNetwork(private val layers: IndexedSeq[Layer])
+class BasicNetwork(val layers: IndexedSeq[Layer])
   extends Network {
   /**
    * All weights of layers

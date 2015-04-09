@@ -153,8 +153,10 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
    * @param set Sequence of training set
    */
   override def setPositiveTrainingReference(set: Seq[(IN, OUT)]): Unit = {
-    trainingSet = sc.parallelize(set, param.numCores)
-      .setName("Positives").persist(param.storageLevel)
+    val rdd =
+      if (param.repartitionOnStart) sc.parallelize(set, param.numCores)
+      else sc.parallelize(set)
+    trainingSet = rdd.setName("Positives").persist(param.storageLevel)
     trainingFraction = param.miniBatch / set.size.toFloat
     validationEpoch = set.size / param.miniBatch
   }
@@ -164,9 +166,11 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
    * @param set RDD of training set
    */
   override def setPositiveTrainingReference(set: RDD[(IN, OUT)]): Unit = {
-    trainingSet = set.repartition(param.numCores)
-      .setName(set.name + " (Positives)").persist(param.storageLevel)
-    val count = trainingSet.count()
+    val rdd =
+      if (param.repartitionOnStart) set.repartition(param.numCores).persist(param.storageLevel)
+      else set
+    trainingSet = rdd.setName(set.name + " (Positives)")
+    val count = trainingSet.countApproxDistinct()
     trainingFraction = param.miniBatch / count.toFloat
     validationEpoch = (count / param.miniBatch).toInt
   }
@@ -176,7 +180,10 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
    * @param set all training outputs that will be used for negative training
    */
   override def setNegativeTrainingReference(set: Seq[OUT]): Unit = {
-    negOutUniverse = sc.parallelize(set, param.numCores).zipWithUniqueId().map(_.swap)
+    val rdd =
+      if (param.repartitionOnStart) sc.parallelize(set, param.numCores)
+      else sc.parallelize(set)
+    negOutUniverse = rdd.zipWithUniqueId().map(_.swap)
       .setName("Negatives").persist(param.storageLevel)
     val size = set.size
     negFraction = (param.miniBatch * param.negSamplingRatio * 2) / size.toFloat
@@ -188,9 +195,12 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
    * @param set all training outputs that will be used for negative training
    */
   override def setNegativeTrainingReference(set: RDD[OUT]): Unit = {
-    negOutUniverse = set.repartition(param.numCores).zipWithUniqueId().map(_.swap)
+    val rdd =
+      if (param.repartitionOnStart) set.repartition(param.numCores)
+      else set
+    negOutUniverse = rdd.zipWithUniqueId().map(_.swap)
       .setName(set.name + " (Negatives)").persist(param.storageLevel)
-    val size = set.count()
+    val size = rdd.countApproxDistinct()
     negFraction = (param.miniBatch * param.negSamplingRatio * 2) / size.toFloat
     negPartitioner = new RandomEqualPartitioner(param.numCores)
   }
@@ -200,8 +210,10 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
    * @param set Sequence of testing set
    */
   override def setTestReference(set: Seq[(IN, OUT)]): Unit = {
-    testSet = sc.parallelize(set, param.numCores)
-      .setName("Validation").persist(param.storageLevel)
+    val rdd =
+      if (param.repartitionOnStart) sc.parallelize(set, param.numCores)
+      else sc.parallelize(set)
+    testSet = rdd.setName("Validation").persist(param.storageLevel)
     testSize = set.size.toFloat
   }
 
@@ -210,9 +222,11 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
    * @param set RDD of testing set
    */
   override def setTestReference(set: RDD[(IN, OUT)]): Unit = {
-    testSet = set.repartition(param.numCores)
-      .setName(set.name + " (Validation)").persist(param.storageLevel)
-    testSize = testSet.count().toFloat
+    val rdd =
+      if (param.repartitionOnStart) set.repartition(param.numCores).persist(param.storageLevel)
+      else set
+    testSet = rdd.setName(set.name + " (Validation)")
+    testSize = testSet.countApproxDistinct().toFloat
   }
 
   /**

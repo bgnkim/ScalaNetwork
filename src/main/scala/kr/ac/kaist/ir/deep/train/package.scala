@@ -54,7 +54,7 @@ package object train {
     /**
      * Gaussian Distribution
      */
-    private val distro = Gaussian distribution(mean, variance)
+    private lazy val distro = Gaussian distribution(mean, variance)
 
     /**
      * Do corruption
@@ -81,7 +81,7 @@ package object train {
    *
    * @param maxIter __maximum mini-batch__ iteration count `(default 100,000)`
    * @param waitAfterUpdate __multiplier__ for calculating patience `(default 2 := lastupdate# * 2)`
-   * @param improveThreshold __threshold__ that iteration is marked as "improved" `(default 95% = 0.95)`
+   * @param improveThreshold __threshold__ that iteration is marked as "improved" `(default 99.5% = 0.995)`
    * @param lossThreshold __maximum-tolerant__ loss value. `(default 0.0001)`
    * @param validationFreq __multiplier__ used for count for validation. `(default 1.0f)`
    *                       Validation checked whenever (validationFreq) * (#epoch for 1 training batch).
@@ -116,6 +116,7 @@ package object train {
    * @param updateStep number of __mini-batches__ between update `(default 2)`
    * @param fetchStep number of __mini-batches__ between fetching `(default 10)`
    * @param numCores number of __v-cores__ in the spark cluster. `(default 1)`
+   * @param repartitionOnStart true if do repartition when define training/testing RDD instances. `(default false)`
    * @param storageLevel StorageLevel that will be used in Spark. `(default DISK_ONLY_2)`
    *
    * @note We recommend set numCores as similar as possible with allocated spark v-cores.
@@ -126,6 +127,7 @@ package object train {
                                 updateStep: Int = 2,
                                 fetchStep: Int = 10,
                                 numCores: Int = 1,
+                                repartitionOnStart: Boolean = false,
                                 storageLevel: StorageLevel = StorageLevel.DISK_ONLY_2) extends TrainingCriteria
 
   /**

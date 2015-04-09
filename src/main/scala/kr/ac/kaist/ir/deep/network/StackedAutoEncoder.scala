@@ -10,7 +10,7 @@ import scala.collection.mutable.ArrayBuffer
  *
  * @param encoders __Sequence of AutoEncoders__ to be stacked.
  */
-class StackedAutoEncoder(private val encoders: Seq[AutoEncoder]) extends Network {
+class StackedAutoEncoder(val encoders: Seq[AutoEncoder]) extends Network {
   /**
    * All accumulated delta weights of layers
    *

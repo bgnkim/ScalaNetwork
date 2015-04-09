@@ -46,7 +46,7 @@ class DropoutOperation(protected val presence: Probability = 1.0f) extends Layer
    * @return JSON object describes this layer
    */
   override def toJSON: JsObject = Json.obj(
-    "type" → "DropoutLayer",
+    "type" → "DropoutOp",
     "presence" → presence.safe
   )
 

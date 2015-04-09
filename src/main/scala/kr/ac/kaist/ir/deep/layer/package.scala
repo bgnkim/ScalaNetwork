@@ -96,39 +96,43 @@ package object layer {
      */
     def apply(obj: JsValue) = {
       val in = obj \ "in"
-      val out = (obj \ "out").as[Int]
+      val out = obj \ "out"
+      val typeStr = (obj \ "type").as[String]
 
-      val actStr = (obj \ "act").as[String]
-      val act = (acts find {
-        x ⇒ x.getClass.getSimpleName == actStr
-      }).getOrElse(HyperbolicTangent)
+      val act = if (typeStr.endsWith("Layer")) {
+        val actStr = (obj \ "act").as[String]
+        (acts find {
+          x ⇒ x.getClass.getSimpleName == actStr
+        }).getOrElse(HyperbolicTangent)
+      } else null
 
-      val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
-
-      (obj \ "type").as[String] match {
-        case "NormLayer" ⇒
+      typeStr match {
+        case "NormOp" ⇒
           val factor = (obj \ "factor").as[Scalar]
           new NormalizeOperation(factor)
-        case "DropoutLayer" ⇒
+        case "DropoutOp" ⇒
           val presence = (obj \ "presence").as[Probability]
           new DropoutOperation(presence)
         case "BasicLayer" ⇒
+          val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
           val w = ScalarMatrix restore (obj \ "weight").as[IndexedSeq[IndexedSeq[String]]]
           (obj \ "reconst_bias").asOpt[IndexedSeq[IndexedSeq[String]]] match {
             case Some(rb) ⇒
-              new ReconBasicLayer(in.as[Int] → out, act, w, b, ScalarMatrix restore rb)
+              new ReconBasicLayer(in.as[Int] → out.as[Int], act, w, b, ScalarMatrix restore rb)
             case None ⇒
-              new BasicLayer(in.as[Int] → out, act, w, b)
+              new BasicLayer(in.as[Int] → out.as[Int], act, w, b)
           }
         case "SplitTensorLayer" ⇒
+          val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
           val tuple = in.as[Seq[Int]]
           val quad = (obj \ "quadratic").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
           val linear = (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
-          new SplitTensorLayer((tuple.head, tuple(1)) → out, act, quad, linear, b)
+          new SplitTensorLayer((tuple.head, tuple(1)) → out.as[Int], act, quad, linear, b)
         case "FullTensorLayer" ⇒
+          val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
           val quad = (obj \ "quadratic").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
           val linear = (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
-          new FullTensorLayer(in.as[Int] → out, act, quad, linear, b)
+          new FullTensorLayer(in.as[Int] → out.as[Int], act, quad, linear, b)
       }
     }
   }

@@ -105,7 +105,7 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
    */
   override def setPositiveTrainingReference(set: RDD[(IN, OUT)]): Unit = {
     trainingSet = (n: Int) ⇒ set.takeSample(withReplacement = true, num = n).toSeq
-    validationEpoch = (set.count() / param.miniBatch).toInt
+    validationEpoch = (set.countApproxDistinct().toFloat / param.miniBatch).toInt
   }
 
   /**
@@ -161,7 +161,7 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
     testSetMapper = (mapper: Pair ⇒ Unit) ⇒ {
       set.foreach(mapper)
     }
-    testSize = set.count()
+    testSize = set.countApproxDistinct().toFloat
     testSetSC = set.context
   }
 

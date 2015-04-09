@@ -45,7 +45,7 @@ class NormalizeOperation(protected val factor: Scalar = 1.0f) extends Layer {
    * @return JSON object describes this layer
    */
   override def toJSON: JsObject = Json.obj(
-    "type" → "NormLayer",
+    "type" → "NormOp",
     "factor" → factor
   )
 
