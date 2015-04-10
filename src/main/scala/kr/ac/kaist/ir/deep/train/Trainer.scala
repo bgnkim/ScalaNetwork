@@ -88,7 +88,9 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
     setPositiveTrainingReference(set)
     setTestReference(validation)
 
-    validationPeriod = (stops.validationFreq * style.validationEpoch).toInt
+    validationPeriod = (stops.validationFreq * validationEpoch).toInt
+    logger info f"($name) Starts training. "
+    logger info f"Every $validationPeriod%5d (${stops.validationFreq * 100}%6.2f%% of TrainingSet), validation process will be submitted."
 
     saveParams()
     val err = trainBatch()
@@ -115,7 +117,9 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
     setPositiveTrainingReference(set)
     setTestReference(validation)
 
-    validationPeriod = (stops.validationFreq * style.validationEpoch).toInt
+    validationPeriod = (stops.validationFreq * validationEpoch).toInt
+    logger info f"($name) Starts training. "
+    logger info f"Every $validationPeriod%5d (${stops.validationFreq * 100}%6.2f%% of TrainingSet), validation process will be submitted."
 
     saveParams()
     val err = trainBatch()
@@ -140,7 +144,7 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
    * Print validation result into logger
    */
   protected def printValidation() = {
-    logger info s"($name) BEST ITERATION ${bestIter + 1}"
+    logger info s"($name) BEST EPOCH ${bestIter + 1}"
     foreachTestSet(5) {
       item ⇒ logger info make.stringOf(net, item)
     }
@@ -191,7 +195,7 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
       // Pending until batch finished
       stopUntilBatchFinished()
 
-      logger debug s"($name) ITERATION ${epoch + 1} : W = ${net.W map (_.mkString) mkString " | "}"
+      logger debug s"($name) Ep ${epoch + 1} : W = ${net.W map (_.mkString) mkString " | "}"
       val train = validationError()
       val weight = algorithm loss net.W
       val improvement = (train + weight) / prevloss
@@ -201,10 +205,14 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
         saveParams()
         val impr = 100.0 - improvement * 100.0
 
-        logger info f"($name) Ep ${epoch + 1}%6d, E = $train%.5f + W = $weight%.5f (▼ $impr%.4f %%) "
+        logger info f"($name) Ep ${epoch + 1}%6d, E + W = $train%.5f + $weight%.5f (▼ $impr%8.4f %%) "
         train + weight
       } else {
-        logger info f"($name) Ep ${epoch + 1}%6d, NOT IMPROVED"
+        val impr = 100.0 - improvement * 100.0
+        if (impr > 0f)
+          logger info f"($name) Ep ${epoch + 1}%6d, NOT IMPROVED ENOUGH       (▼ $impr%8.4f %%)"
+        else
+          logger info f"($name) Ep ${epoch + 1}%6d, NOT IMPROVED ENOUGH       (△ ${-impr}%8.4f %%)"
         prevloss
       }
     } else {
@@ -214,7 +222,7 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
     if (epoch < stops.maxIter && nPatience > epoch && nLoss > stops.lossThreshold) {
       trainBatch(epoch + 1, nLoss, nPatience)
     } else {
-      logger.info(f"($name) Finished ${epoch + 1}%6d, Error = $nLoss%.5f")
+      logger.info(f"($name) Ep ${epoch + 1}%6d, FINISHED with E + W = $nLoss%.5f")
       nLoss
     }
   }
