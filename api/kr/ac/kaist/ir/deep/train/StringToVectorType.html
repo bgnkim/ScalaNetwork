@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>DistBeliefCriteria - kr.ac.kaist.ir.deep.train.DistBeliefCriteria</title>
-          <meta name="description" content="DistBeliefCriteria - kr.ac.kaist.ir.deep.train.DistBeliefCriteria" />
-          <meta name="keywords" content="DistBeliefCriteria kr.ac.kaist.ir.deep.train.DistBeliefCriteria" />
+          <title>StringToVectorType - kr.ac.kaist.ir.deep.train.StringToVectorType</title>
+          <meta name="description" content="StringToVectorType - kr.ac.kaist.ir.deep.train.StringToVectorType" />
+          <meta name="keywords" content="StringToVectorType kr.ac.kaist.ir.deep.train.StringToVectorType" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'kr.ac.kaist.ir.deep.train.package$$DistBeliefCriteria';
+            var hash = 'kr.ac.kaist.ir.deep.train.StringToVectorType';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -26,25 +26,26 @@
       <div id="definition">
         <img src="../../../../../../lib/class_big.png" />
         <p id="owner"><a href="../../../../../package.html" class="extype" name="kr">kr</a>.<a href="../../../../package.html" class="extype" name="kr.ac">ac</a>.<a href="../../../package.html" class="extype" name="kr.ac.kaist">kaist</a>.<a href="../../package.html" class="extype" name="kr.ac.kaist.ir">ir</a>.<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">deep</a>.<a href="package.html" class="extype" name="kr.ac.kaist.ir.deep.train">train</a></p>
-        <h1>DistBeliefCriteria</h1>
+        <h1>StringToVectorType</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">case class</span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">DistBeliefCriteria</span><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="submitInterval">submitInterval: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span> = <span class="defval" name="scala.concurrent.duration.`package`.DurationInt(1).minute">...</span></span>, <span name="updateStep">updateStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="fetchStep">fetchStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">10</span></span>, <span name="numCores">numCores: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="repartitionOnStart">repartitionOnStart: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="storageLevel">storageLevel: <span class="extype" name="org.apache.spark.storage.StorageLevel">StorageLevel</span> = <span class="defval" name="org.apache.spark.storage.StorageLevel.DISK_ONLY_2">...</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">StringToVectorType</span><span class="result"> extends <a href="StringType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StringType">StringType</a>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Criteria</u>: How to train (for <a href="DistBeliefTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a>)</p><p>This case class defines how to train the network. Training parameter is defined in this class.
-</p></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></dd><dt class="param">negSamplingRatio</dt><dd class="cmt"><p>ratio of negative samples per positive instance. <code>(default 0)</code></p></dd><dt class="param">submitInterval</dt><dd class="cmt"><p>Time interval between batch submission. <code>(default 1.minute)</code></p></dd><dt class="param">updateStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between update <code>(default 2)</code></p></dd><dt class="param">fetchStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between fetching <code>(default 10)</code></p></dd><dt class="param">numCores</dt><dd class="cmt"><p>number of <u>v-cores</u> in the spark cluster. <code>(default 1)</code></p></dd><dt class="param">repartitionOnStart</dt><dd class="cmt"><p>true if do repartition when define training/testing RDD instances. <code>(default false)</code></p></dd><dt class="param">storageLevel</dt><dd class="cmt"><p>StorageLevel that will be used in Spark. <code>(default DISK_ONLY_2)</code>
-</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>We recommend set numCores as similar as possible with allocated spark v-cores.
-</p></span></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Input Operation</u> : String as Input &amp; ScalarMatrix as Otput <u>(Spark ONLY)</u>
+</p></div><dl class="attributes block"> <div class="block">Example:
+               <ol><li class="cmt"><p></p><pre><span class="kw">var</span> make = <span class="kw">new</span> StringToVectorType(model = wordModel, error = CrossEntropyErr)
+<span class="kw">var</span> out = make onewayTrip (net, in)</pre></li></ol>
+            </div></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="StringType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StringType">StringType</a>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>], <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -62,7 +63,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria"><span>DistBeliefCriteria</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="kr.ac.kaist.ir.deep.train.TrainingCriteria"><span>TrainingCriteria</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="kr.ac.kaist.ir.deep.train.StringToVectorType"><span>StringToVectorType</span></li><li class="in" name="kr.ac.kaist.ir.deep.train.StringType"><span>StringType</span></li><li class="in" name="kr.ac.kaist.ir.deep.train.ManipulationType"><span>ManipulationType</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -82,19 +83,19 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(miniBatch:Int,negSamplingRatio:Int,submitInterval:scala.concurrent.duration.Duration,updateStep:Int,fetchStep:Int,numCores:Int,repartitionOnStart:Boolean,storageLevel:org.apache.spark.storage.StorageLevel):kr.ac.kaist.ir.deep.train.package.DistBeliefCriteria"></a>
-      <a id="&lt;init&gt;:DistBeliefCriteria"></a>
+              <ol><li name="kr.ac.kaist.ir.deep.train.StringToVectorType#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(model:org.apache.spark.broadcast.Broadcast[kr.ac.kaist.ir.deep.wordvec.WordModel],error:kr.ac.kaist.ir.deep.fn.Objective):kr.ac.kaist.ir.deep.train.StringToVectorType"></a>
+      <a id="&lt;init&gt;:StringToVectorType"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">DistBeliefCriteria</span><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="submitInterval">submitInterval: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span> = <span class="defval" name="scala.concurrent.duration.`package`.DurationInt(1).minute">...</span></span>, <span name="updateStep">updateStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="fetchStep">fetchStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">10</span></span>, <span name="numCores">numCores: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="repartitionOnStart">repartitionOnStart: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="storageLevel">storageLevel: <span class="extype" name="org.apache.spark.storage.StorageLevel">StorageLevel</span> = <span class="defval" name="org.apache.spark.storage.StorageLevel.DISK_ONLY_2">...</span></span>)</span>
+        <span class="name">StringToVectorType</span><span class="params">(<span name="model">model: <span class="extype" name="org.apache.spark.broadcast.Broadcast">Broadcast</span>[<a href="../wordvec/package$$WordModel.html" class="extype" name="kr.ac.kaist.ir.deep.wordvec.WordModel">WordModel</a>]</span>, <span name="error">error: <a href="../fn/Objective.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Objective">Objective</a></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></dd><dt class="param">negSamplingRatio</dt><dd class="cmt"><p>ratio of negative samples per positive instance. <code>(default 0)</code></p></dd><dt class="param">submitInterval</dt><dd class="cmt"><p>Time interval between batch submission. <code>(default 1.minute)</code></p></dd><dt class="param">updateStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between update <code>(default 2)</code></p></dd><dt class="param">fetchStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between fetching <code>(default 10)</code></p></dd><dt class="param">numCores</dt><dd class="cmt"><p>number of <u>v-cores</u> in the spark cluster. <code>(default 1)</code></p></dd><dt class="param">repartitionOnStart</dt><dd class="cmt"><p>true if do repartition when define training/testing RDD instances. <code>(default false)</code></p></dd><dt class="param">storageLevel</dt><dd class="cmt"><p>StorageLevel that will be used in Spark. <code>(default DISK_ONLY_2)</code>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">model</dt><dd class="cmt"><p>Broadcast of WordEmbedding model that contains all meaningful words.</p></dd><dt class="param">error</dt><dd class="cmt"><p>An objective function <code>(Default: <a href="../fn/SquaredErr$.html" class="extype" name="kr.ac.kaist.ir.deep.fn.SquaredErr">kr.ac.kaist.ir.deep.fn.SquaredErr</a>)</code>
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -202,6 +203,48 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.StringType#corrupt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="corrupt:kr.ac.kaist.ir.deep.train.Corruption"></a>
+      <a id="corrupt:Corruption"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">corrupt</span><span class="result">: <a href="package$$Corruption.html" class="extype" name="kr.ac.kaist.ir.deep.train.Corruption">Corruption</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Corruption function</p><div class="fullcomment"><div class="comment cmt"><p>Corruption function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StringType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StringType">StringType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.StringType#corrupted" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="corrupted(x:String):String"></a>
+      <a id="corrupted(String):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">corrupted</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Corrupt input : No corruption for string.</p><div class="fullcomment"><div class="comment cmt"><p>Corrupt input : No corruption for string.
+</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input to be corrupted</p></dd><dt>returns</dt><dd class="cmt"><p>corrupted input
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StringType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StringType">StringType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#different" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="different(x:OUT,y:OUT):Boolean"></a>
+      <a id="different(ScalarMatrix,ScalarMatrix):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">different</span><span class="params">(<span name="x">x: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>, <span name="y">y: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Check whether given two are same or not.</p><div class="fullcomment"><div class="comment cmt"><p>Check whether given two are same or not.</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>Out-type object</p></dd><dt class="param">y</dt><dd class="cmt"><p>Out-type object</p></dd><dt>returns</dt><dd class="cmt"><p>True if they are different.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -215,19 +258,34 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#fetchStep" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="fetchStep:Int"></a>
-      <a id="fetchStep:Int"></a>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.StringToVectorType#error" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="error:kr.ac.kaist.ir.deep.fn.Objective"></a>
+      <a id="error:Objective"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">fetchStep</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">error</span><span class="result">: <a href="../fn/Objective.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Objective">Objective</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">number of <u>mini-batches</u> between fetching <code>(default 10)</code></p>
+      <p class="shortcomment cmt">An objective function <code>(Default: <a href="../fn/SquaredErr$.html" class="extype" name="kr.ac.kaist.ir.deep.fn.SquaredErr">kr.ac.kaist.ir.deep.fn.SquaredErr</a>)</code>
+</p><div class="fullcomment"><div class="comment cmt"><p>An objective function <code>(Default: <a href="../fn/SquaredErr$.html" class="extype" name="kr.ac.kaist.ir.deep.fn.SquaredErr">kr.ac.kaist.ir.deep.fn.SquaredErr</a>)</code>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.StringToVectorType">StringToVectorType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -260,6 +318,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -273,19 +344,35 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#miniBatch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="miniBatch:Int"></a>
-      <a id="miniBatch:Int"></a>
+    </li><li name="kr.ac.kaist.ir.deep.train.StringToVectorType#lossOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="lossOf(net:kr.ac.kaist.ir.deep.network.Network)(pair:(String,kr.ac.kaist.ir.deep.fn.ScalarMatrix)):kr.ac.kaist.ir.deep.fn.Scalar"></a>
+      <a id="lossOf(Network)((String,ScalarMatrix)):Scalar"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lossOf</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>)</span><span class="params">(<span name="pair">pair: (<span class="extype" name="scala.Predef.String">String</span>, <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>)</span>)</span><span class="result">: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Apply given input and compute the error
+</p><div class="fullcomment"><div class="comment cmt"><p>Apply given input and compute the error
+</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">pair</dt><dd class="cmt"><p>(Input, Real output) for error computation.</p></dd><dt>returns</dt><dd class="cmt"><p>error of this network
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.StringToVectorType">StringToVectorType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.StringToVectorType#model" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="model:org.apache.spark.broadcast.Broadcast[kr.ac.kaist.ir.deep.wordvec.WordModel]"></a>
+      <a id="model:Broadcast[WordModel]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">miniBatch</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">model</span><span class="result">: <span class="extype" name="org.apache.spark.broadcast.Broadcast">Broadcast</span>[<a href="../wordvec/package$$WordModel.html" class="extype" name="kr.ac.kaist.ir.deep.wordvec.WordModel">WordModel</a>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">size of <u>mini-batch</u> <code>(default 100)</code></p><div class="fullcomment"><div class="comment cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria">DistBeliefCriteria</a> → <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a></dd></dl></div>
+      <p class="shortcomment cmt">Broadcast of WordEmbedding model that contains all meaningful words.</p><div class="fullcomment"><div class="comment cmt"><p>Broadcast of WordEmbedding model that contains all meaningful words.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.StringToVectorType">StringToVectorType</a> → <a href="StringType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StringType">StringType</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -299,19 +386,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#negSamplingRatio" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="negSamplingRatio:Int"></a>
-      <a id="negSamplingRatio:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">negSamplingRatio</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">ratio of negative samples per positive instance.</p><div class="fullcomment"><div class="comment cmt"><p>ratio of negative samples per positive instance. <code>(default 0)</code></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria">DistBeliefCriteria</a> → <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
@@ -338,59 +412,53 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#numCores" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="numCores:Int"></a>
-      <a id="numCores:Int"></a>
+    </li><li name="kr.ac.kaist.ir.deep.train.StringType#onewayTrip" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="onewayTrip(net:kr.ac.kaist.ir.deep.network.Network,x:String):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
+      <a id="onewayTrip(Network,String):ScalarMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">numCores</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">onewayTrip</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="x">x: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">number of <u>v-cores</u> in the spark cluster.</p><div class="fullcomment"><div class="comment cmt"><p>number of <u>v-cores</u> in the spark cluster. <code>(default 1)</code></p></div></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#repartitionOnStart" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="repartitionOnStart:Boolean"></a>
-      <a id="repartitionOnStart:Boolean"></a>
+      <p class="shortcomment cmt">Apply given single input as one-way forward trip.</p><div class="fullcomment"><div class="comment cmt"><p>Apply given single input as one-way forward trip.
+</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">x</dt><dd class="cmt"><p>input to be computed</p></dd><dt>returns</dt><dd class="cmt"><p>output of the network.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="StringType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StringType">StringType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.StringToVectorType#roundTrip" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="roundTrip(net:kr.ac.kaist.ir.deep.network.Network,in:String,real:kr.ac.kaist.ir.deep.fn.ScalarMatrix,isPositive:Boolean):Unit"></a>
+      <a id="roundTrip(Network,String,ScalarMatrix,Boolean):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">repartitionOnStart</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">roundTrip</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="in">in: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="real">real: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>, <span name="isPositive">isPositive: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">true if do repartition when define training/testing RDD instances.</p><div class="fullcomment"><div class="comment cmt"><p>true if do repartition when define training/testing RDD instances. <code>(default false)</code></p></div></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#storageLevel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="storageLevel:org.apache.spark.storage.StorageLevel"></a>
-      <a id="storageLevel:StorageLevel"></a>
+      <p class="shortcomment cmt">Apply &amp; Back-prop given single input
+</p><div class="fullcomment"><div class="comment cmt"><p>Apply &amp; Back-prop given single input
+</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">in</dt><dd class="cmt"><p>Input for error computation.</p></dd><dt class="param">real</dt><dd class="cmt"><p>Real output for error computation.</p></dd><dt class="param">isPositive</dt><dd class="cmt"><p>Boolean that indicates whether this example is positive or not.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.StringToVectorType">StringToVectorType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.StringToVectorType#stringOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="stringOf(net:kr.ac.kaist.ir.deep.network.Network,pair:(String,kr.ac.kaist.ir.deep.fn.ScalarMatrix)):String"></a>
+      <a id="stringOf(Network,(String,ScalarMatrix)):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">storageLevel</span><span class="result">: <span class="extype" name="org.apache.spark.storage.StorageLevel">StorageLevel</span></span>
+        <span class="name">stringOf</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="pair">pair: (<span class="extype" name="scala.Predef.String">String</span>, <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>)</span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">StorageLevel that will be used in Spark.</p><div class="fullcomment"><div class="comment cmt"><p>StorageLevel that will be used in Spark. <code>(default DISK_ONLY_2)</code>
-</p></div></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#submitInterval" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="submitInterval:scala.concurrent.duration.Duration"></a>
-      <a id="submitInterval:Duration"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">submitInterval</span><span class="result">: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Time interval between batch submission.</p><div class="fullcomment"><div class="comment cmt"><p>Time interval between batch submission. <code>(default 1.minute)</code></p></div></div>
+      <p class="shortcomment cmt">Make validation output
+</p><div class="fullcomment"><div class="comment cmt"><p>Make validation output
+</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">pair</dt><dd class="cmt"><p>(Input, Real output) pair for computation</p></dd><dt>returns</dt><dd class="cmt"><p>input as string
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.StringToVectorType">StringToVectorType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -404,19 +472,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#updateStep" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="updateStep:Int"></a>
-      <a id="updateStep:Int"></a>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">updateStep</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">number of <u>mini-batches</u> between update <code>(default 2)</code></p>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -483,12 +551,10 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Product">
-              <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
-            </div><div class="parent" name="scala.Equals">
-              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
-            </div><div class="parent" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">
-              <h3>Inherited from <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a></h3>
+        <div class="parent" name="kr.ac.kaist.ir.deep.train.StringType">
+              <h3>Inherited from <a href="StringType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StringType">StringType</a>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</h3>
+            </div><div class="parent" name="kr.ac.kaist.ir.deep.train.ManipulationType">
+              <h3>Inherited from <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">

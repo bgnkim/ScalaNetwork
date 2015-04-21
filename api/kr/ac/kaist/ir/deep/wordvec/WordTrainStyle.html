@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>DistBeliefTrainStyle - kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle</title>
-          <meta name="description" content="DistBeliefTrainStyle - kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle" />
-          <meta name="keywords" content="DistBeliefTrainStyle kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle" />
+          <title>WordTrainStyle - kr.ac.kaist.ir.deep.wordvec.WordTrainStyle</title>
+          <meta name="description" content="WordTrainStyle - kr.ac.kaist.ir.deep.wordvec.WordTrainStyle" />
+          <meta name="keywords" content="WordTrainStyle kr.ac.kaist.ir.deep.wordvec.WordTrainStyle" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle';
+            var hash = 'kr.ac.kaist.ir.deep.wordvec.WordTrainStyle';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -25,8 +25,8 @@
         <body class="type">
       <div id="definition">
         <img src="../../../../../../lib/class_big.png" />
-        <p id="owner"><a href="../../../../../package.html" class="extype" name="kr">kr</a>.<a href="../../../../package.html" class="extype" name="kr.ac">ac</a>.<a href="../../../package.html" class="extype" name="kr.ac.kaist">kaist</a>.<a href="../../package.html" class="extype" name="kr.ac.kaist.ir">ir</a>.<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">deep</a>.<a href="package.html" class="extype" name="kr.ac.kaist.ir.deep.train">train</a></p>
-        <h1>DistBeliefTrainStyle</h1>
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="kr">kr</a>.<a href="../../../../package.html" class="extype" name="kr.ac">ac</a>.<a href="../../../package.html" class="extype" name="kr.ac.kaist">kaist</a>.<a href="../../package.html" class="extype" name="kr.ac.kaist.ir">ir</a>.<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">deep</a>.<a href="package.html" class="extype" name="kr.ac.kaist.ir.deep.wordvec">wordvec</a></p>
+        <h1>WordTrainStyle</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -35,15 +35,14 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">DistBeliefTrainStyle</span><span class="tparams">[<span name="IN">IN</span>, <span name="OUT">OUT</span>]</span><span class="result"> extends <a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a>[<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>]</span>
+        <span class="name">WordTrainStyle</span><span class="result"> extends <a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Train Style</u> : Semi-DistBelief Style, Spark-based.
-</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Unlike with DistBelief, this trainer do updates and fetch by <b>master</b> not the <b>workers</b>.
-</p></span></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Trainer</u> : Stochastic-Style, Multi-Threaded WordEmbedding Train Style using Spark.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a>[<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>], <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a>[<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>], <a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -61,7 +60,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle"><span>DistBeliefTrainStyle</span></li><li class="in" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle"><span>MultiThreadTrainStyle</span></li><li class="in" name="kr.ac.kaist.ir.deep.train.TrainStyle"><span>TrainStyle</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="kr.ac.kaist.ir.deep.wordvec.WordTrainStyle"><span>WordTrainStyle</span></li><li class="in" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle"><span>MultiThreadTrainStyle</span></li><li class="in" name="kr.ac.kaist.ir.deep.train.TrainStyle"><span>TrainStyle</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -81,20 +80,20 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(net:kr.ac.kaist.ir.deep.network.Network,algorithm:kr.ac.kaist.ir.deep.fn.WeightUpdater,sc:org.apache.spark.SparkContext,make:kr.ac.kaist.ir.deep.train.ManipulationType[IN,OUT],param:kr.ac.kaist.ir.deep.train.DistBeliefCriteria)(implicitevidence$1:scala.reflect.ClassTag[IN],implicitevidence$2:scala.reflect.ClassTag[OUT]):kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle[IN,OUT]"></a>
-      <a id="&lt;init&gt;:DistBeliefTrainStyle[IN,OUT]"></a>
+              <ol><li name="kr.ac.kaist.ir.deep.wordvec.WordTrainStyle#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(net:kr.ac.kaist.ir.deep.network.Network,algorithm:kr.ac.kaist.ir.deep.fn.WeightUpdater,sc:org.apache.spark.SparkContext,make:kr.ac.kaist.ir.deep.wordvec.StringToStringType,objective:kr.ac.kaist.ir.deep.fn.Objective,param:kr.ac.kaist.ir.deep.train.DistBeliefCriteria):kr.ac.kaist.ir.deep.wordvec.WordTrainStyle"></a>
+      <a id="&lt;init&gt;:WordTrainStyle"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">DistBeliefTrainStyle</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="algorithm">algorithm: <a href="../fn/WeightUpdater.html" class="extype" name="kr.ac.kaist.ir.deep.fn.WeightUpdater">WeightUpdater</a></span>, <span name="sc">sc: <span class="extype" name="org.apache.spark.SparkContext">SparkContext</span></span>, <span name="make">make: <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>] = <span class="defval" name="new VectorType(train.this.VectorType.&lt;init&gt;$default$1, train.this.VectorType.&lt;init&gt;$default$2)">...</span></span>, <span name="param">param: <a href="package$$DistBeliefCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria">DistBeliefCriteria</a> = <span class="defval" name="train.this.`package`.DistBeliefCriteria.apply(train.this.`package`.DistBeliefCriteria.apply$default$1, train.this.`package`.DistBeliefCriteria.apply$default$2, train.this.`package`.DistBeliefCriteria.apply$default$3, train.this.`package`.DistBeliefCriteria.apply$default$4, train.this.`package`.DistBeliefCriteria.apply$default$5, train.this.`package`.DistBeliefCriteria.apply$default$6, train.this.`package`.DistBeliefCriteria.apply$default$7, train.this.`package`.DistBeliefCriteria.apply$default$8)">...</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>]</span>)</span>
+        <span class="name">WordTrainStyle</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="algorithm">algorithm: <a href="../fn/WeightUpdater.html" class="extype" name="kr.ac.kaist.ir.deep.fn.WeightUpdater">WeightUpdater</a></span>, <span name="sc">sc: <span class="extype" name="org.apache.spark.SparkContext">SparkContext</span></span>, <span name="make">make: <a href="StringToStringType.html" class="extype" name="kr.ac.kaist.ir.deep.wordvec.StringToStringType">StringToStringType</a></span>, <span name="objective">objective: <a href="../fn/Objective.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Objective">Objective</a> = <span class="symbol">kr.ac.kaist.ir.deep.fn.SquaredErr</span></span>, <span name="param">param: <a href="../train/package$$DistBeliefCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria">DistBeliefCriteria</a> = <span class="defval" name="kr.ac.kaist.ir.deep.train.`package`.DistBeliefCriteria.apply(kr.ac.kaist.ir.deep.train.`package`.DistBeliefCriteria.apply$default$1, kr.ac.kaist.ir.deep.train.`package`.DistBeliefCriteria.apply$default$2, kr.ac.kaist.ir.deep.train.`package`.DistBeliefCriteria.apply$default$3, kr.ac.kaist.ir.deep.train.`package`.DistBeliefCriteria.apply$default$4, kr.ac.kaist.ir.deep.train.`package`.DistBeliefCriteria.apply$default$5, kr.ac.kaist.ir.deep.train.`package`.DistBeliefCriteria.apply$default$6, kr.ac.kaist.ir.deep.train.`package`.DistBeliefCriteria.apply$default$7, kr.ac.kaist.ir.deep.train.`package`.DistBeliefCriteria.apply$default$8)">...</span></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p><u>Network</u> to be trained</p></dd><dt class="param">algorithm</dt><dd class="cmt"><p>Weight <u>update algorithm</u> to be applied</p></dd><dt class="param">sc</dt><dd class="cmt"><p>A <u>spark context</u> that network will be distributed</p></dd><dt class="param">make</dt><dd class="cmt"><p><u>Input Operation</u> that supervises how to manipulate input as matrices.
-            This also controls how to compute actual network. (default: <a href="VectorType.html" class="extype" name="kr.ac.kaist.ir.deep.train.VectorType">VectorType</a>)</p></dd><dt class="param">param</dt><dd class="cmt"><p><u>DistBelief-style</u> Training criteria (default: <a href="package$$DistBeliefCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria">DistBeliefCriteria</a>)
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p><u>Network</u> to be trained</p></dd><dt class="param">algorithm</dt><dd class="cmt"><p>Weight <u>update algorithm</u> to be applied</p></dd><dt class="param">make</dt><dd class="cmt"><p><u>String-String Input Operation</u> that supervises how to manipulate input as matrices.
+            This also controls how to compute actual network.</p></dd><dt class="param">param</dt><dd class="cmt"><p><u>Training criteria</u> (default: <a href="../train/package$$DistBeliefCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria">kr.ac.kaist.ir.deep.train.DistBeliefCriteria</a>)
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -103,30 +102,30 @@
               <h3>Type Members</h3>
               <ol><li name="kr.ac.kaist.ir.deep.train.TrainStyle.Pair" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Pair=(IN,OUT)"></a>
-      <a id="Pair:(IN,OUT)"></a>
+      <a id="Pair:(String,String)"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Pair</span><span class="result"> = (<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>)</span>
+        <span class="name">Pair</span><span class="result"> = (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Training Pair Type</p><div class="fullcomment"><div class="comment cmt"><p>Training Pair Type</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
+      <p class="shortcomment cmt">Training Pair Type</p><div class="fullcomment"><div class="comment cmt"><p>Training Pair Type</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.TrainStyle.Sampler" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Sampler=Int=&gt;Seq[OUT]"></a>
-      <a id="Sampler:(Int)⇒Seq[OUT]"></a>
+      <a id="Sampler:(Int)⇒Seq[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">Sampler</span><span class="result"> = (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>]</span>
+        <span class="name">Sampler</span><span class="result"> = (<span class="extype" name="scala.Int">Int</span>) ⇒ <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Sampler Type</p><div class="fullcomment"><div class="comment cmt"><p>Sampler Type</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
+      <p class="shortcomment cmt">Sampler Type</p><div class="fullcomment"><div class="comment cmt"><p>Sampler Type</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.TrainStyle.WeightOp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="WeightOpextendsSerializable"></a>
       <a id="WeightOp:WeightOp"></a>
@@ -136,7 +135,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="TrainStyle$WeightOp.html"><span class="name">WeightOp</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="../train/TrainStyle$WeightOp.html"><span class="name">WeightOp</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">Implicit weight operation
@@ -225,7 +224,7 @@
         <span class="name">accCount</span><span class="result">: <span class="extype" name="org.apache.spark.Accumulator">Accumulator</span>[<span class="extype" name="scala.Int">Int</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Accumulator variable for counter</p><div class="fullcomment"><div class="comment cmt"><p>Accumulator variable for counter</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
+      <p class="shortcomment cmt">Accumulator variable for counter</p><div class="fullcomment"><div class="comment cmt"><p>Accumulator variable for counter</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#accNet" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="accNet:org.apache.spark.Accumulator[IndexedSeq[kr.ac.kaist.ir.deep.fn.ScalarMatrix]]"></a>
       <a id="accNet:Accumulator[IndexedSeq[ScalarMatrix]]"></a>
@@ -238,7 +237,20 @@
         <span class="name">accNet</span><span class="result">: <span class="extype" name="org.apache.spark.Accumulator">Accumulator</span>[<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Accumulator variable for networks</p><div class="fullcomment"><div class="comment cmt"><p>Accumulator variable for networks</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
+      <p class="shortcomment cmt">Accumulator variable for networks</p><div class="fullcomment"><div class="comment cmt"><p>Accumulator variable for networks</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordTrainStyle#accWord" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="accWord:org.apache.spark.Accumulator[scala.collection.mutable.HashMap[String,kr.ac.kaist.ir.deep.fn.ScalarMatrix]]"></a>
+      <a id="accWord:Accumulator[HashMap[String,ScalarMatrix]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">accWord</span><span class="result">: <span class="extype" name="org.apache.spark.Accumulator">Accumulator</span>[<span class="extype" name="scala.collection.mutable.HashMap">HashMap</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Set Accumulator variable for networks</p><div class="fullcomment"><div class="comment cmt"><p>Set Accumulator variable for networks</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -252,7 +264,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle#batch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#batch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="batch():Unit"></a>
       <a id="batch():Unit"></a>
       <h4 class="signature">
@@ -266,33 +278,7 @@
       </h4>
       <p class="shortcomment cmt">Do mini-batch
 </p><div class="fullcomment"><div class="comment cmt"><p>Do mini-batch
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a> → <a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle#batchFlag" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="batchFlag:scala.collection.mutable.ArrayBuffer[scala.concurrent.Future[Unit]]"></a>
-      <a id="batchFlag:ArrayBuffer[Future[Unit]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">batchFlag</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Flag for batch : Is Batch remaining?</p><div class="fullcomment"><div class="comment cmt"><p>Flag for batch : Is Batch remaining?</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle#bcNet" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bcNet:org.apache.spark.broadcast.Broadcast[kr.ac.kaist.ir.deep.network.Network]"></a>
-      <a id="bcNet:Broadcast[Network]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">bcNet</span><span class="result">: <span class="extype" name="org.apache.spark.broadcast.Broadcast">Broadcast</span>[<a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Spark distributed networks</p><div class="fullcomment"><div class="comment cmt"><p>Spark distributed networks</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -338,7 +324,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle#fetch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#fetch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fetch(iter:Int):Unit"></a>
       <a id="fetch(Int):Unit"></a>
       <h4 class="signature">
@@ -353,20 +339,7 @@
       <p class="shortcomment cmt">Fetch weights
 </p><div class="fullcomment"><div class="comment cmt"><p>Fetch weights
 </p></div><dl class="paramcmts block"><dt class="param">iter</dt><dd class="cmt"><p>current iteration
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a> → <a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle#fetchFlag" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fetchFlag:scala.concurrent.Future[Unit]"></a>
-      <a id="fetchFlag:Future[Unit]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">fetchFlag</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Flag for fetch : Is fetching?</p><div class="fullcomment"><div class="comment cmt"><p>Flag for fetch : Is fetching?</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -388,18 +361,18 @@
         </dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#foreachTestSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="foreachTestSet(n:Int)(fn:((IN,OUT))=&gt;Unit):Unit"></a>
-      <a id="foreachTestSet(Int)(((IN,OUT))⇒Unit):Unit"></a>
+      <a id="foreachTestSet(Int)(((String,String))⇒Unit):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foreachTestSet</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="fn">fn: ((<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>)) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">foreachTestSet</span><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="params">(<span name="fn">fn: ((<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Iterate over given number of test instances</p><div class="fullcomment"><div class="comment cmt"><p>Iterate over given number of test instances</p></div><dl class="paramcmts block"><dt class="param">n</dt><dd class="cmt"><p>number of random sampled instances</p></dd><dt class="param">fn</dt><dd class="cmt"><p>iteratee function
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -439,7 +412,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle#isUpdateFinished" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="kr.ac.kaist.ir.deep.train.TrainStyle#isUpdateFinished" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isUpdateFinished:scala.concurrent.Future[_]"></a>
       <a id="isUpdateFinished:Future[_]"></a>
       <h4 class="signature">
@@ -451,9 +424,9 @@
         <span class="name">isUpdateFinished</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[_]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Indicates whether the asynchrononus update is finished or not.</p><div class="fullcomment"><div class="comment cmt"><p>Indicates whether the asynchrononus update is finished or not.
+      <p class="shortcomment cmt">Indicates whether the asynchronous update is finished or not.</p><div class="fullcomment"><div class="comment cmt"><p>Indicates whether the asynchronous update is finished or not.
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>future object of update
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.TrainStyle#logger" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="logger:org.apache.log4j.Logger"></a>
       <a id="logger:Logger"></a>
@@ -466,7 +439,7 @@
         <span class="name">logger</span><span class="result">: <span class="extype" name="org.apache.log4j.Logger">Logger</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Logger</p><div class="fullcomment"><div class="comment cmt"><p>Logger</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
+      <p class="shortcomment cmt">Logger</p><div class="fullcomment"><div class="comment cmt"><p>Logger</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -492,20 +465,20 @@
         <span class="name">negFraction</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Fraction of negative samples</p><div class="fullcomment"><div class="comment cmt"><p>Fraction of negative samples</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
+      <p class="shortcomment cmt">Fraction of negative samples</p><div class="fullcomment"><div class="comment cmt"><p>Fraction of negative samples</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#negOutUniverse" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="negOutUniverse:org.apache.spark.rdd.RDD[(Long,OUT)]"></a>
-      <a id="negOutUniverse:RDD[(Long,OUT)]"></a>
+      <a id="negOutUniverse:RDD[(Long,String)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">negOutUniverse</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="scala.Long">Long</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>)]</span>
+        <span class="name">negOutUniverse</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="scala.Long">Long</span>, <span class="extype" name="scala.Predef.String">String</span>)]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Negative Sampler</p><div class="fullcomment"><div class="comment cmt"><p>Negative Sampler</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
+      <p class="shortcomment cmt">Negative Sampler</p><div class="fullcomment"><div class="comment cmt"><p>Negative Sampler</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#negPartitioner" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="negPartitioner:kr.ac.kaist.ir.deep.train.RandomEqualPartitioner"></a>
       <a id="negPartitioner:RandomEqualPartitioner"></a>
@@ -515,10 +488,10 @@
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">negPartitioner</span><span class="result">: <a href="RandomEqualPartitioner.html" class="extype" name="kr.ac.kaist.ir.deep.train.RandomEqualPartitioner">RandomEqualPartitioner</a></span>
+        <span class="name">negPartitioner</span><span class="result">: <a href="../train/RandomEqualPartitioner.html" class="extype" name="kr.ac.kaist.ir.deep.train.RandomEqualPartitioner">RandomEqualPartitioner</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Partitioner for negative samples</p><div class="fullcomment"><div class="comment cmt"><p>Partitioner for negative samples</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
+      <p class="shortcomment cmt">Partitioner for negative samples</p><div class="fullcomment"><div class="comment cmt"><p>Partitioner for negative samples</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
@@ -547,102 +520,102 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#partFunction" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="partFunction:Iterator[(IN,OUT,Seq[OUT])]=&gt;Unit"></a>
-      <a id="partFunction:(Iterator[(IN,OUT,Seq[OUT])])⇒Unit"></a>
+      <a id="partFunction:(Iterator[(String,String,Seq[String])])⇒Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">partFunction</span><span class="result">: (<span class="extype" name="scala.Iterator">Iterator</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>, <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>])]) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">partFunction</span><span class="result">: (<span class="extype" name="scala.Iterator">Iterator</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>])]) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#setNegativeTrainingReference" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setNegativeTrainingReference(set:org.apache.spark.rdd.RDD[OUT]):Unit"></a>
-      <a id="setNegativeTrainingReference(RDD[OUT]):Unit"></a>
+      <a id="setNegativeTrainingReference(RDD[String]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setNegativeTrainingReference</span><span class="params">(<span name="set">set: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">setNegativeTrainingReference</span><span class="params">(<span name="set">set: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Set negative sampling method.</p><div class="fullcomment"><div class="comment cmt"><p>Set negative sampling method.</p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>all training outputs that will be used for negative training
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#setNegativeTrainingReference" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setNegativeTrainingReference(set:Seq[OUT]):Unit"></a>
-      <a id="setNegativeTrainingReference(Seq[OUT]):Unit"></a>
+      <a id="setNegativeTrainingReference(Seq[String]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setNegativeTrainingReference</span><span class="params">(<span name="set">set: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">setNegativeTrainingReference</span><span class="params">(<span name="set">set: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Set negative sampling method.</p><div class="fullcomment"><div class="comment cmt"><p>Set negative sampling method.</p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>all training outputs that will be used for negative training
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#setPositiveTrainingReference" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setPositiveTrainingReference(set:org.apache.spark.rdd.RDD[(IN,OUT)]):Unit"></a>
-      <a id="setPositiveTrainingReference(RDD[(IN,OUT)]):Unit"></a>
+      <a id="setPositiveTrainingReference(RDD[(String,String)]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setPositiveTrainingReference</span><span class="params">(<span name="set">set: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">setPositiveTrainingReference</span><span class="params">(<span name="set">set: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Set training instances</p><div class="fullcomment"><div class="comment cmt"><p>Set training instances</p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>RDD of training set
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#setPositiveTrainingReference" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setPositiveTrainingReference(set:Seq[(IN,OUT)]):Unit"></a>
-      <a id="setPositiveTrainingReference(Seq[(IN,OUT)]):Unit"></a>
+      <a id="setPositiveTrainingReference(Seq[(String,String)]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setPositiveTrainingReference</span><span class="params">(<span name="set">set: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">setPositiveTrainingReference</span><span class="params">(<span name="set">set: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Set training instances</p><div class="fullcomment"><div class="comment cmt"><p>Set training instances</p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>Sequence of training set
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#setTestReference" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setTestReference(set:org.apache.spark.rdd.RDD[(IN,OUT)]):Unit"></a>
-      <a id="setTestReference(RDD[(IN,OUT)]):Unit"></a>
+      <a id="setTestReference(RDD[(String,String)]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setTestReference</span><span class="params">(<span name="set">set: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">setTestReference</span><span class="params">(<span name="set">set: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Set testing instances</p><div class="fullcomment"><div class="comment cmt"><p>Set testing instances</p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>RDD of testing set
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#setTestReference" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setTestReference(set:Seq[(IN,OUT)]):Unit"></a>
-      <a id="setTestReference(Seq[(IN,OUT)]):Unit"></a>
+      <a id="setTestReference(Seq[(String,String)]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">setTestReference</span><span class="params">(<span name="set">set: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">setTestReference</span><span class="params">(<span name="set">set: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Set testing instances</p><div class="fullcomment"><div class="comment cmt"><p>Set testing instances</p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>Sequence of testing set
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle#stopUntilBatchFinished" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.TrainStyle#stopUntilBatchFinished" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="stopUntilBatchFinished():Unit"></a>
       <a id="stopUntilBatchFinished():Unit"></a>
       <h4 class="signature">
@@ -656,7 +629,7 @@
       </h4>
       <p class="shortcomment cmt">Non-blocking pending, until all assigned batches are finished
 </p><div class="fullcomment"><div class="comment cmt"><p>Non-blocking pending, until all assigned batches are finished
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -672,17 +645,17 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#testSet" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="testSet:org.apache.spark.rdd.RDD[(IN,OUT)]"></a>
-      <a id="testSet:RDD[(IN,OUT)]"></a>
+      <a id="testSet:RDD[(String,String)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">testSet</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>)]</span>
+        <span class="name">testSet</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Test Set</p><div class="fullcomment"><div class="comment cmt"><p>Test Set</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
+      <p class="shortcomment cmt">Test Set</p><div class="fullcomment"><div class="comment cmt"><p>Test Set</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#testSize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="testSize:Float"></a>
       <a id="testSize:Float"></a>
@@ -695,7 +668,7 @@
         <span class="name">testSize</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Size of test set</p><div class="fullcomment"><div class="comment cmt"><p>Size of test set</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
+      <p class="shortcomment cmt">Size of test set</p><div class="fullcomment"><div class="comment cmt"><p>Size of test set</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -721,20 +694,20 @@
         <span class="name">trainingFraction</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Fraction of mini-batch</p><div class="fullcomment"><div class="comment cmt"><p>Fraction of mini-batch</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
+      <p class="shortcomment cmt">Fraction of mini-batch</p><div class="fullcomment"><div class="comment cmt"><p>Fraction of mini-batch</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#trainingSet" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trainingSet:org.apache.spark.rdd.RDD[(IN,OUT)]"></a>
-      <a id="trainingSet:RDD[(IN,OUT)]"></a>
+      <a id="trainingSet:RDD[(String,String)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">var</span>
       </span>
       <span class="symbol">
-        <span class="name">trainingSet</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>)]</span>
+        <span class="name">trainingSet</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Training set</p><div class="fullcomment"><div class="comment cmt"><p>Training set</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
+      <p class="shortcomment cmt">Training set</p><div class="fullcomment"><div class="comment cmt"><p>Training set</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#unpersist" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="unpersist():Unit"></a>
       <a id="unpersist():Unit"></a>
@@ -749,8 +722,8 @@
       </h4>
       <p class="shortcomment cmt">Unpersist all
 </p><div class="fullcomment"><div class="comment cmt"><p>Unpersist all
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="update(iter:Int):Unit"></a>
       <a id="update(Int):Unit"></a>
       <h4 class="signature">
@@ -765,20 +738,7 @@
       <p class="shortcomment cmt">Send update of weights
 </p><div class="fullcomment"><div class="comment cmt"><p>Send update of weights
 </p></div><dl class="paramcmts block"><dt class="param">iter</dt><dd class="cmt"><p>current iteration
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a> → <a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle#updateFlag" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="updateFlag:scala.concurrent.Future[Unit]"></a>
-      <a id="updateFlag:Future[Unit]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">var</span>
-      </span>
-      <span class="symbol">
-        <span class="name">updateFlag</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Flag for update : Is updating?</p><div class="fullcomment"><div class="comment cmt"><p>Flag for update : Is updating?</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.TrainStyle#validationEpoch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="validationEpoch:Int"></a>
       <a id="validationEpoch:Int"></a>
@@ -791,7 +751,7 @@
         <span class="name">validationEpoch</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">size of training set</p><div class="fullcomment"><div class="comment cmt"><p>size of training set</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
+      <p class="shortcomment cmt">size of training set</p><div class="fullcomment"><div class="comment cmt"><p>size of training set</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle#validationError" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="validationError():Float"></a>
       <a id="validationError():Float"></a>
@@ -807,7 +767,7 @@
       <p class="shortcomment cmt">Calculate validation error
 </p><div class="fullcomment"><div class="comment cmt"><p>Calculate validation error
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>validation error
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a> → <a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -875,9 +835,9 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">
-              <h3>Inherited from <a href="MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a>[<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>]</h3>
+              <h3>Inherited from <a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</h3>
             </div><div class="parent" name="kr.ac.kaist.ir.deep.train.TrainStyle">
-              <h3>Inherited from <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a>[<span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle.OUT">OUT</span>]</h3>
+              <h3>Inherited from <a href="../train/TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">

@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>DropoutLayer - kr.ac.kaist.ir.deep.layer.DropoutLayer</title>
-          <meta name="description" content="DropoutLayer - kr.ac.kaist.ir.deep.layer.DropoutLayer" />
-          <meta name="keywords" content="DropoutLayer kr.ac.kaist.ir.deep.layer.DropoutLayer" />
+          <title>StringType - kr.ac.kaist.ir.deep.train.StringType</title>
+          <meta name="description" content="StringType - kr.ac.kaist.ir.deep.train.StringType" />
+          <meta name="keywords" content="StringType kr.ac.kaist.ir.deep.train.StringType" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'kr.ac.kaist.ir.deep.layer.DropoutLayer';
+            var hash = 'kr.ac.kaist.ir.deep.train.StringType';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -24,27 +24,29 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../../../lib/class_big.png" />
-        <p id="owner"><a href="../../../../../package.html" class="extype" name="kr">kr</a>.<a href="../../../../package.html" class="extype" name="kr.ac">ac</a>.<a href="../../../package.html" class="extype" name="kr.ac.kaist">kaist</a>.<a href="../../package.html" class="extype" name="kr.ac.kaist.ir">ir</a>.<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">deep</a>.<a href="package.html" class="extype" name="kr.ac.kaist.ir.deep.layer">layer</a></p>
-        <h1>DropoutLayer</h1>
+        <img src="../../../../../../lib/trait_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="kr">kr</a>.<a href="../../../../package.html" class="extype" name="kr.ac">ac</a>.<a href="../../../package.html" class="extype" name="kr.ac.kaist">kaist</a>.<a href="../../package.html" class="extype" name="kr.ac.kaist.ir">ir</a>.<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">deep</a>.<a href="package.html" class="extype" name="kr.ac.kaist.ir.deep.train">train</a></p>
+        <h1>StringType</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">DropoutLayer</span><span class="result"> extends <a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></span>
+        <span class="name">StringType</span><span class="tparams">[<span name="OUT">OUT</span>]</span><span class="result"> extends <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.StringType.OUT">OUT</span>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Layer</u> that drop-outs its input.</p><p>This layer has a function of &quot;pipeline&quot; with drop-out possibility.
-Because dropping out neurons occurr in the hidden layer, we need some intermediate pipe that handle this feature.
-This layer only conveys its input to its output synapse if that output is alive.
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Trait of Input Operation</u> : String as Input. This is an <b>Abstract Implementation</b>
+</p></div><dl class="paramcmts block"><dt class="tparam">OUT</dt><dd class="cmt"><p>Output type.
+</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.StringType.OUT">OUT</span>], <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+          <span class="toggle">Known Subclasses</span>
+          <div class="subClasses hiddenContent"><a href="../wordvec/StringToStringType.html" class="extype" name="kr.ac.kaist.ir.deep.wordvec.StringToStringType">StringToStringType</a>, <a href="StringToVectorType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StringToVectorType">StringToVectorType</a></div>
         </div></div>
         
 
@@ -62,7 +64,7 @@ This layer only conveys its input to its output synapse if that output is alive.
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="kr.ac.kaist.ir.deep.layer.DropoutLayer"><span>DropoutLayer</span></li><li class="in" name="kr.ac.kaist.ir.deep.layer.Layer"><span>Layer</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Function1"><span>Function1</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="kr.ac.kaist.ir.deep.train.StringType"><span>StringType</span></li><li class="in" name="kr.ac.kaist.ir.deep.train.ManipulationType"><span>ManipulationType</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -80,31 +82,91 @@ This layer only conveys its input to its output synapse if that output is alive.
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="kr.ac.kaist.ir.deep.layer.DropoutLayer#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(presence:kr.ac.kaist.ir.deep.fn.Probability):kr.ac.kaist.ir.deep.layer.DropoutLayer"></a>
-      <a id="&lt;init&gt;:DropoutLayer"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">DropoutLayer</span><span class="params">(<span name="presence">presence: <a href="../fn/package.html#Probability=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Probability">Probability</a> = <span class="symbol">1.0</span></span>)</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">presence</dt><dd class="cmt"><p>The probability of the neuron is alive. <code>(Default: 1.0, 100%)</code>
-</p></dd></dl></div>
-    </li></ol>
-            </div>
-
         
 
         
 
         <div id="values" class="values members">
-              <h3>Value Members</h3>
+              <h3>Abstract Value Members</h3>
+              <ol><li name="kr.ac.kaist.ir.deep.train.ManipulationType#error" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="error:kr.ac.kaist.ir.deep.fn.Objective"></a>
+      <a id="error:Objective"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">error</span><span class="result">: <a href="../fn/Objective.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Objective">Objective</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Objective function</p><div class="fullcomment"><div class="comment cmt"><p>Objective function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#lossOf" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="lossOf(net:kr.ac.kaist.ir.deep.network.Network)(pair:(IN,OUT)):kr.ac.kaist.ir.deep.fn.Scalar"></a>
+      <a id="lossOf(Network)((String,OUT)):Scalar"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lossOf</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>)</span><span class="params">(<span name="pair">pair: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.StringType.OUT">OUT</span>)</span>)</span><span class="result">: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Apply given input and compute the error
+</p><div class="fullcomment"><div class="comment cmt"><p>Apply given input and compute the error
+</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">pair</dt><dd class="cmt"><p>(Input, Real output) for error computation.</p></dd><dt>returns</dt><dd class="cmt"><p>error of this network
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.StringType#model" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="model:org.apache.spark.broadcast.Broadcast[kr.ac.kaist.ir.deep.wordvec.WordModel]"></a>
+      <a id="model:Broadcast[WordModel]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">model</span><span class="result">: <span class="extype" name="org.apache.spark.broadcast.Broadcast">Broadcast</span>[<a href="../wordvec/package$$WordModel.html" class="extype" name="kr.ac.kaist.ir.deep.wordvec.WordModel">WordModel</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#roundTrip" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="roundTrip(net:kr.ac.kaist.ir.deep.network.Network,in:IN,real:OUT,isPositive:Boolean):Unit"></a>
+      <a id="roundTrip(Network,String,OUT,Boolean):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">roundTrip</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="in">in: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="real">real: <span class="extype" name="kr.ac.kaist.ir.deep.train.StringType.OUT">OUT</span></span>, <span name="isPositive">isPositive: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Apply &amp; Back-prop given single input
+</p><div class="fullcomment"><div class="comment cmt"><p>Apply &amp; Back-prop given single input
+</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">in</dt><dd class="cmt"><p>Input for error computation.</p></dd><dt class="param">real</dt><dd class="cmt"><p>Real output for error computation.</p></dd><dt class="param">isPositive</dt><dd class="cmt"><p>Boolean that indicates whether this example is positive or not.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#stringOf" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="stringOf(net:kr.ac.kaist.ir.deep.network.Network,in:(IN,OUT)):String"></a>
+      <a id="stringOf(Network,(String,OUT)):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">stringOf</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="in">in: (<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.StringType.OUT">OUT</span>)</span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Make validation output
+</p><div class="fullcomment"><div class="comment cmt"><p>Make validation output
+</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">in</dt><dd class="cmt"><p>(Input, Real output) pair for computation</p></dd><dt>returns</dt><dd class="cmt"><p>input as string
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -170,67 +232,6 @@ This layer only conveys its input to its output synapse if that output is alive.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.layer.DropoutLayer#W" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="W:IndexedSeq[kr.ac.kaist.ir.deep.fn.ScalarMatrix]"></a>
-      <a id="W:IndexedSeq[ScalarMatrix]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">W</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">weights for update
-</p><div class="fullcomment"><div class="comment cmt"><p>weights for update
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>weights
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.layer.DropoutLayer">DropoutLayer</a> → <a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.layer.DropoutLayer#act" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="act:Null"></a>
-      <a id="act:Null"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">act</span><span class="result">: <span class="extype" name="scala.Null">Null</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Null activation</p><div class="fullcomment"><div class="comment cmt"><p>Null activation</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.layer.DropoutLayer">DropoutLayer</a> → <a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></dd></dl></div>
-    </li><li name="scala.Function1#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="andThen[A](g:R=&gt;A):T1=&gt;A"></a>
-      <a id="andThen[A]((ScalarMatrix)⇒A):(ScalarMatrix)⇒A"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>)</span><span class="result">: (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
-                <span class="name">@unspecialized</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.layer.DropoutLayer#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
-      <a id="apply(ScalarMatrix):ScalarMatrix"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="x">x: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Forward computation
-</p><div class="fullcomment"><div class="comment cmt"><p>Forward computation
-</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.layer.DropoutLayer">DropoutLayer</a> → <a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a> → Function1</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -263,38 +264,48 @@ This layer only conveys its input to its output synapse if that output is alive.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scala.Function1#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="compose[A](g:A=&gt;T1):A=&gt;R"></a>
-      <a id="compose[A]((A)⇒ScalarMatrix):(A)⇒ScalarMatrix"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
-                <span class="name">@unspecialized</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.layer.DropoutLayer#dW" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="dW:IndexedSeq[kr.ac.kaist.ir.deep.fn.ScalarMatrix]"></a>
-      <a id="dW:IndexedSeq[ScalarMatrix]"></a>
+    </li><li name="kr.ac.kaist.ir.deep.train.StringType#corrupt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="corrupt:kr.ac.kaist.ir.deep.train.Corruption"></a>
+      <a id="corrupt:Corruption"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">dW</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>
+        <span class="name">corrupt</span><span class="result">: <a href="package$$Corruption.html" class="extype" name="kr.ac.kaist.ir.deep.train.Corruption">Corruption</a></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">accumulated delta values
-</p><div class="fullcomment"><div class="comment cmt"><p>accumulated delta values
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>delta-weight
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.layer.DropoutLayer">DropoutLayer</a> → <a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></dd></dl></div>
+      <p class="shortcomment cmt">Corruption function</p><div class="fullcomment"><div class="comment cmt"><p>Corruption function</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.StringType">StringType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.StringType#corrupted" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="corrupted(x:String):String"></a>
+      <a id="corrupted(String):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">corrupted</span><span class="params">(<span name="x">x: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Corrupt input : No corruption for string.</p><div class="fullcomment"><div class="comment cmt"><p>Corrupt input : No corruption for string.
+</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input to be corrupted</p></dd><dt>returns</dt><dd class="cmt"><p>corrupted input
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.StringType">StringType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#different" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="different(x:OUT,y:OUT):Boolean"></a>
+      <a id="different(OUT,OUT):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">different</span><span class="params">(<span name="x">x: <span class="extype" name="kr.ac.kaist.ir.deep.train.StringType.OUT">OUT</span></span>, <span name="y">y: <span class="extype" name="kr.ac.kaist.ir.deep.train.StringType.OUT">OUT</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Check whether given two are same or not.</p><div class="fullcomment"><div class="comment cmt"><p>Check whether given two are same or not.</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>Out-type object</p></dd><dt class="param">y</dt><dd class="cmt"><p>Out-type object</p></dd><dt>returns</dt><dd class="cmt"><p>True if they are different.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -366,21 +377,6 @@ This layer only conveys its input to its output synapse if that output is alive.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.layer.DropoutLayer#into_:" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="into_:(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
-      <a id="into_:(ScalarMatrix):ScalarMatrix"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: into_$colon" class="name">into_:</span><span class="params">(<span name="x">x: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Sugar: Forward computation.</p><div class="fullcomment"><div class="comment cmt"><p>Sugar: Forward computation. Calls apply(x)
-</p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.layer.DropoutLayer">DropoutLayer</a> → <a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -433,33 +429,21 @@ This layer only conveys its input to its output synapse if that output is alive.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.layer.DropoutLayer#onoff" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="onoff:kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
-      <a id="onoff:ScalarMatrix"></a>
+    </li><li name="kr.ac.kaist.ir.deep.train.StringType#onewayTrip" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="onewayTrip(net:kr.ac.kaist.ir.deep.network.Network,x:String):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
+      <a id="onewayTrip(Network,String):ScalarMatrix"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">var</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">onoff</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
+        <span class="name">onewayTrip</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="x">x: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.layer.DropoutLayer#presence" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="presence:kr.ac.kaist.ir.deep.fn.Probability"></a>
-      <a id="presence:Probability"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">presence</span><span class="result">: <a href="../fn/package.html#Probability=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Probability">Probability</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">The probability of the neuron is alive.</p><div class="fullcomment"><div class="comment cmt"><p>The probability of the neuron is alive. <code>(Default: 1.0, 100%)</code>
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <p class="shortcomment cmt">Apply given single input as one-way forward trip.</p><div class="fullcomment"><div class="comment cmt"><p>Apply given single input as one-way forward trip.
+</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">x</dt><dd class="cmt"><p>input to be computed</p></dd><dt>returns</dt><dd class="cmt"><p>output of the network.
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.StringType">StringType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -473,23 +457,7 @@ This layer only conveys its input to its output synapse if that output is alive.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.layer.DropoutLayer#toJSON" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toJSON:play.api.libs.json.JsObject"></a>
-      <a id="toJSON:JsObject"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toJSON</span><span class="result">: <span class="extype" name="play.api.libs.json.JsObject">JsObject</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Translate this layer into JSON object (in Play! framework)
-</p><div class="fullcomment"><div class="comment cmt"><p>Translate this layer into JSON object (in Play! framework)
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>JSON object describes this layer
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.layer.DropoutLayer">DropoutLayer</a> → <a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></dd></dl></div>
-    </li><li name="scala.Function1#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -501,23 +469,7 @@ This layer only conveys its input to its output synapse if that output is alive.
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1 → AnyRef → Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.layer.DropoutLayer#updateBy" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="updateBy(error:kr.ac.kaist.ir.deep.fn.ScalarMatrix,input:kr.ac.kaist.ir.deep.fn.ScalarMatrix,output:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
-      <a id="updateBy(ScalarMatrix,ScalarMatrix,ScalarMatrix):ScalarMatrix"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">updateBy</span><span class="params">(<span name="error">error: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>, <span name="input">input: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>, <span name="output">output: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Backward computation.</p><div class="fullcomment"><div class="comment cmt"><p>Backward computation.
-</p></div><dl class="paramcmts block"><dt class="param">error</dt><dd class="cmt"><p>to be propagated ( <code>dG / dF</code> is propagated from higher layer )</p></dd><dt class="param">input</dt><dd class="cmt"><p>of this layer (in this case, <code>x = entry of dX / dw</code>)</p></dd><dt class="param">output</dt><dd class="cmt"><p>of this layer (in this case, <code>y</code>)</p></dd><dt>returns</dt><dd class="cmt"><p>propagated error (in this case, <code>dG/dx</code> )
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.layer.DropoutLayer">DropoutLayer</a> → <a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></dd><dt>Note</dt><dd><span class="cmt"><p>Because this layer only mediates two layers, this layer just remove propagated error for unused elements.
-</p></span></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -584,14 +536,12 @@ This layer only conveys its input to its output synapse if that output is alive.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="kr.ac.kaist.ir.deep.layer.Layer">
-              <h3>Inherited from <a href="package$$Layer.html" class="extype" name="kr.ac.kaist.ir.deep.layer.Layer">Layer</a></h3>
+        <div class="parent" name="kr.ac.kaist.ir.deep.train.ManipulationType">
+              <h3>Inherited from <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.StringType.OUT">OUT</span>]</h3>
             </div><div class="parent" name="scala.Serializable">
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="scala.Function1">
-              <h3>Inherited from (<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

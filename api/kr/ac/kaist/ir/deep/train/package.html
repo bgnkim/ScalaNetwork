@@ -118,7 +118,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="package$$DistBeliefCriteria.html"><span class="name">DistBeliefCriteria</span></a><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="submitInterval">submitInterval: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span> = <span class="defval" name="scala.concurrent.duration.`package`.DurationInt(1).minute">...</span></span>, <span name="updateStep">updateStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="fetchStep">fetchStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">10</span></span>, <span name="numCores">numCores: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="storageLevel">storageLevel: <span class="extype" name="org.apache.spark.storage.StorageLevel">StorageLevel</span> = <span class="defval" name="org.apache.spark.storage.StorageLevel.DISK_ONLY_2">...</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="package$$DistBeliefCriteria.html"><span class="name">DistBeliefCriteria</span></a><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="submitInterval">submitInterval: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span> = <span class="defval" name="scala.concurrent.duration.`package`.DurationInt(1).minute">...</span></span>, <span name="updateStep">updateStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="fetchStep">fetchStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">10</span></span>, <span name="numCores">numCores: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="repartitionOnStart">repartitionOnStart: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="storageLevel">storageLevel: <span class="extype" name="org.apache.spark.storage.StorageLevel">StorageLevel</span> = <span class="defval" name="org.apache.spark.storage.StorageLevel.DISK_ONLY_2">...</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt"><u>Criteria</u>: How to train (for <a href="DistBeliefTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a>)</p>
@@ -265,10 +265,37 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="package$$StoppingCriteria.html"><span class="name">StoppingCriteria</span></a><span class="params">(<span name="maxIter">maxIter: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100000</span></span>, <span name="waitAfterUpdate">waitAfterUpdate: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="improveThreshold">improveThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.995</span></span>, <span name="lossThreshold">lossThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0E-4</span></span>, <span name="validationFreq">validationFreq: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span> with <span class="extype" name="scala.Product">Product</span></span>
+        <a href="package$$StoppingCriteria.html"><span class="name">StoppingCriteria</span></a><span class="params">(<span name="maxIter">maxIter: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100000</span></span>, <span name="waitAfterUpdate">waitAfterUpdate: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="improveThreshold">improveThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.995</span></span>, <span name="lossThreshold">lossThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0E-4</span></span>, <span name="validationFreq">validationFreq: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span> with <span class="extype" name="scala.Product">Product</span></span>
       </span>
       </h4>
       <p class="comment cmt"><u>Criteria</u>: When to stop training</p>
+    </li><li name="kr.ac.kaist.ir.deep.train.StringToVectorType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StringToVectorTypeextendsStringType[kr.ac.kaist.ir.deep.fn.ScalarMatrix]"></a>
+      <a id="StringToVectorType:StringToVectorType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StringToVectorType.html"><span class="name">StringToVectorType</span></a><span class="result"> extends <a href="StringType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StringType">StringType</a>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>Input Operation</u> : String as Input &amp; ScalarMatrix as Otput <u>(Spark ONLY)</u>
+</p>
+    </li><li name="kr.ac.kaist.ir.deep.train.StringType" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StringType[OUT]extendsManipulationType[String,OUT]"></a>
+      <a id="StringType[OUT]:StringType[OUT]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StringType.html"><span class="name">StringType</span></a><span class="tparams">[<span name="OUT">OUT</span>]</span><span class="result"> extends <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.StringType.OUT">OUT</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>Trait of Input Operation</u> : String as Input.</p>
     </li><li name="kr.ac.kaist.ir.deep.train.TrainStyle" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="TrainStyle[IN,OUT]extendsSerializable"></a>
       <a id="TrainStyle[IN,OUT]:TrainStyle[IN,OUT]"></a>
@@ -389,7 +416,7 @@
       <a id="WeightAccumulator:WeightAccumulator"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">implicit </span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">

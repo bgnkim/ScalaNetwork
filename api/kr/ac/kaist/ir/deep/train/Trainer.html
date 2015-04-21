@@ -41,8 +41,8 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>General</u> Trainer Implementation.</p><p>This class trains with help of Training Style and Input Operation.
 </p></div><dl class="paramcmts block"><dt class="tparam">IN</dt><dd class="cmt"><p>the type of input.
-           Currently, <span class="extype" name="ScalarMatrix">ScalarMatrix</span> and DAG are supported</p></dd><dt class="tparam">OUT</dt><dd class="cmt"><p>the type of output
-            Currently, <span class="extype" name="ScalarMatrix">ScalarMatrix</span> and Null are supported
+           Currently, <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">kr.ac.kaist.ir.deep.fn.ScalarMatrix</a> and DAG are supported</p></dd><dt class="tparam">OUT</dt><dd class="cmt"><p>the type of output
+            Currently, <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">kr.ac.kaist.ir.deep.fn.ScalarMatrix</a> and Null are supported
 </p></dd></dl><dl class="attributes block"> <div class="block">Example:
                <ol><li class="cmt"><p></p><pre><span class="kw">val</span> net:Network = ...
 
@@ -434,20 +434,21 @@ train.train(set, valid)</pre></li></ol>
 </p><div class="fullcomment"><div class="comment cmt"><p>Restore best parameters
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.Trainer#saveParams" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="saveParams():Unit"></a>
-      <a id="saveParams():Unit"></a>
+      <a id="saveParams(epoch:Int,loss:kr.ac.kaist.ir.deep.fn.Scalar,patience:Int):Unit"></a>
+      <a id="saveParams(Int,Scalar,Int):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">saveParams</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">saveParams</span><span class="params">(<span name="epoch">epoch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="loss">loss: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a> = <span class="symbol">Float.MaxValue</span></span>, <span name="patience">patience: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="#validationPeriod:Int">validationPeriod * 5</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Store best parameters
 </p><div class="fullcomment"><div class="comment cmt"><p>Store best parameters
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">epoch</dt><dd class="cmt"><p>current iteration epoch. (1 iteration = 1 validation freq)</p></dd><dt class="param">loss</dt><dd class="cmt"><p>previous loss</p></dd><dt class="param">patience</dt><dd class="cmt"><p>current patience, i.e. loop until at least this epoch.
+</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.Trainer#setNegativeTrainingReference" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setNegativeTrainingReference(set:org.apache.spark.rdd.RDD[OUT]):Unit"></a>
       <a id="setNegativeTrainingReference(RDD[OUT]):Unit"></a>

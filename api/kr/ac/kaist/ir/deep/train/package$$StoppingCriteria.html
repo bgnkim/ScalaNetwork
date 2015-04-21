@@ -35,16 +35,16 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">StoppingCriteria</span><span class="params">(<span name="maxIter">maxIter: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100000</span></span>, <span name="waitAfterUpdate">waitAfterUpdate: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="improveThreshold">improveThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.995</span></span>, <span name="lossThreshold">lossThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0E-4</span></span>, <span name="validationFreq">validationFreq: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span> with <span class="extype" name="scala.Product">Product</span></span>
+        <span class="name">StoppingCriteria</span><span class="params">(<span name="maxIter">maxIter: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100000</span></span>, <span name="waitAfterUpdate">waitAfterUpdate: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="improveThreshold">improveThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.995</span></span>, <span name="lossThreshold">lossThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0E-4</span></span>, <span name="validationFreq">validationFreq: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span> with <span class="extype" name="scala.Product">Product</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Criteria</u>: When to stop training</p><p>This case class defines when to stop training. Training stops if one of the following condition is satisfied.</p><ul><li>#Iteration ≥ maxIter<ul><li>#Iteration ≥ current patience value, which is calculated by <code>max(patience, bestIteration * patienceStep)</code></li><li>Amount of loss &lt; lossThreshold</li></ul></li></ul><p>Validation is done for each <code>validationFreq</code> iterations,
 and whenever current/best loss ratio below improveThreshold,
 that iteration is marked as best iteration.
-</p></div><dl class="paramcmts block"><dt class="param">maxIter</dt><dd class="cmt"><p><u>maximum mini-batch</u> iteration count <code>(default 100,000)</code></p></dd><dt class="param">waitAfterUpdate</dt><dd class="cmt"><p><u>multiplier</u> for calculating patience <code>(default 2 := lastupdate# * 2)</code></p></dd><dt class="param">improveThreshold</dt><dd class="cmt"><p><u>threshold</u> that iteration is marked as &quot;improved&quot; <code>(default 95% = 0.95)</code></p></dd><dt class="param">lossThreshold</dt><dd class="cmt"><p><u>maximum-tolerant</u> loss value. <code>(default 0.0001)</code></p></dd><dt class="param">validationFreq</dt><dd class="cmt"><p><u>multiplier</u> used for count for validation. <code>(default 1.0f)</code>
-                     Validation checked whenever (validationFreq) * (#epoch for 1 training batch).
-                     where #epoch for 1 training batch = trainset.size / miniBatch.
+</p></div><dl class="paramcmts block"><dt class="param">maxIter</dt><dd class="cmt"><p><u>maximum mini-batch</u> iteration count <code>(default 100,000)</code></p></dd><dt class="param">waitAfterUpdate</dt><dd class="cmt"><p><u>multiplier</u> for calculating patience <code>(default 1 := Wait lastupdate# * 1 after update)</code></p></dd><dt class="param">improveThreshold</dt><dd class="cmt"><p><u>threshold</u> that iteration is marked as &quot;improved&quot; <code>(default 99.5% = 0.995)</code></p></dd><dt class="param">lossThreshold</dt><dd class="cmt"><p><u>maximum-tolerant</u> loss value. <code>(default 0.0001)</code></p></dd><dt class="param">validationFreq</dt><dd class="cmt"><p><u>multiplier</u> used for count for validation. <code>(default 1.0f)</code>
+                      Validation checked whenever (validationFreq) * (#epoch for 1 training batch).
+                      where #epoch for 1 training batch = trainset.size / miniBatch.
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -94,12 +94,12 @@ that iteration is marked as best iteration.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">StoppingCriteria</span><span class="params">(<span name="maxIter">maxIter: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100000</span></span>, <span name="waitAfterUpdate">waitAfterUpdate: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="improveThreshold">improveThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.995</span></span>, <span name="lossThreshold">lossThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0E-4</span></span>, <span name="validationFreq">validationFreq: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0</span></span>)</span>
+        <span class="name">StoppingCriteria</span><span class="params">(<span name="maxIter">maxIter: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100000</span></span>, <span name="waitAfterUpdate">waitAfterUpdate: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="improveThreshold">improveThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.995</span></span>, <span name="lossThreshold">lossThreshold: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0E-4</span></span>, <span name="validationFreq">validationFreq: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0</span></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">maxIter</dt><dd class="cmt"><p><u>maximum mini-batch</u> iteration count <code>(default 100,000)</code></p></dd><dt class="param">waitAfterUpdate</dt><dd class="cmt"><p><u>multiplier</u> for calculating patience <code>(default 2 := lastupdate# * 2)</code></p></dd><dt class="param">improveThreshold</dt><dd class="cmt"><p><u>threshold</u> that iteration is marked as &quot;improved&quot; <code>(default 95% = 0.95)</code></p></dd><dt class="param">lossThreshold</dt><dd class="cmt"><p><u>maximum-tolerant</u> loss value. <code>(default 0.0001)</code></p></dd><dt class="param">validationFreq</dt><dd class="cmt"><p><u>multiplier</u> used for count for validation. <code>(default 1.0f)</code>
-                     Validation checked whenever (validationFreq) * (#epoch for 1 training batch).
-                     where #epoch for 1 training batch = trainset.size / miniBatch.
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">maxIter</dt><dd class="cmt"><p><u>maximum mini-batch</u> iteration count <code>(default 100,000)</code></p></dd><dt class="param">waitAfterUpdate</dt><dd class="cmt"><p><u>multiplier</u> for calculating patience <code>(default 1 := Wait lastupdate# * 1 after update)</code></p></dd><dt class="param">improveThreshold</dt><dd class="cmt"><p><u>threshold</u> that iteration is marked as &quot;improved&quot; <code>(default 99.5% = 0.995)</code></p></dd><dt class="param">lossThreshold</dt><dd class="cmt"><p><u>maximum-tolerant</u> loss value. <code>(default 0.0001)</code></p></dd><dt class="param">validationFreq</dt><dd class="cmt"><p><u>multiplier</u> used for count for validation. <code>(default 1.0f)</code>
+                      Validation checked whenever (validationFreq) * (#epoch for 1 training batch).
+                      where #epoch for 1 training batch = trainset.size / miniBatch.
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -264,7 +264,7 @@ that iteration is marked as best iteration.
         <span class="name">improveThreshold</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"><u>threshold</u> that iteration is marked as &quot;improved&quot; <code>(default 95% = 0.95)</code></p>
+      <p class="shortcomment cmt"><u>threshold</u> that iteration is marked as &quot;improved&quot; <code>(default 99.5% = 0.995)</code></p>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -369,8 +369,8 @@ that iteration is marked as best iteration.
       </span>
       </h4>
       <p class="shortcomment cmt"><u>multiplier</u> used for count for validation.</p><div class="fullcomment"><div class="comment cmt"><p><u>multiplier</u> used for count for validation. <code>(default 1.0f)</code>
-                     Validation checked whenever (validationFreq) * (#epoch for 1 training batch).
-                     where #epoch for 1 training batch = trainset.size / miniBatch.
+                      Validation checked whenever (validationFreq) * (#epoch for 1 training batch).
+                      where #epoch for 1 training batch = trainset.size / miniBatch.
 </p></div></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
@@ -441,7 +441,7 @@ that iteration is marked as best iteration.
         <span class="name">waitAfterUpdate</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt"><u>multiplier</u> for calculating patience <code>(default 2 := lastupdate# * 2)</code></p>
+      <p class="shortcomment cmt"><u>multiplier</u> for calculating patience <code>(default 1 := Wait lastupdate# * 1 after update)</code></p>
     </li></ol>
             </div>
 

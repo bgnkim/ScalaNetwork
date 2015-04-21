@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>DistBeliefCriteria - kr.ac.kaist.ir.deep.train.DistBeliefCriteria</title>
-          <meta name="description" content="DistBeliefCriteria - kr.ac.kaist.ir.deep.train.DistBeliefCriteria" />
-          <meta name="keywords" content="DistBeliefCriteria kr.ac.kaist.ir.deep.train.DistBeliefCriteria" />
+          <title>ActivationOp - kr.ac.kaist.ir.deep.fn.ActivationOp</title>
+          <meta name="description" content="ActivationOp - kr.ac.kaist.ir.deep.fn.ActivationOp" />
+          <meta name="keywords" content="ActivationOp kr.ac.kaist.ir.deep.fn.ActivationOp" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'kr.ac.kaist.ir.deep.train.package$$DistBeliefCriteria';
+            var hash = 'kr.ac.kaist.ir.deep.fn.package$$ActivationOp';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -25,26 +25,24 @@
         <body class="type">
       <div id="definition">
         <img src="../../../../../../lib/class_big.png" />
-        <p id="owner"><a href="../../../../../package.html" class="extype" name="kr">kr</a>.<a href="../../../../package.html" class="extype" name="kr.ac">ac</a>.<a href="../../../package.html" class="extype" name="kr.ac.kaist">kaist</a>.<a href="../../package.html" class="extype" name="kr.ac.kaist.ir">ir</a>.<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">deep</a>.<a href="package.html" class="extype" name="kr.ac.kaist.ir.deep.train">train</a></p>
-        <h1>DistBeliefCriteria</h1>
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="kr">kr</a>.<a href="../../../../package.html" class="extype" name="kr.ac">ac</a>.<a href="../../../package.html" class="extype" name="kr.ac.kaist">kaist</a>.<a href="../../package.html" class="extype" name="kr.ac.kaist.ir">ir</a>.<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">deep</a>.<a href="package.html" class="extype" name="kr.ac.kaist.ir.deep.fn">fn</a></p>
+        <h1>ActivationOp</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">DistBeliefCriteria</span><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="submitInterval">submitInterval: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span> = <span class="defval" name="scala.concurrent.duration.`package`.DurationInt(1).minute">...</span></span>, <span name="updateStep">updateStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="fetchStep">fetchStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">10</span></span>, <span name="numCores">numCores: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="repartitionOnStart">repartitionOnStart: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="storageLevel">storageLevel: <span class="extype" name="org.apache.spark.storage.StorageLevel">StorageLevel</span> = <span class="defval" name="org.apache.spark.storage.StorageLevel.DISK_ONLY_2">...</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">ActivationOp</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Criteria</u>: How to train (for <a href="DistBeliefTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefTrainStyle">DistBeliefTrainStyle</a>)</p><p>This case class defines how to train the network. Training parameter is defined in this class.
-</p></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></dd><dt class="param">negSamplingRatio</dt><dd class="cmt"><p>ratio of negative samples per positive instance. <code>(default 0)</code></p></dd><dt class="param">submitInterval</dt><dd class="cmt"><p>Time interval between batch submission. <code>(default 1.minute)</code></p></dd><dt class="param">updateStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between update <code>(default 2)</code></p></dd><dt class="param">fetchStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between fetching <code>(default 10)</code></p></dd><dt class="param">numCores</dt><dd class="cmt"><p>number of <u>v-cores</u> in the spark cluster. <code>(default 1)</code></p></dd><dt class="param">repartitionOnStart</dt><dd class="cmt"><p>true if do repartition when define training/testing RDD instances. <code>(default false)</code></p></dd><dt class="param">storageLevel</dt><dd class="cmt"><p>StorageLevel that will be used in Spark. <code>(default DISK_ONLY_2)</code>
-</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>We recommend set numCores as similar as possible with allocated spark v-cores.
-</p></span></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Defines transformation of new activation function.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -62,7 +60,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria"><span>DistBeliefCriteria</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="kr.ac.kaist.ir.deep.train.TrainingCriteria"><span>TrainingCriteria</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="kr.ac.kaist.ir.deep.fn.ActivationOp"><span>ActivationOp</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -82,19 +80,19 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(miniBatch:Int,negSamplingRatio:Int,submitInterval:scala.concurrent.duration.Duration,updateStep:Int,fetchStep:Int,numCores:Int,repartitionOnStart:Boolean,storageLevel:org.apache.spark.storage.StorageLevel):kr.ac.kaist.ir.deep.train.package.DistBeliefCriteria"></a>
-      <a id="&lt;init&gt;:DistBeliefCriteria"></a>
+              <ol><li name="kr.ac.kaist.ir.deep.fn.ActivationOp#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(act:kr.ac.kaist.ir.deep.fn.Activation):kr.ac.kaist.ir.deep.fn.package.ActivationOp"></a>
+      <a id="&lt;init&gt;:ActivationOp"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">DistBeliefCriteria</span><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="submitInterval">submitInterval: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span> = <span class="defval" name="scala.concurrent.duration.`package`.DurationInt(1).minute">...</span></span>, <span name="updateStep">updateStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">2</span></span>, <span name="fetchStep">fetchStep: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">10</span></span>, <span name="numCores">numCores: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="repartitionOnStart">repartitionOnStart: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="storageLevel">storageLevel: <span class="extype" name="org.apache.spark.storage.StorageLevel">StorageLevel</span> = <span class="defval" name="org.apache.spark.storage.StorageLevel.DISK_ONLY_2">...</span></span>)</span>
+        <span class="name">ActivationOp</span><span class="params">(<span name="act">act: <a href="Activation.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Activation">Activation</a></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></dd><dt class="param">negSamplingRatio</dt><dd class="cmt"><p>ratio of negative samples per positive instance. <code>(default 0)</code></p></dd><dt class="param">submitInterval</dt><dd class="cmt"><p>Time interval between batch submission. <code>(default 1.minute)</code></p></dd><dt class="param">updateStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between update <code>(default 2)</code></p></dd><dt class="param">fetchStep</dt><dd class="cmt"><p>number of <u>mini-batches</u> between fetching <code>(default 10)</code></p></dd><dt class="param">numCores</dt><dd class="cmt"><p>number of <u>v-cores</u> in the spark cluster. <code>(default 1)</code></p></dd><dt class="param">repartitionOnStart</dt><dd class="cmt"><p>true if do repartition when define training/testing RDD instances. <code>(default false)</code></p></dd><dt class="param">storageLevel</dt><dd class="cmt"><p>StorageLevel that will be used in Spark. <code>(default DISK_ONLY_2)</code>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">act</dt><dd class="cmt"><p>Activation function to be transformed.
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -144,6 +142,48 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.fn.ActivationOp#*" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="*(sX:Float,sY:Float):kr.ac.kaist.ir.deep.fn.Activation"></a>
+      <a id="*(Float,Float):Activation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $times" class="name">*</span><span class="params">(<span name="sX">sX: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1f</span></span>, <span name="sY">sY: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1f</span></span>)</span><span class="result">: <a href="Activation.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Activation">Activation</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Scale Activation function = <code>sY * f(x * sX)</code></p><div class="fullcomment"><div class="comment cmt"><p>Scale Activation function = <code>sY * f(x * sX)</code></p></div><dl class="paramcmts block"><dt class="param">sX</dt><dd class="cmt"><p>scale factor along input</p></dd><dt class="param">sY</dt><dd class="cmt"><p>scale factor along output</p></dd><dt>returns</dt><dd class="cmt"><p>new Activation Function
+</p></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.fn.ActivationOp#+" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="+(others:kr.ac.kaist.ir.deep.fn.Activation*):kr.ac.kaist.ir.deep.fn.Activation"></a>
+      <a id="+(Activation*):Activation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus" class="name">+</span><span class="params">(<span name="others">others: <a href="Activation.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Activation">Activation</a>*</span>)</span><span class="result">: <a href="Activation.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Activation">Activation</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Add activation functions = <code>f1(x) + f2(x) ..</code></p><div class="fullcomment"><div class="comment cmt"><p>Add activation functions = <code>f1(x) + f2(x) ..</code></p></div><dl class="paramcmts block"><dt class="param">others</dt><dd class="cmt"><p>Activation functions to be added. (Variable Parameter)</p></dd><dt>returns</dt><dd class="cmt"><p>new Activation Function
+</p></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.fn.ActivationOp#+" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="+(dX:Float,dY:Float):kr.ac.kaist.ir.deep.fn.Activation"></a>
+      <a id="+(Float,Float):Activation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $plus" class="name">+</span><span class="params">(<span name="dX">dX: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0f</span></span>, <span name="dY">dY: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0f</span></span>)</span><span class="result">: <a href="Activation.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Activation">Activation</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Translate Activation function = <code>dY + f(x - dX)</code></p><div class="fullcomment"><div class="comment cmt"><p>Translate Activation function = <code>dY + f(x - dX)</code></p></div><dl class="paramcmts block"><dt class="param">dX</dt><dd class="cmt"><p>shift amount along input</p></dd><dt class="param">dY</dt><dd class="cmt"><p>shift amount along output</p></dd><dt>returns</dt><dd class="cmt"><p>new Activation Function
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:AnyRef):Boolean"></a>
       <a id="==(AnyRef):Boolean"></a>
@@ -215,19 +255,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#fetchStep" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="fetchStep:Int"></a>
-      <a id="fetchStep:Int"></a>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fetchStep</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">number of <u>mini-batches</u> between fetching <code>(default 10)</code></p>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -260,6 +300,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -273,19 +326,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#miniBatch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="miniBatch:Int"></a>
-      <a id="miniBatch:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">miniBatch</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">size of <u>mini-batch</u> <code>(default 100)</code></p><div class="fullcomment"><div class="comment cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria">DistBeliefCriteria</a> → <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -299,19 +339,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#negSamplingRatio" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="negSamplingRatio:Int"></a>
-      <a id="negSamplingRatio:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">negSamplingRatio</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">ratio of negative samples per positive instance.</p><div class="fullcomment"><div class="comment cmt"><p>ratio of negative samples per positive instance. <code>(default 0)</code></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria">DistBeliefCriteria</a> → <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
@@ -338,59 +365,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#numCores" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="numCores:Int"></a>
-      <a id="numCores:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">numCores</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">number of <u>v-cores</u> in the spark cluster.</p><div class="fullcomment"><div class="comment cmt"><p>number of <u>v-cores</u> in the spark cluster. <code>(default 1)</code></p></div></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#repartitionOnStart" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="repartitionOnStart:Boolean"></a>
-      <a id="repartitionOnStart:Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">repartitionOnStart</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">true if do repartition when define training/testing RDD instances.</p><div class="fullcomment"><div class="comment cmt"><p>true if do repartition when define training/testing RDD instances. <code>(default false)</code></p></div></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#storageLevel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="storageLevel:org.apache.spark.storage.StorageLevel"></a>
-      <a id="storageLevel:StorageLevel"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">storageLevel</span><span class="result">: <span class="extype" name="org.apache.spark.storage.StorageLevel">StorageLevel</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">StorageLevel that will be used in Spark.</p><div class="fullcomment"><div class="comment cmt"><p>StorageLevel that will be used in Spark. <code>(default DISK_ONLY_2)</code>
-</p></div></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#submitInterval" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="submitInterval:scala.concurrent.duration.Duration"></a>
-      <a id="submitInterval:Duration"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">submitInterval</span><span class="result">: <span class="extype" name="scala.concurrent.duration.Duration">Duration</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Time interval between batch submission.</p><div class="fullcomment"><div class="comment cmt"><p>Time interval between batch submission. <code>(default 1.minute)</code></p></div></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -404,19 +378,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.DistBeliefCriteria#updateStep" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="updateStep:Int"></a>
-      <a id="updateStep:Int"></a>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">updateStep</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">number of <u>mini-batches</u> between update <code>(default 2)</code></p>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -483,13 +457,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Product">
-              <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
-            </div><div class="parent" name="scala.Equals">
-              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
-            </div><div class="parent" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">
-              <h3>Inherited from <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a></h3>
-            </div><div class="parent" name="scala.Serializable">
+        <div class="parent" name="scala.Serializable">
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>

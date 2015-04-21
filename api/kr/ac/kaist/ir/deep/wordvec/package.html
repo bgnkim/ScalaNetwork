@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>wordvec - kr.ac.kaist.ir.deep.wordvec</title>
+          <meta name="description" content="wordvec - kr.ac.kaist.ir.deep.wordvec" />
+          <meta name="keywords" content="wordvec kr.ac.kaist.ir.deep.wordvec" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'kr.ac.kaist.ir.deep.wordvec.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="kr">kr</a>.<a href="../../../../package.html" class="extype" name="kr.ac">ac</a>.<a href="../../../package.html" class="extype" name="kr.ac.kaist">kaist</a>.<a href="../../package.html" class="extype" name="kr.ac.kaist.ir">ir</a>.<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">deep</a></p>
+        <h1>wordvec</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wordvec</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Package for WordEmbedding training <u>(Unstable)</u>
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="kr.ac.kaist.ir.deep.wordvec"><span>wordvec</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="kr.ac.kaist.ir.deep.wordvec.StringToStringType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StringToStringTypeextendsStringType[String]"></a>
+      <a id="StringToStringType:StringToStringType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StringToStringType.html"><span class="name">StringToStringType</span></a><span class="result"> extends <a href="../train/StringType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StringType">StringType</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>Input Operation</u> : String as Input &amp; Expected Otput.</p>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WordModelextendsSerializablewithString=&gt;kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
+      <a id="WordModel:WordModel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$WordModel.html"><span class="name">WordModel</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span> with (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Word2Vec model class.</p>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordTrainStyle" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WordTrainStyleextendsMultiThreadTrainStyle[String,String]"></a>
+      <a id="WordTrainStyle:WordTrainStyle"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="WordTrainStyle.html"><span class="name">WordTrainStyle</span></a><span class="result"> extends <a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>Trainer</u> : Stochastic-Style, Multi-Threaded WordEmbedding Train Style using Spark.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="kr.ac.kaist.ir.deep.wordvec.WordMapAccumulator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WordMapAccumulator"></a>
+      <a id="WordMapAccumulator:WordMapAccumulator"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$WordMapAccumulator$.html"><span class="name">WordMapAccumulator</span></a><span class="result"> extends <span class="extype" name="org.apache.spark.AccumulatorParam">AccumulatorParam</span>[<span class="extype" name="scala.collection.mutable.HashMap">HashMap</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Accumulator Param object for WordEmbedding training.</p>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WordModel"></a>
+      <a id="WordModel:WordModel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$WordModel$.html"><span class="name">WordModel</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Companion object of <a href="package$$WordModel.html" class="extype" name="kr.ac.kaist.ir.deep.wordvec.WordModel">WordModel</a>
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../lib/template.js"></script>
+    </body>
+      </html>
