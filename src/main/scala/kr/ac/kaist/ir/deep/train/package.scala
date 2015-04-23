@@ -80,7 +80,7 @@ package object train {
    * that iteration is marked as best iteration.
    *
    * @param maxIter __maximum mini-batch__ iteration count `(default 100,000)`
-   * @param waitAfterUpdate __multiplier__ for calculating patience `(default 2 := lastupdate# * 2)`
+   * @param waitAfterUpdate __multiplier__ for calculating patience `(default 1 := Wait lastupdate# * 1 after update)`
    * @param improveThreshold __threshold__ that iteration is marked as "improved" `(default 99.5% = 0.995)`
    * @param lossThreshold __maximum-tolerant__ loss value. `(default 0.0001)`
    * @param validationFreq __multiplier__ used for count for validation. `(default 1.0f)`
@@ -88,7 +88,7 @@ package object train {
    *                       where #epoch for 1 training batch = trainset.size / miniBatch.
    */
   case class StoppingCriteria(maxIter: Int = 100000,
-                              waitAfterUpdate: Int = 2,
+                              waitAfterUpdate: Int = 1,
                               improveThreshold: Float = 0.995f,
                               lossThreshold: Float = 0.0001f,
                               validationFreq: Float = 1.0f)
@@ -133,7 +133,7 @@ package object train {
   /**
    * Accumulator Param object for DistBelief Train Style.
    */
-  object WeightAccumulator extends AccumulatorParam[IndexedSeq[ScalarMatrix]] {
+  implicit object WeightAccumulator extends AccumulatorParam[IndexedSeq[ScalarMatrix]] {
     /**
      * Add in place function
      * @param r1 left hand side

@@ -3,6 +3,7 @@ package kr.ac.kaist.ir.deep.train
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.network._
 import org.apache.spark.SparkContext
+import org.apache.spark.broadcast.Broadcast
 
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,6 +35,8 @@ class DistBeliefTrainStyle[IN: ClassTag, OUT: ClassTag](net: Network,
   @transient protected var fetchFlag: Future[Unit] = null
   /** Flag for update : Is updating? */
   @transient protected var updateFlag: Future[Unit] = null
+  /** Spark distributed networks */
+  protected var bcNet: Broadcast[Network] = _
 
   /**
    * Fetch weights
@@ -65,14 +68,6 @@ class DistBeliefTrainStyle[IN: ClassTag, OUT: ClassTag](net: Network,
     }
 
   /**
-   * Non-blocking pending, until all assigned batches are finished
-   */
-  override def stopUntilBatchFinished(): Unit = {
-    AsyncAwait.readyAll(param.submitInterval, batchFlag: _*)
-    batchFlag = batchFlag.filterNot(_.isCompleted)
-  }
-
-  /**
    * Send update of weights
    *
    * @param iter current iteration
@@ -100,6 +95,14 @@ class DistBeliefTrainStyle[IN: ClassTag, OUT: ClassTag](net: Network,
           net.W -= dWUpdate
         }
     }
+
+  /**
+   * Non-blocking pending, until all assigned batches are finished
+   */
+  override def stopUntilBatchFinished(): Unit = {
+    AsyncAwait.readyAll(param.submitInterval, batchFlag: _*)
+    batchFlag = batchFlag.filterNot(_.isCompleted)
+  }
 
   /**
    * Indicates whether the asynchrononus update is finished or not.

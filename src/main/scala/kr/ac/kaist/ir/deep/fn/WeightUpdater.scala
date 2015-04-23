@@ -87,37 +87,32 @@ class AdaDelta(protected override val l1decay: Scalar = 0.0000f,
       }
     }
 
-    var id = delta.length - 1
-    while (id >= 0) {
-      val w = weight(id)
-      val deltaW = delta(id)
+    delta.indices.par.foreach {
+      id ⇒
+        val w = weight(id)
+        val deltaW = delta(id)
+        val gradSq_id = gradSq(id)
+        val deltaSq_id = deltaSq(id)
 
-      val deltaL1 = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0f}
-      val deltaL2 = w * (l2decay * 2)
-      val deltaLoss: ScalarMatrix = deltaW + deltaL1 + deltaL2
+        val keys = w.keysIterator
 
-      val gradSq_id = gradSq(id)
-      val deltaSq_id = deltaSq(id)
+        while (keys.hasNext) {
+          val (r, c) = keys.next()
+          val x = w(r, c)
+          val l1 = if (x > 0) l1decay else if (x < 0) -l1decay else 0.0f
+          val d = (l2decay * 2 * x) + l1 + deltaW(r, c)
 
-      gradSq_id :*= decay
-      gradSq_id += (pow(deltaLoss, 2.0f) :* (1.0f - decay))
+          val gSq = gradSq_id(r, c) * decay + d * d * (1.0f - decay)
+          val dSq = deltaSq_id(r, c)
 
-      val adjusted = ScalarMatrix $0(gradSq_id.rows, gradSq_id.cols)
-      val iter = gradSq_id.keysIterator
-      while (iter.hasNext) {
-        val key = iter.next()
-        val value = Math.sqrt(deltaSq_id(key) + epsilon) / Math.sqrt(gradSq_id(key) + epsilon)
-        adjusted.update(key, value.toFloat)
-      }
+          val rate = Math.sqrt(dSq + epsilon) / Math.sqrt(gSq + epsilon)
+          gradSq_id.update(r, c, gSq)
 
-      val d = deltaLoss :* adjusted
+          val dw = d * rate.toFloat
+          w.update(r, c, x - dw)
 
-      w -= d
-
-      deltaSq_id :*= decay
-      deltaSq_id += (pow(d, 2.0f) :* (1.0f - decay))
-
-      id -= 1
+          deltaSq_id.update(r, c, dSq * decay + dw * dw * (1.0f - decay))
+        }
     }
   }
 }
@@ -160,22 +155,24 @@ class AdaGrad(rate: Scalar = 0.6f,
       }
     }
 
-    var id = delta.size - 1
-    while (id >= 0) {
-      val w = weight(id)
-      val deltaW = delta(id)
+    delta.indices.par.foreach {
+      id ⇒
+        val w = weight(id)
+        val deltaW = delta(id)
+        val hW = history(id)
 
-      val deltaL1 = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0f}
-      val deltaL2 = w * (l2decay * 2)
-      val deltaLoss: ScalarMatrix = deltaW + deltaL1 + deltaL2
+        val keys = w.keysIterator
 
-      history(id) :+= pow(deltaLoss, 2)
+        while (keys.hasNext) {
+          val (r, c) = keys.next()
+          val x = w(r, c)
+          val l1 = if (x > 0) l1decay else if (x < 0) -l1decay else 0.0f
+          val d = (l2decay * 2 * x) + l1 + deltaW(r, c)
+          val h = hW(r, c) + d * d
 
-      val adapted = history(id) mapValues { x ⇒ (rate / Math.sqrt(x)).toFloat}
-      val d = deltaLoss :* adapted
-
-      w -= d
-      id -= 1
+          hW.update(r, c, h)
+          w.update(r, c, x - d * (rate / Math.sqrt(h)).toFloat)
+        }
     }
   }
 }
@@ -207,7 +204,7 @@ class StochasticGradientDescent(rate: Scalar = 0.03f,
    * @param weight the __sequence of current weights__
    */
   override def apply(delta: IndexedSeq[ScalarMatrix], weight: IndexedSeq[ScalarMatrix]): Unit = {
-    if (lastDelta.isEmpty) {
+    if (momentum > 0 && lastDelta.isEmpty) {
       lastDelta.sizeHint(delta)
       var i = 0
       while (i < delta.size) {
@@ -217,27 +214,25 @@ class StochasticGradientDescent(rate: Scalar = 0.03f,
       }
     }
 
-    var id = delta.size - 1
-    while (id >= 0) {
-      val w = weight(id)
-      val deltaW = delta(id)
+    delta.indices.par.foreach {
+      id ⇒
+        val w = weight(id)
+        val deltaW = delta(id)
+        val hW = if (momentum > 0) lastDelta(id) else null
 
-      val deltaL1 = w mapValues { x ⇒ if (x > 0) l1decay else if (x < 0) -l1decay else 0.0f}
-      val deltaL2 = w :* (l2decay * 2)
-      val deltaLoss: ScalarMatrix = deltaW + deltaL1 + deltaL2
-      val adapted: ScalarMatrix = deltaLoss :* rate
-
-      val dw = if (lastDelta.nonEmpty) {
-        val moment: ScalarMatrix = lastDelta(id) :* momentum
-        moment - adapted
-      } else {
-        -adapted
-      }
-
-      w += dw
-      deltaW := 0.0f
-      lastDelta.update(id, dw)
-      id -= 1
+        w foreachPair {
+          case ((r, c), x) ⇒
+            val l1 = if (x > 0) l1decay else if (x < 0) -l1decay else 0.0f
+            val d = (l2decay * 2 * x + l1 + deltaW(r, c)) * rate
+            deltaW.update(r, c, 0f)
+            if (hW != null) {
+              val dw = -d + hW(r, c) * momentum
+              w.update(r, c, x + dw)
+              hW.update(r, c, dw)
+            } else {
+              w.update(r, c, x - d)
+            }
+        }
     }
   }
 }

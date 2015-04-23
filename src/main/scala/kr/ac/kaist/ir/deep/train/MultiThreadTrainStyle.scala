@@ -31,11 +31,9 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
                                                          override val param: DistBeliefCriteria = DistBeliefCriteria())
   extends TrainStyle[IN, OUT] {
   /** Accumulator variable for networks */
-  protected val accNet = sc.accumulator(net.dW)(WeightAccumulator)
+  protected val accNet = sc.accumulator(net.dW)
   /** Accumulator variable for counter */
   protected val accCount = sc.accumulator(0)
-  /** Spark distributed networks */
-  protected var bcNet = sc.broadcast(net.copy)
   /** Training set */
   protected var trainingSet: RDD[Pair] = null
   /** Fraction of mini-batch */
@@ -68,7 +66,10 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
    *
    * @param iter current iteration
    */
-  override def fetch(iter: Int): Unit = {}
+  override def fetch(iter: Int): Unit = {
+    accNet.setValue(accNet.zero)
+    accCount.setValue(accCount.zero)
+  }
 
   /**
    * Send update of weights
@@ -77,18 +78,12 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
    */
   override def update(iter: Int): Unit = {
     val dWUpdate = accNet.value
-    val cnt = accCount.value
+    val cnt = accCount.value.toFloat
     if (cnt > 0) {
-      accNet.setValue(accNet.zero)
-      accCount.setValue(accCount.zero)
-      bcNet.unpersist(blocking = false)
-
-      dWUpdate :/= cnt.toFloat
+      dWUpdate :/= cnt
       net.W -= dWUpdate
-
-      bcNet = sc.broadcast(net.copy)
     } else {
-      logger.warn(s"This iteration trained with 0 instances. Please check.")
+      logger.warn(s"Epoch $iter trained with 0 instances. Please check.")
     }
   }
 
@@ -117,35 +112,38 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
       }
     } else rddSet.map(p ⇒ (p._1, p._2, Seq.empty[OUT]))
 
-    trainPair.foreachPartition {
-      part ⇒
-        val netCopy = bcNet.value.copy
-        var count = 0
+    trainPair.foreachPartition(partFunction)
 
-        val f = Future.traverse(part) {
-          pair ⇒
-            count += 1
+    rddSet.unpersist(blocking = false)
+  }
 
-            future {
-              make.roundTrip(netCopy, make corrupted pair._1, pair._2)
+  protected final def partFunction = {
+    val netCopy = net.copy
 
-              var samples = pair._3
-              while (samples.nonEmpty) {
-                val neg = samples.head
-                samples = samples.tail
+    (part: Iterator[(IN, OUT, Seq[OUT])]) ⇒ {
+      var count = 0
+      val f = Future.traverse(part) {
+        pair ⇒
+          count += 1
 
-                if (make.different(neg, pair._2))
-                  make.roundTrip(netCopy, make corrupted pair._1, neg, isPositive = false)
-              }
+          future {
+            make.roundTrip(netCopy, make corrupted pair._1, pair._2)
+
+            var samples = pair._3
+            while (samples.nonEmpty) {
+              val neg = samples.head
+              samples = samples.tail
+
+              if (make.different(neg, pair._2))
+                make.roundTrip(netCopy, make corrupted pair._1, neg, isPositive = false)
             }
-        }
+          }
+      }
 
-        AsyncAwait.ready(f, 1.second)
-        accCount += count
-        accNet += netCopy.dW
+      AsyncAwait.ready(f, 1.second)
+      accCount += count
+      accNet += netCopy.dW
     }
-
-    rddSet.unpersist()
   }
 
   /**

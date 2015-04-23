@@ -7,7 +7,7 @@ import kr.ac.kaist.ir.deep.network.Network
  * __Input Operation__ : Vector as Input & Auto Encoder Training (no output type)
  *
  * @param corrupt Corruption that supervises how to corrupt the input matrix. (Default : [[NoCorruption]])
- * @param error An objective function (Default: [[SquaredErr]])
+ * @param error An objective function (Default: [[kr.ac.kaist.ir.deep.fn.SquaredErr]])
  *
  * @example
   * {{{var make = new AEType(error = CrossEntropyErr)

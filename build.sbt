@@ -2,9 +2,11 @@ organization := "kr.ac.kaist.ir"
 
 name := "ScalaNetwork"
 
-version := "0.10.4"
+version := "0.11.3"
 
 scalaVersion := "2.10.4"
+
+scalacOptions += "-target:jvm-1.7"
 
 crossScalaVersions := Seq("2.10.4", "2.11.4")
 

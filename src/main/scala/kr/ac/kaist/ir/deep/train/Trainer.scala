@@ -47,9 +47,9 @@ import scala.concurrent.duration._
  * @param name Name used for logging.
  *
  * @tparam IN the type of input.
- *            Currently, [[ScalarMatrix]] and DAG are supported
+ *            Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and DAG are supported
  * @tparam OUT the type of output
- *             Currently, [[ScalarMatrix]] and Null are supported
+ *             Currently, [[kr.ac.kaist.ir.deep.fn.ScalarMatrix]] and Null are supported
  */
 class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
                        val stops: StoppingCriteria = StoppingCriteria(),
@@ -152,9 +152,16 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
 
   /**
    * Store best parameters
+   *
+   * @param epoch current iteration epoch. (1 iteration = 1 validation freq)
+   * @param loss previous loss
+   * @param patience current patience, i.e. loop until at least this epoch.
    */
-  protected final def saveParams() = {
+  protected final def saveParams(epoch: Int = 0,
+                                 loss: Scalar = Float.MaxValue,
+                                 patience: Int = validationPeriod * 5) = {
     bestParam = net.W.copy
+    bestIter = epoch
   }
 
   /**
@@ -198,31 +205,37 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
       logger debug s"($name) Ep ${epoch + 1} : W = ${net.W map (_.mkString) mkString " | "}"
       val train = validationError()
       val weight = algorithm loss net.W
-      val improvement = (train + weight) / prevloss
+      val loss = train + weight
+      val improvement = if (prevloss > 0f) loss / prevloss else 0.0f
       if (improvement < stops.improveThreshold) {
-        nPatience = Math.max(patience, epoch * stops.waitAfterUpdate)
-        bestIter = epoch
-        saveParams()
-        val impr = 100.0 - improvement * 100.0
+        nPatience = Math.max(patience, (epoch + 1) * (stops.waitAfterUpdate + 1))
+        saveParams(epoch, loss, nPatience)
 
-        logger info f"($name) Ep ${epoch + 1}%6d, E + W = $train%.5f + $weight%.5f (▼ $impr%8.4f %%) "
-        train + weight
+        val impr = 100.0 - improvement * 100.0
+        logger info f"($name) # ${epoch + 1}%6d/$nPatience%6d, E + W = $train%.5f + $weight%.5f = $loss%.5f (▼ $impr%8.4f %%) "
+        loss
       } else {
         val impr = 100.0 - improvement * 100.0
         if (impr > 0f)
-          logger info f"($name) Ep ${epoch + 1}%6d, NOT IMPROVED ENOUGH       (▼ $impr%8.4f %%)"
+          logger info f"($name) # ${epoch + 1}%6d/$nPatience%6d, DISCARDED: NOT ENOUGH IMPROVEMENT   (▼ $impr%8.4f %%)"
         else
-          logger info f"($name) Ep ${epoch + 1}%6d, NOT IMPROVED ENOUGH       (△ ${-impr}%8.4f %%)"
+          logger info f"($name) # ${epoch + 1}%6d/$nPatience%6d, DISCARDED: NOT IMPROVED             (△ ${-impr}%8.4f %%)"
         prevloss
       }
     } else {
       prevloss
     }
 
-    if (epoch < stops.maxIter && nPatience > epoch && nLoss > stops.lossThreshold) {
+    if (epoch <= stops.maxIter && nPatience >= epoch && nLoss >= stops.lossThreshold) {
       trainBatch(epoch + 1, nLoss, nPatience)
     } else {
-      logger.info(f"($name) Ep ${epoch + 1}%6d, FINISHED with E + W = $nLoss%.5f")
+      if (nLoss < stops.lossThreshold)
+        logger info f"($name) # ${epoch + 1}%6d/$nPatience%6d, FINISHED with E + W = $nLoss%.5f [Loss < ${stops.lossThreshold}%.5f]"
+      else if (epoch > stops.maxIter)
+        logger info f"($name) # ${epoch + 1}%6d/$nPatience%6d, FINISHED with E + W = $nLoss%.5f [Epoch > ${stops.maxIter}%6d]"
+      else if (nPatience < epoch)
+        logger info f"($name) # ${epoch + 1}%6d/$nPatience%6d, FINISHED with E + W = $nLoss%.5f [NoUpdate ${stops.waitAfterUpdate} × $bestIter Ep.]"
+
       nLoss
     }
   }

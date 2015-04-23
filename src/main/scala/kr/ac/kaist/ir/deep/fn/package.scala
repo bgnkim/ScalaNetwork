@@ -175,4 +175,85 @@ package object fn {
     }
   }
 
+  /**
+   * Defines transformation of new activation function.
+   *
+   * @param act Activation function to be transformed.
+   */
+  implicit class ActivationOp(act: Activation) extends Serializable {
+    /**
+     * Scale Activation function = `sY * f(x * sX)`
+     * @param sX scale factor along input
+     * @param sY scale factor along output
+     * @return new Activation Function
+     */
+    def *(sX: Float = 1f, sY: Float = 1f) = new Activation {
+      /**
+       * Compute differentiation value of this function at `f(x) = fx`
+       *
+       * @param fx the __output__ of this function
+       * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
+       */
+      override def derivative(fx: ScalarMatrix): ScalarMatrix = act(fx :* sX) :* (sY * sX)
+
+      /**
+       * Compute mapping for `x`
+       *
+       * @param x the __input__ matrix. ''Before application, input should be summed already.''
+       * @return value of `f(x)`
+       */
+      override def apply(x: ScalarMatrix): ScalarMatrix = act(x :* sX) :* sY
+    }
+
+    /**
+     * Translate Activation function = `dY + f(x - dX)`
+     * @param dX shift amount along input
+     * @param dY shift amount along output
+     * @return new Activation Function
+     */
+    def +(dX: Float = 0f, dY: Float = 0f) = new Activation {
+      /**
+       * Compute differentiation value of this function at `f(x) = fx`
+       *
+       * @param fx the __output__ of this function
+       * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
+       */
+      override def derivative(fx: ScalarMatrix): ScalarMatrix = act(fx :- dX)
+
+      /**
+       * Compute mapping for `x`
+       *
+       * @param x the __input__ matrix. ''Before application, input should be summed already.''
+       * @return value of `f(x)`
+       */
+      override def apply(x: ScalarMatrix): ScalarMatrix = act(x :- dX) :+ dY
+    }
+
+    /**
+     * Add activation functions = `f1(x) + f2(x) ..`
+     * @param others Activation functions to be added. (Variable Parameter)
+     * @return new Activation Function
+     */
+    def +(others: Activation*) = new Activation {
+      private val applySeq = others :+ act
+
+      /**
+       * Compute differentiation value of this function at `f(x) = fx`
+       *
+       * @param fx the __output__ of this function
+       * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
+       */
+      override def derivative(fx: ScalarMatrix): ScalarMatrix =
+        applySeq.map(_.apply(fx)).reduce(_ :+ _)
+
+      /**
+       * Compute mapping for `x`
+       *
+       * @param x the __input__ matrix. ''Before application, input should be summed already.''
+       * @return value of `f(x)`
+       */
+      override def apply(x: ScalarMatrix): ScalarMatrix =
+        applySeq.map(_.apply(x)).reduce(_ :+ _)
+    }
+  }
 }

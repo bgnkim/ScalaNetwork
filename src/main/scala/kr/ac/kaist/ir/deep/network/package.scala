@@ -2,9 +2,11 @@ package kr.ac.kaist.ir.deep
 
 import kr.ac.kaist.ir.deep.fn.{Activation, Probability, ScalarMatrix}
 import kr.ac.kaist.ir.deep.layer.{BasicLayer, Layer, Reconstructable}
-import play.api.libs.json.{JsArray, JsObject}
+import play.api.libs.json.{JsArray, JsObject, Json}
 
 import scala.collection.mutable.ArrayBuffer
+import scala.io.Codec
+import scala.reflect.io.{File, Path}
 
 /**
  * Package for network structure
@@ -76,12 +78,50 @@ package object network {
       val json = net.toJSON
       Network(json)
     }
+
+    /**
+     * Save given network into given file.
+     * @param path Path to save this network.
+     * @param codec Codec used for writer. `(Default: Codec.UTF8)`
+     */
+    def saveAsJsonFile(path: Path, codec: Codec = Codec.UTF8): Unit = {
+      val writer = File(path).bufferedWriter(append = false, codec = codec)
+      writer.write(net.toJSON.toString())
+      writer.close()
+    }
   }
 
   /**
    * Companion object of BasicNetwork
    */
   object Network {
+    /**
+     * Construct network from given layer size information
+     *
+     * @param act Activation function for activation function
+     * @param layerSizes Sizes for construct layers
+     */
+    def apply(act: Activation, layerSizes: Int*): Network = {
+      val layers = ArrayBuffer[Layer]()
+      layers ++= layerSizes.indices.tail.map {
+        i ⇒ new BasicLayer(layerSizes(i - 1) → layerSizes(i), act)
+      }
+      new BasicNetwork(layers)
+    }
+
+    /**
+     * Load network from given file.
+     * @param path Path to save this network.
+     * @param codec Codec used for writer. `(Default: Codec.UTF8)`
+     *
+     * @tparam T Type of network casted into.
+     */
+    def jsonFile[T >: Network](path: Path, codec: Codec = Codec.UTF8): T = {
+      val line = File(path).lines(codec).mkString("")
+      val json = Json.parse(line).as[JsObject]
+      apply(json).asInstanceOf[T]
+    }
+
     /**
      * Load network from JsObject
      *
@@ -108,7 +148,7 @@ package object network {
     def AutoEncoder(obj: JsObject): AutoEncoder = {
       val layers = (obj \ "layers").as[JsArray].value map Layer.apply
       val presence = (obj \ "presence").as[Probability]
-      new AutoEncoder(layers(0).asInstanceOf[Reconstructable], presence)
+      new AutoEncoder(layers.head.asInstanceOf[Reconstructable], presence)
     }
 
     /**
@@ -120,20 +160,6 @@ package object network {
     def BasicNetwork(obj: JsObject): BasicNetwork = {
       val layers = ArrayBuffer[Layer]()
       layers ++= (obj \ "layers").as[JsArray].value.map(Layer.apply)
-      new BasicNetwork(layers)
-    }
-
-    /**
-     * Construct network from given layer size information
-     *
-     * @param act Activation function for activation function
-     * @param layerSizes Sizes for construct layers
-     */
-    def apply(act: Activation, layerSizes: Int*): Network = {
-      val layers = ArrayBuffer[Layer]()
-      layers ++= layerSizes.indices.tail.map {
-        i ⇒ new BasicLayer(layerSizes(i - 1) → layerSizes(i), act)
-      }
       new BasicNetwork(layers)
     }
   }

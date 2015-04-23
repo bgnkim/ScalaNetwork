@@ -1,6 +1,6 @@
 package kr.ac.kaist.ir.deep.train
 
-import breeze.linalg.{any, all}
+import breeze.linalg.any
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.network.Network
 
@@ -8,7 +8,7 @@ import kr.ac.kaist.ir.deep.network.Network
  * __Input Operation__ : Vector as Input and output
  *
  * @param corrupt Corruption that supervises how to corrupt the input matrix. (Default : [[NoCorruption]])
- * @param error An objective function (Default: [[SquaredErr]])
+ * @param error An objective function (Default: [[kr.ac.kaist.ir.deep.fn.SquaredErr]])
  *
  * @example
  * {{{var make = new VectorType(error = CrossEntropyErr)
