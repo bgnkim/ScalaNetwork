@@ -1,6 +1,6 @@
 package kr.ac.kaist.ir.deep.fn
 
-import breeze.linalg.DenseMatrix
+import breeze.linalg.{DenseMatrix, diag}
 import breeze.numerics._
 
 /**
@@ -63,7 +63,9 @@ object HardSigmoid extends Activation {
     var r = 0
     while (r < fx.rows) {
       val x = fx(r, 0)
-      res.update((r, r), if (x == 0.0f || x == 1.0f) 0.0f else 0.25f)
+      if (x > 0.0f && x < 1.0f)
+        res.update(r, r, 0.25f)
+      // else res.update((r, r), 0.0f) [Already initialized as zero]
       r += 1
     }
     res
@@ -76,14 +78,22 @@ object HardSigmoid extends Activation {
    * @return value of `f(x)`
    */
   override def apply(x: ScalarMatrix): ScalarMatrix = {
-    val res = x.copy
-    val iter = x.keysIterator
-    while (iter.hasNext) {
-      val key = iter.next()
-      val v = x(key)
-      if (v < -2) res.update(key, 0.0f)
-      else if (v > 2) res.update(key, 1.0f)
-      else res.update(key, 0.25f * v + 0.5f)
+    val res = ScalarMatrix $0(x.rows, x.cols)
+
+    val rows = x.rows
+    val cols = x.cols
+    var r, c = 0
+
+    while (r < rows) {
+      c = 0
+      while (c < cols) {
+        val v = x(r, c)
+        // if (v < -2) res.update(r, c, 0.0f) [Already initailized as zero]
+        if (v > 2) res.update(r, c, 1.0f)
+        else res.update(r, c, 0.25f * v + 0.5f)
+        c += 1
+      }
+      r += 1
     }
     res
   }
@@ -111,7 +121,9 @@ object HardTanh extends Activation {
     var r = 0
     while (r < fx.rows) {
       val x = fx(r, 0)
-      res.update((r, r), if (x == 1.0f || x == -1.0f) 0.0f else 1.0f)
+      if (x < 1.0f && x > -1.0f)
+        res.update(r, r, 1.0f)
+      // else res.update(r, r, 0.0f) [Already initalized as zero]
       r += 1
     }
     res
@@ -125,12 +137,19 @@ object HardTanh extends Activation {
    */
   override def apply(x: ScalarMatrix): ScalarMatrix = {
     val res = x.copy
-    val iter = x.keysIterator
-    while (iter.hasNext) {
-      val key = iter.next()
-      val v = x(key)
-      if (v < -1) res.update(key, -1.0f)
-      else if (v > 1) res.update(key, 1.0f)
+    val rows = x.rows
+    val cols = x.cols
+    var r, c = 0
+
+    while (r < rows) {
+      c = 0
+      while (c < cols) {
+        val v = x(r, c)
+        if (v < -1) res.update(r, c, -1.0f)
+        else if (v > 1) res.update(r, c, 1.0f)
+        c += 1
+      }
+      r += 1
     }
     res
   }
@@ -152,16 +171,9 @@ object HyperbolicTangent extends Activation {
    * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
    */
   override def derivative(fx: ScalarMatrix): ScalarMatrix = {
-    // Because fx is n by 1 matrix, generate n by n matrix
-    val res = ScalarMatrix $0(fx.rows, fx.rows)
     // Output is diagonal matrix, with dfi(xi)/dxi.
-    var r = 0
-    while (r < fx.rows) {
-      val x = fx(r, 0)
-      res.update((r, r), 1.0f - x * x)
-      r += 1
-    }
-    res
+    val dVec: ScalarMatrix = 1.0f - (fx :* fx)
+    diag(dVec.toDenseVector)
   }
 
   /**
@@ -236,7 +248,9 @@ object Rectifier extends Activation {
     var r = 0
     while (r < fx.rows) {
       val x = fx(r, 0)
-      res.update((r, r), if (x > 0) 1.0f else 0.0f)
+      if (x > 0)
+        res.update(r, r, 1.0f)
+      //else res.update(r, r, 0.0f) [Already Initialized as zero]
       r += 1
     }
     res
@@ -250,10 +264,17 @@ object Rectifier extends Activation {
    */
   override def apply(x: ScalarMatrix): ScalarMatrix = {
     val res = x.copy
-    val iter = x.keysIterator
-    while (iter.hasNext) {
-      val key = iter.next()
-      if (x(key) < 0) res.update(key, 0.0f)
+    val rows = x.rows
+    val cols = x.cols
+    var r, c = 0
+
+    while (r < rows) {
+      c = 0
+      while (c < cols) {
+        if (x(r, c) < 0) res.update(r, c, 0.0f)
+        c += 1
+      }
+      r += 1
     }
     res
   }
@@ -275,16 +296,9 @@ object Sigmoid extends Activation {
    * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
    */
   override def derivative(fx: ScalarMatrix): ScalarMatrix = {
-    // Because fx is n by 1 matrix, generate n by n matrix
-    val res = ScalarMatrix $0(fx.rows, fx.rows)
     // Output is diagonal matrix, with dfi(xi)/dxi.
-    var r = 0
-    while (r < fx.rows) {
-      val x = fx(r, 0)
-      res.update((r, r), x * (1.0f - x))
-      r += 1
-    }
-    res
+    val dVec: ScalarMatrix = (1.0f - fx) :* fx
+    diag(dVec.toDenseVector)
   }
 
   /**
@@ -294,20 +308,9 @@ object Sigmoid extends Activation {
    * @return value of `f(x)`
    */
   override def apply(x: ScalarMatrix): ScalarMatrix = {
-    // Because fx is n by 1 matrix, generate n by n matrix
-    val res = ScalarMatrix $0(x.rows, x.cols)
-    // Output is diagonal matrix, with dfi(xi)/dxi.
-    var r = 0
-    while (r < x.rows) {
-      var c = 0
-      while (c < x.cols) {
-        val expx = exp(-x(r, c))
-        res.update((r, c), 1.0f / (1.0f + expx))
-        c += 1
-      }
-      r += 1
-    }
-    res
+    val expv: ScalarMatrix = exp(x)
+    val exp1: ScalarMatrix = expv :+ 1.0f
+    1.0f / exp1
   }
 
   /**
@@ -342,16 +345,11 @@ object Softplus extends Activation {
    * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
    */
   override def derivative(fx: ScalarMatrix): ScalarMatrix = {
-    // Because fx is n by 1 matrix, generate n by n matrix
-    val res = ScalarMatrix $0(fx.rows, fx.rows)
     // Output is diagonal matrix, with dfi(xi)/dxi.
-    var r = 0
-    while (r < fx.rows) {
-      val expx = exp(fx(r, 0))
-      res.update((r, r), (expx - 1.0f) / expx)
-      r += 1
-    }
-    res
+    val expv: ScalarMatrix = exp(fx)
+    val exp1: ScalarMatrix = expv - 1.0f
+    val dVec: ScalarMatrix = exp1 / expv
+    diag(dVec.toDenseVector)
   }
 
   /**

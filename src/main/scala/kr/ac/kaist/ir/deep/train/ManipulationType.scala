@@ -33,9 +33,8 @@ trait ManipulationType[IN, OUT] extends Serializable {
    * @param net A network that gets input
    * @param in Input for error computation.
    * @param real Real output for error computation.
-   * @param isPositive Boolean that indicates whether this example is positive or not.             
    */
-  def roundTrip(net: Network, in: IN, real: OUT, isPositive: Boolean = true): Unit
+  def roundTrip(net: Network, in: IN, real: OUT): Unit
 
   /**
    * Apply given single input as one-way forward trip.

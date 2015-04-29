@@ -1,8 +1,8 @@
-package kr.ac.kaist.ir.deep.train
+package kr.ac.kaist.ir.deep.wordvec
 
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.network.Network
-import kr.ac.kaist.ir.deep.wordvec.WordModel
+import kr.ac.kaist.ir.deep.train.{Corruption, ManipulationType}
 import org.apache.spark.broadcast.Broadcast
 
 /**

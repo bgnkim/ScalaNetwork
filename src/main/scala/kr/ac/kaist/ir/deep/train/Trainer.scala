@@ -89,15 +89,24 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
     setTestReference(validation)
 
     validationPeriod = (stops.validationFreq * validationEpoch).toInt
-    logger info f"($name) Starts training. "
-    logger info f"Every $validationPeriod%5d (${stops.validationFreq * 100}%6.2f%% of TrainingSet), validation process will be submitted."
 
-    saveParams()
-    val err = trainBatch()
-    restoreParams()
-    printValidation()
+    if (validationPeriod > 0) {
+      logger info f"($name) Starts training. "
+      logger info f"($name) Every $validationPeriod%5d (${stops.validationFreq * 100}%6.2f%% of TrainingSet), " +
+        f"validation process will be submitted."
 
-    err
+      saveParams()
+      val err = lossOfTraining
+      restoreParams()
+      printValidation()
+
+      err
+    } else {
+      logger warn f"($name) Validation Period is zero! Training stopped."
+      logger warn f"($name) Please check your validation frequency (currently ${stops.validationFreq}) " +
+        f"and training set size (about ${validationEpoch * param.miniBatch})"
+      Float.PositiveInfinity
+    }
   }
 
   /**
@@ -118,26 +127,24 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
     setTestReference(validation)
 
     validationPeriod = (stops.validationFreq * validationEpoch).toInt
-    logger info f"($name) Starts training. "
-    logger info f"Every $validationPeriod%5d (${stops.validationFreq * 100}%6.2f%% of TrainingSet), validation process will be submitted."
 
-    saveParams()
-    val err = trainBatch()
-    restoreParams()
-    printValidation()
+    if (validationPeriod > 0) {
+      logger info f"($name) Starts training. "
+      logger info f"($name) Every $validationPeriod%5d (${stops.validationFreq * 100}%6.2f%% of TrainingSet), " +
+        f"validation process will be submitted."
 
-    err
-  }
+      saveParams()
+      val err = lossOfTraining
+      restoreParams()
+      printValidation()
 
-
-  /**
-   * Set negative sampling method.
-   *
-   * @param set all training outputs that will be used for negative training
-   */
-  def setNegativeTrainingReference(set: RDD[OUT]) = {
-    require(make.isInstanceOf[VectorType], "Currently, only 'VectorType' manipulation supports negative sampling.")
-    style.setNegativeTrainingReference(set)
+      err
+    } else {
+      logger warn f"($name) Validation Period is zero! Training stopped."
+      logger warn f"($name) Please check your validation frequency (currently ${stops.validationFreq}) " +
+        f"and training set size (about ${validationEpoch * param.miniBatch})"
+      Float.PositiveInfinity
+    }
   }
 
   /**
@@ -191,53 +198,80 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
   @tailrec
   protected final def trainBatch(epoch: Int = 0,
                                  prevloss: Scalar = Float.MaxValue,
-                                 patience: Int = validationPeriod * 5): Scalar = {
+                                 patience: Int = 5): Scalar = {
     fetch(epoch)
     batch()
     update(epoch)
 
     var nPatience = patience
+    val iter = epoch / validationPeriod + 1
 
     val nLoss = if ((epoch + 1) % validationPeriod == 0) {
       // Pending until batch finished
       stopUntilBatchFinished()
 
-      logger debug s"($name) Ep ${epoch + 1} : W = ${net.W map (_.mkString) mkString " | "}"
       val train = validationError()
       val weight = algorithm loss net.W
       val loss = train + weight
-      val improvement = if (prevloss > 0f) loss / prevloss else 0.0f
+      val improvement = if (prevloss > 0f) loss / prevloss else stops.improveThreshold
       if (improvement < stops.improveThreshold) {
-        nPatience = Math.max(patience, (epoch + 1) * (stops.waitAfterUpdate + 1))
+        nPatience = Math.max(patience, iter * (stops.waitAfterUpdate + 1))
         saveParams(epoch, loss, nPatience)
 
         val impr = 100.0 - improvement * 100.0
-        logger info f"($name) # ${epoch + 1}%6d/$nPatience%6d, E + W = $train%.5f + $weight%.5f = $loss%.5f (▼ $impr%8.4f %%) "
+        logger info f"($name) # $iter%4d/$nPatience%4d, " +
+          f"E + W = $train%.5f + $weight%.5f = $loss%.5f (▼ $impr%8.4f %%) "
         loss
       } else {
         val impr = 100.0 - improvement * 100.0
         if (impr > 0f)
-          logger info f"($name) # ${epoch + 1}%6d/$nPatience%6d, DISCARDED: NOT ENOUGH IMPROVEMENT   (▼ $impr%8.4f %%)"
+          logger info f"($name) # $iter%4d/$nPatience%4d, " +
+            f"DISCARDED: NOT ENOUGH IMPROVEMENT   (▼ $impr%8.4f %%)"
         else
-          logger info f"($name) # ${epoch + 1}%6d/$nPatience%6d, DISCARDED: NOT IMPROVED             (△ ${-impr}%8.4f %%)"
+          logger info f"($name) # $iter%4d/$nPatience%4d, " +
+            f"DISCARDED: NOT IMPROVED             (△ ${-impr}%8.4f %%)"
         prevloss
       }
     } else {
       prevloss
     }
 
-    if (epoch <= stops.maxIter && nPatience >= epoch && nLoss >= stops.lossThreshold) {
+    if (iter <= stops.maxIter && nPatience >= iter && nLoss >= stops.lossThreshold) {
       trainBatch(epoch + 1, nLoss, nPatience)
     } else {
       if (nLoss < stops.lossThreshold)
-        logger info f"($name) # ${epoch + 1}%6d/$nPatience%6d, FINISHED with E + W = $nLoss%.5f [Loss < ${stops.lossThreshold}%.5f]"
+        logger info f"($name) # $iter%4d/$nPatience%4d, " +
+          f"FINISHED with E + W = $nLoss%.5f [Loss < ${stops.lossThreshold}%.5f]"
       else if (epoch > stops.maxIter)
-        logger info f"($name) # ${epoch + 1}%6d/$nPatience%6d, FINISHED with E + W = $nLoss%.5f [Epoch > ${stops.maxIter}%6d]"
+        logger info f"($name) # $iter%4d/$nPatience%4d, " +
+          f"FINISHED with E + W = $nLoss%.5f [Iteration > ${stops.maxIter}%6d]"
       else if (nPatience < epoch)
-        logger info f"($name) # ${epoch + 1}%6d/$nPatience%6d, FINISHED with E + W = $nLoss%.5f [NoUpdate ${stops.waitAfterUpdate} × $bestIter Ep.]"
+        logger info f"($name) # $iter%4d/$nPatience%4d, " +
+          f"FINISHED with E + W = $nLoss%.5f [NoUpdate ${stops.waitAfterUpdate} Iterations.]"
 
       nLoss
     }
   }
+
+  /**
+   * Do actual training process
+   * @return MSE of the training process
+   */
+  private def lossOfTraining: Float =
+    if (param.miniBatch > 0) {
+      trainBatch()
+    } else {
+      fetch(0)
+      batch()
+      update(0)
+
+      val train = validationError()
+      val weight = algorithm loss net.W
+      val loss = train + weight
+      saveParams(0, loss, 0)
+
+      logger info f"($name) PASSONCE, E + W = $train%.5f + $weight%.5f = $loss%.5f"
+      loss
+    }
 
 }

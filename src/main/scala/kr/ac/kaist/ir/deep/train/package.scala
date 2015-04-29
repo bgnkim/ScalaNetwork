@@ -100,10 +100,9 @@ package object train {
    * This case class defines how to train the network. Training parameter is defined in this class.
    *
    * @param miniBatch size of __mini-batch__ `(default 100)`
-   * @param negSamplingRatio ratio of negative samples per positive instance. `(default 0)`
+   *                  If below or equal to zero, then this indicates no batch training (i.e. just go through once.)
    */
-  case class SimpleTrainingCriteria(override val miniBatch: Int = 100,
-                                    override val negSamplingRatio: Int = 0) extends TrainingCriteria
+  case class SimpleTrainingCriteria(override val miniBatch: Int = 100) extends TrainingCriteria
 
   /**
    * __Criteria__: How to train (for [[DistBeliefTrainStyle]])
@@ -111,7 +110,7 @@ package object train {
    * This case class defines how to train the network. Training parameter is defined in this class.
    *
    * @param miniBatch size of __mini-batch__ `(default 100)`
-   * @param negSamplingRatio ratio of negative samples per positive instance. `(default 0)`
+   *                  If below or equal to zero, then this indicates no batch training (i.e. just go through once.)
    * @param submitInterval Time interval between batch submission. `(default 1.minute)`
    * @param updateStep number of __mini-batches__ between update `(default 2)`
    * @param fetchStep number of __mini-batches__ between fetching `(default 10)`
@@ -122,7 +121,6 @@ package object train {
    * @note We recommend set numCores as similar as possible with allocated spark v-cores.
    */
   case class DistBeliefCriteria(override val miniBatch: Int = 100,
-                                override val negSamplingRatio: Int = 0,
                                 submitInterval: Duration = 1.minute,
                                 updateStep: Int = 2,
                                 fetchStep: Int = 10,

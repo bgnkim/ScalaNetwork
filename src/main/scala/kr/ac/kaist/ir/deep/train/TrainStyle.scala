@@ -60,18 +60,6 @@ trait TrainStyle[IN, OUT] extends Serializable {
   def setPositiveTrainingReference(set: RDD[Pair]): Unit
 
   /**
-   * Set negative sampling method.
-   * @param set all training outputs that will be used for negative training
-   */
-  def setNegativeTrainingReference(set: Seq[OUT]): Unit
-
-  /**
-   * Set negative sampling method.
-   * @param set all training outputs that will be used for negative training
-   */
-  def setNegativeTrainingReference(set: RDD[OUT]): Unit
-
-  /**
    * Set testing instances 
    * @param set Sequence of testing set
    */

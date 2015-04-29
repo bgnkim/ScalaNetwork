@@ -5,7 +5,6 @@ import kr.ac.kaist.ir.deep.network.Network
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 
-import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import scala.concurrent.duration._
@@ -38,12 +37,8 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
   protected var trainingSet: RDD[Pair] = null
   /** Fraction of mini-batch */
   protected var trainingFraction: Float = 0.0f
-  /** Negative Sampler */
-  protected var negOutUniverse: RDD[(Long, OUT)] = null
-  /** Partitioner for negative samples */
-  protected var negPartitioner: RandomEqualPartitioner = _
-  /** Fraction of negative samples */
-  protected var negFraction: Float = 0.0f
+  /** Size of training set */
+  protected var trainingSize: Long = 0l
   /** Test Set */
   protected var testSet: RDD[Pair] = null
   /** Size of test set */
@@ -55,8 +50,6 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
   def unpersist(): Unit = {
     if (trainingSet != null)
       trainingSet.unpersist()
-    if (negOutUniverse != null)
-      negOutUniverse.unpersist()
     if (testSet != null)
       testSet.unpersist()
   }
@@ -90,59 +83,33 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
   /**
    * Do mini-batch
    */
-  override def batch(): Unit = {
-    val rddSet = trainingSet.sample(withReplacement = true, fraction = trainingFraction)
-    val trainPair = if (negOutUniverse != null) {
-      negPartitioner.refreshRandom()
-      negOutUniverse.sample(withReplacement = true, fraction = negFraction)
-        .partitionBy(negPartitioner)
-        .zipPartitions(rddSet) {
-        (itNeg, itPair) ⇒
-          itPair.map {
-            pair ⇒
-              val seq = ArrayBuffer[OUT]()
-              seq.sizeHint(param.negSamplingRatio)
+  override def batch(): Unit =
+    if (trainingFraction > 0) {
+      val set = trainingSet.sample(withReplacement = true, fraction = trainingFraction)
+      set.foreachPartition(partFunction)
+      set.unpersist(blocking = false)
+    } else {
+      trainingSet.foreachPartition(partFunction)
+    }
 
-              while (seq.size < param.negSamplingRatio && itNeg.hasNext) {
-                seq += itNeg.next()._2
-              }
-
-              (pair._1, pair._2, seq)
-          }
-      }
-    } else rddSet.map(p ⇒ (p._1, p._2, Seq.empty[OUT]))
-
-    trainPair.foreachPartition(partFunction)
-
-    rddSet.unpersist(blocking = false)
-  }
-
-  protected final def partFunction = {
+  private final def partFunction = {
     val netCopy = net.copy
 
-    (part: Iterator[(IN, OUT, Seq[OUT])]) ⇒ {
+    (part: Iterator[(IN, OUT)]) ⇒ {
       var count = 0
-      val f = Future.traverse(part) {
-        pair ⇒
+      val f = future {
+        while (part.hasNext) {
+          val pair = part.next()
           count += 1
 
-          future {
-            make.roundTrip(netCopy, make corrupted pair._1, pair._2)
+          make.roundTrip(netCopy, make corrupted pair._1, pair._2)
+        }
 
-            var samples = pair._3
-            while (samples.nonEmpty) {
-              val neg = samples.head
-              samples = samples.tail
-
-              if (make.different(neg, pair._2))
-                make.roundTrip(netCopy, make corrupted pair._1, neg, isPositive = false)
-            }
-          }
+        accCount += count
+        accNet += netCopy.dW
       }
 
       AsyncAwait.ready(f, 1.second)
-      accCount += count
-      accNet += netCopy.dW
     }
   }
 
@@ -155,8 +122,9 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
       if (param.repartitionOnStart) sc.parallelize(set, param.numCores)
       else sc.parallelize(set)
     trainingSet = rdd.setName("Positives").persist(param.storageLevel)
-    trainingFraction = param.miniBatch / set.size.toFloat
-    validationEpoch = set.size / param.miniBatch
+    trainingSize = set.size
+    trainingFraction = if (param.miniBatch > 0) param.miniBatch / trainingSize.toFloat else 0
+    validationEpoch = if (param.miniBatch > 0) (trainingSize / param.miniBatch).toInt else 1
   }
 
   /**
@@ -168,39 +136,9 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
       if (param.repartitionOnStart) set.repartition(param.numCores).persist(param.storageLevel)
       else set
     trainingSet = rdd.setName(set.name + " (Positives)")
-    val count = trainingSet.countApproxDistinct()
-    trainingFraction = param.miniBatch / count.toFloat
-    validationEpoch = (count / param.miniBatch).toInt
-  }
-
-  /**
-   * Set negative sampling method.
-   * @param set all training outputs that will be used for negative training
-   */
-  override def setNegativeTrainingReference(set: Seq[OUT]): Unit = {
-    val rdd =
-      if (param.repartitionOnStart) sc.parallelize(set, param.numCores)
-      else sc.parallelize(set)
-    negOutUniverse = rdd.zipWithUniqueId().map(_.swap)
-      .setName("Negatives").persist(param.storageLevel)
-    val size = set.size
-    negFraction = (param.miniBatch * param.negSamplingRatio * 2) / size.toFloat
-    negPartitioner = new RandomEqualPartitioner(param.numCores)
-  }
-
-  /**
-   * Set negative sampling method.
-   * @param set all training outputs that will be used for negative training
-   */
-  override def setNegativeTrainingReference(set: RDD[OUT]): Unit = {
-    val rdd =
-      if (param.repartitionOnStart) set.repartition(param.numCores)
-      else set
-    negOutUniverse = rdd.zipWithUniqueId().map(_.swap)
-      .setName(set.name + " (Negatives)").persist(param.storageLevel)
-    val size = rdd.countApproxDistinct()
-    negFraction = (param.miniBatch * param.negSamplingRatio * 2) / size.toFloat
-    negPartitioner = new RandomEqualPartitioner(param.numCores)
+    trainingSize = trainingSet.countApproxDistinct()
+    trainingFraction = if (param.miniBatch > 0) param.miniBatch / trainingSize.toFloat else 0
+    validationEpoch = if (param.miniBatch > 0) (trainingSize / param.miniBatch).toInt else 1
   }
 
   /**
@@ -250,11 +188,15 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
     val lossOf = make.lossOf(net) _
     testSet.foreachPartition {
       iter ⇒
-        var sum = 0.0f
-        while (iter.hasNext) {
-          sum += lossOf(iter.next()) / testSize
+        val f = future {
+          var sum = 0.0f
+          while (iter.hasNext) {
+            sum += lossOf(iter.next()) / testSize
+          }
+          loss += sum
         }
-        loss += sum
+
+        AsyncAwait.ready(f, 1.second)
     }
 
     loss.value

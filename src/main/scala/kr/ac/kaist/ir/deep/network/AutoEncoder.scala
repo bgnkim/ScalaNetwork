@@ -63,14 +63,14 @@ class AutoEncoder(val layer: Reconstructable,
    *
    * @param err backpropagated error from error function
    */
-  protected[deep] override def updateBy(err: ScalarMatrix) = encode_!(decode_!(err))
+  override def updateBy(err: ScalarMatrix) = encode_!(decode_!(err))
 
   /**
    * Backpropagation algorithm for decoding phrase
    *
    * @param err backpropagated error from error function
    */
-  protected[deep] def decode_!(err: ScalarMatrix) = {
+  def decode_!(err: ScalarMatrix) = {
     val output = input.head
     val hidden = input.tail.head
     input = input.tail.tail
@@ -84,7 +84,7 @@ class AutoEncoder(val layer: Reconstructable,
    *
    * @param err backpropagated error from error function
    */
-  protected[deep] def encode_!(err: ScalarMatrix) = {
+  def encode_!(err: ScalarMatrix) = {
     val hidden = input.head
     val in = input.tail.head
     input = input.tail.tail
@@ -99,7 +99,7 @@ class AutoEncoder(val layer: Reconstructable,
    * @param x input matrix
    * @return output matrix
    */
-  protected[deep] override def into_:(x: ScalarMatrix): ScalarMatrix = decode(encode(x))
+  override def into_:(x: ScalarMatrix): ScalarMatrix = decode(encode(x))
 
   /**
    * Encode computation for training.
@@ -108,7 +108,7 @@ class AutoEncoder(val layer: Reconstructable,
    * @param x input matrix
    * @return hidden values
    */
-  protected[deep] def encode(x: ScalarMatrix): ScalarMatrix = {
+  def encode(x: ScalarMatrix): ScalarMatrix = {
     val hidden = x into_: layer
     input = Seq(hidden, x) ++: input
     hidden
@@ -121,7 +121,7 @@ class AutoEncoder(val layer: Reconstructable,
    * @param x hidden values
    * @return output matrix
    */
-  protected[deep] def decode(x: ScalarMatrix): ScalarMatrix = {
+  def decode(x: ScalarMatrix): ScalarMatrix = {
     val hidden = x into_: dropout
     val output = hidden decodeBy_: layer
     input = Seq(output, hidden) ++: input
@@ -134,7 +134,7 @@ class AutoEncoder(val layer: Reconstructable,
    * @param x input matrix
    * @return output matrix
    */
-  override protected[deep] def of(x: ScalarMatrix): ScalarMatrix = {
+  override def of(x: ScalarMatrix): ScalarMatrix = {
     val h = dropout(layer(x))
     h decodeBy_: layer
   }

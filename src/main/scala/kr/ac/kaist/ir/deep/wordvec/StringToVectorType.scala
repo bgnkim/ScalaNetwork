@@ -1,8 +1,7 @@
-package kr.ac.kaist.ir.deep.train
+package kr.ac.kaist.ir.deep.wordvec
 
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.network.Network
-import kr.ac.kaist.ir.deep.wordvec.WordModel
 import org.apache.spark.broadcast.Broadcast
 
 /**
@@ -23,16 +22,11 @@ class StringToVectorType(protected override val model: Broadcast[WordModel],
    * @param net A network that gets input
    * @param in Input for error computation.
    * @param real Real output for error computation.
-   * @param isPositive Boolean that indicates whether this example is positive or not.
    */
-  override def roundTrip(net: Network, in: String, real: ScalarMatrix, isPositive: Boolean): Unit = {
+  override def roundTrip(net: Network, in: String, real: ScalarMatrix): Unit = {
     val out = model.value(in) into_: net
     val err: ScalarMatrix = error.derivative(real, out)
-    if (isPositive) {
-      net updateBy err
-    } else {
-      net updateBy (-err)
-    }
+    net updateBy err
   }
 
   /**

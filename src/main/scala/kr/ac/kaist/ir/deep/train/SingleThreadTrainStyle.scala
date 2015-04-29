@@ -24,8 +24,6 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
 
   /** Training set */
   private var trainingSet: Int ⇒ Seq[Pair] = null
-  /** Negative Sampler */
-  private var negOutUniverse: Int ⇒ Seq[OUT] = null
   /** Test Set */
   private var testSet: Int ⇒ Seq[Pair] = null
   /** Test Set iterator */
@@ -34,6 +32,8 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
   private var testSetSC: SparkContext = null
   /** Size of test set */
   private var testSize: Float = 0.0f
+  /** Count */
+  private var count = 0
 
   /**
    * Fetch weights
@@ -48,8 +48,9 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
    * @param iter current iteration
    */
   override def update(iter: Int): Unit = {
-    net.dW :/= param.miniBatch.toFloat
+    net.dW :/= count.toFloat
     net.W -= net.dW
+    count = 0
   }
 
   /**
@@ -57,25 +58,11 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
    */
   override def batch(): Unit = {
     var seq = trainingSet(param.miniBatch)
-    if (param.negSamplingRatio == 0 || negOutUniverse == null) {
-      while (seq.nonEmpty) {
-        val pair = seq.head
-        seq = seq.tail
-        make roundTrip(net, make corrupted pair._1, pair._2)
-      }
-    } else {
-      while (seq.nonEmpty) {
-        val pair = seq.head
-        seq = seq.tail
-        make roundTrip(net, make corrupted pair._1, pair._2)
-
-        var samples = negOutUniverse(param.negSamplingRatio)
-        while (samples.nonEmpty) {
-          val neg = samples.head
-          samples = samples.tail
-          make roundTrip(net, make corrupted pair._1, neg, isPositive = false)
-        }
-      }
+    while (seq.nonEmpty) {
+      val pair = seq.head
+      seq = seq.tail
+      count += 1
+      make roundTrip(net, make corrupted pair._1, pair._2)
     }
   }
 
@@ -85,18 +72,22 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
    */
   override def setPositiveTrainingReference(set: Seq[(IN, OUT)]): Unit = {
     val index = () ⇒ Math.floor(Math.random() * set.size).toInt
-    trainingSet = (n: Int) ⇒ {
-      val array = ArrayBuffer[Pair]()
-      array.sizeHint(n)
+    trainingSet = (n: Int) ⇒
+      if (n > 0) {
+        val array = ArrayBuffer[Pair]()
+        array.sizeHint(n)
 
-      var i = 0
-      while (i < n) {
-        array += set(index())
-        i += 1
+        var i = 0
+        while (i < n) {
+          array += set(index())
+          i += 1
+        }
+        array
+      } else {
+        set
       }
-      array
-    }
-    validationEpoch = set.size / param.miniBatch
+    val trainingSize = set.length
+    validationEpoch = if (param.miniBatch > 0) trainingSize / param.miniBatch else 1
   }
 
   /**
@@ -104,35 +95,11 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
    * @param set RDD of training set
    */
   override def setPositiveTrainingReference(set: RDD[(IN, OUT)]): Unit = {
-    trainingSet = (n: Int) ⇒ set.takeSample(withReplacement = true, num = n).toSeq
-    validationEpoch = (set.countApproxDistinct().toFloat / param.miniBatch).toInt
-  }
-
-  /**
-   * Set negative sampling method.
-   * @param set all training outputs that will be used for negative training
-   */
-  override def setNegativeTrainingReference(set: Seq[OUT]): Unit = {
-    val index = () ⇒ Math.floor(Math.random() * set.size).toInt
-    negOutUniverse = (n: Int) ⇒ {
-      val array = ArrayBuffer[OUT]()
-      array.sizeHint(n)
-
-      var i = 0
-      while (i < n) {
-        array += set(index())
-        i += 1
-      }
-      array
-    }
-  }
-
-  /**
-   * Set negative sampling method.
-   * @param set all training outputs that will be used for negative training
-   */
-  override def setNegativeTrainingReference(set: RDD[OUT]): Unit = {
-    negOutUniverse = (n: Int) ⇒ set.takeSample(withReplacement = true, num = n).toSeq
+    trainingSet = (n: Int) ⇒
+      if (n > 0) set.takeSample(withReplacement = true, num = n).toSeq
+      else set.collect()
+    val trainingSize = set.countApproxDistinct()
+    validationEpoch = if (param.miniBatch > 0) (trainingSize / param.miniBatch).toInt else 1
   }
 
   /**

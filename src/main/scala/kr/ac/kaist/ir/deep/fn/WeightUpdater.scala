@@ -91,28 +91,25 @@ class AdaDelta(protected override val l1decay: Scalar = 0.0000f,
       id ⇒
         val w = weight(id)
         val deltaW = delta(id)
-        val gradSq_id = gradSq(id)
-        val deltaSq_id = deltaSq(id)
+        val gSq = gradSq(id)
+        val dSq = deltaSq(id)
 
-        val keys = w.keysIterator
+        val l1: ScalarMatrix = signum(w) * l1decay
+        val l2: ScalarMatrix = (l2decay * 2) * w
+        val d = l1 + l2 + deltaW
 
-        while (keys.hasNext) {
-          val (r, c) = keys.next()
-          val x = w(r, c)
-          val l1 = if (x > 0) l1decay else if (x < 0) -l1decay else 0.0f
-          val d = (l2decay * 2 * x) + l1 + deltaW(r, c)
+        gSq *= decay
+        gSq += (1.0f - decay) * (d :* d)
 
-          val gSq = gradSq_id(r, c) * decay + d * d * (1.0f - decay)
-          val dSq = deltaSq_id(r, c)
+        val r1: ScalarMatrix = sqrt(dSq + epsilon)
+        val r2: ScalarMatrix = sqrt(gSq + epsilon)
+        val rate: ScalarMatrix = r1 / r2
 
-          val rate = Math.sqrt(dSq + epsilon) / Math.sqrt(gSq + epsilon)
-          gradSq_id.update(r, c, gSq)
+        val dw = d :* rate
+        w -= dw
 
-          val dw = d * rate.toFloat
-          w.update(r, c, x - dw)
-
-          deltaSq_id.update(r, c, dSq * decay + dw * dw * (1.0f - decay))
-        }
+        dSq *= decay
+        dSq += (1.0f - decay) * (dw :* dw)
     }
   }
 }
@@ -161,18 +158,15 @@ class AdaGrad(rate: Scalar = 0.6f,
         val deltaW = delta(id)
         val hW = history(id)
 
-        val keys = w.keysIterator
+        val l1: ScalarMatrix = signum(w) * l1decay
+        val l2: ScalarMatrix = (l2decay * 2) * w
+        val d = l1 + l2 + deltaW
 
-        while (keys.hasNext) {
-          val (r, c) = keys.next()
-          val x = w(r, c)
-          val l1 = if (x > 0) l1decay else if (x < 0) -l1decay else 0.0f
-          val d = (l2decay * 2 * x) + l1 + deltaW(r, c)
-          val h = hW(r, c) + d * d
+        hW += (d :* d)
 
-          hW.update(r, c, h)
-          w.update(r, c, x - d * (rate / Math.sqrt(h)).toFloat)
-        }
+        val arate: ScalarMatrix = rate / sqrt(hW)
+        val dw: ScalarMatrix = d :* arate
+        w -= dw
     }
   }
 }
@@ -220,18 +214,15 @@ class StochasticGradientDescent(rate: Scalar = 0.03f,
         val deltaW = delta(id)
         val hW = if (momentum > 0) lastDelta(id) else null
 
-        w foreachPair {
-          case ((r, c), x) ⇒
-            val l1 = if (x > 0) l1decay else if (x < 0) -l1decay else 0.0f
-            val d = (l2decay * 2 * x + l1 + deltaW(r, c)) * rate
-            deltaW.update(r, c, 0f)
-            if (hW != null) {
-              val dw = -d + hW(r, c) * momentum
-              w.update(r, c, x + dw)
-              hW.update(r, c, dw)
-            } else {
-              w.update(r, c, x - d)
-            }
+        val l1: ScalarMatrix = signum(w) * l1decay
+        val l2: ScalarMatrix = (l2decay * 2) * w
+        val d = l1 + l2 + deltaW
+        if (hW != null) {
+          hW *= momentum
+          hW -= d
+          w -= hW
+        } else {
+          w -= d
         }
     }
   }

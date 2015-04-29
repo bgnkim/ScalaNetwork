@@ -18,7 +18,7 @@ class StackedAutoEncoder(val encoders: Seq[AutoEncoder]) extends Network {
    */
   override val dW: IndexedSeq[ScalarMatrix] = {
     val matrices = ArrayBuffer[ScalarMatrix]()
-    encoders.flatMap(_.dW).foreach(matrices.append(_))
+    encoders.flatMap(_.dW).foreach(matrices += _)
     matrices
   }
 
@@ -29,7 +29,7 @@ class StackedAutoEncoder(val encoders: Seq[AutoEncoder]) extends Network {
    */
   override val W: IndexedSeq[ScalarMatrix] = {
     val matrices = ArrayBuffer[ScalarMatrix]()
-    encoders.flatMap(_.W).foreach(matrices.append(_))
+    encoders.flatMap(_.W).foreach(matrices += _)
     matrices
   }
 
@@ -67,7 +67,7 @@ class StackedAutoEncoder(val encoders: Seq[AutoEncoder]) extends Network {
    * @param x input matrix
    * @return output matrix
    */
-  protected[deep] override def into_:(x: ScalarMatrix): ScalarMatrix = {
+  override def into_:(x: ScalarMatrix): ScalarMatrix = {
     var i = 0
     var in = x
     while (i < encoders.size) {
@@ -82,7 +82,7 @@ class StackedAutoEncoder(val encoders: Seq[AutoEncoder]) extends Network {
    *
    * @param err backpropagated error from error function
    */
-  protected[deep] override def updateBy(err: ScalarMatrix): ScalarMatrix = {
+  override def updateBy(err: ScalarMatrix): ScalarMatrix = {
     var i = encoders.size - 1
     var x = err
     while (i >= 0) {

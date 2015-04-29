@@ -23,7 +23,7 @@ package object fn {
    */
   implicit class ScalarMatrixOp(x: ScalarMatrix) {
     /**
-     * Add __given scalar__ to last row.
+     * Append __given scalar__ to last row.
      *
      * @param y a __scalar__ to be added
      */
@@ -33,7 +33,7 @@ package object fn {
     }
 
     /**
-     * Add __given matrix__ to last rows.
+     * Append __given matrix__ to last rows.
      *
      * @param y a __matrix__ to be added
      */
@@ -42,7 +42,7 @@ package object fn {
     }
 
     /**
-     * Add __given matrix__ to last columns.
+     * Append __given matrix__ to last columns.
      *
      * @param y a __matrix__ to be added
      */
@@ -127,6 +127,7 @@ package object fn {
      * @param w2 __matrix sequence__ to be added onto.
      * @return added matrices
      */
+    @deprecated
     def copy_+(w2: IndexedSeq[ScalarMatrix]) =
       if (w2.isEmpty) copy
       else {

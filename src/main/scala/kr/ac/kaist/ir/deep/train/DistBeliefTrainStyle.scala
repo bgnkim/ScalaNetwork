@@ -115,59 +115,21 @@ class DistBeliefTrainStyle[IN: ClassTag, OUT: ClassTag](net: Network,
    * Do mini-batch
    */
   override def batch(): Unit = {
-    val rddSet = trainingSet.sample(withReplacement = true, fraction = trainingFraction).repartition(param.numCores)
-    val trainPair = if(negOutUniverse != null){
-      negPartitioner.refreshRandom()
-      negOutUniverse.sample(withReplacement = true, fraction = negFraction)
-        .partitionBy(negPartitioner)
-        .zipPartitions(rddSet) {
-        (itNeg, itPair) ⇒
-          itPair.map{
-            pair ⇒
-              val seq = ArrayBuffer[OUT]()
-              seq.sizeHint(param.negSamplingRatio)
+    val x = if (trainingFraction > 0) {
+      val rddSet = trainingSet.sample(withReplacement = true, fraction = trainingFraction).repartition(param.numCores)
 
-              while (seq.size < param.negSamplingRatio && itNeg.hasNext) {
-                seq += itNeg.next()._2
-              }
+      val x = rddSet foreachPartitionAsync partFunction
+      batchFlag += x
 
-              (pair._1, pair._2, seq)
-          }
+      x.onComplete {
+        _ ⇒ rddSet.unpersist()
       }
-    }else rddSet.map(p ⇒ (p._1, p._2, Seq.empty[OUT]))
+      x
+    } else {
+      val x = trainingSet foreachPartitionAsync partFunction
+      batchFlag += x
 
-    val x = trainPair.foreachPartitionAsync {
-      part ⇒
-        val netCopy = bcNet.value.copy
-        var count = 0
-
-        val f = Future.traverse(part) {
-          pair ⇒
-            count += 1
-
-            future {
-              make.roundTrip(netCopy, make corrupted pair._1, pair._2)
-
-              var samples = pair._3
-              while (samples.nonEmpty) {
-                val neg = samples.head
-                samples = samples.tail
-
-                if (make.different(neg, pair._2))
-                  make.roundTrip(netCopy, make corrupted pair._1, neg, isPositive = false)
-              }
-            }
-        }
-
-        AsyncAwait.ready(f, 1.second)
-        accCount += count
-        accNet += netCopy.dW
-    }
-
-    batchFlag += x
-
-    x.onComplete {
-      _ ⇒ rddSet.unpersist()
+      x
     }
 
     try {
@@ -175,5 +137,25 @@ class DistBeliefTrainStyle[IN: ClassTag, OUT: ClassTag](net: Network,
     } catch {
       case _: Throwable ⇒
     }
+  }
+
+  private final def partFunction: (Iterator[(IN, OUT)]) ⇒ Unit = {
+    part ⇒
+      val netCopy = bcNet.value.copy
+      var count = 0
+
+      val f = future {
+        while (part.hasNext) {
+          val pair = part.next()
+          count += 1
+
+          make.roundTrip(netCopy, make corrupted pair._1, pair._2)
+        }
+
+        accCount += count
+        accNet += netCopy.dW
+      }
+
+      AsyncAwait.ready(f, 1.second)
   }
 }

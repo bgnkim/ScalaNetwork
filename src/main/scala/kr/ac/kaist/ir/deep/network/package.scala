@@ -43,7 +43,7 @@ package object network {
      *
      * @param err backpropagated error from error function
      */
-    protected[deep] def updateBy(err: ScalarMatrix): ScalarMatrix
+    def updateBy(err: ScalarMatrix): ScalarMatrix
 
     /**
      * Forward computation for training
@@ -51,7 +51,7 @@ package object network {
      * @param x input matrix
      * @return output matrix
      */
-    protected[deep] def into_:(x: ScalarMatrix): ScalarMatrix
+    def into_:(x: ScalarMatrix): ScalarMatrix
 
     /**
      * Sugar: Forward computation for validation. Calls apply(x)
@@ -59,7 +59,7 @@ package object network {
      * @param x input matrix
      * @return output matrix
      */
-    protected[deep] def of(x: ScalarMatrix): ScalarMatrix = apply(x)
+    def of(x: ScalarMatrix): ScalarMatrix = apply(x)
   }
 
   /**

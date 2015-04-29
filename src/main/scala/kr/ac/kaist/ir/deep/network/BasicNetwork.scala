@@ -58,7 +58,7 @@ class BasicNetwork(val layers: IndexedSeq[Layer])
    *
    * @param err backpropagated error from error function
    */
-  protected[deep] override def updateBy(err: ScalarMatrix) = {
+  override def updateBy(err: ScalarMatrix) = {
     var id = layers.size - 1
     var error = err
     while (id >= 0) {
@@ -82,7 +82,7 @@ class BasicNetwork(val layers: IndexedSeq[Layer])
    * @param x input matrix
    * @return output matrix
    */
-  protected[deep] override def into_:(x: ScalarMatrix): ScalarMatrix = {
+  override def into_:(x: ScalarMatrix): ScalarMatrix = {
     // We have to store this value
     var id = 0
     input = x.copy +: input
