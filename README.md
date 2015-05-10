@@ -1,4 +1,4 @@
-ScalaNetwork 0.10.3
+ScalaNetwork 1.0.0
 ====================
 
 A *Neural Network implementation* with Scala, [Breeze](https://github.com/scalanlp/breeze) & [Spark](http://spark.apache.org)
@@ -49,6 +49,8 @@ ScalaNetwork supports following activation functions:
 * HardSigmoid
 * HardTanh
 
+And also you can make new activation function using several operations.
+
 # Usage
 
 Here is some examples for basic usage. If you want to extend this package or use it more precisely, please refer [ScalaDoc](http://nearbydelta.github.io/ScalaNetwork/api/#kr.ac.kaist.ir.deep.package)
@@ -57,12 +59,12 @@ Here is some examples for basic usage. If you want to extend this package or use
 
 Currently ScalaNetwork supports Scala version 2.10 ~ 2.11.
 
-* Stable Release is 0.10.3
+* Stable Release is 1.0.0
  
 If you are using SBT, add a dependency as described below:
 
 ```scala
-libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "0.10.3"
+libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "1.0.0"
 ```
 
 If you are using Maven, add a dependency as described below:
@@ -70,7 +72,7 @@ If you are using Maven, add a dependency as described below:
 <dependency>
   <groupId>kr.ac.kaist.ir</groupId>
   <artifactId>scalanetwork_${your.scala.version}</artifactId>
-  <version>0.10.1</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
@@ -80,7 +82,7 @@ If you are using Maven, add a dependency as described below:
 ```scala
 // Define 2 -> 4 -> 1 Layered, Fully connected network.
 val net = Network(Sigmoid, 2, 4, 1)
-// Define Manipulation Type. VectorType, AEType, RAEType, StandardRAEType, and URAEType.
+// Define Manipulation Type. VectorType, AEType, RAEType, StandardRAEType, URAEType, and StringToVectorType
 val operation = new VectorType(
    corrupt = GaussianCorruption(variance = 0.1)
 )
@@ -157,9 +159,9 @@ new AdaDelta(l1decay=0.0, l2decay=0.0001, decay=0.95, epsilon=1e-6)
 ```scala
 /* Training Criteria */
 import scala.concurrent.duration._
-SimpleTrainingCriteria(miniBatch=100, validationSize=20, negSamplingRatio=0)
-DistBeliefCriteria(miniBatch=100, validationSize=20, negSamplingRatio=0, submitInterval=1.seconds,
-  updateStep=2, fetchStep=10, numCores=1)
+SimpleTrainingCriteria(miniBatch=100, validationSize=20)
+DistBeliefCriteria(miniBatch=100, validationSize=20, submitInterval=1.seconds,
+  updateStep=2, fetchStep=10, numCores=1, repartitionOnStart = true, storageLevel = StorageLevel.MEMORY_ONLY)
 ```
 
 Validation size sets the number of elements used for validation phrase.
@@ -193,6 +195,9 @@ new StandardRAEType(corrupt, objective)
 // Experimental: Train network as URAE style. 
 // With same structure, network should reconstruct all leaves from root.
 new URAEType(corrupt, objective)
+
+/* Manipulation Type : String input, Vector output */
+new StringToVectorType(model, objective)
 ```
 
 ### Training Style
@@ -200,9 +205,9 @@ You can choose the training style of the network.
 
 ```scala
 /* Styles */
-new SingleThreadTrainStyle(net, algorithm, mnpl:ManipulationType, param)
-new MultiThreadTrainStyle(net, sparkContext, algorithm, mnpl:ManipulationType, param:DistBeliefCriteria)
-new DistBeliefTrainStyle(net, sparkContext, algorithm, mnpl:ManipulationType, param:DistBeliefCriteria)
+new SingleThreadTrainStyle(net, algorithm, make:ManipulationType, param)
+new MultiThreadTrainStyle(net, sparkContext, algorithm, make:ManipulationType, param:DistBeliefCriteria)
+new DistBeliefTrainStyle(net, sparkContext, algorithm, make:ManipulationType, param:DistBeliefCriteria)
 ```
 
 ### Training

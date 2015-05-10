@@ -87,9 +87,9 @@ class DistBeliefTrainStyle[IN: ClassTag, OUT: ClassTag](net: Network,
           stopUntilBatchFinished()
 
           val dWUpdate = accNet.value
-          accNet.setValue(accNet.zero)
+          accNet.setValue(WeightAccumulator.zero(accNet.zero))
           val count = accCount.value
-          accCount.setValue(accCount.zero)
+          accCount.setValue(0)
 
           dWUpdate :/= count.toFloat
           net.W -= dWUpdate

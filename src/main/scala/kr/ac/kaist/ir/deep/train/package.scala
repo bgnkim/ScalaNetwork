@@ -121,12 +121,12 @@ package object train {
    * @note We recommend set numCores as similar as possible with allocated spark v-cores.
    */
   case class DistBeliefCriteria(override val miniBatch: Int = 100,
-                                submitInterval: Duration = 1.minute,
+                                submitInterval: Duration = 30.seconds,
                                 updateStep: Int = 2,
                                 fetchStep: Int = 10,
                                 numCores: Int = 1,
-                                repartitionOnStart: Boolean = false,
-                                storageLevel: StorageLevel = StorageLevel.DISK_ONLY_2) extends TrainingCriteria
+                                repartitionOnStart: Boolean = true,
+                                storageLevel: StorageLevel = StorageLevel.MEMORY_ONLY) extends TrainingCriteria
 
   /**
    * Accumulator Param object for DistBelief Train Style.

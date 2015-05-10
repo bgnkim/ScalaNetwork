@@ -1,22 +1,36 @@
 package kr.ac.kaist.ir.deep.wordvec
 
-import java.io.StringReader
+import java.util
 
-import edu.stanford.nlp.process.PTBTokenizer.PTBTokenizerFactory
-import kr.ac.kaist.ir.deep.wordvec.WordModel
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.{Logging, SparkConf, SparkContext}
+import org.apache.log4j._
 
 import scala.collection.JavaConversions._
-import scala.collection.immutable.HashSet
 
 /**
  * Train Word2Vec and save the model.
  */
 object PrepareCorpus extends Logging {
-  var threshold = 5
+  {
+    // Initialize Network Logging
+    val PATTERN = "%d{yy/MM/dd HH:mm:ss} %p %C{2}: %m%n"
+    val orgFile = new RollingFileAppender(new PatternLayout(PATTERN), "spark.log")
+    orgFile.setMaxFileSize("1MB")
+    orgFile.setMaxBackupIndex(5)
+    val root = Logger.getRootLogger
+    root.addAppender(orgFile)
+    root.setLevel(Level.WARN)
+    root.setAdditivity(false)
+    val krFile = new RollingFileAppender(new PatternLayout(PATTERN), "trainer.log")
+    krFile.setMaxFileSize("1MB")
+    krFile.setMaxBackupIndex(10)
+    val kr = Logger.getLogger("kr.ac")
+    kr.addAppender(krFile)
+    kr.setLevel(Level.INFO)
+  }
 
   /**
    * Main thread.
@@ -32,8 +46,11 @@ object PrepareCorpus extends Logging {
           | -o	Path of tokenized output text file.
           |
           |== Arguments with default ==
-          | --thre	Minimum include count. (Default: 5)
+          | --srlz	Local Path of Serialized Language Filter file. (Default: filter.dat)
+          | --thre	Minimum include count. (Default: 3)
           | --part	Number of partitios. (Default: organized by Spark)
+          | --lang	Accepted Language Area of Unicode. (Default: \\\\u0000-\\\\u007f)
+          |       	For Korean: 가-힣|\\\\u0000-\\\\u007f
           |
           |== Additional Arguments ==
           | --help	Display this help message.
@@ -44,27 +61,33 @@ object PrepareCorpus extends Logging {
         .setAppName("Normalize Infrequent words")
         .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
         .set("spark.scheduler.mode", "FAIR")
-        .set("spark.shuffle.memoryFraction", "0.075")
-        .set("spark.storage.unrollFraction", "0.075")
-        .set("spark.storage.memoryFraction", "0.85")
+        .set("spark.shuffle.memoryFraction", "0.05")
+        .set("spark.storage.unrollFraction", "0.05")
+        .set("spark.storage.memoryFraction", "0.9")
+        .set("spark.broadcast.blockSize", "40960")
+        .set("spark.akka.frameSize", "50")
+        .set("spark.locality.wait", "10000")
       val sc = new SparkContext(conf)
       sc.setLocalProperty("spark.scheduler.pool", "production")
 
-      val in = getArgument(args, "-i", "article.txt")
-      val out = getArgument(args, "-o", "article-preproc.txt")
-
-      threshold = getArgument(args, "--thre", "5").toInt
+      val langArea = getArgument(args, "--lang", "\\u0000-\\u007f")
+      val langFilter = LangFilter(langArea)
+      val bcFilter = sc.broadcast(langFilter)
+      langFilter.saveAs(getArgument(args, "--srlz", "filter.dat"))
+      logInfo(s"Language filter created : $langArea")
 
       // read file
+      val in = getArgument(args, "-i", "article.txt")
       val parts = getArgument(args, "--part", "1").toInt
       val lines = sc.textFile(in, parts).filter(_.trim.nonEmpty)
-      val input = getInput(lines)
+      val tokens = tokenize(lines, bcFilter)
 
-      val freqWords = getWords(input.flatMap(x ⇒ x))
-      val freqSet = sc.broadcast(freqWords)
-      val output = getOutput(input, freqSet).cache()
+      val threshold = getArgument(args, "--thre", "3").toInt
+      val infreqWords = infrequentWords(tokens.flatMap(x ⇒ x), threshold)
+      val infreqSet = sc.broadcast(infreqWords)
 
-      output.map(_.mkString(" ")).saveAsTextFile(out)
+      val out = getArgument(args, "-o", "article-preproc.txt")
+      normalizedTokens(tokens, infreqSet).saveAsTextFile(out)
 
       // Stop the context
       sc.stop()
@@ -88,9 +111,18 @@ object PrepareCorpus extends Logging {
    * @param words Word seq.
    * @return HashSet of frequent words.
    */
-  def getWords(words: RDD[String]) = {
-    val set = words.countByValue().filter(_._2 >= threshold).keySet
-    HashSet.newBuilder[String].++=(set).result()
+  def infrequentWords(words: RDD[String], threshold: Int) = {
+    val counts = words.countByValue()
+    val above = counts.count(_._2 >= threshold)
+    val set = counts.filter(_._2 < threshold).keySet
+    val value = new util.HashSet[String]()
+    value ++= set
+
+    val all = above + set.size
+    val ratio = Math.round(set.size.toFloat / all * 100)
+    logInfo(s"Total $all distinct words, ${set.size} words($ratio%) will be discarded.")
+
+    value
   }
 
   /**
@@ -98,66 +130,35 @@ object PrepareCorpus extends Logging {
    * @param lines Input lines
    * @return tokenized & normalized lines.
    */
-  def getInput(lines: RDD[String]) =
-    lines.mapPartitions {
-      @transient lazy val tokenizer = PTBTokenizerFactory.newWordTokenizerFactory("untokenizable=noneKeep")
-      // Tokenize paragraph.
-      // Simple split can work, but it causes the situation "ABC" != "ABC.".
-      _.map {
-        para ⇒
-          val tokens = tokenizer.getTokenizer(new StringReader(para.trim))
-            .tokenize()
-          val array = new Array[String](tokens.size())
-
-          var i = tokens.size() - 1
-          while (i >= 0) {
-            val value = tokens(i).value
-
-            // Replace real numbers as "#REAL", because real number has too much diversity.
-            // Natural numbers are not replaced, because they sometimes have meanings.
-            array(i) =
-              if (value.matches("^[0-9]+\\.[0-9]+$")) {
-                WordModel.REALNUM
-              } else if (value.startsWith("#") || value.startsWith("@")) {
-                //Since stanford parser preserves hashtag-like entries, remove that symbol.
-                value.replaceAll("^[#|@]+", "")
-              } else value
-
-            i -= 1
-          }
-
-          array
-      }
-    }.persist(StorageLevel.DISK_ONLY_2)
+  def tokenize(lines: RDD[String], bcFilter: Broadcast[_ <: WordFilter]) =
+    lines.map(bcFilter.value.tokenize).persist(StorageLevel.DISK_ONLY_2)
 
   /**
    * Convert tokenized string into a sentence, with appropriate conversion of (Threshold - 1) count word.
    * @param input Tokenized input sentence
-   * @param freqSet Frequent words
+   * @param infreqSet Less Frequent words
    * @return Tokenized converted sentence
    */
-  def getOutput(input: RDD[Array[String]], freqSet: Broadcast[HashSet[String]]) =
+  def normalizedTokens(input: RDD[_ <: Seq[String]], infreqSet: Broadcast[util.HashSet[String]]) =
     input.mapPartitions {
+      lazy val set = infreqSet.value
+
       _.map {
-        array ⇒
-          var i = array.size - 1
+        seq ⇒
+          val it = seq.iterator
+          val buf = StringBuilder.newBuilder
 
-          while (i >= 0) {
-            val word = array(i)
-            if (!freqSet.value.contains(word)) {
-              if (word.matches("^[0-9]+$")) {
-                array(i) = WordModel.NUMBERS_UNK
-              } else if (word.matches("[\u00c0-\u01ff]")) {
-                array(i) = WordModel.FOREIGN_UNK
-              } else {
-                array(i) = WordModel.OTHER_UNK
-              }
+          while(it.hasNext){
+            val word = it.next()
+            if (set contains word){
+              buf.append(WordModel.OTHER_UNK)
+            }else{
+              buf.append(word)
             }
-
-            i -= 1
+            buf.append(' ')
           }
 
-          array
+          buf.result()
       }
     }
 }

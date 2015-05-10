@@ -30,7 +30,7 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
                                                          override val param: DistBeliefCriteria = DistBeliefCriteria())
   extends TrainStyle[IN, OUT] {
   /** Accumulator variable for networks */
-  protected val accNet = sc.accumulator(net.dW)
+  protected val accNet = sc.accumulator(net.dW)(WeightAccumulator)
   /** Accumulator variable for counter */
   protected val accCount = sc.accumulator(0)
   /** Training set */
@@ -60,8 +60,8 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
    * @param iter current iteration
    */
   override def fetch(iter: Int): Unit = {
-    accNet.setValue(accNet.zero)
-    accCount.setValue(accCount.zero)
+    accNet.value.map(_ := 0f)
+    accCount.setValue(0)
   }
 
   /**
