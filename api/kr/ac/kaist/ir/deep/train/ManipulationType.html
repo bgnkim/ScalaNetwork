@@ -46,7 +46,7 @@
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="AEType.html" class="extype" name="kr.ac.kaist.ir.deep.train.AEType">AEType</a>, <a href="RAEType.html" class="extype" name="kr.ac.kaist.ir.deep.train.RAEType">RAEType</a>, <a href="StandardRAEType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StandardRAEType">StandardRAEType</a>, <a href="../wordvec/StringToStringType.html" class="extype" name="kr.ac.kaist.ir.deep.wordvec.StringToStringType">StringToStringType</a>, <a href="StringToVectorType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StringToVectorType">StringToVectorType</a>, <a href="StringType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StringType">StringType</a>, <a href="TreeType.html" class="extype" name="kr.ac.kaist.ir.deep.train.TreeType">TreeType</a>, <a href="URAEType.html" class="extype" name="kr.ac.kaist.ir.deep.train.URAEType">URAEType</a>, <a href="VectorType.html" class="extype" name="kr.ac.kaist.ir.deep.train.VectorType">VectorType</a></div>
+          <div class="subClasses hiddenContent"><a href="AEType.html" class="extype" name="kr.ac.kaist.ir.deep.train.AEType">AEType</a>, <a href="RAEType.html" class="extype" name="kr.ac.kaist.ir.deep.train.RAEType">RAEType</a>, <a href="StandardRAEType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StandardRAEType">StandardRAEType</a>, <a href="../wordvec/StringToVectorType.html" class="extype" name="kr.ac.kaist.ir.deep.wordvec.StringToVectorType">StringToVectorType</a>, <a href="../wordvec/StringType.html" class="extype" name="kr.ac.kaist.ir.deep.wordvec.StringType">StringType</a>, <a href="TreeType.html" class="extype" name="kr.ac.kaist.ir.deep.train.TreeType">TreeType</a>, <a href="URAEType.html" class="extype" name="kr.ac.kaist.ir.deep.train.URAEType">URAEType</a>, <a href="VectorType.html" class="extype" name="kr.ac.kaist.ir.deep.train.VectorType">VectorType</a></div>
         </div></div>
         
 
@@ -162,20 +162,20 @@
 </p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">x</dt><dd class="cmt"><p>input to be computed</p></dd><dt>returns</dt><dd class="cmt"><p>output of the network.
 </p></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#roundTrip" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="roundTrip(net:kr.ac.kaist.ir.deep.network.Network,in:IN,real:OUT,isPositive:Boolean):Unit"></a>
-      <a id="roundTrip(Network,IN,OUT,Boolean):Unit"></a>
+      <a id="roundTrip(net:kr.ac.kaist.ir.deep.network.Network,in:IN,real:OUT):Unit"></a>
+      <a id="roundTrip(Network,IN,OUT):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">roundTrip</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="in">in: <span class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType.IN">IN</span></span>, <span name="real">real: <span class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType.OUT">OUT</span></span>, <span name="isPositive">isPositive: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">roundTrip</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="in">in: <span class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType.IN">IN</span></span>, <span name="real">real: <span class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType.OUT">OUT</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Apply &amp; Back-prop given single input
 </p><div class="fullcomment"><div class="comment cmt"><p>Apply &amp; Back-prop given single input
-</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">in</dt><dd class="cmt"><p>Input for error computation.</p></dd><dt class="param">real</dt><dd class="cmt"><p>Real output for error computation.</p></dd><dt class="param">isPositive</dt><dd class="cmt"><p>Boolean that indicates whether this example is positive or not.
+</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">in</dt><dd class="cmt"><p>Input for error computation.</p></dd><dt class="param">real</dt><dd class="cmt"><p>Real output for error computation.
 </p></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#stringOf" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="stringOf(net:kr.ac.kaist.ir.deep.network.Network,in:(IN,OUT)):String"></a>

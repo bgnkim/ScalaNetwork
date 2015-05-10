@@ -417,20 +417,20 @@
 </p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">x</dt><dd class="cmt"><p>input to be computed</p></dd><dt>returns</dt><dd class="cmt"><p>output of the network.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.VectorType">VectorType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.VectorType#roundTrip" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="roundTrip(net:kr.ac.kaist.ir.deep.network.Network,in:kr.ac.kaist.ir.deep.fn.ScalarMatrix,real:kr.ac.kaist.ir.deep.fn.ScalarMatrix,isPositive:Boolean):Unit"></a>
-      <a id="roundTrip(Network,ScalarMatrix,ScalarMatrix,Boolean):Unit"></a>
+      <a id="roundTrip(net:kr.ac.kaist.ir.deep.network.Network,in:kr.ac.kaist.ir.deep.fn.ScalarMatrix,real:kr.ac.kaist.ir.deep.fn.ScalarMatrix):Unit"></a>
+      <a id="roundTrip(Network,ScalarMatrix,ScalarMatrix):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">roundTrip</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="in">in: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>, <span name="real">real: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>, <span name="isPositive">isPositive: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">roundTrip</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="in">in: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>, <span name="real">real: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Apply &amp; Back-prop given single input
 </p><div class="fullcomment"><div class="comment cmt"><p>Apply &amp; Back-prop given single input
-</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">in</dt><dd class="cmt"><p>Input for error computation.</p></dd><dt class="param">real</dt><dd class="cmt"><p>Real Output for error computation.</p></dd><dt class="param">isPositive</dt><dd class="cmt"><p>Boolean that indicates whether this example is positive or not.
+</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">in</dt><dd class="cmt"><p>Input for error computation.</p></dd><dt class="param">real</dt><dd class="cmt"><p>Real Output for error computation.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.VectorType">VectorType</a> → <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.VectorType#stringOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="stringOf(net:kr.ac.kaist.ir.deep.network.Network,pair:(kr.ac.kaist.ir.deep.fn.ScalarMatrix,kr.ac.kaist.ir.deep.fn.ScalarMatrix)):String"></a>

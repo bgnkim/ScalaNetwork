@@ -89,7 +89,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">SingleThreadTrainStyle</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="algorithm">algorithm: <a href="../fn/WeightUpdater.html" class="extype" name="kr.ac.kaist.ir.deep.fn.WeightUpdater">WeightUpdater</a></span>, <span name="make">make: <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<span class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle.OUT">OUT</span>] = <span class="defval" name="new VectorType(train.this.VectorType.&lt;init&gt;$default$1, train.this.VectorType.&lt;init&gt;$default$2)">...</span></span>, <span name="param">param: <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> = <span class="defval" name="train.this.`package`.SimpleTrainingCriteria.apply(train.this.`package`.SimpleTrainingCriteria.apply$default$1, train.this.`package`.SimpleTrainingCriteria.apply$default$2)">...</span></span>)</span>
+        <span class="name">SingleThreadTrainStyle</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="algorithm">algorithm: <a href="../fn/WeightUpdater.html" class="extype" name="kr.ac.kaist.ir.deep.fn.WeightUpdater">WeightUpdater</a></span>, <span name="make">make: <a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<span class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle.OUT">OUT</span>] = <span class="defval" name="new VectorType(train.this.VectorType.&lt;init&gt;$default$1, train.this.VectorType.&lt;init&gt;$default$2)">...</span></span>, <span name="param">param: <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> = <span class="defval" name="train.this.`package`.SimpleTrainingCriteria.apply(train.this.`package`.SimpleTrainingCriteria.apply$default$1)">...</span></span>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p><u>Network</u> to be trained</p></dd><dt class="param">algorithm</dt><dd class="cmt"><p>Weight <u>update algorithm</u> to be applied</p></dd><dt class="param">make</dt><dd class="cmt"><p><u>Input Operation</u> that supervises how to manipulate input as matrices.
@@ -495,34 +495,6 @@
       <p class="shortcomment cmt"><u>Training criteria</u> (default: <a href="package$$SimpleTrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria">SimpleTrainingCriteria</a>)
 </p><div class="fullcomment"><div class="comment cmt"><p><u>Training criteria</u> (default: <a href="package$$SimpleTrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria">SimpleTrainingCriteria</a>)
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle">SingleThreadTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle#setNegativeTrainingReference" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setNegativeTrainingReference(set:org.apache.spark.rdd.RDD[OUT]):Unit"></a>
-      <a id="setNegativeTrainingReference(RDD[OUT]):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">setNegativeTrainingReference</span><span class="params">(<span name="set">set: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle.OUT">OUT</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Set negative sampling method.</p><div class="fullcomment"><div class="comment cmt"><p>Set negative sampling method.</p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>all training outputs that will be used for negative training
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle">SingleThreadTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle#setNegativeTrainingReference" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setNegativeTrainingReference(set:Seq[OUT]):Unit"></a>
-      <a id="setNegativeTrainingReference(Seq[OUT]):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">setNegativeTrainingReference</span><span class="params">(<span name="set">set: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle.OUT">OUT</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Set negative sampling method.</p><div class="fullcomment"><div class="comment cmt"><p>Set negative sampling method.</p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>all training outputs that will be used for negative training
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle">SingleThreadTrainStyle</a> → <a href="TrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainStyle">TrainStyle</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle#setPositiveTrainingReference" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setPositiveTrainingReference(set:org.apache.spark.rdd.RDD[(IN,OUT)]):Unit"></a>
       <a id="setPositiveTrainingReference(RDD[(IN,OUT)]):Unit"></a>

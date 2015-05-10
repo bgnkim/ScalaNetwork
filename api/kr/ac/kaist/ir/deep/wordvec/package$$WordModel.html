@@ -80,7 +80,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="kr.ac.kaist.ir.deep.wordvec.WordModel#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(map:Map[String,Array[kr.ac.kaist.ir.deep.fn.Scalar]]):kr.ac.kaist.ir.deep.wordvec.package.WordModel"></a>
+      <a id="&lt;init&gt;(map:java.util.HashMap[String,Array[kr.ac.kaist.ir.deep.fn.Scalar]]):kr.ac.kaist.ir.deep.wordvec.package.WordModel"></a>
       <a id="&lt;init&gt;:WordModel"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -88,7 +88,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">WordModel</span><span class="params">(<span name="map">map: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Array">Array</span>[<a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>]]</span>)</span>
+        <span class="name">WordModel</span><span class="params">(<span name="map">map: <span class="extype" name="java.util.HashMap">HashMap</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Array">Array</span>[<a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>]]</span>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">map</dt><dd class="cmt"><p>Mapping between String to Array[Coord]
@@ -167,58 +167,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel#FOREIGN_VEC" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FOREIGN_VEC:kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
-      <a id="FOREIGN_VEC:ScalarMatrix"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">FOREIGN_VEC</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
-      </span>
-      </h4>
-      
-    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel#NUM_VEC" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NUM_VEC:kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
-      <a id="NUM_VEC:ScalarMatrix"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">NUM_VEC</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
-      </span>
-      </h4>
-      
-    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel#OTHER_VEC" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="OTHER_VEC:kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
-      <a id="OTHER_VEC:ScalarMatrix"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">OTHER_VEC</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
-      </span>
-      </h4>
-      
-    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel#REAL_VEC" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="REAL_VEC:kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
-      <a id="REAL_VEC:ScalarMatrix"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">REAL_VEC</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
-      </span>
-      </h4>
-      
     </li><li name="scala.Function1#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="andThen[A&lt;:&lt;?&gt;](g:&lt;?&gt;):T1=&gt;A"></a>
       <a id="andThen[A]((ScalarMatrix)⇒A):(String)⇒A"></a>
@@ -297,6 +245,20 @@
                 <span class="name">@unspecialized</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel#contains" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="contains(word:String):Boolean"></a>
+      <a id="contains(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">contains</span><span class="params">(<span name="word">word: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Check existance of given word</p><div class="fullcomment"><div class="comment cmt"><p>Check existance of given word</p></div><dl class="paramcmts block"><dt class="param">word</dt><dd class="cmt"><p>Word string for search</p></dd><dt>returns</dt><dd class="cmt"><p>True if it is in the list
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -381,30 +343,44 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel#isUnknown" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="isUnknown(word:String):Boolean"></a>
-      <a id="isUnknown(String):Boolean"></a>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel#loadFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="loadFilter(file:scala.reflect.io.File):WordModel.this.type"></a>
+      <a id="loadFilter(File):WordModel.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isUnknown</span><span class="params">(<span name="word">word: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">loadFilter</span><span class="params">(<span name="file">file: <span class="extype" name="scala.reflect.io.File">File</span></span>)</span><span class="result">: <a href="" class="extype" name="kr.ac.kaist.ir.deep.wordvec.WordModel">WordModel</a>.this.type</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Check whether given word mapping is UNKNOWN in Word2Vec model, or not.</p><div class="fullcomment"><div class="comment cmt"><p>Check whether given word mapping is UNKNOWN in Word2Vec model, or not.</p></div><dl class="paramcmts block"><dt class="param">word</dt><dd class="cmt"><p>String for check</p></dd><dt>returns</dt><dd class="cmt"><p>True if word is unknown.
+      <p class="shortcomment cmt">Load Word Filter</p><div class="fullcomment"><div class="comment cmt"><p>Load Word Filter</p></div><dl class="paramcmts block"><dt class="param">file</dt><dd class="cmt"><p>File where Serialized Filter saved
+</p></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel#loadFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="loadFilter(path:scala.reflect.io.Path):WordModel.this.type"></a>
+      <a id="loadFilter(Path):WordModel.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loadFilter</span><span class="params">(<span name="path">path: <span class="extype" name="scala.reflect.io.Path">Path</span></span>)</span><span class="result">: <a href="" class="extype" name="kr.ac.kaist.ir.deep.wordvec.WordModel">WordModel</a>.this.type</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Load Word Filter</p><div class="fullcomment"><div class="comment cmt"><p>Load Word Filter</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path where Serialized Filter saved
 </p></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel#map" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="map:Map[String,Array[kr.ac.kaist.ir.deep.fn.Scalar]]"></a>
-      <a id="map:Map[String,Array[Scalar]]"></a>
+      <a id="map:java.util.HashMap[String,Array[kr.ac.kaist.ir.deep.fn.Scalar]]"></a>
+      <a id="map:HashMap[String,Array[Scalar]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">map</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Array">Array</span>[<a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>]]</span>
+        <span class="name">map</span><span class="result">: <span class="extype" name="java.util.HashMap">HashMap</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Array">Array</span>[<a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>]]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Mapping between String to Array[Coord]
@@ -476,6 +452,20 @@
       </h4>
       <p class="shortcomment cmt">Write model into given path.</p><div class="fullcomment"><div class="comment cmt"><p>Write model into given path.</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path where to store.
 </p></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel#setFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setFilter(newFilter:kr.ac.kaist.ir.deep.wordvec.package.WordFilter):Unit"></a>
+      <a id="setFilter(WordFilter):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setFilter</span><span class="params">(<span name="newFilter">newFilter: <a href="package$$WordFilter.html" class="extype" name="kr.ac.kaist.ir.deep.wordvec.WordFilter">WordFilter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Set Word Filter</p><div class="fullcomment"><div class="comment cmt"><p>Set Word Filter</p></div><dl class="paramcmts block"><dt class="param">newFilter</dt><dd class="cmt"><p>Filter to be set
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -502,6 +492,34 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1 → AnyRef → Any</dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel#tokenize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tokenize(str:String):scala.collection.mutable.WrappedArray[String]"></a>
+      <a id="tokenize(String):WrappedArray[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tokenize</span><span class="params">(<span name="str">str: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.mutable.WrappedArray">WrappedArray</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Tokenize given string using word filter</p><div class="fullcomment"><div class="comment cmt"><p>Tokenize given string using word filter</p></div><dl class="paramcmts block"><dt class="param">str</dt><dd class="cmt"><p>String to tokenize</p></dd><dt>returns</dt><dd class="cmt"><p>Tokenized string (WrappedArray)
+</p></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel#tokenizeAndApply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tokenizeAndApply(str:String):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
+      <a id="tokenizeAndApply(String):ScalarMatrix"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tokenizeAndApply</span><span class="params">(<span name="str">str: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Tokenize given string and take average vector of them</p><div class="fullcomment"><div class="comment cmt"><p>Tokenize given string and take average vector of them</p></div><dl class="paramcmts block"><dt class="param">str</dt><dd class="cmt"><p>String to compute</p></dd><dt>returns</dt><dd class="cmt"><p>Average word embedding of given string.
+</p></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel#vectorSize" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="vectorSize:Int"></a>
       <a id="vectorSize:Int"></a>

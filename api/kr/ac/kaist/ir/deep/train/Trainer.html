@@ -449,21 +449,6 @@ train.train(set, valid)</pre></li></ol>
 </p><div class="fullcomment"><div class="comment cmt"><p>Store best parameters
 </p></div><dl class="paramcmts block"><dt class="param">epoch</dt><dd class="cmt"><p>current iteration epoch. (1 iteration = 1 validation freq)</p></dd><dt class="param">loss</dt><dd class="cmt"><p>previous loss</p></dd><dt class="param">patience</dt><dd class="cmt"><p>current patience, i.e. loop until at least this epoch.
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.Trainer#setNegativeTrainingReference" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setNegativeTrainingReference(set:org.apache.spark.rdd.RDD[OUT]):Unit"></a>
-      <a id="setNegativeTrainingReference(RDD[OUT]):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">setNegativeTrainingReference</span><span class="params">(<span name="set">set: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Set negative sampling method.</p><div class="fullcomment"><div class="comment cmt"><p>Set negative sampling method.
-</p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>all training outputs that will be used for negative training
-</p></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.Trainer#stops" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="stops:kr.ac.kaist.ir.deep.train.StoppingCriteria"></a>
       <a id="stops:StoppingCriteria"></a>
@@ -587,7 +572,7 @@ train.train(set, valid)</pre></li></ol>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trainBatch</span><span class="params">(<span name="epoch">epoch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="prevloss">prevloss: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a> = <span class="symbol">Float.MaxValue</span></span>, <span name="patience">patience: <span class="extype" name="scala.Int">Int</span> = <span class="symbol"><span class="name"><a href="#validationPeriod:Int">validationPeriod * 5</a></span></span></span>)</span><span class="result">: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
+        <span class="name">trainBatch</span><span class="params">(<span name="epoch">epoch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="prevloss">prevloss: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a> = <span class="symbol">Float.MaxValue</span></span>, <span name="patience">patience: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">5</span></span>)</span><span class="result">: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Tail Recursive : Train each batch

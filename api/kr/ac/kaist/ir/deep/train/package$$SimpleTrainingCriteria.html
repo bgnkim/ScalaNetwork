@@ -35,12 +35,13 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">SimpleTrainingCriteria</span><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">SimpleTrainingCriteria</span><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Criteria</u>: How to train (for <a href="SingleThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle">SingleThreadTrainStyle</a>)</p><p>This case class defines how to train the network. Training parameter is defined in this class.
-</p></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></dd><dt class="param">negSamplingRatio</dt><dd class="cmt"><p>ratio of negative samples per positive instance. <code>(default 0)</code>
+</p></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code>
+                 If below or equal to zero, then this indicates no batch training (i.e. just go through once.)
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -82,7 +83,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(miniBatch:Int,negSamplingRatio:Int):kr.ac.kaist.ir.deep.train.package.SimpleTrainingCriteria"></a>
+      <a id="&lt;init&gt;(miniBatch:Int):kr.ac.kaist.ir.deep.train.package.SimpleTrainingCriteria"></a>
       <a id="&lt;init&gt;:SimpleTrainingCriteria"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -90,10 +91,11 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">SimpleTrainingCriteria</span><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>, <span name="negSamplingRatio">negSamplingRatio: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span>
+        <span class="name">SimpleTrainingCriteria</span><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></dd><dt class="param">negSamplingRatio</dt><dd class="cmt"><p>ratio of negative samples per positive instance. <code>(default 0)</code>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code>
+                 If below or equal to zero, then this indicates no batch training (i.e. just go through once.)
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -271,7 +273,10 @@
         <span class="name">miniBatch</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">size of <u>mini-batch</u> <code>(default 100)</code></p><div class="fullcomment"><div class="comment cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria">SimpleTrainingCriteria</a> → <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a></dd></dl></div>
+      <p class="shortcomment cmt">size of <u>mini-batch</u> <code>(default 100)</code>
+                 If below or equal to zero, then this indicates no batch training (i.</p><div class="fullcomment"><div class="comment cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code>
+                 If below or equal to zero, then this indicates no batch training (i.e. just go through once.)
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria">SimpleTrainingCriteria</a> → <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -285,20 +290,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria#negSamplingRatio" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="negSamplingRatio:Int"></a>
-      <a id="negSamplingRatio:Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">negSamplingRatio</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">ratio of negative samples per positive instance.</p><div class="fullcomment"><div class="comment cmt"><p>ratio of negative samples per positive instance. <code>(default 0)</code>
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria">SimpleTrainingCriteria</a> → <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>

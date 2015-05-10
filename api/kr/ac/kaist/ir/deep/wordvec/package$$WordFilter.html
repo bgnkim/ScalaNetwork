@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>StochasticGradientDescent - kr.ac.kaist.ir.deep.fn.StochasticGradientDescent</title>
-          <meta name="description" content="StochasticGradientDescent - kr.ac.kaist.ir.deep.fn.StochasticGradientDescent" />
-          <meta name="keywords" content="StochasticGradientDescent kr.ac.kaist.ir.deep.fn.StochasticGradientDescent" />
+          <title>WordFilter - kr.ac.kaist.ir.deep.wordvec.WordFilter</title>
+          <meta name="description" content="WordFilter - kr.ac.kaist.ir.deep.wordvec.WordFilter" />
+          <meta name="keywords" content="WordFilter kr.ac.kaist.ir.deep.wordvec.WordFilter" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'kr.ac.kaist.ir.deep.fn.StochasticGradientDescent';
+            var hash = 'kr.ac.kaist.ir.deep.wordvec.package$$WordFilter';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -24,27 +24,28 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img src="../../../../../../lib/class_big.png" />
-        <p id="owner"><a href="../../../../../package.html" class="extype" name="kr">kr</a>.<a href="../../../../package.html" class="extype" name="kr.ac">ac</a>.<a href="../../../package.html" class="extype" name="kr.ac.kaist">kaist</a>.<a href="../../package.html" class="extype" name="kr.ac.kaist.ir">ir</a>.<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">deep</a>.<a href="package.html" class="extype" name="kr.ac.kaist.ir.deep.fn">fn</a></p>
-        <h1>StochasticGradientDescent</h1>
+        <img src="../../../../../../lib/trait_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="kr">kr</a>.<a href="../../../../package.html" class="extype" name="kr.ac">ac</a>.<a href="../../../package.html" class="extype" name="kr.ac.kaist">kaist</a>.<a href="../../package.html" class="extype" name="kr.ac.kaist.ir">ir</a>.<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">deep</a>.<a href="package.html" class="extype" name="kr.ac.kaist.ir.deep.wordvec">wordvec</a></p>
+        <h1>WordFilter</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">StochasticGradientDescent</span><span class="result"> extends <a href="WeightUpdater.html" class="extype" name="kr.ac.kaist.ir.deep.fn.WeightUpdater">WeightUpdater</a></span>
+        <span class="name">WordFilter</span><span class="result"> extends (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Algorithm</u>: Stochastic Gradient Descent</p><p>Basic Gradient Descent rule with mini-batch training.
-</p></div><dl class="attributes block"> <div class="block">Example:
-               <ol><li class="cmt"><p></p><pre><span class="kw">val</span> algorithm = <span class="kw">new</span> StochasticGradientDescent(l2decay = <span class="num">0.0001</span>)</pre></li></ol>
-            </div></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Word Filter type
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="WeightUpdater.html" class="extype" name="kr.ac.kaist.ir.deep.fn.WeightUpdater">WeightUpdater</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, (<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>], <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]) ⇒ <span class="extype" name="scala.Unit">Unit</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+          <span class="toggle">Known Subclasses</span>
+          <div class="subClasses hiddenContent"><a href="package$$LangFilter.html" class="extype" name="kr.ac.kaist.ir.deep.wordvec.LangFilter">LangFilter</a></div>
         </div></div>
         
 
@@ -62,7 +63,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="kr.ac.kaist.ir.deep.fn.StochasticGradientDescent"><span>StochasticGradientDescent</span></li><li class="in" name="kr.ac.kaist.ir.deep.fn.WeightUpdater"><span>WeightUpdater</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Function2"><span>Function2</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="kr.ac.kaist.ir.deep.wordvec.WordFilter"><span>WordFilter</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Function1"><span>Function1</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -80,31 +81,44 @@
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="kr.ac.kaist.ir.deep.fn.StochasticGradientDescent#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(rate:kr.ac.kaist.ir.deep.fn.Scalar,l1decay:kr.ac.kaist.ir.deep.fn.Scalar,l2decay:kr.ac.kaist.ir.deep.fn.Scalar,momentum:kr.ac.kaist.ir.deep.fn.Scalar):kr.ac.kaist.ir.deep.fn.StochasticGradientDescent"></a>
-      <a id="&lt;init&gt;:StochasticGradientDescent"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">StochasticGradientDescent</span><span class="params">(<span name="rate">rate: <a href="package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a> = <span class="symbol">0.03</span></span>, <span name="l1decay">l1decay: <a href="package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a> = <span class="symbol">0.0</span></span>, <span name="l2decay">l2decay: <a href="package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a> = <span class="symbol">1.0E-4</span></span>, <span name="momentum">momentum: <a href="package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a> = <span class="symbol">1.0E-4</span></span>)</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">rate</dt><dd class="cmt"><p>the learning rate <code>(Default 0.03)</code></p></dd><dt class="param">l1decay</dt><dd class="cmt"><p>L<sub>1</sub> regularization factor <code>(Default 0.0)</code></p></dd><dt class="param">l2decay</dt><dd class="cmt"><p>L<sub>2</sub> regularization factor <code>(Default 0.0001)</code></p></dd><dt class="param">momentum</dt><dd class="cmt"><p>Momentum factor for adaptive learning <code>(Default 0.0001)</code>
-</p></dd></dl></div>
-    </li></ol>
-            </div>
-
         
 
         
 
         <div id="values" class="values members">
-              <h3>Value Members</h3>
+              <h3>Abstract Value Members</h3>
+              <ol><li name="scala.Function1#apply" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="apply(v1:T1):R"></a>
+      <a id="apply(String):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="v1">v1: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordFilter#tokenize" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="tokenize(str:String):scala.collection.mutable.WrappedArray[String]"></a>
+      <a id="tokenize(String):WrappedArray[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tokenize</span><span class="params">(<span name="str">str: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.collection.mutable.WrappedArray">WrappedArray</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Tokenize given string using this filter</p><div class="fullcomment"><div class="comment cmt"><p>Tokenize given string using this filter</p></div><dl class="paramcmts block"><dt class="param">str</dt><dd class="cmt"><p>String for tokenize</p></dd><dt>returns</dt><dd class="cmt"><p>Array of tokens
+</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:AnyRef):Boolean"></a>
       <a id="!=(AnyRef):Boolean"></a>
@@ -170,22 +184,22 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.fn.StochasticGradientDescent#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(delta:IndexedSeq[kr.ac.kaist.ir.deep.fn.ScalarMatrix],weight:IndexedSeq[kr.ac.kaist.ir.deep.fn.ScalarMatrix]):Unit"></a>
-      <a id="apply(IndexedSeq[ScalarMatrix],IndexedSeq[ScalarMatrix]):Unit"></a>
+    </li><li name="scala.Function1#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen[A](g:R=&gt;A):T1=&gt;A"></a>
+      <a id="andThen[A]((String)⇒A):(String)⇒A"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="delta">delta: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>, <span name="weight">weight: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>)</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Execute the algorithm for given <u>sequence of Δweight</u> and sequence of <u>weights</u>
-</p><div class="fullcomment"><div class="comment cmt"><p>Execute the algorithm for given <u>sequence of Δweight</u> and sequence of <u>weights</u>
-</p></div><dl class="paramcmts block"><dt class="param">delta</dt><dd class="cmt"><p>the <u>sequence of accumulated Δweight</u></p></dd><dt class="param">weight</dt><dd class="cmt"><p>the <u>sequence of current weights</u>
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.fn.StochasticGradientDescent">StochasticGradientDescent</a> → <a href="WeightUpdater.html" class="extype" name="kr.ac.kaist.ir.deep.fn.WeightUpdater">WeightUpdater</a> → Function2</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -218,19 +232,19 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="scala.Function2#curried" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="curried:T1=&gt;(T2=&gt;R)"></a>
-      <a id="curried:(IndexedSeq[ScalarMatrix])⇒(IndexedSeq[ScalarMatrix])⇒Unit"></a>
+    </li><li name="scala.Function1#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compose[A](g:A=&gt;T1):A=&gt;R"></a>
+      <a id="compose[A]((A)⇒String):(A)⇒String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">curried</span><span class="result">: (<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]) ⇒ (<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function2</dd><dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
                 <span class="name">@unspecialized</span><span class="args">()</span>
               
         </dd></dl></div>
@@ -318,48 +332,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.fn.StochasticGradientDescent#l1decay" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="l1decay:kr.ac.kaist.ir.deep.fn.Scalar"></a>
-      <a id="l1decay:Scalar"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">l1decay</span><span class="result">: <a href="package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">L<sub>1</sub> regularization factor <code>(Default 0.0)</code></p><div class="fullcomment"><div class="comment cmt"><p>L<sub>1</sub> regularization factor <code>(Default 0.0)</code></p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.fn.StochasticGradientDescent">StochasticGradientDescent</a> → <a href="WeightUpdater.html" class="extype" name="kr.ac.kaist.ir.deep.fn.WeightUpdater">WeightUpdater</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.fn.StochasticGradientDescent#l2decay" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="l2decay:kr.ac.kaist.ir.deep.fn.Scalar"></a>
-      <a id="l2decay:Scalar"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">l2decay</span><span class="result">: <a href="package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">L<sub>2</sub> regularization factor <code>(Default 0.0001)</code></p><div class="fullcomment"><div class="comment cmt"><p>L<sub>2</sub> regularization factor <code>(Default 0.0001)</code></p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.fn.StochasticGradientDescent">StochasticGradientDescent</a> → <a href="WeightUpdater.html" class="extype" name="kr.ac.kaist.ir.deep.fn.WeightUpdater">WeightUpdater</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.fn.WeightUpdater#loss" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="loss(seq:Seq[kr.ac.kaist.ir.deep.fn.ScalarMatrix]):Float"></a>
-      <a id="loss(Seq[ScalarMatrix]):Float"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">loss</span><span class="params">(<span name="seq">seq: <span class="extype" name="scala.Seq">Seq</span>[<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Compute weight-loss of given weight parameters
-</p><div class="fullcomment"><div class="comment cmt"><p>Compute weight-loss of given weight parameters
-</p></div><dl class="paramcmts block"><dt class="param">seq</dt><dd class="cmt"><p>the <u>sequence</u> of weight matrices</p></dd><dt>returns</dt><dd class="cmt"><p>the total weight loss of this sequence
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="WeightUpdater.html" class="extype" name="kr.ac.kaist.ir.deep.fn.WeightUpdater">WeightUpdater</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -399,6 +371,34 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordFilter#saveAs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="saveAs(file:scala.reflect.io.File):WordFilter.this.type"></a>
+      <a id="saveAs(File):WordFilter.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">saveAs</span><span class="params">(<span name="file">file: <span class="extype" name="scala.reflect.io.File">File</span></span>)</span><span class="result">: <a href="" class="extype" name="kr.ac.kaist.ir.deep.wordvec.WordFilter">WordFilter</a>.this.type</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Save this filter into given file</p><div class="fullcomment"><div class="comment cmt"><p>Save this filter into given file</p></div><dl class="paramcmts block"><dt class="param">file</dt><dd class="cmt"><p>File to save.
+</p></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordFilter#saveAs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="saveAs(path:scala.reflect.io.Path):WordFilter.this.type"></a>
+      <a id="saveAs(Path):WordFilter.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">saveAs</span><span class="params">(<span name="path">path: <span class="extype" name="scala.reflect.io.Path">Path</span></span>)</span><span class="result">: <a href="" class="extype" name="kr.ac.kaist.ir.deep.wordvec.WordFilter">WordFilter</a>.this.type</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Save this filter into given path</p><div class="fullcomment"><div class="comment cmt"><p>Save this filter into given path</p></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>Path to save.
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -412,7 +412,7 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Function2#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.Function1#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -424,23 +424,7 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function2 → AnyRef → Any</dd></dl></div>
-    </li><li name="scala.Function2#tupled" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="tupled:((T1,T2))=&gt;R"></a>
-      <a id="tupled:((IndexedSeq[ScalarMatrix],IndexedSeq[ScalarMatrix]))⇒Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">tupled</span><span class="result">: ((<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>], <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>])) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function2</dd><dt>Annotations</dt><dd>
-                <span class="name">@unspecialized</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1 → AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -507,14 +491,12 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="kr.ac.kaist.ir.deep.fn.WeightUpdater">
-              <h3>Inherited from <a href="WeightUpdater.html" class="extype" name="kr.ac.kaist.ir.deep.fn.WeightUpdater">WeightUpdater</a></h3>
-            </div><div class="parent" name="scala.Serializable">
+        <div class="parent" name="scala.Serializable">
               <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
             </div><div class="parent" name="java.io.Serializable">
               <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="scala.Function2">
-              <h3>Inherited from (<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>], <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]) ⇒ <span class="extype" name="scala.Unit">Unit</span></h3>
+            </div><div class="parent" name="scala.Function1">
+              <h3>Inherited from (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

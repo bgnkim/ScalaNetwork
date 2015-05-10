@@ -130,20 +130,20 @@
 </p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">pair</dt><dd class="cmt"><p>(Input, Real output) for error computation.</p></dd><dt>returns</dt><dd class="cmt"><p>error of this network
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#roundTrip" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="roundTrip(net:kr.ac.kaist.ir.deep.network.Network,in:IN,real:OUT,isPositive:Boolean):Unit"></a>
-      <a id="roundTrip(Network,BinaryTree,Null,Boolean):Unit"></a>
+      <a id="roundTrip(net:kr.ac.kaist.ir.deep.network.Network,in:IN,real:OUT):Unit"></a>
+      <a id="roundTrip(Network,BinaryTree,Null):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">roundTrip</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="in">in: <a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a></span>, <span name="real">real: <span class="extype" name="scala.Null">Null</span></span>, <span name="isPositive">isPositive: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">roundTrip</span><span class="params">(<span name="net">net: <a href="../network/package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></span>, <span name="in">in: <a href="../rec/BinaryTree.html" class="extype" name="kr.ac.kaist.ir.deep.rec.BinaryTree">BinaryTree</a></span>, <span name="real">real: <span class="extype" name="scala.Null">Null</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Apply &amp; Back-prop given single input
 </p><div class="fullcomment"><div class="comment cmt"><p>Apply &amp; Back-prop given single input
-</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">in</dt><dd class="cmt"><p>Input for error computation.</p></dd><dt class="param">real</dt><dd class="cmt"><p>Real output for error computation.</p></dd><dt class="param">isPositive</dt><dd class="cmt"><p>Boolean that indicates whether this example is positive or not.
+</p></div><dl class="paramcmts block"><dt class="param">net</dt><dd class="cmt"><p>A network that gets input</p></dd><dt class="param">in</dt><dd class="cmt"><p>Input for error computation.</p></dd><dt class="param">real</dt><dd class="cmt"><p>Real output for error computation.
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.ManipulationType#stringOf" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="stringOf(net:kr.ac.kaist.ir.deep.network.Network,in:(IN,OUT)):String"></a>

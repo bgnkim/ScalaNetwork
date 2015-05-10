@@ -281,7 +281,7 @@ If drop-out is used, to average drop-out effect, we need to multiply output by p
 </p><div class="fullcomment"><div class="comment cmt"><p>All accumulated delta weights of layers
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>all accumulated delta weights
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#decode" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#decode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="decode(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="decode(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
@@ -296,8 +296,8 @@ If drop-out is used, to average drop-out effect, we need to multiply output by p
       <p class="shortcomment cmt">Decode computation for training.</p><div class="fullcomment"><div class="comment cmt"><p>Decode computation for training.
 If drop-out is used, we need to drop-out entry of input vector.
 </p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>hidden values</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#decode_!" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#decode_!" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="decode_!(err:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="decode_!(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
@@ -312,8 +312,8 @@ If drop-out is used, we need to drop-out entry of input vector.
       <p class="shortcomment cmt">Backpropagation algorithm for decoding phrase
 </p><div class="fullcomment"><div class="comment cmt"><p>Backpropagation algorithm for decoding phrase
 </p></div><dl class="paramcmts block"><dt class="param">err</dt><dd class="cmt"><p>backpropagated error from error function
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#encode" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#encode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="encode(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="encode(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
@@ -328,8 +328,8 @@ If drop-out is used, we need to drop-out entry of input vector.
       <p class="shortcomment cmt">Encode computation for training.</p><div class="fullcomment"><div class="comment cmt"><p>Encode computation for training.
 If drop-out is used, we need to drop-out entry of input vector.
 </p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>hidden values
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#encode_!" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></dd></dl></div>
+    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#encode_!" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="encode_!(err:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="encode_!(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
@@ -344,7 +344,7 @@ If drop-out is used, we need to drop-out entry of input vector.
       <p class="shortcomment cmt">Backpropagation algorithm for encoding phrase
 </p><div class="fullcomment"><div class="comment cmt"><p>Backpropagation algorithm for encoding phrase
 </p></div><dl class="paramcmts block"><dt class="param">err</dt><dd class="cmt"><p>backpropagated error from error function
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -429,7 +429,7 @@ If drop-out is used, we need to drop-out entry of input vector.
       </span>
       </h4>
       <p class="shortcomment cmt">Collected input &amp; output of each layer</p><div class="fullcomment"><div class="comment cmt"><p>Collected input &amp; output of each layer</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#into_:" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#into_:" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="into_:(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="into_:(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
@@ -444,7 +444,7 @@ If drop-out is used, we need to drop-out entry of input vector.
       <p class="shortcomment cmt">Forward computation for training.</p><div class="fullcomment"><div class="comment cmt"><p>Forward computation for training.
 If drop-out is used, we need to drop-out entry of input vector.
 </p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -510,7 +510,7 @@ If drop-out is used, we need to drop-out entry of input vector.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#of" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#of" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="of(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="of(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
@@ -524,7 +524,7 @@ If drop-out is used, we need to drop-out entry of input vector.
       </h4>
       <p class="shortcomment cmt">Sugar: Forward computation for validation.</p><div class="fullcomment"><div class="comment cmt"><p>Sugar: Forward computation for validation. Calls apply(x)
 </p></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>input matrix</p></dd><dt>returns</dt><dd class="cmt"><p>output matrix
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#reconstruct" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="reconstruct(x:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="reconstruct(ScalarMatrix):ScalarMatrix"></a>
@@ -583,7 +583,7 @@ If drop-out is used, we need to drop-out entry of input vector.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1 → AnyRef → Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#updateBy" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="kr.ac.kaist.ir.deep.network.AutoEncoder#updateBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="updateBy(err:kr.ac.kaist.ir.deep.fn.ScalarMatrix):kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="updateBy(ScalarMatrix):ScalarMatrix"></a>
       <h4 class="signature">
@@ -598,7 +598,7 @@ If drop-out is used, we need to drop-out entry of input vector.
       <p class="shortcomment cmt">Backpropagation algorithm
 </p><div class="fullcomment"><div class="comment cmt"><p>Backpropagation algorithm
 </p></div><dl class="paramcmts block"><dt class="param">err</dt><dd class="cmt"><p>backpropagated error from error function
-</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="kr.ac.kaist.ir.deep">kr.ac.kaist.ir.deep</a>] </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.network.AutoEncoder">AutoEncoder</a> → <a href="package$$Network.html" class="extype" name="kr.ac.kaist.ir.deep.network.Network">Network</a></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

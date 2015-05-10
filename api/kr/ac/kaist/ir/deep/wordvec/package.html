@@ -82,19 +82,60 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="kr.ac.kaist.ir.deep.wordvec.StringToStringType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="StringToStringTypeextendsStringType[String]"></a>
-      <a id="StringToStringType:StringToStringType"></a>
+              <ol><li name="kr.ac.kaist.ir.deep.wordvec.LangFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LangFilterextendspackage.WordFilterwithProductwithSerializable"></a>
+      <a id="LangFilter:LangFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$LangFilter.html"><span class="name">LangFilter</span></a><span class="params">(<span name="langFilter">langFilter: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="package$$WordFilter.html" class="extype" name="kr.ac.kaist.ir.deep.wordvec.WordFilter">WordFilter</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>WordFilter</u> : Filter class for take only specific language area.</p>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.StringToVectorType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StringToVectorTypeextendsStringType[kr.ac.kaist.ir.deep.fn.ScalarMatrix]"></a>
+      <a id="StringToVectorType:StringToVectorType"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="StringToStringType.html"><span class="name">StringToStringType</span></a><span class="result"> extends <a href="../train/StringType.html" class="extype" name="kr.ac.kaist.ir.deep.train.StringType">StringType</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <a href="StringToVectorType.html"><span class="name">StringToVectorType</span></a><span class="result"> extends <a href="StringType.html" class="extype" name="kr.ac.kaist.ir.deep.wordvec.StringType">StringType</a>[<a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]</span>
       </span>
       </h4>
-      <p class="comment cmt"><u>Input Operation</u> : String as Input &amp; Expected Otput.</p>
+      <p class="comment cmt"><u>Input Operation</u> : String as Input &amp; ScalarMatrix as Otput <u>(Spark ONLY)</u>
+</p>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.StringType" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StringType[OUT]extendsManipulationType[String,OUT]"></a>
+      <a id="StringType[OUT]:StringType[OUT]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StringType.html"><span class="name">StringType</span></a><span class="tparams">[<span name="OUT">OUT</span>]</span><span class="result"> extends <a href="../train/ManipulationType.html" class="extype" name="kr.ac.kaist.ir.deep.train.ManipulationType">ManipulationType</a>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="kr.ac.kaist.ir.deep.wordvec.StringType.OUT">OUT</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt"><u>Trait of Input Operation</u> : String as Input.</p>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordFilter" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="WordFilterextendsString=&gt;StringwithSerializable"></a>
+      <a id="WordFilter:WordFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$WordFilter.html"><span class="name">WordFilter</span></a><span class="result"> extends (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Word Filter type
+</p>
     </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="WordModelextendsSerializablewithString=&gt;kr.ac.kaist.ir.deep.fn.ScalarMatrix"></a>
       <a id="WordModel:WordModel"></a>
@@ -108,19 +149,6 @@
       </span>
       </h4>
       <p class="comment cmt">Word2Vec model class.</p>
-    </li><li name="kr.ac.kaist.ir.deep.wordvec.WordTrainStyle" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="WordTrainStyleextendsMultiThreadTrainStyle[String,String]"></a>
-      <a id="WordTrainStyle:WordTrainStyle"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="WordTrainStyle.html"><span class="name">WordTrainStyle</span></a><span class="result"> extends <a href="../train/MultiThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.MultiThreadTrainStyle">MultiThreadTrainStyle</a>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>
-      </span>
-      </h4>
-      <p class="comment cmt"><u>Trainer</u> : Stochastic-Style, Multi-Threaded WordEmbedding Train Style using Spark.</p>
     </li></ol>
             </div>
 
@@ -128,19 +156,84 @@
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="kr.ac.kaist.ir.deep.wordvec.WordMapAccumulator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="WordMapAccumulator"></a>
-      <a id="WordMapAccumulator:WordMapAccumulator"></a>
+              <ol><li name="kr.ac.kaist.ir.deep.wordvec.package#PATTERN_INTEGER" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PATTERN_INTEGER:java.util.regex.Pattern"></a>
+      <a id="PATTERN_INTEGER:Pattern"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">implicit </span>
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">PATTERN_INTEGER</span><span class="result">: <span class="extype" name="java.util.regex.Pattern">Pattern</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Pattern for integer *</p>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.package#PATTERN_PUNCT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PATTERN_PUNCT:java.util.regex.Pattern"></a>
+      <a id="PATTERN_PUNCT:Pattern"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">PATTERN_PUNCT</span><span class="result">: <span class="extype" name="java.util.regex.Pattern">Pattern</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Pattern for Punctuation *</p>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.package#PATTERN_REAL" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PATTERN_REAL:java.util.regex.Pattern"></a>
+      <a id="PATTERN_REAL:Pattern"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">PATTERN_REAL</span><span class="result">: <span class="extype" name="java.util.regex.Pattern">Pattern</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Pattern for real number *</p>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.package#PATTERN_REAL_WITHIN" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PATTERN_REAL_WITHIN:java.util.regex.Pattern"></a>
+      <a id="PATTERN_REAL_WITHIN:Pattern"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">PATTERN_REAL_WITHIN</span><span class="result">: <span class="extype" name="java.util.regex.Pattern">Pattern</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.package#PATTERN_SPECIAL" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PATTERN_SPECIAL:java.util.regex.Pattern"></a>
+      <a id="PATTERN_SPECIAL:Pattern"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">PATTERN_SPECIAL</span><span class="result">: <span class="extype" name="java.util.regex.Pattern">Pattern</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Pattern for Special Range *</p>
+    </li><li name="kr.ac.kaist.ir.deep.wordvec.PrepareCorpus" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PrepareCorpus"></a>
+      <a id="PrepareCorpus:PrepareCorpus"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="package$$WordMapAccumulator$.html"><span class="name">WordMapAccumulator</span></a><span class="result"> extends <span class="extype" name="org.apache.spark.AccumulatorParam">AccumulatorParam</span>[<span class="extype" name="scala.collection.mutable.HashMap">HashMap</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../fn/package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>]]</span>
+        <a href="PrepareCorpus$.html"><span class="name">PrepareCorpus</span></a><span class="result"> extends <span class="extype" name="org.apache.spark.Logging">Logging</span></span>
       </span>
       </h4>
-      <p class="comment cmt">Accumulator Param object for WordEmbedding training.</p>
+      <p class="comment cmt">Train Word2Vec and save the model.</p>
     </li><li name="kr.ac.kaist.ir.deep.wordvec.WordModel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="WordModel"></a>
       <a id="WordModel:WordModel"></a>
