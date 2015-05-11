@@ -1,4 +1,4 @@
-ScalaNetwork 1.0.0
+ScalaNetwork 1.0.1
 ====================
 
 A *Neural Network implementation* with Scala, [Breeze](https://github.com/scalanlp/breeze) & [Spark](http://spark.apache.org)
@@ -48,6 +48,7 @@ ScalaNetwork supports following activation functions:
 * Softplus
 * HardSigmoid
 * HardTanh
+* Softmax
 
 And also you can make new activation function using several operations.
 
@@ -59,12 +60,12 @@ Here is some examples for basic usage. If you want to extend this package or use
 
 Currently ScalaNetwork supports Scala version 2.10 ~ 2.11.
 
-* Stable Release is 1.0.0
+* Stable Release is 1.0.1
  
 If you are using SBT, add a dependency as described below:
 
 ```scala
-libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "1.0.0"
+libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "1.0.1"
 ```
 
 If you are using Maven, add a dependency as described below:
@@ -72,7 +73,7 @@ If you are using Maven, add a dependency as described below:
 <dependency>
   <groupId>kr.ac.kaist.ir</groupId>
   <artifactId>scalanetwork_${your.scala.version}</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 

@@ -156,7 +156,6 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
      * Chain Rule : dG/dX_ij = tr[ ( dG/dF ).t * dF/dX_ij ].
      *
      * Note 1. X, dG/dF, dF/dX_ij are row vectors. Therefore tr(.) can be omitted.
-     * Note 2. dF/dX_ij is a column vector with all zero but (i, 1) = (i, i)-entry of dFdX.
      *
      * Thus, dG/dX = [ (dG/dF).t * dF/dX ].t, because [...] is 1 × fanOut matrix.
      * Therefore dG/dX = dF/dX * dG/dF, because dF/dX is symmetric in our case.

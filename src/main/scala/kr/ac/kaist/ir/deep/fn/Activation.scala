@@ -1,6 +1,6 @@
 package kr.ac.kaist.ir.deep.fn
 
-import breeze.linalg.{DenseMatrix, diag}
+import breeze.linalg.{DenseMatrix, diag, sum}
 import breeze.numerics._
 
 /**
@@ -13,7 +13,7 @@ trait Activation extends (ScalarMatrix ⇒ ScalarMatrix) with Serializable {
    * Compute differentiation value of this function at `f(x) = fx`
    *
    * @param fx the __output__ of this function
-   * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
+   * @return differentiation value at `f(x) = fx`, which should be an __square, symmetric matrix__
    */
   def derivative(fx: ScalarMatrix): ScalarMatrix
 
@@ -45,6 +45,7 @@ trait Activation extends (ScalarMatrix ⇒ ScalarMatrix) with Serializable {
  *
  * @note `sigmoid(x) = 1 / [exp(-x) + 1]`, hard version approximates tanh as piecewise linear function
  *       (derived from relationship between tanh & sigmoid, and tanh & hard tanh.)
+ *       We assumed the input of activation is a row vector.
  * @example
  * {{{val fx = HardSigmoid(0.0)
  *          val diff = HardSigmoid.derivative(fx) }}}
@@ -54,7 +55,7 @@ object HardSigmoid extends Activation {
    * Compute differentiation value of this function at `f(x) = fx`
    *
    * @param fx the __output__ of this function
-   * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
+   * @return differentiation value at `f(x) = fx`, which should be an __square, symmetric matrix__
    */
   override def derivative(fx: ScalarMatrix): ScalarMatrix = {
     // Because fx is n by 1 matrix, generate n by n matrix
@@ -103,6 +104,7 @@ object HardSigmoid extends Activation {
  * __Activation Function__: Hard version of Tanh (Hyperbolic Tangent)
  *
  * @note `tanh(x) = sinh(x) / cosh(x)`, hard version approximates tanh as piecewise linear function.
+ *       We assumed the input of activation is a row vector.
  * @example
  * {{{val fx = HardTanh(0.0)
  *          val diff = HardTanh.derivative(fx) }}}
@@ -112,7 +114,7 @@ object HardTanh extends Activation {
    * Compute differentiation value of this function at `f(x) = fx`
    *
    * @param fx the __output__ of this function
-   * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
+   * @return differentiation value at `f(x) = fx`, which should be an __square, symmetric matrix__
    */
   override def derivative(fx: ScalarMatrix): ScalarMatrix = {
     // Because fx is n by 1 matrix, generate n by n matrix
@@ -159,6 +161,7 @@ object HardTanh extends Activation {
  * __Activation Function__: Tanh (Hyperbolic Tangent)
  *
  * @note `tanh(x) = sinh(x) / cosh(x)`
+ *       We assumed the input of activation is a row vector.
  * @example
  * {{{val fx = HyperbolicTangent(0.0)
  *         val diff = HyperbolicTangent.derivative(fx) }}}
@@ -168,7 +171,7 @@ object HyperbolicTangent extends Activation {
    * Compute differentiation value of this function at `f(x) = fx`
    *
    * @param fx the __output__ of this function
-   * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
+   * @return differentiation value at `f(x) = fx`, which should be an __square, symmetric matrix__
    */
   override def derivative(fx: ScalarMatrix): ScalarMatrix = {
     // Output is diagonal matrix, with dfi(xi)/dxi.
@@ -204,6 +207,7 @@ object HyperbolicTangent extends Activation {
  * __Activation Function__: Linear
  *
  * @note `linear(x) = x`
+ *       We assumed the input of activation is a row vector.
  * @example
   * {{{val fx = Linear(0.0)
  *                   val diff = Linear.derivative(fx)}}}
@@ -213,7 +217,7 @@ object Linear extends Activation {
    * Compute differentiation value of this function at `f(x) = fx`
    *
    * @param fx the __output__ of this function
-   * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
+   * @return differentiation value at `f(x) = fx`, which should be an __square, symmetric matrix__
    */
   override def derivative(fx: ScalarMatrix): ScalarMatrix = DenseMatrix.eye[Scalar](fx.rows)
 
@@ -230,6 +234,7 @@ object Linear extends Activation {
  * __Activation Function__: Rectifier
  *
  * @note `rectifier(x) = x if x > 0, otherwise 0`
+ *       We assumed the input of activation is a row vector.
  * @example
  * {{{val fx = Rectifier(0.0)
  *         val diff = Rectifier.derivative(fx)}}}
@@ -239,7 +244,7 @@ object Rectifier extends Activation {
    * Compute differentiation value of this function at `f(x) = fx`
    *
    * @param fx the __output__ of this function
-   * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
+   * @return differentiation value at `f(x) = fx`, which should be an __square, symmetric matrix__
    */
   override def derivative(fx: ScalarMatrix): ScalarMatrix = {
     // Because fx is n by 1 matrix, generate n by n matrix
@@ -284,6 +289,7 @@ object Rectifier extends Activation {
  * __Activation Function__: Sigmoid function
  *
  * @note {{{sigmoid(x) = 1 / [exp(-x) + 1]}}}
+ *       We assumed the input of activation is a row vector.
  * @example
  * {{{val fx = Sigmoid(0.0)
  *         val diff = Sigmoid.derivative(fx)}}}
@@ -293,7 +299,7 @@ object Sigmoid extends Activation {
    * Compute differentiation value of this function at `f(x) = fx`
    *
    * @param fx the __output__ of this function
-   * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
+   * @return differentiation value at `f(x) = fx`, which should be an __square, symmetric matrix__
    */
   override def derivative(fx: ScalarMatrix): ScalarMatrix = {
     // Output is diagonal matrix, with dfi(xi)/dxi.
@@ -330,9 +336,79 @@ object Sigmoid extends Activation {
 }
 
 /**
+ * __Activation Function__: Softmax function
+ *
+ * @note {{{softmax(x)_i = exp(x_i) / sum(exp(x_i))}}}
+ *       We assumed the input of activation is a row vector.
+ * @example
+ * {{{val fx = Softmax(0.0)
+ *          val diff = Softmax.derivative(fx)}}}
+ */
+object Softmax extends Activation {
+  /**
+   * Compute differentiation value of this function at `f(x) = fx`
+   *
+   * @param fx the __output__ of this function
+   * @return differentiation value at `f(x) = fx`, which should be an __square, symmetric matrix__
+   */
+  override def derivative(fx: ScalarMatrix): ScalarMatrix = {
+    val res: ScalarMatrix = ScalarMatrix $0(fx.rows, fx.rows)
+
+    val rows = res.rows
+    val cols = res.cols
+    var r, c = 0
+
+    // Note that (i, j)-entry of deriviative is dF_i / dX_j
+    // and dF_i / dX_j = F(i) * (Delta_ij - F(j)).
+    while (r < rows) {
+      val Fi = fx(r, 0)
+      c = 0
+      while (c < cols) {
+        val Fj = fx(c, 0)
+        val dfdx =
+          if (r == c) Fi * (1 - Fj)
+          else -Fi * Fj
+        res.update(r, c, dfdx)
+        c += 1
+      }
+      r += 1
+    }
+    res
+  }
+
+  /**
+   * Compute mapping for `x`
+   *
+   * @param x the __input__ matrix. ''Before application, input should be summed already.''
+   * @return value of `f(x)`
+   */
+  override def apply(x: ScalarMatrix): ScalarMatrix = {
+    val expv: ScalarMatrix = exp(x)
+    val normalize: Scalar = sum(exp(x))
+    expv :/= normalize
+  }
+
+  /**
+   * Initialize the weight matrix
+   *
+   * @param fanIn the number of __fan-in__ ''i.e. the number of neurons in previous layer''
+   * @param fanOut the number of __fan-out__ ''i.e. the number of neurons in next layer''
+   * @param rows the number of __rows of resulting matrix__ `(Default 0)`
+   * @param cols the number of __cols of resulting matrix__ `(Default 0)`
+   * @return the initialized weight matrix
+   */
+  override def initialize(fanIn: Int, fanOut: Int, rows: Int = 0, cols: Int = 0): ScalarMatrix = {
+    val range = (Math.sqrt(6.0 / (fanIn + fanOut)) * 4.0).toFloat
+    val pmMatx: ScalarMatrix = ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :- 0.5f
+    pmMatx :* (2.0f * range)
+  }
+}
+
+/**
  * __Activation Function__: Softplus
  *
  * @note `softplus(x) = log[1 + exp(x)]`
+ *       We assumed the input of activation is a row vector.
  * @example
  * {{{val fx = Softplus(0.0)
  *         val diff = Softplus.derivative(fx)}}}
@@ -342,7 +418,7 @@ object Softplus extends Activation {
    * Compute differentiation value of this function at `f(x) = fx`
    *
    * @param fx the __output__ of this function
-   * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
+   * @return differentiation value at `f(x) = fx`, which should be an __square, symmetric matrix__
    */
   override def derivative(fx: ScalarMatrix): ScalarMatrix = {
     // Output is diagonal matrix, with dfi(xi)/dxi.

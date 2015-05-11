@@ -36,7 +36,10 @@ class NormalizeOperation(protected val factor: Scalar = 1.0f) extends Layer {
     val len = Math.sqrt(sum(pow(x, 2.0f))).toFloat
     val normalized: ScalarMatrix = x :/ len
 
-    normalized :* factor
+    if (factor != 1.0f)
+      normalized :* factor
+    else
+      normalized
   }
 
   /**
