@@ -2,7 +2,7 @@ organization := "kr.ac.kaist.ir"
 
 name := "ScalaNetwork"
 
-version := "1.0.1"
+version := "1.0.2"
 
 scalaVersion := "2.10.4"
 

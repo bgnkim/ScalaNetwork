@@ -1,4 +1,4 @@
-ScalaNetwork 1.0.1
+ScalaNetwork 1.0.2
 ====================
 
 A *Neural Network implementation* with Scala, [Breeze](https://github.com/scalanlp/breeze) & [Spark](http://spark.apache.org)
@@ -60,12 +60,12 @@ Here is some examples for basic usage. If you want to extend this package or use
 
 Currently ScalaNetwork supports Scala version 2.10 ~ 2.11.
 
-* Stable Release is 1.0.1
+* Stable Release is 1.0.2
  
 If you are using SBT, add a dependency as described below:
 
 ```scala
-libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "1.0.1"
+libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "1.0.2"
 ```
 
 If you are using Maven, add a dependency as described below:
@@ -83,16 +83,16 @@ If you are using Maven, add a dependency as described below:
 ```scala
 // Define 2 -> 4 -> 1 Layered, Fully connected network.
 val net = Network(Sigmoid, 2, 4, 1)
-// Define Manipulation Type. VectorType, AEType, RAEType, StandardRAEType, URAEType, and StringToVectorType
+// Define Manipulation Type. VectorType, AEType, RAEType, StandardRAEType, URAEType, and StringToVectorType.
 val operation = new VectorType(
    corrupt = GaussianCorruption(variance = 0.1)
 )
 // Define Training Style. SingleThreadTrainStyle, MultiThreadTrainStyle, & DistBeliefTrainStyle
 val style = new SingleThreadTrainStyle(
   net = net,
-  algorithm = new StochasticGradientDescent(l2decay = 0.0001),
+  algorithm = new StochasticGradientDescent(l2decay = 0.0001f),
   make = operation,
-  param = SimpleTrainingCriteria(miniBatch = 8))
+  param = SimpleTrainingCriteria(miniBatchFraction = 0.01f))
 // Define Trainer
 val train = new Trainer(
   style = style,
@@ -160,8 +160,8 @@ new AdaDelta(l1decay=0.0, l2decay=0.0001, decay=0.95, epsilon=1e-6)
 ```scala
 /* Training Criteria */
 import scala.concurrent.duration._
-SimpleTrainingCriteria(miniBatch=100, validationSize=20)
-DistBeliefCriteria(miniBatch=100, validationSize=20, submitInterval=1.seconds,
+SimpleTrainingCriteria(miniBatchFraction=0.01f, validationSize=20)
+DistBeliefCriteria(miniBatchFraction=0.01f, validationSize=20, submitInterval=1.seconds,
   updateStep=2, fetchStep=10, numCores=1, repartitionOnStart = true, storageLevel = StorageLevel.MEMORY_ONLY)
 ```
 

@@ -35,14 +35,8 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
   protected val accCount = sc.accumulator(0)
   /** Training set */
   protected var trainingSet: RDD[Pair] = null
-  /** Fraction of mini-batch */
-  protected var trainingFraction: Float = 0.0f
-  /** Size of training set */
-  protected var trainingSize: Long = 0l
   /** Test Set */
   protected var testSet: RDD[Pair] = null
-  /** Size of test set */
-  protected var testSize: Float = 0.0f
 
   /**
    * Unpersist all
@@ -84,8 +78,8 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
    * Do mini-batch
    */
   override def batch(): Unit =
-    if (trainingFraction > 0) {
-      val set = trainingSet.sample(withReplacement = true, fraction = trainingFraction)
+    if (param.miniBatchFraction > 0) {
+      val set = trainingSet.sample(withReplacement = true, fraction = param.miniBatchFraction)
       set.foreachPartition(partFunction)
       set.unpersist(blocking = false)
     } else {
@@ -122,9 +116,7 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
       if (param.repartitionOnStart) sc.parallelize(set, param.numCores)
       else sc.parallelize(set)
     trainingSet = rdd.setName("Positives").persist(param.storageLevel)
-    trainingSize = set.size
-    trainingFraction = if (param.miniBatch > 0) param.miniBatch / trainingSize.toFloat else 0
-    validationEpoch = if (param.miniBatch > 0) (trainingSize / param.miniBatch).toInt else 1
+    validationEpoch = if (param.miniBatchFraction > 0) Math.round(1.0f / param.miniBatchFraction) else 1
   }
 
   /**
@@ -136,9 +128,7 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
       if (param.repartitionOnStart) set.repartition(param.numCores).persist(param.storageLevel)
       else set
     trainingSet = rdd.setName(set.name + " (Positives)")
-    trainingSize = trainingSet.countApproxDistinct()
-    trainingFraction = if (param.miniBatch > 0) param.miniBatch / trainingSize.toFloat else 0
-    validationEpoch = if (param.miniBatch > 0) (trainingSize / param.miniBatch).toInt else 1
+    validationEpoch = if (param.miniBatchFraction > 0) Math.round(1.0f / param.miniBatchFraction) else 1
   }
 
   /**
@@ -150,7 +140,6 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
       if (param.repartitionOnStart) sc.parallelize(set, param.numCores)
       else sc.parallelize(set)
     testSet = rdd.setName("Validation").persist(param.storageLevel)
-    testSize = set.size.toFloat
   }
 
   /**
@@ -162,7 +151,6 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
       if (param.repartitionOnStart) set.repartition(param.numCores).persist(param.storageLevel)
       else set
     testSet = rdd.setName(set.name + " (Validation)")
-    testSize = testSet.countApproxDistinct().toFloat
   }
 
   /**
@@ -185,20 +173,24 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
    */
   def validationError() = {
     val loss = sc.accumulator(0.0f)
+    val count = sc.accumulator(0)
     val lossOf = make.lossOf(net) _
     testSet.foreachPartition {
       iter ⇒
         val f = future {
           var sum = 0.0f
+          var c = 0
           while (iter.hasNext) {
-            sum += lossOf(iter.next()) / testSize
+            sum += lossOf(iter.next())
+            c += 1
           }
           loss += sum
+          count += c
         }
 
         AsyncAwait.ready(f, 1.second)
     }
 
-    loss.value
+    loss.value / count.value.toFloat
   }
 }

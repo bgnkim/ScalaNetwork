@@ -7,7 +7,7 @@ package kr.ac.kaist.ir
  * {{{// Define 2 -> 4 -> 1 Layered, Fully connected network.
  *        val net = Network(Sigmoid, 2, 4, 1)
  *
- *         // Define Manipulation Type. VectorType, AEType, RAEType, and URAEType.
+ *          // Define Manipulation Type. VectorType, AEType, RAEType, StandardRAEType, URAEType, and StringToVectorType.
  *         val operation = new VectorType(
  *            corrupt = GaussianCorruption(variance = 0.1)
  *         )
@@ -17,7 +17,7 @@ package kr.ac.kaist.ir
  *           net = net,
  *           algorithm = new StochasticGradientDescent(l2decay = 0.0001),
  *            make = operation,
- *           param = SimpleTrainingCriteria(miniBatch = 8))
+ *            param = SimpleTrainingCriteria(miniBatchFraction = 0.01))
  *
  *        // Define Trainer
  *        val train = new Trainer(

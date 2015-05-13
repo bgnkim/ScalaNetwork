@@ -115,8 +115,9 @@ class DistBeliefTrainStyle[IN: ClassTag, OUT: ClassTag](net: Network,
    * Do mini-batch
    */
   override def batch(): Unit = {
-    val x = if (trainingFraction > 0) {
-      val rddSet = trainingSet.sample(withReplacement = true, fraction = trainingFraction).repartition(param.numCores)
+    val x = if (param.miniBatchFraction > 0) {
+      val rddSet = trainingSet.sample(withReplacement = true, fraction = param.miniBatchFraction)
+        .repartition(param.numCores)
 
       val x = rddSet foreachPartitionAsync partFunction
       batchFlag += x

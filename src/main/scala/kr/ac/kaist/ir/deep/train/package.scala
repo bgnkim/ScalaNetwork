@@ -85,7 +85,7 @@ package object train {
    * @param lossThreshold __maximum-tolerant__ loss value. `(default 0.0001)`
    * @param validationFreq __multiplier__ used for count for validation. `(default 1.0f)`
    *                       Validation checked whenever (validationFreq) * (#epoch for 1 training batch).
-   *                       where #epoch for 1 training batch = trainset.size / miniBatch.
+   *                       where #epoch for 1 iteration = round(1 / miniBatchFraction).
    */
   case class StoppingCriteria(maxIter: Int = 100000,
                               waitAfterUpdate: Int = 1,
@@ -99,18 +99,18 @@ package object train {
    *
    * This case class defines how to train the network. Training parameter is defined in this class.
    *
-   * @param miniBatch size of __mini-batch__ `(default 100)`
-   *                  If below or equal to zero, then this indicates no batch training (i.e. just go through once.)
+   * @param miniBatchFraction size of __mini-batch__ `(default 0.01 = 1%)`
+   *                          If below or equal to zero, then this indicates no batch training (i.e. just go through once.)
    */
-  case class SimpleTrainingCriteria(override val miniBatch: Int = 100) extends TrainingCriteria
+  case class SimpleTrainingCriteria(override val miniBatchFraction: Float = 0.01f) extends TrainingCriteria
 
   /**
    * __Criteria__: How to train (for [[DistBeliefTrainStyle]])
    *
    * This case class defines how to train the network. Training parameter is defined in this class.
    *
-   * @param miniBatch size of __mini-batch__ `(default 100)`
-   *                  If below or equal to zero, then this indicates no batch training (i.e. just go through once.)
+   * @param miniBatchFraction size of __mini-batch__ `(default 0.01 = 1%)`
+   *                          If below or equal to zero, then this indicates no batch training (i.e. just go through once.)
    * @param submitInterval Time interval between batch submission. `(default 1.minute)`
    * @param updateStep number of __mini-batches__ between update `(default 2)`
    * @param fetchStep number of __mini-batches__ between fetching `(default 10)`
@@ -120,7 +120,7 @@ package object train {
    *
    * @note We recommend set numCores as similar as possible with allocated spark v-cores.
    */
-  case class DistBeliefCriteria(override val miniBatch: Int = 100,
+  case class DistBeliefCriteria(override val miniBatchFraction: Float = 0.01f,
                                 submitInterval: Duration = 30.seconds,
                                 updateStep: Int = 2,
                                 fetchStep: Int = 10,

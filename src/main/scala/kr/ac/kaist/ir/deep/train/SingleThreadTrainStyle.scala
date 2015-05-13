@@ -1,11 +1,11 @@
 package kr.ac.kaist.ir.deep.train
 
-import kr.ac.kaist.ir.deep.fn.{WeightSeqOp, WeightUpdater}
+import java.util.concurrent.ThreadLocalRandom
+
+import kr.ac.kaist.ir.deep.fn.{Scalar, WeightSeqOp, WeightUpdater}
 import kr.ac.kaist.ir.deep.network.Network
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-
-import scala.collection.mutable.ArrayBuffer
 
 /**
  * __Trainer__ : Stochastic-Style, Single-Threaded
@@ -23,15 +23,13 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
   extends TrainStyle[IN, OUT] {
 
   /** Training set */
-  private var trainingSet: Int ⇒ Seq[Pair] = null
+  private var trainingSet: Scalar ⇒ Seq[Pair] = null
   /** Test Set */
   private var testSet: Int ⇒ Seq[Pair] = null
   /** Test Set iterator */
   private var testSetMapper: (Pair ⇒ Unit) ⇒ Unit = null
   /** Test Set Context. Null if testset is a local seq */
   private var testSetSC: SparkContext = null
-  /** Size of test set */
-  private var testSize: Float = 0.0f
   /** Count */
   private var count = 0
 
@@ -57,7 +55,7 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
    * Do mini-batch
    */
   override def batch(): Unit = {
-    var seq = trainingSet(param.miniBatch)
+    var seq = trainingSet(param.miniBatchFraction)
     while (seq.nonEmpty) {
       val pair = seq.head
       seq = seq.tail
@@ -71,23 +69,13 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
    * @param set Sequence of training set
    */
   override def setPositiveTrainingReference(set: Seq[(IN, OUT)]): Unit = {
-    val index = () ⇒ Math.floor(Math.random() * set.size).toInt
-    trainingSet = (n: Int) ⇒
-      if (n > 0) {
-        val array = ArrayBuffer[Pair]()
-        array.sizeHint(n)
-
-        var i = 0
-        while (i < n) {
-          array += set(index())
-          i += 1
-        }
-        array
+    trainingSet = (x: Scalar) ⇒
+      if (x > 0) {
+        set.filter(_ ⇒ ThreadLocalRandom.current().nextFloat() < x)
       } else {
         set
       }
-    val trainingSize = set.length
-    validationEpoch = if (param.miniBatch > 0) trainingSize / param.miniBatch else 1
+    validationEpoch = if (param.miniBatchFraction > 0) Math.round(1.0f / param.miniBatchFraction) else 1
   }
 
   /**
@@ -95,11 +83,10 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
    * @param set RDD of training set
    */
   override def setPositiveTrainingReference(set: RDD[(IN, OUT)]): Unit = {
-    trainingSet = (n: Int) ⇒
-      if (n > 0) set.takeSample(withReplacement = true, num = n).toSeq
+    trainingSet = (x: Scalar) ⇒
+      if (x > 0) set.sample(withReplacement = true, fraction = x).collect().toSeq
       else set.collect()
-    val trainingSize = set.countApproxDistinct()
-    validationEpoch = if (param.miniBatch > 0) (trainingSize / param.miniBatch).toInt else 1
+    validationEpoch = if (param.miniBatchFraction > 0) Math.round(1.0f / param.miniBatchFraction) else 1
   }
 
   /**
@@ -115,7 +102,6 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
         seq = seq.tail
       }
     }
-    testSize = set.size
     testSetSC = null
   }
 
@@ -128,7 +114,6 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
     testSetMapper = (mapper: Pair ⇒ Unit) ⇒ {
       set.foreach(mapper)
     }
-    testSize = set.countApproxDistinct().toFloat
     testSetSC = set.context
   }
 
@@ -143,20 +128,25 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
     if (testSetSC == null) {
       // If it is from general "local" sequence
       var sum = 0.0f
+      var count = 0
       testSetMapper {
-        item ⇒ sum += lossOf(item) / testSize
+        item ⇒
+          sum += lossOf(item)
+          count += 1
       }
-      sum
+      sum / count.toFloat
     } else {
       // If it is from RDD
       val sum = testSetSC.accumulator(0.0f)
+      val count = testSetSC.accumulator(0)
       val bcLoss = testSetSC.broadcast(lossOf)
       testSetMapper {
         item ⇒
-          sum += bcLoss.value(item) / testSize
+          sum += bcLoss.value(item)
+          count += 1
       }
       bcLoss.destroy()
-      sum.value
+      sum.value / count.value.toFloat
     }
   }
 

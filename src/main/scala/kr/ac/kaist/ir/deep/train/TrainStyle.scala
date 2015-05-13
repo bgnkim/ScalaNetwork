@@ -30,7 +30,7 @@ trait TrainStyle[IN, OUT] extends Serializable {
   val make: ManipulationType[IN, OUT]
   /** Logger */
   @transient protected val logger = Logger.getLogger(this.getClass)
-  /** size of training set */
+  /** number of epochs for iterating one training set */
   var validationEpoch: Int = 0
 
   /**

@@ -23,12 +23,12 @@ import scala.concurrent.duration._
  *             corrupt = GaussianCorruption(variance = 0.1)
  *          )
  *
- *         // Define Training Style. SingleThreadTrainStyle vs DistBeliefTrainStyle
+ *          // Define Manipulation Type. VectorType, AEType, RAEType, StandardRAEType, URAEType, and StringToVectorType.
  *          val style = new SingleThreadTrainStyle(
  *            net = net,
  *            algorithm = new StochasticGradientDescent(l2decay = 0.0001),
  *             make = operation,
- *            param = SimpleTrainingCriteria(miniBatch = 8))
+ *             param = SimpleTrainingCriteria(miniBatchFraction = 0.01))
  *
  *         // Define Trainer
  *         val train = new Trainer(
@@ -74,7 +74,7 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
    * @param set Full Sequence of training set
    * @return Training error (loss)
    */
-  def train(set: Seq[Pair]): Scalar = train(set, set)
+  def train(set: Seq[Pair]): (Scalar, Scalar, Scalar) = train(set, set)
 
   /**
    * Train given sequence, and validate with another sequence.
@@ -84,7 +84,7 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
    * @return Training error (loss)
    */
   def train(set: Seq[Pair],
-            validation: Seq[Pair]): Scalar = {
+            validation: Seq[Pair]): (Scalar, Scalar, Scalar) = {
     setPositiveTrainingReference(set)
     setTestReference(validation)
 
@@ -103,9 +103,8 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
       err
     } else {
       logger warn f"($name) Validation Period is zero! Training stopped."
-      logger warn f"($name) Please check your validation frequency (currently ${stops.validationFreq}) " +
-        f"and training set size (about ${validationEpoch * param.miniBatch})"
-      Float.PositiveInfinity
+      logger warn f"($name) Maybe because miniBatchFraction value is too large. Please check."
+      (Float.PositiveInfinity, Float.PositiveInfinity, Float.PositiveInfinity)
     }
   }
 
@@ -114,7 +113,7 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
    *
    * @param set RDD of training set
    */
-  def train(set: RDD[Pair]): Scalar = train(set, set)
+  def train(set: RDD[Pair]): (Scalar, Scalar, Scalar) = train(set, set)
 
   /**
    * Train using given RDD sequence. 
@@ -122,7 +121,7 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
    * @param set RDD of training set
    * @param validation RDD of validation set
    */
-  def train(set: RDD[Pair], validation: RDD[Pair]): Scalar = {
+  def train(set: RDD[Pair], validation: RDD[Pair]): (Scalar, Scalar, Scalar) = {
     setPositiveTrainingReference(set)
     setTestReference(validation)
 
@@ -141,9 +140,8 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
       err
     } else {
       logger warn f"($name) Validation Period is zero! Training stopped."
-      logger warn f"($name) Please check your validation frequency (currently ${stops.validationFreq}) " +
-        f"and training set size (about ${validationEpoch * param.miniBatch})"
-      Float.PositiveInfinity
+      logger warn f"($name) Maybe because miniBatchFraction value is too large. Please check."
+      (Float.PositiveInfinity, Float.PositiveInfinity, Float.PositiveInfinity)
     }
   }
 
@@ -191,14 +189,16 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
    * Tail Recursive : Train each batch
    *
    * @param epoch current iteration epoch. (1 iteration = 1 validation freq)
-   * @param prevloss previous loss
+   * @param prevEloss previous loss (Evaluation)
+   * @param prevWloss previous loss (Weight)
    * @param patience current patience, i.e. loop until at least this epoch.
-   * @return Total Loss when train is finished
+   * @return (Evaluation, Weight, Total) Loss when train is finished
    */
   @tailrec
   protected final def trainBatch(epoch: Int = 0,
-                                 prevloss: Scalar = Float.MaxValue,
-                                 patience: Int = 5): Scalar = {
+                                 prevEloss: Scalar = Float.MaxValue,
+                                 prevWloss: Scalar = Float.MaxValue,
+                                 patience: Int = 5): (Scalar, Scalar, Scalar) = {
     fetch(epoch)
     batch()
     update(epoch)
@@ -206,6 +206,7 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
     var nPatience = patience
     val iter = epoch / validationPeriod + 1
 
+    val prevloss = prevEloss + prevWloss
     val nLoss = if ((epoch + 1) % validationPeriod == 0) {
       // Pending until batch finished
       stopUntilBatchFinished()
@@ -221,7 +222,7 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
         val impr = 100.0 - improvement * 100.0
         logger info f"($name) # $iter%4d/$nPatience%4d, " +
           f"E + W = $train%.5f + $weight%.5f = $loss%.5f (▼ $impr%8.4f %%) "
-        loss
+        (train, weight, loss)
       } else {
         val impr = 100.0 - improvement * 100.0
         if (impr > 0f)
@@ -230,24 +231,24 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
         else
           logger info f"($name) # $iter%4d/$nPatience%4d, " +
             f"DISCARDED: NOT IMPROVED             (△ ${-impr}%8.4f %%)"
-        prevloss
+        (prevEloss, prevWloss, prevloss)
       }
     } else {
-      prevloss
+      (prevEloss, prevWloss, prevloss)
     }
 
-    if (iter <= stops.maxIter && nPatience >= iter && nLoss >= stops.lossThreshold) {
-      trainBatch(epoch + 1, nLoss, nPatience)
+    if (iter <= stops.maxIter && nPatience >= iter && nLoss._3 >= stops.lossThreshold) {
+      trainBatch(epoch + 1, nLoss._1, nLoss._2, nPatience)
     } else {
-      if (nLoss < stops.lossThreshold)
+      if (nLoss._3 < stops.lossThreshold)
         logger info f"($name) # $iter%4d/$nPatience%4d, " +
-          f"FINISHED with E + W = $nLoss%.5f [Loss < ${stops.lossThreshold}%.5f]"
+          f"FINISHED with E + W = ${nLoss._3}%.5f [Loss < ${stops.lossThreshold}%.5f]"
       else if (epoch > stops.maxIter)
         logger info f"($name) # $iter%4d/$nPatience%4d, " +
-          f"FINISHED with E + W = $nLoss%.5f [Iteration > ${stops.maxIter}%6d]"
+          f"FINISHED with E + W = ${nLoss._3}%.5f [Iteration > ${stops.maxIter}%6d]"
       else if (nPatience < epoch)
         logger info f"($name) # $iter%4d/$nPatience%4d, " +
-          f"FINISHED with E + W = $nLoss%.5f [NoUpdate ${stops.waitAfterUpdate} Iterations.]"
+          f"FINISHED with E + W = ${nLoss._3}%.5f [NoUpdate ${stops.waitAfterUpdate} Iterations.]"
 
       nLoss
     }
@@ -257,8 +258,8 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
    * Do actual training process
    * @return MSE of the training process
    */
-  private def lossOfTraining: Float =
-    if (param.miniBatch > 0) {
+  private def lossOfTraining: (Scalar, Scalar, Scalar) =
+    if (param.miniBatchFraction > 0) {
       trainBatch()
     } else {
       fetch(0)
@@ -271,7 +272,7 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
       saveParams(0, loss, 0)
 
       logger info f"($name) PASSONCE, E + W = $train%.5f + $weight%.5f = $loss%.5f"
-      loss
+      (train, weight, loss)
     }
 
 }
