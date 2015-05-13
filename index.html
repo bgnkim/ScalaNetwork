@@ -20,7 +20,7 @@
 
     <section class="main-content">
       <h1>
-<a id="scalanetwork-0102" class="anchor" href="#scalanetwork-0102" aria-hidden="true"><span class="octicon octicon-link"></span></a>ScalaNetwork 0.10.2</h1>
+<a id="scalanetwork-102" class="anchor" href="#scalanetwork-102" aria-hidden="true"><span class="octicon octicon-link"></span></a>ScalaNetwork 1.0.2</h1>
 
 <p>A <em>Neural Network implementation</em> with Scala, <a href="https://github.com/scalanlp/breeze">Breeze</a> &amp; <a href="http://spark.apache.org">Spark</a></p>
 
@@ -88,7 +88,10 @@
 <li>Softplus</li>
 <li>HardSigmoid</li>
 <li>HardTanh</li>
+<li>Softmax</li>
 </ul>
+
+<p>And also you can make new activation function using several operations.</p>
 
 <h1>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h1>
@@ -101,19 +104,19 @@
 <p>Currently ScalaNetwork supports Scala version 2.10 ~ 2.11.</p>
 
 <ul>
-<li>Stable Release is 0.10.2</li>
+<li>Stable Release is 1.0.2</li>
 </ul>
 
 <p>If you are using SBT, add a dependency as described below:</p>
 
-<div class="highlight highlight-scala"><pre>libraryDependencies <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>kr.ac.kaist.ir<span class="pl-pds">"</span></span> <span class="pl-k">%%</span> <span class="pl-s"><span class="pl-pds">"</span>scalanetwork<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s"><span class="pl-pds">"</span>0.10.2<span class="pl-pds">"</span></span></pre></div>
+<div class="highlight highlight-scala"><pre>libraryDependencies <span class="pl-k">+</span><span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>kr.ac.kaist.ir<span class="pl-pds">"</span></span> <span class="pl-k">%%</span> <span class="pl-s"><span class="pl-pds">"</span>scalanetwork<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s"><span class="pl-pds">"</span>1.0.2<span class="pl-pds">"</span></span></pre></div>
 
 <p>If you are using Maven, add a dependency as described below:</p>
 
 <div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
   &lt;<span class="pl-ent">groupId</span>&gt;kr.ac.kaist.ir&lt;/<span class="pl-ent">groupId</span>&gt;
   &lt;<span class="pl-ent">artifactId</span>&gt;scalanetwork_${your.scala.version}&lt;/<span class="pl-ent">artifactId</span>&gt;
-  &lt;<span class="pl-ent">version</span>&gt;0.10.1&lt;/<span class="pl-ent">version</span>&gt;
+  &lt;<span class="pl-ent">version</span>&gt;1.0.1&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <h2>
@@ -123,16 +126,16 @@
 
 <div class="highlight highlight-scala"><pre><span class="pl-c">// Define 2 -&gt; 4 -&gt; 1 Layered, Fully connected network.</span>
 <span class="pl-k">val</span> <span class="pl-en">net</span> <span class="pl-k">=</span> <span class="pl-en">Network</span>(<span class="pl-en">Sigmoid</span>, <span class="pl-c1">2</span>, <span class="pl-c1">4</span>, <span class="pl-c1">1</span>)
-<span class="pl-c">// Define Manipulation Type. VectorType, AEType, RAEType, StandardRAEType, and URAEType.</span>
+<span class="pl-c">// Define Manipulation Type. VectorType, AEType, RAEType, StandardRAEType, URAEType, and StringToVectorType.</span>
 <span class="pl-k">val</span> <span class="pl-en">operation</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">VectorType</span>(
    corrupt <span class="pl-k">=</span> <span class="pl-en">GaussianCorruption</span>(variance <span class="pl-k">=</span> <span class="pl-c1">0.1</span>)
 )
 <span class="pl-c">// Define Training Style. SingleThreadTrainStyle, MultiThreadTrainStyle, &amp; DistBeliefTrainStyle</span>
 <span class="pl-k">val</span> <span class="pl-en">style</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">SingleThreadTrainStyle</span>(
   net <span class="pl-k">=</span> net,
-  algorithm <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">StochasticGradientDescent</span>(l2decay <span class="pl-k">=</span> <span class="pl-c1">0.0001</span>),
+  algorithm <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">StochasticGradientDescent</span>(l2decay <span class="pl-k">=</span> <span class="pl-c1">0.0001f</span>),
   make <span class="pl-k">=</span> operation,
-  param <span class="pl-k">=</span> <span class="pl-en">SimpleTrainingCriteria</span>(miniBatch <span class="pl-k">=</span> <span class="pl-c1">8</span>))
+  param <span class="pl-k">=</span> <span class="pl-en">SimpleTrainingCriteria</span>(miniBatchFraction <span class="pl-k">=</span> <span class="pl-c1">0.01f</span>))
 <span class="pl-c">// Define Trainer</span>
 <span class="pl-k">val</span> <span class="pl-en">train</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trainer</span>(
   style <span class="pl-k">=</span> style,
@@ -202,9 +205,9 @@ i.e. 1 - (neuron drop-out probability for drop-out training). Default is 1.</p>
 
 <div class="highlight highlight-scala"><pre><span class="pl-c">/* Training Criteria */</span>
 <span class="pl-k">import</span> <span class="pl-v">scala.concurrent.duration.</span><span class="pl-v">_</span>
-<span class="pl-en">SimpleTrainingCriteria</span>(miniBatch<span class="pl-k">=</span><span class="pl-c1">100</span>, validationSize<span class="pl-k">=</span><span class="pl-c1">20</span>, negSamplingRatio<span class="pl-k">=</span><span class="pl-c1">0</span>)
-<span class="pl-en">DistBeliefCriteria</span>(miniBatch<span class="pl-k">=</span><span class="pl-c1">100</span>, validationSize<span class="pl-k">=</span><span class="pl-c1">20</span>, negSamplingRatio<span class="pl-k">=</span><span class="pl-c1">0</span>, submitInterval<span class="pl-k">=</span><span class="pl-c1">1.</span>seconds,
-  updateStep<span class="pl-k">=</span><span class="pl-c1">2</span>, fetchStep<span class="pl-k">=</span><span class="pl-c1">10</span>, numCores<span class="pl-k">=</span><span class="pl-c1">1</span>)</pre></div>
+<span class="pl-en">SimpleTrainingCriteria</span>(miniBatchFraction<span class="pl-k">=</span><span class="pl-c1">0.01f</span>, validationSize<span class="pl-k">=</span><span class="pl-c1">20</span>)
+<span class="pl-en">DistBeliefCriteria</span>(miniBatchFraction<span class="pl-k">=</span><span class="pl-c1">0.01f</span>, validationSize<span class="pl-k">=</span><span class="pl-c1">20</span>, submitInterval<span class="pl-k">=</span><span class="pl-c1">1.</span>seconds,
+  updateStep<span class="pl-k">=</span><span class="pl-c1">2</span>, fetchStep<span class="pl-k">=</span><span class="pl-c1">10</span>, numCores<span class="pl-k">=</span><span class="pl-c1">1</span>, repartitionOnStart <span class="pl-k">=</span> <span class="pl-c1">true</span>, storageLevel <span class="pl-k">=</span> <span class="pl-en">StorageLevel</span>.<span class="pl-en">MEMORY_ONLY</span>)</pre></div>
 
 <p>Validation size sets the number of elements used for validation phrase.</p>
 
@@ -235,7 +238,10 @@ i.e. 1 - (neuron drop-out probability for drop-out training). Default is 1.</p>
 <span class="pl-k">new</span> <span class="pl-en">StandardRAEType</span>(corrupt, objective)
 <span class="pl-c">// Experimental: Train network as URAE style. </span>
 <span class="pl-c">// With same structure, network should reconstruct all leaves from root.</span>
-<span class="pl-k">new</span> <span class="pl-en">URAEType</span>(corrupt, objective)</pre></div>
+<span class="pl-k">new</span> <span class="pl-en">URAEType</span>(corrupt, objective)
+
+<span class="pl-c">/* Manipulation Type : String input, Vector output */</span>
+<span class="pl-k">new</span> <span class="pl-en">StringToVectorType</span>(model, objective)</pre></div>
 
 <h3>
 <a id="training-style" class="anchor" href="#training-style" aria-hidden="true"><span class="octicon octicon-link"></span></a>Training Style</h3>
@@ -243,9 +249,9 @@ i.e. 1 - (neuron drop-out probability for drop-out training). Default is 1.</p>
 <p>You can choose the training style of the network.</p>
 
 <div class="highlight highlight-scala"><pre><span class="pl-c">/* Styles */</span>
-<span class="pl-k">new</span> <span class="pl-en">SingleThreadTrainStyle</span>(net, algorithm, mnpl<span class="pl-k">:</span><span class="pl-en">ManipulationType</span>, param)
-<span class="pl-k">new</span> <span class="pl-en">MultiThreadTrainStyle</span>(net, sparkContext, algorithm, mnpl<span class="pl-k">:</span><span class="pl-en">ManipulationType</span>, param<span class="pl-k">:</span><span class="pl-en">DistBeliefCriteria</span>)
-<span class="pl-k">new</span> <span class="pl-en">DistBeliefTrainStyle</span>(net, sparkContext, algorithm, mnpl<span class="pl-k">:</span><span class="pl-en">ManipulationType</span>, param<span class="pl-k">:</span><span class="pl-en">DistBeliefCriteria</span>)</pre></div>
+<span class="pl-k">new</span> <span class="pl-en">SingleThreadTrainStyle</span>(net, algorithm, make<span class="pl-k">:</span><span class="pl-en">ManipulationType</span>, param)
+<span class="pl-k">new</span> <span class="pl-en">MultiThreadTrainStyle</span>(net, sparkContext, algorithm, make<span class="pl-k">:</span><span class="pl-en">ManipulationType</span>, param<span class="pl-k">:</span><span class="pl-en">DistBeliefCriteria</span>)
+<span class="pl-k">new</span> <span class="pl-en">DistBeliefTrainStyle</span>(net, sparkContext, algorithm, make<span class="pl-k">:</span><span class="pl-en">ManipulationType</span>, param<span class="pl-k">:</span><span class="pl-en">DistBeliefCriteria</span>)</pre></div>
 
 <h3>
 <a id="training-1" class="anchor" href="#training-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Training</h3>
