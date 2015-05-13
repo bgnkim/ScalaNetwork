@@ -35,13 +35,13 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">SimpleTrainingCriteria</span><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">SimpleTrainingCriteria</span><span class="params">(<span name="miniBatchFraction">miniBatchFraction: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.01</span></span>)</span><span class="result"> extends <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p><u>Criteria</u>: How to train (for <a href="SingleThreadTrainStyle.html" class="extype" name="kr.ac.kaist.ir.deep.train.SingleThreadTrainStyle">SingleThreadTrainStyle</a>)</p><p>This case class defines how to train the network. Training parameter is defined in this class.
-</p></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code>
-                 If below or equal to zero, then this indicates no batch training (i.e. just go through once.)
+</p></div><dl class="paramcmts block"><dt class="param">miniBatchFraction</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 0.01 = 1%)</code>
+                         If below or equal to zero, then this indicates no batch training (i.e. just go through once.)
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
@@ -83,7 +83,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(miniBatch:Int):kr.ac.kaist.ir.deep.train.package.SimpleTrainingCriteria"></a>
+      <a id="&lt;init&gt;(miniBatchFraction:Float):kr.ac.kaist.ir.deep.train.package.SimpleTrainingCriteria"></a>
       <a id="&lt;init&gt;:SimpleTrainingCriteria"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -91,11 +91,11 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">SimpleTrainingCriteria</span><span class="params">(<span name="miniBatch">miniBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">100</span></span>)</span>
+        <span class="name">SimpleTrainingCriteria</span><span class="params">(<span name="miniBatchFraction">miniBatchFraction: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.01</span></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">miniBatch</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code>
-                 If below or equal to zero, then this indicates no batch training (i.e. just go through once.)
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">miniBatchFraction</dt><dd class="cmt"><p>size of <u>mini-batch</u> <code>(default 0.01 = 1%)</code>
+                         If below or equal to zero, then this indicates no batch training (i.e. just go through once.)
 </p></dd></dl></div>
     </li></ol>
             </div>
@@ -261,21 +261,21 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria#miniBatch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="miniBatch:Int"></a>
-      <a id="miniBatch:Int"></a>
+    </li><li name="kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria#miniBatchFraction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="miniBatchFraction:Float"></a>
+      <a id="miniBatchFraction:Float"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">miniBatch</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+        <span class="name">miniBatchFraction</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">size of <u>mini-batch</u> <code>(default 100)</code>
-                 If below or equal to zero, then this indicates no batch training (i.</p><div class="fullcomment"><div class="comment cmt"><p>size of <u>mini-batch</u> <code>(default 100)</code>
-                 If below or equal to zero, then this indicates no batch training (i.e. just go through once.)
+      <p class="shortcomment cmt">size of <u>mini-batch</u> <code>(default 0.01 = 1%)</code>
+                         If below or equal to zero, then this indicates no batch training (i.</p><div class="fullcomment"><div class="comment cmt"><p>size of <u>mini-batch</u> <code>(default 0.01 = 1%)</code>
+                         If below or equal to zero, then this indicates no batch training (i.e. just go through once.)
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.train.SimpleTrainingCriteria">SimpleTrainingCriteria</a> → <a href="TrainingCriteria.html" class="extype" name="kr.ac.kaist.ir.deep.train.TrainingCriteria">TrainingCriteria</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>

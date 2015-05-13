@@ -43,7 +43,8 @@
 </p></div><dl class="attributes block"> <div class="block">Example:
                <ol><li class="cmt"><p></p><pre><span class="kw">val</span> fx = HardTanh(<span class="num">0.0</span>)
 <span class="kw">val</span> diff = HardTanh.derivative(fx)</pre></li></ol>
-            </div><dt>Note</dt><dd><span class="cmt"><p><code>tanh(x) = sinh(x) / cosh(x)</code>, hard version approximates tanh as piecewise linear function.</p></span></dd></dl><div class="toggleContainer block">
+            </div><dt>Note</dt><dd><span class="cmt"><p><code>tanh(x) = sinh(x) / cosh(x)</code>, hard version approximates tanh as piecewise linear function.
+      We assumed the input of activation is a row vector.</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="Activation.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Activation">Activation</a>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, (<a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>) ⇒ <a href="package.html#ScalarMatrix=breeze.linalg.DenseMatrix[kr.ac.kaist.ir.deep.fn.package.Scalar]" class="extmbr" name="kr.ac.kaist.ir.deep.fn.ScalarMatrix">ScalarMatrix</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -248,7 +249,7 @@
       </h4>
       <p class="shortcomment cmt">Compute differentiation value of this function at <code>f(x) = fx</code>
 </p><div class="fullcomment"><div class="comment cmt"><p>Compute differentiation value of this function at <code>f(x) = fx</code>
-</p></div><dl class="paramcmts block"><dt class="param">fx</dt><dd class="cmt"><p>the <u>output</u> of this function</p></dd><dt>returns</dt><dd class="cmt"><p>differentiation value at <code>f(x) = fx</code>, which should be an <u>square, diagonal matrix</u>
+</p></div><dl class="paramcmts block"><dt class="param">fx</dt><dd class="cmt"><p>the <u>output</u> of this function</p></dd><dt>returns</dt><dd class="cmt"><p>differentiation value at <code>f(x) = fx</code>, which should be an <u>square, symmetric matrix</u>
 </p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="kr.ac.kaist.ir.deep.fn.HardTanh">HardTanh</a> → <a href="Activation.html" class="extype" name="kr.ac.kaist.ir.deep.fn.Activation">Activation</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>

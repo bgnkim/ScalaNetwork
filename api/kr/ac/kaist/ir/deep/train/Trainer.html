@@ -504,80 +504,80 @@ train.train(set, valid)</pre></li></ol>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.Trainer#train" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="train(set:org.apache.spark.rdd.RDD[(IN,OUT)],validation:org.apache.spark.rdd.RDD[(IN,OUT)]):kr.ac.kaist.ir.deep.fn.Scalar"></a>
-      <a id="train(RDD[(IN,OUT)],RDD[(IN,OUT)]):Scalar"></a>
+      <a id="train(set:org.apache.spark.rdd.RDD[(IN,OUT)],validation:org.apache.spark.rdd.RDD[(IN,OUT)]):(kr.ac.kaist.ir.deep.fn.Scalar,kr.ac.kaist.ir.deep.fn.Scalar,kr.ac.kaist.ir.deep.fn.Scalar)"></a>
+      <a id="train(RDD[(IN,OUT)],RDD[(IN,OUT)]):(Scalar,Scalar,Scalar)"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">train</span><span class="params">(<span name="set">set: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>)]</span>, <span name="validation">validation: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>)]</span>)</span><span class="result">: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
+        <span class="name">train</span><span class="params">(<span name="set">set: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>)]</span>, <span name="validation">validation: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>)]</span>)</span><span class="result">: (<a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>, <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>, <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Train using given RDD sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Train using given RDD sequence.
 </p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>RDD of training set</p></dd><dt class="param">validation</dt><dd class="cmt"><p>RDD of validation set
 </p></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.Trainer#train" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="train(set:org.apache.spark.rdd.RDD[(IN,OUT)]):kr.ac.kaist.ir.deep.fn.Scalar"></a>
-      <a id="train(RDD[(IN,OUT)]):Scalar"></a>
+      <a id="train(set:org.apache.spark.rdd.RDD[(IN,OUT)]):(kr.ac.kaist.ir.deep.fn.Scalar,kr.ac.kaist.ir.deep.fn.Scalar,kr.ac.kaist.ir.deep.fn.Scalar)"></a>
+      <a id="train(RDD[(IN,OUT)]):(Scalar,Scalar,Scalar)"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">train</span><span class="params">(<span name="set">set: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>)]</span>)</span><span class="result">: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
+        <span class="name">train</span><span class="params">(<span name="set">set: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>)]</span>)</span><span class="result">: (<a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>, <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>, <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Train using given RDD sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Train using given RDD sequence.
 </p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>RDD of training set
 </p></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.Trainer#train" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="train(set:Seq[(IN,OUT)],validation:Seq[(IN,OUT)]):kr.ac.kaist.ir.deep.fn.Scalar"></a>
-      <a id="train(Seq[(IN,OUT)],Seq[(IN,OUT)]):Scalar"></a>
+      <a id="train(set:Seq[(IN,OUT)],validation:Seq[(IN,OUT)]):(kr.ac.kaist.ir.deep.fn.Scalar,kr.ac.kaist.ir.deep.fn.Scalar,kr.ac.kaist.ir.deep.fn.Scalar)"></a>
+      <a id="train(Seq[(IN,OUT)],Seq[(IN,OUT)]):(Scalar,Scalar,Scalar)"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">train</span><span class="params">(<span name="set">set: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>)]</span>, <span name="validation">validation: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>)]</span>)</span><span class="result">: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
+        <span class="name">train</span><span class="params">(<span name="set">set: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>)]</span>, <span name="validation">validation: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>)]</span>)</span><span class="result">: (<a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>, <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>, <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Train given sequence, and validate with another sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Train given sequence, and validate with another sequence.
 </p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>Full Sequence of training set</p></dd><dt class="param">validation</dt><dd class="cmt"><p>Full Sequence of validation set</p></dd><dt>returns</dt><dd class="cmt"><p>Training error (loss)
 </p></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.Trainer#train" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="train(set:Seq[(IN,OUT)]):kr.ac.kaist.ir.deep.fn.Scalar"></a>
-      <a id="train(Seq[(IN,OUT)]):Scalar"></a>
+      <a id="train(set:Seq[(IN,OUT)]):(kr.ac.kaist.ir.deep.fn.Scalar,kr.ac.kaist.ir.deep.fn.Scalar,kr.ac.kaist.ir.deep.fn.Scalar)"></a>
+      <a id="train(Seq[(IN,OUT)]):(Scalar,Scalar,Scalar)"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">train</span><span class="params">(<span name="set">set: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>)]</span>)</span><span class="result">: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
+        <span class="name">train</span><span class="params">(<span name="set">set: <span class="extype" name="scala.Seq">Seq</span>[(<span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.IN">IN</span>, <span class="extype" name="kr.ac.kaist.ir.deep.train.Trainer.OUT">OUT</span>)]</span>)</span><span class="result">: (<a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>, <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>, <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Train given sequence, and validate with given sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Train given sequence, and validate with given sequence.
 </p></div><dl class="paramcmts block"><dt class="param">set</dt><dd class="cmt"><p>Full Sequence of training set</p></dd><dt>returns</dt><dd class="cmt"><p>Training error (loss)
 </p></dd></dl></div>
     </li><li name="kr.ac.kaist.ir.deep.train.Trainer#trainBatch" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="trainBatch(epoch:Int,prevloss:kr.ac.kaist.ir.deep.fn.Scalar,patience:Int):kr.ac.kaist.ir.deep.fn.Scalar"></a>
-      <a id="trainBatch(Int,Scalar,Int):Scalar"></a>
+      <a id="trainBatch(epoch:Int,prevEloss:kr.ac.kaist.ir.deep.fn.Scalar,prevWloss:kr.ac.kaist.ir.deep.fn.Scalar,patience:Int):(kr.ac.kaist.ir.deep.fn.Scalar,kr.ac.kaist.ir.deep.fn.Scalar,kr.ac.kaist.ir.deep.fn.Scalar)"></a>
+      <a id="trainBatch(Int,Scalar,Scalar,Int):(Scalar,Scalar,Scalar)"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trainBatch</span><span class="params">(<span name="epoch">epoch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="prevloss">prevloss: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a> = <span class="symbol">Float.MaxValue</span></span>, <span name="patience">patience: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">5</span></span>)</span><span class="result">: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a></span>
+        <span class="name">trainBatch</span><span class="params">(<span name="epoch">epoch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>, <span name="prevEloss">prevEloss: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a> = <span class="symbol">Float.MaxValue</span></span>, <span name="prevWloss">prevWloss: <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a> = <span class="symbol">Float.MaxValue</span></span>, <span name="patience">patience: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">5</span></span>)</span><span class="result">: (<a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>, <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>, <a href="../fn/package.html#Scalar=Float" class="extmbr" name="kr.ac.kaist.ir.deep.fn.Scalar">Scalar</a>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Tail Recursive : Train each batch
 </p><div class="fullcomment"><div class="comment cmt"><p>Tail Recursive : Train each batch
-</p></div><dl class="paramcmts block"><dt class="param">epoch</dt><dd class="cmt"><p>current iteration epoch. (1 iteration = 1 validation freq)</p></dd><dt class="param">prevloss</dt><dd class="cmt"><p>previous loss</p></dd><dt class="param">patience</dt><dd class="cmt"><p>current patience, i.e. loop until at least this epoch.</p></dd><dt>returns</dt><dd class="cmt"><p>Total Loss when train is finished
+</p></div><dl class="paramcmts block"><dt class="param">epoch</dt><dd class="cmt"><p>current iteration epoch. (1 iteration = 1 validation freq)</p></dd><dt class="param">prevEloss</dt><dd class="cmt"><p>previous loss (Evaluation)</p></dd><dt class="param">prevWloss</dt><dd class="cmt"><p>previous loss (Weight)</p></dd><dt class="param">patience</dt><dd class="cmt"><p>current patience, i.e. loop until at least this epoch.</p></dd><dt>returns</dt><dd class="cmt"><p>(Evaluation, Weight, Total) Loss when train is finished
 </p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Annotations</dt><dd>
                 <span class="name">@tailrec</span><span class="args">()</span>
               
