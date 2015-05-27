@@ -1,4 +1,4 @@
-ScalaNetwork 1.0.2
+ScalaNetwork 1.0.3
 ====================
 
 A *Neural Network implementation* with Scala, [Breeze](https://github.com/scalanlp/breeze) & [Spark](http://spark.apache.org)
@@ -60,12 +60,12 @@ Here is some examples for basic usage. If you want to extend this package or use
 
 Currently ScalaNetwork supports Scala version 2.10 ~ 2.11.
 
-* Stable Release is 1.0.2
+* Stable Release is 1.0.3
  
 If you are using SBT, add a dependency as described below:
 
 ```scala
-libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "1.0.2"
+libraryDependencies += "kr.ac.kaist.ir" %% "scalanetwork" % "1.0.3"
 ```
 
 If you are using Maven, add a dependency as described below:
@@ -73,7 +73,7 @@ If you are using Maven, add a dependency as described below:
 <dependency>
   <groupId>kr.ac.kaist.ir</groupId>
   <artifactId>scalanetwork_${your.scala.version}</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.3</version>
 </dependency>
 ```
 
