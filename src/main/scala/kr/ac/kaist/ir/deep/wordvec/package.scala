@@ -17,35 +17,6 @@ import scala.reflect.io.{File, Path}
  */
 package object wordvec {
 
-  /**
-   * Word Filter type
-   */
-  trait WordFilter extends (String ⇒ String) with Serializable {
-    /**
-     * Tokenize given string using this filter
-     * @param str String for tokenize
-     * @return Array of tokens
-     */
-    def tokenize(str:String): mutable.WrappedArray[String]
-
-    /**
-     * Save this filter into given path
-     * @param path Path to save.
-     */
-    def saveAs(path: Path):this.type = saveAs(File(path))
-
-    /**
-     * Save this filter into given file
-     * @param file File to save.
-     */
-    def saveAs(file: File):this.type = {
-      val oos = new ObjectOutputStream(file.outputStream())
-      oos.writeObject(this)
-      oos.close()
-      this
-    }
-  }
-
   /** Pattern for real number **/
   final val PATTERN_REAL = Pattern.compile("^[0-9]+\\.[0-9]+$", Pattern.UNICODE_CHARACTER_CLASS)
   final val PATTERN_REAL_WITHIN = Pattern.compile("\\s+[0-9]+\\.[0-9]+\\s+", Pattern.UNICODE_CHARACTER_CLASS)
@@ -57,11 +28,47 @@ package object wordvec {
   final val PATTERN_SPECIAL = Pattern.compile("^≪[A-Z]+≫$", Pattern.UNICODE_CHARACTER_CLASS)
 
   /**
+   * Word Filter type
+   */
+  trait WordFilter extends (String ⇒ String) with Serializable {
+    /**
+     * Tokenize given string using this filter
+     * @param str String for tokenize
+     * @return Array of tokens
+     */
+    def tokenize(str: String): mutable.WrappedArray[String]
+
+    /**
+     * Save this filter into given path
+     * @param path Path to save.
+     */
+    def saveAs(path: Path): this.type = saveAs(File(path))
+
+    /**
+     * Save this filter into given file
+     * @param file File to save.
+     */
+    def saveAs(file: File): this.type = {
+      val oos = new ObjectOutputStream(file.outputStream())
+      oos.writeObject(this)
+      oos.close()
+      this
+    }
+  }
+
+  /**
    * __WordFilter__ : Filter class for take only specific language area.
    * @param langFilter Regular Expression String indicating accepted Unicode area.
    */
   case class LangFilter(langFilter: String) extends WordFilter{
     val langPattern = Pattern.compile(s"[^$langFilter\\p{Punct}]+", Pattern.UNICODE_CHARACTER_CLASS)
+
+    def tokenize(str: String): mutable.WrappedArray[String] = {
+      val withReal = PATTERN_REAL_WITHIN.matcher(s" $str ")
+        .replaceAll(" ≪REALNUM≫ ").trim()
+      PATTERN_PUNCT.matcher(withReal).replaceAll(" $1 ").split("\\s+")
+        .transform(apply)
+    }
 
     /**
      * Normalize words
@@ -80,13 +87,6 @@ package object wordvec {
         "≪FOREIGN≫"
       } else
         word
-
-    def tokenize(str:String): mutable.WrappedArray[String] = {
-      val withReal = PATTERN_REAL_WITHIN.matcher(s" $str ")
-        .replaceAll(" ≪REALNUM≫ ").trim()
-      PATTERN_PUNCT.matcher(withReal).replaceAll(" $1 ").split("\\s+")
-        .transform(apply)
-    }
   }
 
   /**
@@ -94,29 +94,21 @@ package object wordvec {
    * @param map Mapping between String to Array[Coord]
    */
   class WordModel(val map: util.HashMap[String, Array[Scalar]]) extends Serializable with (String ⇒ ScalarMatrix) {
+    private final val OTHER_VEC = map(WordModel.OTHER_UNK)
     lazy val vectorSize = map.head._2.length
     private var filter: WordFilter = LangFilter("\\u0000-\\u007f")
-    private final val OTHER_VEC = map(WordModel.OTHER_UNK)
-
-    /**
-     * Set Word Filter
-     * @param newFilter Filter to be set
-     */
-    def setFilter(newFilter: WordFilter) = {
-      filter = newFilter
-    }
 
     /**
      * Load Word Filter
      * @param path Path where Serialized Filter saved
      */
-    def loadFilter(path: Path):this.type = loadFilter(File(path))
+    def loadFilter(path: Path): this.type = loadFilter(File(path))
 
     /**
      * Load Word Filter
      * @param file File where Serialized Filter saved
      */
-    def loadFilter(file: File):this.type = {
+    def loadFilter(file: File): this.type = {
       if (file.exists && file.isFile) {
         val ois = new ObjectInputStream(file.inputStream())
         val filter = ois.readObject().asInstanceOf[WordFilter]
@@ -125,6 +117,14 @@ package object wordvec {
       }
 
       this
+    }
+
+    /**
+     * Set Word Filter
+     * @param newFilter Filter to be set
+     */
+    def setFilter(newFilter: WordFilter) = {
+      filter = newFilter
     }
 
     /**
@@ -208,18 +208,21 @@ package object wordvec {
     /**
      * Restore Word Model from Path.
      * @param path Path of word model file.
+     * @param normalize True if you want vectors are normalized by longest length of vector.
      * @return WordModel restored from file.
      */
-    def apply(path: Path): WordModel = apply(File(path))
+    def apply(path: Path, normalize: Boolean): WordModel = apply(File(path), normalize)
 
     /**
      * Restore WordModel from File.
      * @param file File where to read
+     * @param normalize True if you want vectors are normalized by longest length of vector.
      * @return WordModel restored from file.
      */
-    def apply(file: File): WordModel =
-      if (File(file.path + ".obj").exists) {
-        val in = new ObjectInputStream(File(file.path + ".obj").inputStream())
+    def apply(file: File, normalize: Boolean = false): WordModel = {
+      val path = file.path + (if (normalize) ".norm.obj" else ".orig.obj")
+      if (File(path).exists) {
+        val in = new ObjectInputStream(File(path).inputStream())
         val model = in.readObject().asInstanceOf[WordModel]
         in.close()
 
@@ -233,6 +236,7 @@ package object wordvec {
 
         val buffer = new util.HashMap[String, Array[Scalar]]()
         var lineNo = mapSize
+        var maxlen = 0.0f
 
         while (lineNo > 0) {
           lineNo -= 1
@@ -243,20 +247,36 @@ package object wordvec {
           val splits = line.split("\\s+")
           val word = splits(0)
           val vector = splits.view.slice(1, vectorSize + 1).map(_.toFloat).force
+          val len = vector.map(Math.abs).max
           require(vector.length == vectorSize, s"'$word' Vector is broken! Read size ${vector.length}, but expected $vectorSize")
 
+          if (maxlen < len)
+            maxlen = len
           buffer += word → vector
         }
 
         br.close()
 
+        if (normalize && maxlen > 0f) {
+          logger info f"READ Word2Vec file : Maximum absolute value of entry in vector matrix = $maxlen%.4f"
+          buffer.foreach {
+            case (_, vec) ⇒
+              var i = vec.length
+              while (i > 0) {
+                i -= 1
+                vec.update(i, vec(i) / maxlen)
+              }
+          }
+        }
+
         val model = new WordModel(buffer)
-        val stream = new ObjectOutputStream(File(file.path + ".obj").outputStream())
+        val stream = new ObjectOutputStream(File(path).outputStream())
         stream.writeObject(model)
         stream.close()
 
         logger info "READ Word2Vec finished."
         model
       }
+    }
   }
 }

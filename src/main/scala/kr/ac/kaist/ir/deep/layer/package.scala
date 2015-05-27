@@ -86,7 +86,7 @@ package object layer {
    */
   object Layer {
     /** Sequence of supported activation functions */
-    private val acts = Seq(Sigmoid, HyperbolicTangent, Rectifier, Softplus, Linear, HardSigmoid, HardTanh)
+    private val acts = Seq(Sigmoid, HyperbolicTangent, Rectifier, Softplus, Linear, HardSigmoid, HardTanh, Softmax)
 
     /**
      * Load layer from JsObject

@@ -384,7 +384,7 @@ object Softmax extends Activation {
    */
   override def apply(x: ScalarMatrix): ScalarMatrix = {
     val expv: ScalarMatrix = exp(x)
-    val normalize: Scalar = sum(exp(x))
+    val normalize: Scalar = sum(expv)
     expv :/= normalize
   }
 

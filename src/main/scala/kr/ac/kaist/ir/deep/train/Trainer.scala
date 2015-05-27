@@ -216,7 +216,7 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
       val loss = train + weight
       val improvement = if (prevloss > 0f) loss / prevloss else stops.improveThreshold
       if (improvement < stops.improveThreshold) {
-        nPatience = Math.max(patience, iter * (stops.waitAfterUpdate + 1))
+        nPatience = Math.min(Math.max(patience, iter * (stops.waitAfterUpdate + 1)), stops.maxIter)
         saveParams(epoch, loss, nPatience)
 
         val impr = 100.0 - improvement * 100.0
@@ -237,16 +237,16 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
       (prevEloss, prevWloss, prevloss)
     }
 
-    if (iter <= stops.maxIter && nPatience >= iter && nLoss._3 >= stops.lossThreshold) {
+    if (iter <= nPatience && (nLoss._3 >= stops.lossThreshold || iter < 5)) {
       trainBatch(epoch + 1, nLoss._1, nLoss._2, nPatience)
     } else {
       if (nLoss._3 < stops.lossThreshold)
         logger info f"($name) # $iter%4d/$nPatience%4d, " +
           f"FINISHED with E + W = ${nLoss._3}%.5f [Loss < ${stops.lossThreshold}%.5f]"
-      else if (epoch > stops.maxIter)
+      else if (iter > stops.maxIter)
         logger info f"($name) # $iter%4d/$nPatience%4d, " +
           f"FINISHED with E + W = ${nLoss._3}%.5f [Iteration > ${stops.maxIter}%6d]"
-      else if (nPatience < epoch)
+      else if (nPatience < iter)
         logger info f"($name) # $iter%4d/$nPatience%4d, " +
           f"FINISHED with E + W = ${nLoss._3}%.5f [NoUpdate ${stops.waitAfterUpdate} Iterations.]"
 
