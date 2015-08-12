@@ -174,8 +174,10 @@ package object layer {
             } catch {
               case _: Throwable ⇒
                 (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[String]]]].map(ScalarMatrix.restore)
-                  .zipWithIndex.foldLeft(ScalarMatrix.$0(out.as[Int], tuple.head + tuple(1))) {
-                  case (matx, (row, id)) ⇒ matx(id to id, ::) := row
+                  .zipWithIndex.foldLeft(ScalarMatrix.$0(out.as[Int], tuple.sum)) {
+                  case (matx, (row, id)) ⇒
+                    matx(id to id, ::) := row
+                    matx
                 }
             }
           new SplitTensorLayer((tuple.head, tuple(1)) → out.as[Int], act, quad, linear, b)
@@ -189,7 +191,9 @@ package object layer {
               case _: Throwable ⇒
                 (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[String]]]].map(ScalarMatrix.restore)
                   .zipWithIndex.foldLeft(ScalarMatrix.$0(out.as[Int], in.as[Int])) {
-                  case (matx, (row, id)) ⇒ matx(id to id, ::) := row
+                  case (matx, (row, id)) ⇒
+                    matx(id to id, ::) := row
+                    matx
                 }
             }
           new FullTensorLayer(in.as[Int] → out.as[Int], act, quad, linear, b)
