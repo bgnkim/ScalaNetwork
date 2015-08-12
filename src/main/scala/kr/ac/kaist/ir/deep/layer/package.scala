@@ -167,26 +167,32 @@ package object layer {
         case "SplitTensorLayer" ⇒
           val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
           val tuple = in.as[Seq[Int]]
-          val quad = (obj \ "quadratic").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
-          try {
-            val linear = ScalarMatrix restore (obj \ "linear").as[IndexedSeq[IndexedSeq[String]]]
-            new SplitTensorLayer((tuple.head, tuple(1)) → out.as[Int], act, quad, linear, b)
-          } catch {
-            case _: Throwable ⇒
-              val linear = (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
-              new SplitTensorLayer((tuple.head, tuple(1)) → out.as[Int], act, quad, linear, b)
-          }
+          val quad = (obj \ "quadratic").as[Seq[IndexedSeq[IndexedSeq[String]]]] map ScalarMatrix.restore
+          val linear =
+            try {
+              ScalarMatrix restore (obj \ "linear").as[IndexedSeq[IndexedSeq[String]]]
+            } catch {
+              case _: Throwable ⇒
+                (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[String]]]].map(ScalarMatrix.restore)
+                  .zipWithIndex.foldLeft(ScalarMatrix.$0(out.as[Int], tuple.head + tuple(1))) {
+                  case (matx, (row, id)) ⇒ matx(id to id, ::) := row
+                }
+            }
+          new SplitTensorLayer((tuple.head, tuple(1)) → out.as[Int], act, quad, linear, b)
         case "FullTensorLayer" ⇒
           val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
-          val quad = (obj \ "quadratic").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
-          try {
-            val linear = ScalarMatrix restore (obj \ "linear").as[IndexedSeq[IndexedSeq[String]]]
-            new FullTensorLayer(in.as[Int] → out.as[Int], act, quad, linear, b)
-          } catch {
-            case _: Throwable ⇒
-              val linear = (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
-              new FullTensorLayer(in.as[Int] → out.as[Int], act, quad, linear, b)
-          }
+          val quad = (obj \ "quadratic").as[Seq[IndexedSeq[IndexedSeq[String]]]] map ScalarMatrix.restore
+          val linear =
+            try {
+              ScalarMatrix restore (obj \ "linear").as[IndexedSeq[IndexedSeq[String]]]
+            } catch {
+              case _: Throwable ⇒
+                (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[String]]]].map(ScalarMatrix.restore)
+                  .zipWithIndex.foldLeft(ScalarMatrix.$0(out.as[Int], in.as[Int])) {
+                  case (matx, (row, id)) ⇒ matx(id to id, ::) := row
+                }
+            }
+          new FullTensorLayer(in.as[Int] → out.as[Int], act, quad, linear, b)
       }
     }
   }

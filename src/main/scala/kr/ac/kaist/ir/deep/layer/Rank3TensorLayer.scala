@@ -188,7 +188,7 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
     val dXdQ: ScalarMatrix = inA * inB.t //d tr(axb)/dx = a'b'
 
     // Add dG/dx quadratic part.
-    updateQuadratic(input, inA, inB, dGdX, dXdQ, dGdx)
+    updateQuadratic(inA, inB, dGdX, dXdQ, dGdx)
   }
 
   private def updateQuadratic(inA: ScalarMatrix, inB: ScalarMatrix,
