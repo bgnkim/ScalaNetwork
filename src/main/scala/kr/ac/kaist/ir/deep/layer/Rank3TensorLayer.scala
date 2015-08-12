@@ -193,7 +193,7 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
 
   private def updateQuadratic(inA: ScalarMatrix, inB: ScalarMatrix,
                               dGdXAll: ScalarMatrix, dXdQ: ScalarMatrix,
-                              acc: ScalarMatrix, id: Int = fanIn - 1): ScalarMatrix =
+                              acc: ScalarMatrix, id: Int = fanOut - 1): ScalarMatrix =
     if (id >= 0) {
       // This is scalar
       val dGdX = dGdXAll(id, 0)
