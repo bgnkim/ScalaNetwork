@@ -45,7 +45,7 @@ class AutoEncoder(val layer: Reconstructable,
    * @return JsObject of this network
    */
   override def toJSON = Json.obj(
-    "type" → "AutoEncoder",
+    "type" → this.getClass.getSimpleName,
     "presence" → presence.safe,
     "layers" → Json.arr(layer.toJSON)
   )
@@ -139,3 +139,4 @@ class AutoEncoder(val layer: Reconstructable,
     h decodeBy_: layer
   }
 }
+

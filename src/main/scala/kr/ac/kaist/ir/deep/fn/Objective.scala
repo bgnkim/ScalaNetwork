@@ -143,6 +143,7 @@ object CrossEntropyErr extends Objective {
  * __Objective Function__: Dot-product Error
  *
  * @note This function computes additive inverse of dot product, i.e. dot-product dissimiarity.
+ *       Also this function assumes all matrices between [-1, 1]^N^
  *
  * @example
  * {{{val output = net(input)
@@ -167,7 +168,7 @@ object DotProductErr extends Objective {
    * @param output the computed __output of the network__
    * @return the error
    */
-  override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar = - sum(real :* output)
+  override def apply(real: ScalarMatrix, output: ScalarMatrix): Scalar = real.rows - sum(real :* output)
 }
 
 /**

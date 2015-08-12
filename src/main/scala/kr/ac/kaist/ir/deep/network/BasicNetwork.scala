@@ -49,7 +49,7 @@ class BasicNetwork(val layers: IndexedSeq[Layer])
    * @return JsObject of this network
    */
   override def toJSON = Json.obj(
-    "type" → "BasicNetwork",
+    "type" → this.getClass.getSimpleName,
     "layers" → JsArray(layers map (_.toJSON))
   )
 
@@ -93,3 +93,4 @@ class BasicNetwork(val layers: IndexedSeq[Layer])
     input.head
   }
 }
+

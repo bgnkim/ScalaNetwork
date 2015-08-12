@@ -1,12 +1,15 @@
 package kr.ac.kaist.ir.deep
 
+import java.io.Serializable
+
 import kr.ac.kaist.ir.deep.fn.{Activation, Probability, ScalarMatrix}
 import kr.ac.kaist.ir.deep.layer.{BasicLayer, Layer, Reconstructable}
-import play.api.libs.json.{JsArray, JsObject, Json}
+import play.api.libs.json.{JsArray, JsObject, JsValue, Json}
 
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Codec
 import scala.reflect.io.{File, Path}
+import scala.reflect.runtime.universe
 
 /**
  * Package for network structure
@@ -33,6 +36,9 @@ package object network {
 
     /**
      * Serialize network to JSON
+     * @note Please make an NetReviver object if you're using custom network.
+     *       In that case, please specify NetReviver object's full class name as "__reviver__,"
+     *       and fill up NetReviver.revive method.
      *
      * @return JsObject of this network
      */
@@ -60,14 +66,6 @@ package object network {
      * @return output matrix
      */
     def of(x: ScalarMatrix): ScalarMatrix = apply(x)
-  }
-
-  /**
-   * Operation for Network
-   *
-   * @param net the network that operation will be applied
-   */
-  implicit class NetworkOp(net: Network) extends Serializable {
 
     /**
      * Copy given network by given amount
@@ -75,7 +73,7 @@ package object network {
      * @return Sequence of copied network (Not linked)
      */
     def copy = {
-      val json = net.toJSON
+      val json = this.toJSON
       Network(json)
     }
 
@@ -86,15 +84,28 @@ package object network {
      */
     def saveAsJsonFile(path: Path, codec: Codec = Codec.UTF8): Unit = {
       val writer = File(path).bufferedWriter(append = false, codec = codec)
-      writer.write(net.toJSON.toString())
+      writer.write(Json.prettyPrint(this.toJSON))
       writer.close()
     }
   }
 
   /**
+   * __Trait__ of Network Reviver (Companion) objects
+   */
+  trait NetReviver extends Serializable {
+    /**
+     * Revive network using given JSON value
+     * @param obj JSON value to be revived
+     * @return Revived network.
+     */
+    def revive(obj: JsValue): Network
+  }
+
+  /**
    * Companion object of BasicNetwork
    */
-  object Network {
+  object Network extends NetReviver {
+    @transient lazy val runtimeMirror = universe.synchronized(universe.runtimeMirror(getClass.getClassLoader))
     /**
      * Construct network from given layer size information
      *
@@ -118,7 +129,7 @@ package object network {
      */
     def jsonFile[T >: Network](path: Path, codec: Codec = Codec.UTF8): T = {
       val line = File(path).lines(codec).mkString("")
-      val json = Json.parse(line).as[JsObject]
+      val json = Json.parse(line)
       apply(json).asInstanceOf[T]
     }
 
@@ -128,16 +139,32 @@ package object network {
      * @param obj JsObject to be parsed
      * @return New Network reconstructed from this object
      */
-    def apply(obj: JsObject): Network =
+    def apply(obj: JsValue): Network = {
+      val companion =
+        universe.synchronized {
+          (obj \ "reviver").asOpt[String] match {
+            case Some(clsName) ⇒
+              val module = runtimeMirror.staticModule(clsName)
+              runtimeMirror.reflectModule(module).instance.asInstanceOf[NetReviver]
+            case None ⇒
+              this
+          }
+        }
+      companion.revive(obj)
+    }
+
+    /**
+     * Revive network using given JSON value
+     * @param obj JSON value to be revived
+     * @return Revived network.
+     */
+    override def revive(obj: JsValue): Network = {
       (obj \ "type").as[String] match {
-        case "AutoEncoder" ⇒
-          AutoEncoder(obj)
-        case "BasicNetwork" ⇒
-          BasicNetwork(obj)
-        case "StackedAutoEncoder" ⇒
-          val layers = (obj \ "stack").as[Seq[JsObject]] map Network.AutoEncoder
-          new StackedAutoEncoder(layers)
+        case "AutoEncoder" ⇒ AutoEncoder(obj)
+        case "BasicNetwork" ⇒ BasicNetwork(obj)
+        case "StackedAutoEncoder" ⇒ StackedAutoEncoder(obj)
       }
+    }
 
     /**
      * Load network from JsObject
@@ -145,7 +172,7 @@ package object network {
      * @param obj JsObject to be parsed
      * @return New AutoEncoder reconstructed from this object
      */
-    def AutoEncoder(obj: JsObject): AutoEncoder = {
+    def AutoEncoder(obj: JsValue): AutoEncoder = {
       val layers = (obj \ "layers").as[JsArray].value map Layer.apply
       val presence = (obj \ "presence").as[Probability]
       new AutoEncoder(layers.head.asInstanceOf[Reconstructable], presence)
@@ -157,11 +184,23 @@ package object network {
      * @param obj JsObject to be parsed
      * @return New Basic Network reconstructed from this object
      */
-    def BasicNetwork(obj: JsObject): BasicNetwork = {
+    def BasicNetwork(obj: JsValue): BasicNetwork = {
       val layers = ArrayBuffer[Layer]()
       layers ++= (obj \ "layers").as[JsArray].value.map(Layer.apply)
       new BasicNetwork(layers)
     }
+
+    /**
+     * Load network from JsObject
+     *
+     * @param obj JsObject to be parsed
+     * @return New Stacked AutoEncoder reconstructed from this object
+     */
+    def StackedAutoEncoder(obj: JsValue): StackedAutoEncoder = {
+      val layers = (obj \ "stack").as[Seq[JsObject]] map Network.AutoEncoder
+      new StackedAutoEncoder(layers)
+    }
+
   }
 
 }

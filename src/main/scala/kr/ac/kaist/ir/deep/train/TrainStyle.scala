@@ -2,7 +2,7 @@ package kr.ac.kaist.ir.deep.train
 
 import kr.ac.kaist.ir.deep.fn._
 import kr.ac.kaist.ir.deep.network.Network
-import org.apache.log4j.Logger
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.rdd.RDD
 
 import scala.concurrent.Future
@@ -16,6 +16,10 @@ import scala.concurrent.Future
  * @tparam OUT the type of output
  */
 trait TrainStyle[IN, OUT] extends Serializable {
+  // Turnoff spark logging feature.
+  Logger.getRootLogger.setLevel(Level.WARN)
+  Logger.getLogger("kr.ac").setLevel(Level.INFO)
+
   /** Training Pair Type */
   type Pair = (IN, OUT)
   /** Sampler Type */

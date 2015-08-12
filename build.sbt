@@ -2,7 +2,7 @@ organization := "kr.ac.kaist.ir"
 
 name := "ScalaNetwork"
 
-version := "1.0.3"
+version := "1.2.0"
 
 scalaVersion := "2.10.4"
 
@@ -17,10 +17,9 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-core" % "1.3.1",
+  "org.apache.spark" %% "spark-core" % "1.4.1",
   "com.typesafe.play" %% "play-json" % "2.3.4",
-  "org.scalanlp" %% "breeze" % "0.11.2",
-  "org.scalanlp" %% "breeze-natives" % "0.11.2"
+  "org.scalanlp" %% "breeze" % "0.11.2"
 )
 
 scalacOptions in Test ++= Seq("-Yrangepos")

@@ -40,7 +40,7 @@ class StackedAutoEncoder(val encoders: Seq[AutoEncoder]) extends Network {
    */
   override def toJSON: JsObject =
     Json.obj(
-      "type" → "StackedAutoEncoder",
+      "type" → this.getClass.getSimpleName,
       "stack" → Json.arr(encoders map (_.toJSON))
     )
 
@@ -92,3 +92,5 @@ class StackedAutoEncoder(val encoders: Seq[AutoEncoder]) extends Network {
     x
   }
 }
+
+

@@ -1,7 +1,7 @@
 package kr.ac.kaist.ir.deep
 
 import breeze.linalg.DenseMatrix
-import play.api.libs.json.{JsArray, JsString}
+import play.api.libs.json.{JsArray, JsObject, JsString, Json}
 
 /**
  * Package for various functions.
@@ -195,7 +195,7 @@ package object fn {
        * @param fx the __output__ of this function
        * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
        */
-      override def derivative(fx: ScalarMatrix): ScalarMatrix = act(fx :* sX) :* (sY * sX)
+      override def derivative(fx: ScalarMatrix): ScalarMatrix = act.derivative(fx :* sX) :* (sY * sX)
 
       /**
        * Compute mapping for `x`
@@ -204,6 +204,19 @@ package object fn {
        * @return value of `f(x)`
        */
       override def apply(x: ScalarMatrix): ScalarMatrix = act(x :* sX) :* sY
+
+      /**
+       * Serialize Activation function into String.
+       * @note If this is an "object", do not modify this function.
+       *       This does not supports Activation Operations defined outside of this package.
+       * @return JSON object states this function
+       */
+      override def toJSON: JsObject = Json.obj(
+        "function" → "scale",
+        "base" → act.toJSON,
+        "X" → sX,
+        "Y" → sY
+      )
     }
 
     /**
@@ -219,7 +232,7 @@ package object fn {
        * @param fx the __output__ of this function
        * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
        */
-      override def derivative(fx: ScalarMatrix): ScalarMatrix = act(fx :- dX)
+      override def derivative(fx: ScalarMatrix): ScalarMatrix = act.derivative(fx :- dX)
 
       /**
        * Compute mapping for `x`
@@ -228,6 +241,19 @@ package object fn {
        * @return value of `f(x)`
        */
       override def apply(x: ScalarMatrix): ScalarMatrix = act(x :- dX) :+ dY
+
+      /**
+       * Serialize Activation function into String.
+       * @note If this is an "object", do not modify this function.
+       *       This does not supports Activation Operations defined outside of this package.
+       * @return JSON object states this function
+       */
+      override def toJSON: JsObject = Json.obj(
+        "function" → "translate",
+        "base" → act.toJSON,
+        "X" → dX,
+        "Y" → dY
+      )
     }
 
     /**
@@ -245,7 +271,7 @@ package object fn {
        * @return differentiation value at `f(x) = fx`, which should be an __square, diagonal matrix__
        */
       override def derivative(fx: ScalarMatrix): ScalarMatrix =
-        applySeq.map(_.apply(fx)).reduce(_ :+ _)
+        applySeq.map(_.derivative(fx)).reduce(_ :+ _)
 
       /**
        * Compute mapping for `x`
@@ -255,6 +281,18 @@ package object fn {
        */
       override def apply(x: ScalarMatrix): ScalarMatrix =
         applySeq.map(_.apply(x)).reduce(_ :+ _)
+
+      /**
+       * Serialize Activation function into String.
+       * @note If this is an "object", do not modify this function.
+       *       This does not supports Activation Operations defined outside of this package.
+       * @return JSON object states this function
+       */
+      override def toJSON: JsObject = Json.obj(
+        "function" → "add",
+        "base" → act.toJSON,
+        "args" → others.map(_.toJSON)
+      )
     }
   }
 }

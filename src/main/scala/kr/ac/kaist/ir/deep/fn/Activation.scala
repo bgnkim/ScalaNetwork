@@ -2,6 +2,10 @@ package kr.ac.kaist.ir.deep.fn
 
 import breeze.linalg.{DenseMatrix, diag, sum}
 import breeze.numerics._
+import play.api.libs.json.{JsObject, JsValue, Json}
+
+import scala.annotation.tailrec
+import scala.reflect.runtime._
 
 /**
  * __Trait__ that describes an activation function for '''each layer'''
@@ -26,6 +30,14 @@ trait Activation extends (ScalarMatrix ⇒ ScalarMatrix) with Serializable {
   def apply(x: ScalarMatrix): ScalarMatrix
 
   /**
+   * Serialize Activation function into String.
+   * @note If this is an "object", do not modify this function.
+   *       This does not supports Activation Operations defined outside of this package.
+   * @return JSON object states this function
+   */
+  def toJSON: JsObject = Json.obj("class" → this.getClass.getCanonicalName)
+
+  /**
    * Initialize the weight matrix
    *
    * @param fanIn the number of __fan-in__ ''i.e. the number of neurons in previous layer''
@@ -37,6 +49,46 @@ trait Activation extends (ScalarMatrix ⇒ ScalarMatrix) with Serializable {
   def initialize(fanIn: Int, fanOut: Int, rows: Int = 0, cols: Int = 0): ScalarMatrix = {
     val pmMatx: ScalarMatrix = ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :* 1e-2f
     pmMatx :+ 1e-2f
+  }
+}
+
+/**
+ * Companion Object of Activation.
+ */
+object Activation {
+  @transient val runtimeMirror = universe.synchronized(universe.runtimeMirror(getClass.getClassLoader))
+
+  /**
+   * Reconstruct Activation function from given JSON value.
+   * @param obj JSON value to be reconstructed
+   * @return Activation reconstructed from JSON
+   */
+  def apply(obj: JsValue): Activation = {
+    (obj \ "function").asOpt[String] match {
+      case Some("scale") ⇒
+        val base = apply(obj \ "base")
+        val x = (obj \ "X").as[Float]
+        val y = (obj \ "Y").as[Float]
+        base *(x, y)
+      case Some("translation") ⇒
+        val base = apply(obj \ "base")
+        val x = (obj \ "X").as[Float]
+        val y = (obj \ "Y").as[Float]
+        base +(x, y)
+      case Some("add") ⇒
+        val base = apply(obj \ "base")
+        val args = (obj \ "args").as[Seq[JsValue]].map(apply)
+        base.+(args: _*)
+      case _ ⇒
+        val str = (obj \ "class").asOpt[String] match {
+          case Some(x) ⇒ x
+          case _ ⇒ "kr.ac.kaist.ir.deep.fn." + obj.as[String]
+        }
+        universe.synchronized {
+          val module = runtimeMirror.staticModule(str)
+          runtimeMirror.reflectModule(module).instance.asInstanceOf[Activation]
+        }
+    }
   }
 }
 
@@ -61,15 +113,7 @@ object HardSigmoid extends Activation {
     // Because fx is n by 1 matrix, generate n by n matrix
     val res = ScalarMatrix $0(fx.rows, fx.rows)
     // Output is diagonal matrix, with dfi(xi)/dxi.
-    var r = 0
-    while (r < fx.rows) {
-      val x = fx(r, 0)
-      if (x > 0.0f && x < 1.0f)
-        res.update(r, r, 0.25f)
-      // else res.update((r, r), 0.0f) [Already initialized as zero]
-      r += 1
-    }
-    res
+    derivCoord(fx, res, fx.rows - 1)
   }
 
   /**
@@ -80,24 +124,34 @@ object HardSigmoid extends Activation {
    */
   override def apply(x: ScalarMatrix): ScalarMatrix = {
     val res = ScalarMatrix $0(x.rows, x.cols)
-
-    val rows = x.rows
-    val cols = x.cols
-    var r, c = 0
-
-    while (r < rows) {
-      c = 0
-      while (c < cols) {
-        val v = x(r, c)
-        // if (v < -2) res.update(r, c, 0.0f) [Already initailized as zero]
-        if (v > 2) res.update(r, c, 1.0f)
-        else res.update(r, c, 0.25f * v + 0.5f)
-        c += 1
-      }
-      r += 1
-    }
-    res
+    applyCoord(x, res, x.rows - 1, x.cols - 1)
   }
+
+  @tailrec
+  private def derivCoord(fx: ScalarMatrix, res: ScalarMatrix, r: Int): ScalarMatrix =
+    if (r >= 0) {
+      val x = fx(r, 0)
+      if (x > 0.0f && x < 1.0f)
+        res.update(r, r, 0.25f)
+      // else res.update((r, r), 0.0f) [Already initialized as zero]
+      derivCoord(fx, res, r - 1)
+    } else
+      res
+
+  @tailrec
+  private def applyCoord(x: ScalarMatrix, res: ScalarMatrix, r: Int, c: Int): ScalarMatrix =
+    if (r >= 0) {
+      val v = x(r, c)
+      // if (v < -2) res.update(r, c, 0.0f) [Already initailized as zero]
+      if (v > 2) res.update(r, c, 1.0f)
+      else res.update(r, c, 0.25f * v + 0.5f)
+
+      if (c > 0)
+        applyCoord(x, res, r, c - 1)
+      else
+        applyCoord(x, res, r - 1, x.cols - 1)
+    } else
+      res
 }
 
 /**
@@ -120,15 +174,7 @@ object HardTanh extends Activation {
     // Because fx is n by 1 matrix, generate n by n matrix
     val res = ScalarMatrix $0(fx.rows, fx.rows)
     // Output is diagonal matrix, with dfi(xi)/dxi.
-    var r = 0
-    while (r < fx.rows) {
-      val x = fx(r, 0)
-      if (x < 1.0f && x > -1.0f)
-        res.update(r, r, 1.0f)
-      // else res.update(r, r, 0.0f) [Already initalized as zero]
-      r += 1
-    }
-    res
+    derivCoord(fx, res, fx.rows - 1)
   }
 
   /**
@@ -139,22 +185,33 @@ object HardTanh extends Activation {
    */
   override def apply(x: ScalarMatrix): ScalarMatrix = {
     val res = x.copy
-    val rows = x.rows
-    val cols = x.cols
-    var r, c = 0
-
-    while (r < rows) {
-      c = 0
-      while (c < cols) {
-        val v = x(r, c)
-        if (v < -1) res.update(r, c, -1.0f)
-        else if (v > 1) res.update(r, c, 1.0f)
-        c += 1
-      }
-      r += 1
-    }
-    res
+    applyCoord(x, res, x.rows - 1, x.cols - 1)
   }
+
+  @tailrec
+  private def derivCoord(fx: ScalarMatrix, res: ScalarMatrix, r: Int): ScalarMatrix =
+    if (r >= 0) {
+      val x = fx(r, 0)
+      if (x < 1.0f && x > -1.0f)
+        res.update(r, r, 1.0f)
+      // else res.update(r, r, 0.0f) [Already initalized as zero]
+      derivCoord(fx, res, r - 1)
+    } else
+      res
+
+  @tailrec
+  private def applyCoord(x: ScalarMatrix, res: ScalarMatrix, r: Int, c: Int): ScalarMatrix =
+    if (r >= 0) {
+      val v = x(r, c)
+      if (v < -1) res.update(r, c, -1.0f)
+      else if (v > 1) res.update(r, c, 1.0f)
+
+      if (c > 0)
+        applyCoord(x, res, r, c - 1)
+      else
+        applyCoord(x, res, r - 1, x.cols - 1)
+    } else
+      res
 }
 
 /**
@@ -250,15 +307,7 @@ object Rectifier extends Activation {
     // Because fx is n by 1 matrix, generate n by n matrix
     val res = ScalarMatrix $0(fx.rows, fx.rows)
     // Output is diagonal matrix, with dfi(xi)/dxi.
-    var r = 0
-    while (r < fx.rows) {
-      val x = fx(r, 0)
-      if (x > 0)
-        res.update(r, r, 1.0f)
-      //else res.update(r, r, 0.0f) [Already Initialized as zero]
-      r += 1
-    }
-    res
+    derivCoord(fx, res, fx.rows - 1)
   }
 
   /**
@@ -269,20 +318,29 @@ object Rectifier extends Activation {
    */
   override def apply(x: ScalarMatrix): ScalarMatrix = {
     val res = x.copy
-    val rows = x.rows
-    val cols = x.cols
-    var r, c = 0
-
-    while (r < rows) {
-      c = 0
-      while (c < cols) {
-        if (x(r, c) < 0) res.update(r, c, 0.0f)
-        c += 1
-      }
-      r += 1
-    }
-    res
+    applyCoord(x, res, x.rows - 1, x.cols - 1)
   }
+
+  @tailrec
+  private def derivCoord(fx: ScalarMatrix, res: ScalarMatrix, r: Int): ScalarMatrix =
+    if (r >= 0) {
+      val x = fx(r, 0)
+      if (x > 0)
+        res.update(r, r, 1.0f)
+      //else res.update(r, r, 0.0f) [Already Initialized as zero]
+      derivCoord(fx, res, r - 1)
+    } else
+      res
+
+  @tailrec
+  private def applyCoord(x: ScalarMatrix, res: DenseMatrix[Scalar], r: Int, c: Int): ScalarMatrix =
+    if (r >= 0) {
+      if (x(r, c) < 0) res.update(r, c, 0.0f)
+
+      if (c > 0) applyCoord(x, res, r, c - 1)
+      else applyCoord(x, res, r - 1, x.cols - 1)
+    } else
+      res
 }
 
 /**
@@ -354,26 +412,10 @@ object Softmax extends Activation {
   override def derivative(fx: ScalarMatrix): ScalarMatrix = {
     val res: ScalarMatrix = ScalarMatrix $0(fx.rows, fx.rows)
 
-    val rows = res.rows
-    val cols = res.cols
-    var r, c = 0
-
     // Note that (i, j)-entry of deriviative is dF_i / dX_j
     // and dF_i / dX_j = F(i) * (Delta_ij - F(j)).
-    while (r < rows) {
-      val Fi = fx(r, 0)
-      c = 0
-      while (c < cols) {
-        val Fj = fx(c, 0)
-        val dfdx =
-          if (r == c) Fi * (1 - Fj)
-          else -Fi * Fj
-        res.update(r, c, dfdx)
-        c += 1
-      }
-      r += 1
-    }
-    res
+    initDeriv(fx, res, fx.rows - 1)
+    derivCoord(fx, res, res.rows - 1, res.cols - 1)
   }
 
   /**
@@ -402,6 +444,24 @@ object Softmax extends Activation {
     val pmMatx: ScalarMatrix = ScalarMatrix.of(if (rows > 0) rows else fanOut, if (cols > 0) cols else fanIn) :- 0.5f
     pmMatx :* (2.0f * range)
   }
+
+  @tailrec
+  private def initDeriv(fx: ScalarMatrix, res: ScalarMatrix, r: Int): Unit =
+    if (r >= 0) {
+      res(r, ::) := fx(r, 0)
+      initDeriv(fx, res, r - 1)
+    }
+
+  @tailrec
+  private def derivCoord(fx: ScalarMatrix, res: ScalarMatrix, r: Int, c: Int): ScalarMatrix =
+    if (r >= 0) {
+      val dfdx = (if (r == c) 1 else 0) - fx(c, 0)
+      res.update(r, c, res(r, c) * dfdx)
+
+      if (c > 0) derivCoord(fx, res, r, c - 1)
+      else derivCoord(fx, res, r - 1, fx.rows - 1)
+    } else
+      res
 }
 
 /**

@@ -11,17 +11,33 @@ import play.api.libs.json.{JsObject, Json}
  * @param w initial weight matrix for the case that it is restored from JSON `(default: null)`
  * @param b inital bias matrix for the case that it is restored from JSON `(default: null)`
  */
-class BasicLayer(IO: (Int, Int),
-                 protected override val act: Activation,
-                 w: ScalarMatrix = null,
-                 b: ScalarMatrix = null)
+class LowerTriangularLayer(IO: (Int, Int),
+                           protected override val act: Activation,
+                           w: ScalarMatrix = null,
+                           b: ScalarMatrix = null)
   extends Layer {
   /** Number of Fan-ins */
   protected final val fanIn = IO._1
   /** Number of output */
   protected final val fanOut = IO._2
   /* Initialize weight */
-  protected final val weight = if (w != null) w else act.initialize(fanIn, fanOut)
+  protected final val weight =
+    if (w != null) w
+    else {
+      val m = act.initialize(fanIn, fanOut)
+      var r = 0
+      var c = 0
+      while (r < fanOut) {
+        c = r + 1
+        while (c < fanIn) {
+          m.update(r, c, 0f)
+          c += 1
+        }
+        r += 1
+      }
+
+      m
+    }
   protected final val bias = if (b != null) b else act.initialize(fanIn, fanOut, fanOut, 1)
   /* Weight-Update Accumulator */
   protected final val delta = ScalarMatrix $0(fanOut, fanIn)
@@ -49,7 +65,7 @@ class BasicLayer(IO: (Int, Int),
    * @return JSON object describes this layer
    */
   override def toJSON: JsObject = Json.obj(
-    "type" → "BasicLayer",
+    "type" → "LowerTriangularLayer",
     "in" → fanIn,
     "out" → fanOut,
     "act" → act.toJSON,
@@ -102,8 +118,19 @@ class BasicLayer(IO: (Int, Int),
      * Then {j-th column of dG/dW} = X_j * dG/dX = dG/dX * X_j.
      *
      * Therefore dG/dW = dG/dX * X.t
+     * Except the upper triangular region.
      */
     val dGdW: ScalarMatrix = dGdX * input.t
+    var r = 0
+    var c = 0
+    while (r < fanOut) {
+      c = r + 1
+      while (c < fanIn) {
+        dGdW.update(r, c, 0f)
+        c += 1
+      }
+      r += 1
+    }
     delta += dGdW
 
     // For bias, input is always 1. We only need dG/dX

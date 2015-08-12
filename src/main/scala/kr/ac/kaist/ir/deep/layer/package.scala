@@ -3,6 +3,8 @@ package kr.ac.kaist.ir.deep
 import kr.ac.kaist.ir.deep.fn._
 import play.api.libs.json.{JsObject, JsValue}
 
+import scala.reflect.runtime._
+
 /**
  * Package for layer implementation
  */
@@ -61,6 +63,9 @@ package object layer {
 
     /**
      * Translate this layer into JSON object (in Play! framework)
+     * @note Please make an LayerReviver object if you're using custom layer.
+     *       In that case, please specify LayerReviver object's full class name as "__reviver__,"
+     *       and fill up LayerReviver.revive method.
      *
      * @return JSON object describes this layer
      */
@@ -82,11 +87,22 @@ package object layer {
   }
 
   /**
+   * __Trait__ that revives layer from JSON value
+   */
+  trait LayerReviver extends Serializable {
+    /**
+     * Revive layer using given JSON value
+     * @param obj JSON value to be revived
+     * @return Revived layer.
+     */
+    def revive(obj: JsValue): Layer
+  }
+
+  /**
    * Companion object of Layer
    */
-  object Layer {
-    /** Sequence of supported activation functions */
-    private val acts = Seq(Sigmoid, HyperbolicTangent, Rectifier, Softplus, Linear, HardSigmoid, HardTanh, Softmax)
+  object Layer extends LayerReviver {
+    @transient val runtimeMirror = universe.synchronized(universe.runtimeMirror(getClass.getClassLoader))
 
     /**
      * Load layer from JsObject
@@ -95,15 +111,32 @@ package object layer {
      * @return New layer reconstructed from this object
      */
     def apply(obj: JsValue) = {
+      val companion =
+        universe.synchronized {
+          (obj \ "reviver").asOpt[String] match {
+            case Some(clsName) ⇒
+              val module = runtimeMirror.staticModule(clsName)
+              runtimeMirror.reflectModule(module).instance.asInstanceOf[LayerReviver]
+            case None ⇒
+              this
+          }
+        }
+      companion.revive(obj)
+    }
+
+    /**
+     * Load layer from JsObject
+     *
+     * @param obj JsObject to be parsed
+     * @return New layer reconstructed from this object
+     */
+    def revive(obj: JsValue) = {
       val in = obj \ "in"
       val out = obj \ "out"
       val typeStr = (obj \ "type").as[String]
 
       val act = if (typeStr.endsWith("Layer")) {
-        val actStr = (obj \ "act").as[String]
-        (acts find {
-          x ⇒ x.getClass.getSimpleName == actStr
-        }).getOrElse(HyperbolicTangent)
+        Activation.apply(obj \ "act")
       } else null
 
       typeStr match {
@@ -113,6 +146,11 @@ package object layer {
         case "DropoutOp" ⇒
           val presence = (obj \ "presence").as[Probability]
           new DropoutOperation(presence)
+        case "GaussianRBF" ⇒
+          val w = ScalarMatrix restore (obj \ "weight").as[IndexedSeq[IndexedSeq[String]]]
+          val c = ScalarMatrix restore (obj \ "center").as[IndexedSeq[IndexedSeq[String]]]
+          val modifiable = (obj \ "canModifyCenter").as[Boolean]
+          new GaussianRBFLayer(in.as[Int], c, modifiable, w)
         case "BasicLayer" ⇒
           val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
           val w = ScalarMatrix restore (obj \ "weight").as[IndexedSeq[IndexedSeq[String]]]
@@ -122,17 +160,33 @@ package object layer {
             case None ⇒
               new BasicLayer(in.as[Int] → out.as[Int], act, w, b)
           }
+        case "LowerTriangularLayer" ⇒
+          val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
+          val w = ScalarMatrix restore (obj \ "weight").as[IndexedSeq[IndexedSeq[String]]]
+          new LowerTriangularLayer(in.as[Int] → out.as[Int], act, w, b)
         case "SplitTensorLayer" ⇒
           val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
           val tuple = in.as[Seq[Int]]
           val quad = (obj \ "quadratic").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
-          val linear = (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
-          new SplitTensorLayer((tuple.head, tuple(1)) → out.as[Int], act, quad, linear, b)
+          try {
+            val linear = ScalarMatrix restore (obj \ "linear").as[IndexedSeq[IndexedSeq[String]]]
+            new SplitTensorLayer((tuple.head, tuple(1)) → out.as[Int], act, quad, linear, b)
+          } catch {
+            case _: Throwable ⇒
+              val linear = (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
+              new SplitTensorLayer((tuple.head, tuple(1)) → out.as[Int], act, quad, linear, b)
+          }
         case "FullTensorLayer" ⇒
           val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
           val quad = (obj \ "quadratic").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
-          val linear = (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
-          new FullTensorLayer(in.as[Int] → out.as[Int], act, quad, linear, b)
+          try {
+            val linear = ScalarMatrix restore (obj \ "linear").as[IndexedSeq[IndexedSeq[String]]]
+            new FullTensorLayer(in.as[Int] → out.as[Int], act, quad, linear, b)
+          } catch {
+            case _: Throwable ⇒
+              val linear = (obj \ "linear").as[Seq[IndexedSeq[IndexedSeq[String]]]] map { x ⇒ ScalarMatrix restore x }
+              new FullTensorLayer(in.as[Int] → out.as[Int], act, quad, linear, b)
+          }
       }
     }
   }

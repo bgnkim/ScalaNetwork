@@ -1,5 +1,8 @@
 package kr.ac.kaist.ir.deep.train
 
+import java.text.SimpleDateFormat
+import java.util.Date
+
 import kr.ac.kaist.ir.deep.fn._
 import org.apache.log4j.Logger
 import org.apache.spark.rdd.RDD
@@ -59,6 +62,7 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
 
   import style._
 
+  @transient private final val dateFormatter = new SimpleDateFormat("MM/dd HH:mm:ss")
   /** Logger */
   @transient protected val logger = Logger.getLogger(this.getClass)
   /** Best Parameter History */
@@ -67,6 +71,14 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
   @transient protected var bestIter: Int = 0
   /** Period of validation */
   @transient protected var validationPeriod: Int = 0
+  /** Get command line column width */
+  @transient protected var columns = try {
+    System.getenv("COLUMNS").toInt
+  } catch {
+    case _: Throwable ⇒ 80
+  }
+  /** Finish time of last iteration */
+  @transient protected var startAt: Long = _
 
   /**
    * Train given sequence, and validate with given sequence.
@@ -149,7 +161,7 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
    * Print validation result into logger
    */
   protected def printValidation() = {
-    logger info s"($name) BEST EPOCH ${bestIter + 1}"
+    logger info s"($name) BEST ITERATION : $bestIter"
     foreachTestSet(5) {
       item ⇒ logger info make.stringOf(net, item)
     }
@@ -158,15 +170,15 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
   /**
    * Store best parameters
    *
-   * @param epoch current iteration epoch. (1 iteration = 1 validation freq)
+   * @param iteration current iteration. (1 iteration = 1 validation freq)
    * @param loss previous loss
    * @param patience current patience, i.e. loop until at least this epoch.
    */
-  protected final def saveParams(epoch: Int = 0,
+  protected final def saveParams(iteration: Int = 0,
                                  loss: Scalar = Float.MaxValue,
                                  patience: Int = validationPeriod * 5) = {
     bestParam = net.W.copy
-    bestIter = epoch
+    bestIter = iteration
   }
 
   /**
@@ -217,20 +229,12 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
       val improvement = if (prevloss > 0f) loss / prevloss else stops.improveThreshold
       if (improvement < stops.improveThreshold) {
         nPatience = Math.min(Math.max(patience, iter * (stops.waitAfterUpdate + 1)), stops.maxIter)
-        saveParams(epoch, loss, nPatience)
+        saveParams(iter, loss, nPatience)
 
-        val impr = 100.0 - improvement * 100.0
-        logger info f"($name) # $iter%4d/$nPatience%4d, " +
-          f"E + W = $train%.5f + $weight%.5f = $loss%.5f (▼ $impr%8.4f %%) "
+        printProgress(iter, nPatience, train, weight, improved = true)
         (train, weight, loss)
       } else {
-        val impr = 100.0 - improvement * 100.0
-        if (impr > 0f)
-          logger info f"($name) # $iter%4d/$nPatience%4d, " +
-            f"DISCARDED: NOT ENOUGH IMPROVEMENT   (▼ $impr%8.4f %%)"
-        else
-          logger info f"($name) # $iter%4d/$nPatience%4d, " +
-            f"DISCARDED: NOT IMPROVED             (△ ${-impr}%8.4f %%)"
+        printProgress(iter, nPatience, prevEloss, prevWloss, improved = false)
         (prevEloss, prevWloss, prevloss)
       }
     } else {
@@ -248,10 +252,40 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
           f"FINISHED with E + W = ${nLoss._3}%.5f [Iteration > ${stops.maxIter}%6d]"
       else if (nPatience < iter)
         logger info f"($name) # $iter%4d/$nPatience%4d, " +
-          f"FINISHED with E + W = ${nLoss._3}%.5f [NoUpdate ${stops.waitAfterUpdate} Iterations.]"
+          f"FINISHED with E + W = ${nLoss._3}%.5f [NoUpdate after $bestIter%6d]"
 
       nLoss
     }
+  }
+
+  private def printProgress(iter: Int, patience: Int, eLoss: Float, wLoss: Float, improved: Boolean) = {
+    val wait = patience / stops.maxIter.toFloat
+    val header = f"\033[4m$name\033[24m $iter%4d/$patience%4d \033[0m["
+    val impr = if (improved) "IMPROVED" else f" @ $bestIter%4d "
+    val footer = f" E + W = $eLoss%7.5f + $wLoss%7.5f $impr"
+
+    val buf = new StringBuilder(s"\033[2A\033[${columns}D\033[2K \033[1;33m$header\033[46;36m")
+    val total = columns - header.length - footer.length + 10
+    val len = Math.floor(wait * total).toInt
+    val step = Math.floor(iter / stops.maxIter.toFloat * total).toInt
+    buf.append(" " * step)
+    buf.append("\033[49m")
+    buf.append(" " * (len - step))
+    buf.append("\033[0m]\033[34m")
+    if (total > len) buf.append(s"\033[${total - len}C")
+    buf.append(s"$footer\033[0m")
+
+    val now = System.currentTimeMillis()
+    val remainA = (now - startAt) / iter * patience
+    val etaA = startAt + remainA
+    val calA = dateFormatter.format(new Date(etaA))
+    val remainB = (now - startAt) / iter * stops.maxIter
+    val etaB = startAt + remainB
+    val calB = dateFormatter.format(new Date(etaB))
+
+    buf.append(f"\n\033[2K Estimated Finish Time : $calA \t ~ $calB")
+
+    println(buf.result())
   }
 
   /**
@@ -260,6 +294,8 @@ class Trainer[IN, OUT](val style: TrainStyle[IN, OUT],
    */
   private def lossOfTraining: (Scalar, Scalar, Scalar) =
     if (param.miniBatchFraction > 0) {
+      println("Start training...\n Estimated Time: NONE")
+      startAt = System.currentTimeMillis()
       trainBatch()
     } else {
       fetch(0)
