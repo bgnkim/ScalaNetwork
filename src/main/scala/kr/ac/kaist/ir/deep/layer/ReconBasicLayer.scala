@@ -39,7 +39,7 @@ class ReconBasicLayer(IO: (Int, Int),
    * @param x hidden layer output matrix
    * @return tuple of reconstruction output
    */
-  override def decodeBy_:(x: ScalarMatrix): ScalarMatrix = {
+  override def decodeFrom(x: ScalarMatrix): ScalarMatrix = {
     val wx: ScalarMatrix = weight.t[ScalarMatrix, ScalarMatrix] * x
     val wxb: ScalarMatrix = wx + reBias
     act(wxb)
@@ -56,14 +56,9 @@ class ReconBasicLayer(IO: (Int, Int),
    * Backpropagation of reconstruction. For the information about backpropagation calculation, see [[kr.ac.kaist.ir.deep.layer.Layer]]
    *
    * @param error error matrix to be propagated
-   * @param input input of this layer
-   * @param output final reconstruction output of this layer
    * @return propagated error
    */
-  protected[deep] override def decodeUpdateBy(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
-    // Recon × Recon matrix
-    val dFdX = act.derivative(output)
-
+  protected[deep] override def decodeUpdateBy(error: ScalarMatrix): ScalarMatrix = {
     /*
      * Chain Rule : dG/dX_ij = tr[ ( dG/dF ).t * dF/dX_ij ].
      *
@@ -72,7 +67,7 @@ class ReconBasicLayer(IO: (Int, Int),
      * Thus, dG/dX = [ (dG/dF).t * dF/dX ].t, because [...] is 1 × fanOut matrix.
      * Therefore dG/dX = dF/dX * dG/dF, because dF/dX is symmetric in our case.
      */
-    val dGdX: ScalarMatrix = dFdX * error
+    val dGdX: ScalarMatrix = decdFdX * error
 
     /*
      * Chain Rule : dG/dW_ij = tr[ ( dG/dX ).t * dX/dW_ij ].
@@ -83,7 +78,7 @@ class ReconBasicLayer(IO: (Int, Int),
      *
      * Therefore dG/dW = dG/dX * X.t
      */
-    val dGdW: ScalarMatrix = dGdX * input.t
+    val dGdW: ScalarMatrix = dGdX * decX.t
     delta += dGdW.t // Because we used transposed weight for reconstruction, we need to transpose it.
 
     // For bias, input is always 1. We only need dG/dX

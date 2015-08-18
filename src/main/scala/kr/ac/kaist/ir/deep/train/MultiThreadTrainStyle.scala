@@ -3,6 +3,7 @@ package kr.ac.kaist.ir.deep.train
 import kr.ac.kaist.ir.deep.fn.{WeightSeqOp, WeightUpdater}
 import kr.ac.kaist.ir.deep.network.Network
 import org.apache.spark.SparkContext
+import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -77,26 +78,29 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
   /**
    * Do mini-batch
    */
-  override def batch(): Unit =
+  override def batch(): Unit = {
+    val bcNet = sc.broadcast(net)
+    val part = partFunction(bcNet)
     if (param.miniBatchFraction > 0) {
       val set = trainingSet.sample(withReplacement = true, fraction = param.miniBatchFraction)
-      set.foreachPartition(partFunction)
+      set.foreachPartition(part)
       set.unpersist(blocking = false)
     } else {
-      trainingSet.foreachPartition(partFunction)
+      trainingSet.foreachPartition(part)
     }
+    bcNet.unpersist(blocking = false)
+  }
 
-  private final def partFunction = {
-    val netCopy = net.copy
+  private final def partFunction(net: Broadcast[Network]) = {
+    lazy val netCopy = net.value.copy
 
     (part: Iterator[(IN, OUT)]) ⇒ {
       var count = 0
       val f = future {
-        while (part.hasNext) {
-          val pair = part.next()
-          count += 1
-
-          make.roundTrip(netCopy, make corrupted pair._1, pair._2)
+        part.foreach {
+          case (x, y) ⇒
+            count += 1
+            make.roundTrip(netCopy, make corrupted x, y)
         }
 
         accCount += count

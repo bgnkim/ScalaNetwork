@@ -7,11 +7,8 @@ import play.api.libs.json.{JsObject, Json}
 
 /**
  * __Layer__ that normalizes its input.
- *
- * @param factor The multiplication factor of the normalized output `(Default 1.0)`
  */
-@deprecated
-class NormalizeOperation(protected val factor: Scalar = 1.0f) extends Layer {
+trait Normalize extends Layer {
   /**
    * weights for update
    *
@@ -28,26 +25,35 @@ class NormalizeOperation(protected val factor: Scalar = 1.0f) extends Layer {
   protected override val act = null
 
   /**
+   * Forward computation
+   *
+   * @param x input matrix
+   * @return output matrix
+   */
+  override def apply(x: ScalarMatrix): ScalarMatrix = {
+    val len = Math.sqrt(sum(pow(x, 2.0f))).toFloat
+    x :/ len
+  }
+
+  /**
    * Translate this layer into JSON object (in Play! framework)
    *
    * @return JSON object describes this layer
    */
-  override def toJSON: JsObject = Json.obj(
-    "type" → "NormOp",
-    "factor" → factor
-  )
+  override def toJSON: JsObject = super.toJSON ++ Json.obj("Normalize" → "")
 
   /**
    * <p>Backward computation.</p>
    *
-   * @note Because this layer only mediates two layers, this layer just remove propagated error for unused elements.
+   * @note Because this layer only mediates two layers, this layer just remove propagated error for unused elements. 
    *
    * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
    * @return propagated error (in this case, <code>dG/dx</code> )
    */
   protected[deep] override def updateBy(error: ScalarMatrix): ScalarMatrix = {
-    val len: Scalar = Math.sqrt(sum(pow(X, 2.0f))).toFloat
-    val output: ScalarMatrix = apply(X)
+    val Xsq = pow(X, 2.0f)
+    val lenSq = sum(Xsq)
+    val len: Scalar = Math.sqrt(lenSq).toFloat
 
     // Note that length is the function of x_i.
     // Let z_i := x_i / len(x_i).
@@ -62,9 +68,9 @@ class NormalizeOperation(protected val factor: Scalar = 1.0f) extends Layer {
       while (c < rows) {
         if (r == c) {
           //dX_c
-          dZdX.update(r, c, (1.0f - output(r, 0) * output(r, 0)) / len)
+          dZdX.update(r, c, (1.0f - Xsq(r, 0) / lenSq) / len)
         } else {
-          dZdX.update(r, c, (-output(r, 0) * output(c, 0)) / len)
+          dZdX.update(r, c, (-X(r, 0) * X(c, 0)) / (len * lenSq))
         }
         c += 1
       }
@@ -73,21 +79,5 @@ class NormalizeOperation(protected val factor: Scalar = 1.0f) extends Layer {
 
     // un-normalize the error
     dZdX * error
-  }
-
-  /**
-   * Forward computation
-   *
-   * @param x input matrix
-   * @return output matrix
-   */
-  override def apply(x: ScalarMatrix): ScalarMatrix = {
-    val len = Math.sqrt(sum(pow(x, 2.0f))).toFloat
-    val normalized: ScalarMatrix = x :/ len
-
-    if (factor != 1.0f)
-      normalized :* factor
-    else
-      normalized
   }
 }

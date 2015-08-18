@@ -92,14 +92,9 @@ class LowerTriangularLayer(IO: (Int, Int),
    *       </p>
    *
    * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
-   * @param input of this layer (in this case, <code>x = entry of dX / dw</code>)
-   * @param output of this layer (in this case, <code>y</code>)
    * @return propagated error (in this case, <code>dG/dx</code> )
    */
-  protected[deep] override def updateBy(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
-    // fanOut × fanOut matrix (Numerator/Denominator Layout)
-    val dFdX = act.derivative(output)
-
+  protected[deep] override def updateBy(error: ScalarMatrix): ScalarMatrix = {
     /*
      * Chain Rule : dG/dX_ij = tr[ ( dG/dF ).t * dF/dX_ij ].
      *
@@ -120,7 +115,7 @@ class LowerTriangularLayer(IO: (Int, Int),
      * Therefore dG/dW = dG/dX * X.t
      * Except the upper triangular region.
      */
-    val dGdW: ScalarMatrix = dGdX * input.t
+    val dGdW: ScalarMatrix = dGdX * X.t
     var r = 0
     var c = 0
     while (r < fanOut) {

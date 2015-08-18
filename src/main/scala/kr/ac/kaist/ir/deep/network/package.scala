@@ -57,7 +57,16 @@ package object network {
      * @param x input matrix
      * @return output matrix
      */
-    def into_:(x: ScalarMatrix): ScalarMatrix
+    def passedBy(x: ScalarMatrix): ScalarMatrix
+
+    /**
+     * Forward computation for training
+     *
+     * @param x input matrix
+     * @return output matrix
+     */
+    @deprecated
+    def into_:(x: ScalarMatrix): ScalarMatrix = passedBy(x)
 
     /**
      * Sugar: Forward computation for validation. Calls apply(x)

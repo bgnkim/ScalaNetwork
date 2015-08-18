@@ -36,12 +36,12 @@ class StandardRAEType(override val corrupt: Corruption = NoCorruption,
   def roundTrip(net: Network, in: BinaryTree, real: Null): Unit = {
     in forward {
       x ⇒
-        val out = x into_: net
-        val zOut = out into_: normalizeLayer
+        val out = net passedBy x
+        val zOut = normalizeLayer passedBy out
 
         // un-normalize the error
         val normalErr = error.derivative(x, zOut)
-        val err = normalizeLayer.updateBy(normalErr, out, zOut)
+        val err = normalizeLayer updateBy normalErr
 
         net updateBy err
 

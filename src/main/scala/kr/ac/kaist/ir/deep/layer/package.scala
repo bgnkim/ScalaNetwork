@@ -19,6 +19,8 @@ package object layer {
   trait Layer extends (ScalarMatrix ⇒ ScalarMatrix) with Serializable {
     /** Activation Function */
     protected val act: Activation
+    protected var X: ScalarMatrix = _
+    protected var dFdX: ScalarMatrix = _
 
     /**
      * Forward computation
@@ -47,11 +49,9 @@ package object layer {
      *       </p>
      *
      * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
-     * @param input of this layer (in this case, <code>x = entry of dX / dw</code>)
-     * @param output of this layer (in this case, <code>y</code>)
      * @return propagated error (in this case, <code>dG/dx</code> )
      */
-    protected[deep] def updateBy(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix
+    protected[deep] def updateBy(error: ScalarMatrix): ScalarMatrix
 
     /**
      * Sugar: Forward computation. Calls apply(x)
@@ -59,17 +59,34 @@ package object layer {
      * @param x input matrix
      * @return output matrix
      */
-    protected[deep] def into_:(x: ScalarMatrix) = apply(x)
+    protected[deep] def passedBy(x: ScalarMatrix) = {
+      this.X = x
+      val out = apply(x)
+      dFdX =
+        if (act != null)
+          act.derivative(out)
+        else
+          out
+      out
+    }
 
     /**
      * Translate this layer into JSON object (in Play! framework)
      * @note Please make an LayerReviver object if you're using custom layer.
      *       In that case, please specify LayerReviver object's full class name as "__reviver__,"
      *       and fill up LayerReviver.revive method.
-     *
      * @return JSON object describes this layer
      */
     def toJSON: JsObject
+
+    /**
+     * Sugar: Forward computation. Calls apply(x)
+     *
+     * @param x input matrix
+     * @return output matrix
+     */
+    @deprecated
+    protected[deep] def into_:(x: ScalarMatrix) = passedBy(x)
 
     /**
      * weights for update
@@ -139,6 +156,9 @@ package object layer {
         Activation.apply(obj \ "act")
       } else null
 
+      val dropout = (obj \ "Dropout").asOpt[Probability]
+      val normalize = (obj \ "Normalize").asOpt[String]
+
       typeStr match {
         case "NormOp" ⇒
           val factor = (obj \ "factor").as[Scalar]
@@ -150,23 +170,70 @@ package object layer {
           val w = ScalarMatrix restore (obj \ "weight").as[IndexedSeq[IndexedSeq[String]]]
           val c = ScalarMatrix restore (obj \ "center").as[IndexedSeq[IndexedSeq[String]]]
           val modifiable = (obj \ "canModifyCenter").as[Boolean]
-          new GaussianRBFLayer(in.as[Int], c, modifiable, w)
+          (dropout, normalize) match {
+            case (Some(p), Some(_)) ⇒
+              new GaussianRBFLayer(in.as[Int], c, modifiable, w) with Dropout with Normalize withProbability p
+            case (Some(p), None) ⇒
+              new GaussianRBFLayer(in.as[Int], c, modifiable, w) with Dropout withProbability p
+            case (None, Some(_)) ⇒
+              new GaussianRBFLayer(in.as[Int], c, modifiable, w) with Normalize
+            case _ ⇒
+              new GaussianRBFLayer(in.as[Int], c, modifiable, w)
+          }
+
         case "BasicLayer" ⇒
+          val i = in.as[Int]
+          val o = out.as[Int]
           val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
           val w = ScalarMatrix restore (obj \ "weight").as[IndexedSeq[IndexedSeq[String]]]
           (obj \ "reconst_bias").asOpt[IndexedSeq[IndexedSeq[String]]] match {
-            case Some(rb) ⇒
-              new ReconBasicLayer(in.as[Int] → out.as[Int], act, w, b, ScalarMatrix restore rb)
+            case Some(rbraw) ⇒
+              val rb = ScalarMatrix restore rbraw
+              (dropout, normalize) match {
+                case (Some(p), Some(_)) ⇒
+                  new ReconBasicLayer(i → o, act, w, b, rb) with Dropout with Normalize withProbability p
+                case (Some(p), None) ⇒
+                  new ReconBasicLayer(i → o, act, w, b, rb) with Dropout withProbability p
+                case (None, Some(_)) ⇒
+                  new ReconBasicLayer(i → o, act, w, b, rb) with Normalize
+                case _ ⇒
+                  new ReconBasicLayer(i → o, act, w, b, rb)
+              }
             case None ⇒
-              new BasicLayer(in.as[Int] → out.as[Int], act, w, b)
+              (dropout, normalize) match {
+                case (Some(p), Some(_)) ⇒
+                  new BasicLayer(i → o, act, w, b) with Dropout with Normalize withProbability p
+                case (Some(p), None) ⇒
+                  new BasicLayer(i → o, act, w, b) with Dropout withProbability p
+                case (None, Some(_)) ⇒
+                  new BasicLayer(i → o, act, w, b) with Normalize
+                case _ ⇒
+                  new BasicLayer(i → o, act, w, b)
+              }
           }
+
         case "LowerTriangularLayer" ⇒
+          val i = in.as[Int]
+          val o = out.as[Int]
           val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
           val w = ScalarMatrix restore (obj \ "weight").as[IndexedSeq[IndexedSeq[String]]]
-          new LowerTriangularLayer(in.as[Int] → out.as[Int], act, w, b)
+
+          (dropout, normalize) match {
+            case (Some(p), Some(_)) ⇒
+              new LowerTriangularLayer(i → o, act, w, b) with Dropout with Normalize withProbability p
+            case (Some(p), None) ⇒
+              new LowerTriangularLayer(i → o, act, w, b) with Dropout withProbability p
+            case (None, Some(_)) ⇒
+              new LowerTriangularLayer(i → o, act, w, b) with Normalize
+            case _ ⇒
+              new LowerTriangularLayer(i → o, act, w, b)
+          }
+
         case "SplitTensorLayer" ⇒
-          val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
           val tuple = in.as[Seq[Int]]
+          val i = (tuple.head, tuple(1))
+          val o = out.as[Int]
+          val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
           val quad = (obj \ "quadratic").as[Seq[IndexedSeq[IndexedSeq[String]]]] map ScalarMatrix.restore
           val linear =
             try {
@@ -180,8 +247,20 @@ package object layer {
                     matx
                 }
             }
-          new SplitTensorLayer((tuple.head, tuple(1)) → out.as[Int], act, quad, linear, b)
+
+          (dropout, normalize) match {
+            case (Some(p), Some(_)) ⇒
+              new SplitTensorLayer(i → o, act, quad, linear, b) with Dropout with Normalize withProbability p
+            case (Some(p), None) ⇒
+              new SplitTensorLayer(i → o, act, quad, linear, b) with Dropout withProbability p
+            case (None, Some(_)) ⇒
+              new SplitTensorLayer(i → o, act, quad, linear, b) with Normalize
+            case _ ⇒
+              new SplitTensorLayer(i → o, act, quad, linear, b)
+          }
         case "FullTensorLayer" ⇒
+          val i = in.as[Int]
+          val o = out.as[Int]
           val b = ScalarMatrix restore (obj \ "bias").as[IndexedSeq[IndexedSeq[String]]]
           val quad = (obj \ "quadratic").as[Seq[IndexedSeq[IndexedSeq[String]]]] map ScalarMatrix.restore
           val linear =
@@ -196,7 +275,17 @@ package object layer {
                     matx
                 }
             }
-          new FullTensorLayer(in.as[Int] → out.as[Int], act, quad, linear, b)
+
+          (dropout, normalize) match {
+            case (Some(p), Some(_)) ⇒
+              new FullTensorLayer(i → o, act, quad, linear, b) with Dropout with Normalize withProbability p
+            case (Some(p), None) ⇒
+              new FullTensorLayer(i → o, act, quad, linear, b) with Dropout withProbability p
+            case (None, Some(_)) ⇒
+              new FullTensorLayer(i → o, act, quad, linear, b) with Normalize
+            case _ ⇒
+              new FullTensorLayer(i → o, act, quad, linear, b)
+          }
       }
     }
   }

@@ -35,7 +35,7 @@ class VectorType(override val corrupt: Corruption = NoCorruption,
    * @param real Real Output for error computation.
    */
   def roundTrip(net: Network, in: ScalarMatrix, real: ScalarMatrix): Unit = {
-    val out = in into_: net
+    val out = net passedBy in
     val err: ScalarMatrix = error.derivative(real, out)
     net updateBy err
   }

@@ -33,7 +33,7 @@ class RAEType(override val corrupt: Corruption = NoCorruption,
   def roundTrip(net: Network, in: BinaryTree, real: Null): Unit = {
     in forward {
       x ⇒
-        val err = error.derivative(x, x into_: net)
+        val err = error.derivative(x, net passedBy x)
         net updateBy err
         // propagate hidden-layer value
         net(x)

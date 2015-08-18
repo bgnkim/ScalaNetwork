@@ -9,29 +9,22 @@ import play.api.libs.json.{JsObject, Json}
  * This layer has a function of "pipeline" with drop-out possibility.
  * Because dropping out neurons occurr in the hidden layer, we need some intermediate pipe that handle this feature.
  * This layer only conveys its input to its output synapse if that output is alive.
- *
- * @note Please extend [[Dropout]] trait to target layer.
- *
- * @param presence The probability of the neuron is alive. `(Default: 1.0, 100%)`
  */
-@deprecated
-class DropoutOperation(protected val presence: Probability = 1.0f) extends Layer {
-  /**
-   * weights for update
-   *
-   * @return weights
-   */
-  override val W: IndexedSeq[ScalarMatrix] = IndexedSeq.empty
-  /**
-   * accumulated delta values
-   *
-   * @return delta-weight
-   */
-  override val dW: IndexedSeq[ScalarMatrix] = IndexedSeq.empty
-  /** Null activation */
-  protected override val act = null
+trait Dropout extends Layer {
   /* On-off matrix */
   protected var onoff: ScalarMatrix = null
+  /** The probability of the neuron is alive. `(Default: 1.0, 100%)` */
+  private var presence: Probability = 1.0f
+
+  /**
+   * Set presence probability
+   * @param p Probability to be set
+   * @return Layer extended with dropout operta
+   */
+  def withProbability(p: Probability) = {
+    presence = p
+    this
+  }
 
   /**
    * Forward computation
@@ -40,18 +33,15 @@ class DropoutOperation(protected val presence: Probability = 1.0f) extends Layer
    * @return output matrix
    */
   override def apply(x: ScalarMatrix): ScalarMatrix =
-    if (presence >= 1.0) x
-    else x :* presence.safe
+    if (presence >= 1.0) super.apply(x)
+    else super.apply(x) :* presence.safe
 
   /**
    * Translate this layer into JSON object (in Play! framework)
    *
    * @return JSON object describes this layer
    */
-  override def toJSON: JsObject = Json.obj(
-    "type" → "DropoutOp",
-    "presence" → presence.safe
-  )
+  override def toJSON: JsObject = super.toJSON ++ Json.obj("Dropout" → presence)
 
   /**
    * Sugar: Forward computation. Calls apply(x)
@@ -59,11 +49,11 @@ class DropoutOperation(protected val presence: Probability = 1.0f) extends Layer
    * @param x input matrix
    * @return output matrix
    */
-  override protected[deep] def into_:(x: ScalarMatrix): ScalarMatrix =
-    if (presence >= 1.0) x
+  override protected[deep] def passedBy(x: ScalarMatrix): ScalarMatrix =
+    if (presence >= 1.0) super.passedBy(x)
     else {
       onoff = ScalarMatrix $01(x.rows, x.cols, presence.safe)
-      x :* onoff
+      super.passedBy(x) :* onoff
     }
 
   /**
@@ -75,6 +65,6 @@ class DropoutOperation(protected val presence: Probability = 1.0f) extends Layer
    * @return propagated error (in this case, <code>dG/dx</code> )
    */
   protected[deep] override def updateBy(error: ScalarMatrix): ScalarMatrix =
-    if (presence >= 1) error
-    else error :* onoff
+    if (presence >= 1) super.updateBy(error)
+    else super.updateBy(error :* onoff)
 }

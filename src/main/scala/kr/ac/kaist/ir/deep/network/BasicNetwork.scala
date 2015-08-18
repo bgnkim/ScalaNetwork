@@ -22,8 +22,6 @@ class BasicNetwork(val layers: IndexedSeq[Layer])
    * @return all accumulated delta weights
    */
   override val dW: IndexedSeq[ScalarMatrix] = layers flatMap (_.dW)
-  /** Collected input & output of each layer */
-  protected[deep] var input: Seq[ScalarMatrix] = Seq()
 
   /**
    * Compute output of neural network with given input
@@ -33,14 +31,9 @@ class BasicNetwork(val layers: IndexedSeq[Layer])
    * @return output of the vector
    */
   override def apply(in: ScalarMatrix): ScalarMatrix = {
-    // We don't have to store this value
-    var id = 0
-    var input = in
-    while (id < layers.size) {
-      input = layers(id)(input)
-      id += 1
+    layers.foldLeft(in) {
+      case (v, l) ⇒ l apply v
     }
-    input
   }
 
   /**
@@ -59,20 +52,9 @@ class BasicNetwork(val layers: IndexedSeq[Layer])
    * @param err backpropagated error from error function
    */
   override def updateBy(err: ScalarMatrix) = {
-    var id = layers.size - 1
-    var error = err
-    while (id >= 0) {
-      val l = layers(id)
-      val out = input.head
-      input = input.tail
-      val in = input.head
-      error = l updateBy(error, in, out)
-      id -= 1
+    layers.foldRight(err) {
+      case (l, e) ⇒ l updateBy e
     }
-
-    // Clean-up last entry
-    input = input.tail
-    error
   }
 
   /**
@@ -82,15 +64,10 @@ class BasicNetwork(val layers: IndexedSeq[Layer])
    * @param x input matrix
    * @return output matrix
    */
-  override def into_:(x: ScalarMatrix): ScalarMatrix = {
-    // We have to store this value
-    var id = 0
-    input = x.copy +: input
-    while (id < layers.size) {
-      input = (input.head into_: layers(id)) +: input
-      id += 1
+  override def passedBy(x: ScalarMatrix): ScalarMatrix = {
+    layers.foldLeft(x) {
+      case (v, l) ⇒ l passedBy v
     }
-    input.head
   }
 }
 

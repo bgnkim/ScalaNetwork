@@ -5,6 +5,8 @@ import breeze.numerics.{exp, pow}
 import kr.ac.kaist.ir.deep.fn._
 import play.api.libs.json.{JsObject, Json}
 
+import scala.annotation.tailrec
+
 /**
  * __Layer__ : An Radial Basis Function Layer, with Gaussian function as its radial basis.
  *
@@ -20,7 +22,8 @@ class GaussianRBFLayer(val in: Int,
   protected final val weight = if (w != null) w else ScalarMatrix of(centers.cols, 1)
   protected final val dWeight = ScalarMatrix of(centers.cols, 1)
   protected final val dCenter = ScalarMatrix of(centers.rows, centers.cols)
-  protected final val sumByRow = ScalarMatrix $1(centers.cols, 1)
+  protected final val sumCentroidEff = ScalarMatrix $1(centers.cols, 1)
+  protected final val sumByRow = ScalarMatrix $1(1, in)
   override protected val act: Activation = null
   override val W: IndexedSeq[ScalarMatrix] = IndexedSeq(centers, weight)
   override val dW: IndexedSeq[ScalarMatrix] = IndexedSeq(dCenter, dWeight)
@@ -48,19 +51,8 @@ class GaussianRBFLayer(val in: Int,
    * @return output matrix
    */
   override def apply(x: ScalarMatrix): ScalarMatrix = {
-    val out = ScalarMatrix $0(centers.cols, 1)
-
-    var i = out.rows
-    while (i > 0) {
-      i -= 1
-      val w = weight(i, 0)
-      val d: Scalar = sum(pow(x - centers(::, i to i), 2f))
-      val in = -d / (2f * w * w)
-
-      out(i, 0) = exp(in)
-    }
-
-    out
+    val sqWeight: ScalarMatrix = pow(weight, 2f) :* 2f
+    exp(applyCoord(x, sqWeight, ScalarMatrix $0(centers.cols, 1), centers.cols - 1))
   }
 
   /**
@@ -79,22 +71,38 @@ class GaussianRBFLayer(val in: Int,
    *       </p>
    *
    * @param error to be propagated ( <code>dG / dN</code> is propagated from higher layer )
-   * @param input of this layer (in this case, <code>x = entry of dX / dw</code>)
-   * @param output of this layer (in this case, <code>y</code>)
    * @return propagated error (in this case, <code>dG/dx</code> )
    */
-  override protected[deep] def updateBy(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix) = {
-    val dGdC = ScalarMatrix $0(centers.rows, centers.cols)
+  override protected[deep] def updateBy(error: ScalarMatrix) = {
+    val multiplier: ScalarMatrix = (error :* dFdX) :/ pow(weight, 2f)
 
-    var i = dGdC.cols
-    while (i > 0) {
-      i -= 1
-      val d: ScalarMatrix = input - centers(::, i to i)
+    val dGdC: ScalarMatrix = updateCoord(multiplier, ScalarMatrix.$0(centers.rows, centers.cols), centers.cols - 1)
+
+    if (canModifyCenter) {
+      dCenter += dGdC
+    }
+
+    -dGdC * sumCentroidEff
+  }
+
+  @tailrec
+  private def applyCoord(x: ScalarMatrix, sqWeight: ScalarMatrix, out: ScalarMatrix, i: Int): ScalarMatrix =
+    if (i >= 0) {
+      val d: Scalar = sum(pow(x - centers(::, i to i), 2f))
+      val in = -d / sqWeight(i, 0)
+
+      out(i, 0) = in
+      applyCoord(x, sqWeight, out, i - 1)
+    } else
+      out
+
+  @tailrec
+  private def updateCoord(multiplier: ScalarMatrix, dGdC: ScalarMatrix, i: Int): ScalarMatrix =
+    if (i >= 0) {
+      val d: ScalarMatrix = X - centers(::, i to i)
 
       val w = weight(i, 0)
-      val o = output(i, 0)
-      val e = error(i, 0)
-      val multiplier = e * o / (w * w)
+      val m = multiplier(i, 0)
 
       /* Compute dNi/dCij.
        * Since Ni = exp(-|x-ci|^2/(2si^2)), dNi/dCij = (xj-cij)/si^2 * Ni.
@@ -102,19 +110,15 @@ class GaussianRBFLayer(val in: Int,
        * dG/dCi = dG/dNi * dNi/dCi.
        * Note that dNi/dX = -dNi/dCi, and dG/dX = - \sum (dG/dNi * dNi/dCi)
        */
-      dGdC(::, i to i) := d * multiplier
+      dGdC(::, i to i) := d * m
 
       /* Compute dG/dSi.
        * dNi/dSi = |x-ci|^2/si^3 * Ni.
        * dG/dSi = dG/dNi * dNi/dSi.
        */
-      dWeight(i, 0) += sum(pow(d, 2f)) * (multiplier / w)
-    }
+      dWeight(i, 0) += sum(pow(d, 2f)) * (m / w)
+      updateCoord(multiplier, dGdC, i - 1)
+    } else
+      dGdC
 
-    if (canModifyCenter) {
-      dCenter += dGdC
-    }
-
-    -dGdC * sumByRow
-  }
 }

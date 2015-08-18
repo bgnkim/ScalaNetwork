@@ -16,6 +16,10 @@ class BasicLayer(IO: (Int, Int),
                  w: ScalarMatrix = null,
                  b: ScalarMatrix = null)
   extends Layer {
+  require(act != null, "Activation function must not be null.")
+  require(IO._1 > 0, "Input dimension must be greater than 0")
+  require(IO._2 > 0, "Output dimension must be greater than 0")
+
   /** Number of Fan-ins */
   protected final val fanIn = IO._1
   /** Number of output */
@@ -76,14 +80,9 @@ class BasicLayer(IO: (Int, Int),
    *       </p>
    *
    * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
-   * @param input of this layer (in this case, <code>x = entry of dX / dw</code>)
-   * @param output of this layer (in this case, <code>y</code>)
    * @return propagated error (in this case, <code>dG/dx</code> )
    */
-  protected[deep] override def updateBy(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
-    // fanOut × fanOut matrix (Numerator/Denominator Layout)
-    val dFdX = act.derivative(output)
-
+  protected[deep] override def updateBy(error: ScalarMatrix): ScalarMatrix = {
     /*
      * Chain Rule : dG/dX_ij = tr[ ( dG/dF ).t * dF/dX_ij ].
      *
@@ -103,7 +102,7 @@ class BasicLayer(IO: (Int, Int),
      *
      * Therefore dG/dW = dG/dX * X.t
      */
-    val dGdW: ScalarMatrix = dGdX * input.t
+    val dGdW: ScalarMatrix = dGdX * X.t
     delta += dGdW
 
     // For bias, input is always 1. We only need dG/dX

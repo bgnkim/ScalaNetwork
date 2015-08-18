@@ -1,7 +1,7 @@
 package kr.ac.kaist.ir.deep.network
 
 import kr.ac.kaist.ir.deep.fn._
-import kr.ac.kaist.ir.deep.layer.{DropoutOperation, Reconstructable}
+import kr.ac.kaist.ir.deep.layer.Reconstructable
 import play.api.libs.json.Json
 
 /**
@@ -25,10 +25,6 @@ class AutoEncoder(val layer: Reconstructable,
    * @return all accumulated delta weights
    */
   override val dW: IndexedSeq[ScalarMatrix] = layer.dW
-  /** Dropout layer **/
-  private val dropout = new DropoutOperation(presence)
-  /** Collected input & output of each layer */
-  protected[deep] var input: Seq[ScalarMatrix] = Seq()
 
   /**
    * Compute output of neural network with given input (without reconstruction)
@@ -37,7 +33,7 @@ class AutoEncoder(val layer: Reconstructable,
    * @param in an input vector
    * @return output of the vector
    */
-  override def apply(in: ScalarMatrix): ScalarMatrix = dropout(layer(in))
+  override def apply(in: ScalarMatrix): ScalarMatrix = layer(in)
 
   /**
    * Serialize network to JSON
@@ -56,7 +52,7 @@ class AutoEncoder(val layer: Reconstructable,
    * @param x hidden value to be reconstructed.
    * @return reconstruction value.
    */
-  def reconstruct(x: ScalarMatrix): ScalarMatrix = x decodeBy_: layer
+  def reconstruct(x: ScalarMatrix): ScalarMatrix = layer.decodeBy(x)
 
   /**
    * Backpropagation algorithm
@@ -71,12 +67,7 @@ class AutoEncoder(val layer: Reconstructable,
    * @param err backpropagated error from error function
    */
   def decode_!(err: ScalarMatrix) = {
-    val output = input.head
-    val hidden = input.tail.head
-    input = input.tail.tail
-
-    val hiddenErr = layer decodeUpdateBy(err, hidden, output)
-    dropout updateBy(hiddenErr, null, null)
+    layer decodeUpdateBy err
   }
 
   /**
@@ -85,11 +76,7 @@ class AutoEncoder(val layer: Reconstructable,
    * @param err backpropagated error from error function
    */
   def encode_!(err: ScalarMatrix) = {
-    val hidden = input.head
-    val in = input.tail.head
-    input = input.tail.tail
-
-    layer updateBy(err, in, hidden)
+    layer updateBy err
   }
 
   /**
@@ -99,7 +86,7 @@ class AutoEncoder(val layer: Reconstructable,
    * @param x input matrix
    * @return output matrix
    */
-  override def into_:(x: ScalarMatrix): ScalarMatrix = decode(encode(x))
+  override def passedBy(x: ScalarMatrix): ScalarMatrix = decode(encode(x))
 
   /**
    * Encode computation for training.
@@ -109,9 +96,7 @@ class AutoEncoder(val layer: Reconstructable,
    * @return hidden values
    */
   def encode(x: ScalarMatrix): ScalarMatrix = {
-    val hidden = x into_: layer
-    input = Seq(hidden, x) ++: input
-    hidden
+    layer.passedBy(x)
   }
 
   /**
@@ -122,10 +107,7 @@ class AutoEncoder(val layer: Reconstructable,
    * @return output matrix
    */
   def decode(x: ScalarMatrix): ScalarMatrix = {
-    val hidden = x into_: dropout
-    val output = hidden decodeBy_: layer
-    input = Seq(output, hidden) ++: input
-    output
+    layer.decodeBy(x)
   }
 
   /**
@@ -135,8 +117,7 @@ class AutoEncoder(val layer: Reconstructable,
    * @return output matrix
    */
   override def of(x: ScalarMatrix): ScalarMatrix = {
-    val h = dropout(layer(x))
-    h decodeBy_: layer
+    layer.decodeFrom(layer(x))
   }
 }
 

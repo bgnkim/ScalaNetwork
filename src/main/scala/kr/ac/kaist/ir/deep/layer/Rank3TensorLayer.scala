@@ -92,14 +92,12 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
     val intermediate: ScalarMatrix = linear * x
     intermediate += bias
 
-    (0 until fanOut).par foreach {
-      id ⇒
-        val xQ: ScalarMatrix = inA.t * quadratic(id)
-        val xQy: ScalarMatrix = xQ * inB
-
-        // 1 × 1 matrix output.
-        intermediate(id, 0) += xQy(0, 0)
+    val quads = quadratic.map { q ⇒
+      val xQ: ScalarMatrix = inA.t * q
+      val xQy: ScalarMatrix = xQ * inB
+      xQy(0, 0)
     }
+    intermediate += ScalarMatrix(quads: _*)
 
     act(intermediate)
   }
@@ -137,16 +135,11 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
    *       </p>
    *
    * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
-   * @param input of this layer (in this case, <code>x = entry of dX / dw</code>)
-   * @param output of this layer (in this case, <code>y</code>)
    * @return propagated error (in this case, <code>dG/dx</code> )
    */
-  protected[deep] override def updateBy(error: ScalarMatrix, input: ScalarMatrix, output: ScalarMatrix): ScalarMatrix = {
-    val inA = in1(input)
-    val inB = in2(input)
-
-    // fanOut × fanOut matrix (Numerator/Denominator Layout)
-    val dFdX = act.derivative(output)
+  protected[deep] override def updateBy(error: ScalarMatrix): ScalarMatrix = {
+    val inA = in1(X)
+    val inB = in2(X)
 
     /*
      * Chain Rule : dG/dX_ij = tr[ ( dG/dF ).t * dF/dX_ij ].
@@ -170,7 +163,7 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
      *
      * Therefore dG/dW = dG/dX * X.t
      */
-    val dGdL = dGdX * input.t
+    val dGdL = dGdX * X.t
     dL += dGdL
     /*
      * Chain Rule (Linear weight part) : dG/dx_ij = tr[ ( dG/dX ).t * dX/dx_ij ].

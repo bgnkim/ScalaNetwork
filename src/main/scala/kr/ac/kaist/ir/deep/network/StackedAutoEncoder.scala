@@ -52,13 +52,9 @@ class StackedAutoEncoder(val encoders: Seq[AutoEncoder]) extends Network {
    * @return output of the vector
    */
   override def apply(in: ScalarMatrix): ScalarMatrix = {
-    var i = 0
-    var x = in
-    while (i < encoders.size) {
-      x = encoders(i)(x)
-      i += 1
+    encoders.foldLeft(in) {
+      case (v, l) ⇒ l apply v
     }
-    x
   }
 
   /**
@@ -67,14 +63,10 @@ class StackedAutoEncoder(val encoders: Seq[AutoEncoder]) extends Network {
    * @param x input matrix
    * @return output matrix
    */
-  override def into_:(x: ScalarMatrix): ScalarMatrix = {
-    var i = 0
-    var in = x
-    while (i < encoders.size) {
-      in = in into_: encoders(i)
-      i += 1
+  override def passedBy(x: ScalarMatrix): ScalarMatrix = {
+    encoders.foldLeft(x) {
+      case (v, l) ⇒ l passedBy v
     }
-    in
   }
 
   /**
@@ -83,13 +75,9 @@ class StackedAutoEncoder(val encoders: Seq[AutoEncoder]) extends Network {
    * @param err backpropagated error from error function
    */
   override def updateBy(err: ScalarMatrix): ScalarMatrix = {
-    var i = encoders.size - 1
-    var x = err
-    while (i >= 0) {
-      x = encoders(i) updateBy err
-      i -= 1
+    encoders.foldRight(err) {
+      case (l, e) ⇒ l updateBy e
     }
-    x
   }
 }
 
