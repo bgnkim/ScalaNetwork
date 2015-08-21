@@ -27,14 +27,13 @@ class RAEType(override val corrupt: Corruption = NoCorruption,
    * Apply & Back-prop given single input
    *
    * @param net A network that gets input
-   * @param in Input for error computation.
-   * @param real Real Output for error computation.
+   * @param delta Sequence of delta updates
    */
-  def roundTrip(net: Network, in: BinaryTree, real: Null): Unit = {
+  def roundTrip(net: Network, delta: Seq[ScalarMatrix]) = (in: BinaryTree, real: Null) ⇒ {
     in forward {
       x ⇒
         val err = error.derivative(x, net passedBy x)
-        net updateBy err
+        net updateBy(delta.toIterator, err)
         // propagate hidden-layer value
         net(x)
     }

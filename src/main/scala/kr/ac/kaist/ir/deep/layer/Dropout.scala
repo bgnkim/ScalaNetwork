@@ -32,7 +32,7 @@ trait Dropout extends Layer {
    * @param x input matrix
    * @return output matrix
    */
-  override def apply(x: ScalarMatrix): ScalarMatrix =
+  abstract override def apply(x: ScalarMatrix): ScalarMatrix =
     if (presence >= 1.0) super.apply(x)
     else super.apply(x) :* presence.safe
 
@@ -41,7 +41,7 @@ trait Dropout extends Layer {
    *
    * @return JSON object describes this layer
    */
-  override def toJSON: JsObject = super.toJSON ++ Json.obj("Dropout" → presence)
+  abstract override def toJSON: JsObject = super.toJSON ++ Json.obj("Dropout" → presence)
 
   /**
    * Sugar: Forward computation. Calls apply(x)
@@ -49,7 +49,7 @@ trait Dropout extends Layer {
    * @param x input matrix
    * @return output matrix
    */
-  override protected[deep] def passedBy(x: ScalarMatrix): ScalarMatrix =
+  abstract override def passedBy(x: ScalarMatrix): ScalarMatrix =
     if (presence >= 1.0) super.passedBy(x)
     else {
       onoff = ScalarMatrix $01(x.rows, x.cols, presence.safe)
@@ -61,10 +61,11 @@ trait Dropout extends Layer {
    *
    * @note Because this layer only mediates two layers, this layer just remove propagated error for unused elements. 
    *
+   * @param delta Sequence of delta amount of weight. The order must be the reverse of [[W]]
    * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
    * @return propagated error (in this case, <code>dG/dx</code> )
    */
-  protected[deep] override def updateBy(error: ScalarMatrix): ScalarMatrix =
-    if (presence >= 1) super.updateBy(error)
-    else super.updateBy(error :* onoff)
+  abstract override def updateBy(delta: Iterator[ScalarMatrix], error: ScalarMatrix): ScalarMatrix =
+    if (presence >= 1) super.updateBy(delta, error)
+    else super.updateBy(delta, error :* onoff)
 }

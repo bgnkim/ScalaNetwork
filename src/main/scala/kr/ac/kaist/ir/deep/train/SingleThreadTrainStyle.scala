@@ -22,6 +22,8 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
                                       override val param: TrainingCriteria = SimpleTrainingCriteria())
   extends TrainStyle[IN, OUT] {
 
+  /** dWeight */
+  private val dW = WeightAccumulator.zero(net.W).reverse
   /** Training set */
   private var trainingSet: Scalar ⇒ Seq[Pair] = null
   /** Test Set */
@@ -46,8 +48,8 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
    * @param iter current iteration
    */
   override def update(iter: Int): Unit = {
-    net.dW :/= count.toFloat
-    net.W -= net.dW
+    dW :/= count.toFloat
+    net.W -= dW.reverse
     count = 0
   }
 
@@ -55,12 +57,12 @@ class SingleThreadTrainStyle[IN, OUT](override val net: Network,
    * Do mini-batch
    */
   override def batch(): Unit = {
-    var seq = trainingSet(param.miniBatchFraction)
-    while (seq.nonEmpty) {
-      val pair = seq.head
-      seq = seq.tail
-      count += 1
-      make roundTrip(net, make corrupted pair._1, pair._2)
+    val seq = trainingSet(param.miniBatchFraction)
+    val trip = make.roundTrip(net, dW)
+    seq.foreach {
+      case (x, y) ⇒
+        count += 1
+        trip(x, y)
     }
   }
 

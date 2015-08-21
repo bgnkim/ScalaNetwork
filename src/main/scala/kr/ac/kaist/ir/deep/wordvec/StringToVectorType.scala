@@ -20,13 +20,12 @@ class StringToVectorType(protected override val model: Broadcast[WordModel],
    * Apply & Back-prop given single input
    *
    * @param net A network that gets input
-   * @param in Input for error computation.
-   * @param real Real output for error computation.
+   * @param delta Sequence of delta updates
    */
-  override def roundTrip(net: Network, in: String, real: ScalarMatrix): Unit = {
-    val out = model.value(in) into_: net
+  def roundTrip(net: Network, delta: Seq[ScalarMatrix]) = (in: String, real: ScalarMatrix) ⇒ {
+    val out = net.passedBy(model.value(in))
     val err: ScalarMatrix = error.derivative(real, out)
-    net updateBy err
+    net updateBy(delta.toIterator, err)
   }
 
   /**

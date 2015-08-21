@@ -23,29 +23,13 @@ class LowerTriangularLayer(IO: (Int, Int),
   /* Initialize weight */
   protected final val weight =
     if (w != null) w
-    else {
-      val m = act.initialize(fanIn, fanOut)
-      var r = 0
-      var c = 0
-      while (r < fanOut) {
-        c = r + 1
-        while (c < fanIn) {
-          m.update(r, c, 0f)
-          c += 1
-        }
-        r += 1
+    else
+      act.initialize(fanIn, fanOut).mapActivePairs {
+        case ((r, c), x) ⇒ if (c > r) 0f else x
       }
-
-      m
-    }
   protected final val bias = if (b != null) b else act.initialize(fanIn, fanOut, fanOut, 1)
-  /* Weight-Update Accumulator */
-  protected final val delta = ScalarMatrix $0(fanOut, fanIn)
-  protected final val dbias = ScalarMatrix $0(fanOut, 1)
   /** weights for update */
   override val W: IndexedSeq[ScalarMatrix] = IndexedSeq(weight, bias)
-  /** accumulated delta values */
-  override val dW: IndexedSeq[ScalarMatrix] = IndexedSeq(delta, dbias)
 
   /**
    * Forward computation
@@ -91,10 +75,12 @@ class LowerTriangularLayer(IO: (Int, Int),
    *       For the computation rules, see "Matrix Cookbook" from MIT.
    *       </p>
    *
+   * @param delta Sequence of delta amount of weight. The order must be the reverse of [[W]]
+   *              In this case, bias :: weight ::: lowerStack
    * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
    * @return propagated error (in this case, <code>dG/dx</code> )
    */
-  protected[deep] override def updateBy(error: ScalarMatrix): ScalarMatrix = {
+  def updateBy(delta: Iterator[ScalarMatrix], error: ScalarMatrix): ScalarMatrix = {
     /*
      * Chain Rule : dG/dX_ij = tr[ ( dG/dF ).t * dF/dX_ij ].
      *
@@ -104,6 +90,9 @@ class LowerTriangularLayer(IO: (Int, Int),
      * Therefore dG/dX = dF/dX * dG/dF, because dF/dX is symmetric in our case.
      */
     val dGdX: ScalarMatrix = dFdX * error
+
+    // For bias, input is always 1. We only need dG/dX
+    delta.next += dGdX
 
     /*
      * Chain Rule : dG/dW_ij = tr[ ( dG/dX ).t * dX/dW_ij ].
@@ -115,21 +104,11 @@ class LowerTriangularLayer(IO: (Int, Int),
      * Therefore dG/dW = dG/dX * X.t
      * Except the upper triangular region.
      */
-    val dGdW: ScalarMatrix = dGdX * X.t
-    var r = 0
-    var c = 0
-    while (r < fanOut) {
-      c = r + 1
-      while (c < fanIn) {
-        dGdW.update(r, c, 0f)
-        c += 1
-      }
-      r += 1
+    val dGdWp: ScalarMatrix = (dGdX * X.t)
+    val dGdW = dGdWp.mapActivePairs {
+      case ((r, c), x) ⇒ if (c > r) 0f else x
     }
-    delta += dGdW
-
-    // For bias, input is always 1. We only need dG/dX
-    dbias += dGdX
+    delta.next += dGdW
 
     /*
      * Chain Rule : dG/dx_ij = tr[ ( dG/dX ).t * dX/dx_ij ].

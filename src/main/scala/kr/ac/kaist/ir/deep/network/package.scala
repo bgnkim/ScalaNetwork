@@ -28,13 +28,6 @@ package object network {
     val W: IndexedSeq[ScalarMatrix]
 
     /**
-     * All accumulated delta weights of layers
-     *
-     * @return all accumulated delta weights
-     */
-    val dW: IndexedSeq[ScalarMatrix]
-
-    /**
      * Serialize network to JSON
      * @note Please make an NetReviver object if you're using custom network.
      *       In that case, please specify NetReviver object's full class name as "__reviver__,"
@@ -47,9 +40,10 @@ package object network {
     /**
      * Backpropagation algorithm
      *
+     * @param delta Sequence of delta amount of weight. The order must be the reverse of [[W]]
      * @param err backpropagated error from error function
      */
-    def updateBy(err: ScalarMatrix): ScalarMatrix
+    def updateBy(delta: Iterator[ScalarMatrix], err: ScalarMatrix): ScalarMatrix
 
     /**
      * Forward computation for training
@@ -75,16 +69,6 @@ package object network {
      * @return output matrix
      */
     def of(x: ScalarMatrix): ScalarMatrix = apply(x)
-
-    /**
-     * Copy given network by given amount
-     *
-     * @return Sequence of copied network (Not linked)
-     */
-    def copy = {
-      val json = this.toJSON
-      Network(json)
-    }
 
     /**
      * Save given network into given file.

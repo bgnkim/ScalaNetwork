@@ -48,10 +48,11 @@ package object layer {
      *       For the computation rules, see "Matrix Cookbook" from MIT.
      *       </p>
      *
+     * @param delta Sequence of delta amount of weight. The order must be the re of [[W]]
      * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
      * @return propagated error (in this case, <code>dG/dx</code> )
      */
-    protected[deep] def updateBy(error: ScalarMatrix): ScalarMatrix
+    def updateBy(delta: Iterator[ScalarMatrix], error: ScalarMatrix): ScalarMatrix
 
     /**
      * Sugar: Forward computation. Calls apply(x)
@@ -59,7 +60,7 @@ package object layer {
      * @param x input matrix
      * @return output matrix
      */
-    protected[deep] def passedBy(x: ScalarMatrix) = {
+    def passedBy(x: ScalarMatrix) = {
       this.X = x
       val out = apply(x)
       dFdX =
@@ -94,13 +95,6 @@ package object layer {
      * @return weights
      */
     val W: IndexedSeq[ScalarMatrix]
-
-    /**
-     * accumulated delta values
-     *
-     * @return delta-weight
-     */
-    val dW: IndexedSeq[ScalarMatrix]
   }
 
   /**

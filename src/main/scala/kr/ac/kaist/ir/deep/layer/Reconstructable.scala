@@ -41,8 +41,9 @@ trait Reconstructable extends Layer {
   /**
    * Backpropagation of reconstruction. For the information about backpropagation calculation, see [[kr.ac.kaist.ir.deep.layer.Layer]]
    *
+   * @param delta Sequence of delta amount of weight. The order must be the reverse of [[W]]
    * @param error error matrix to be propagated
    * @return propagated error
    */
-  protected[deep] def decodeUpdateBy(error: ScalarMatrix): ScalarMatrix
+  protected[deep] def decodeUpdateBy(delta: Iterator[ScalarMatrix], error: ScalarMatrix): ScalarMatrix
 }

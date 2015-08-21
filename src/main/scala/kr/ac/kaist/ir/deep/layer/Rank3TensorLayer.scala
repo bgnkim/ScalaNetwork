@@ -2,8 +2,6 @@ package kr.ac.kaist.ir.deep.layer
 
 import kr.ac.kaist.ir.deep.fn._
 
-import scala.collection.mutable.ArrayBuffer
-
 /**
  * __Layer__: Basic, Fully-connected Rank 3 Tensor Layer.
  *
@@ -35,25 +33,11 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
   protected final val fanInB = fanIns._2
   protected final val fanIn = fanIns._3
   /* Initialize weight */
-  protected final val quadratic: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
+  protected final val quadratic: IndexedSeq[ScalarMatrix] =
+    if (quad.nonEmpty) quad.toIndexedSeq
+    else (0 until fanOut).map(_ ⇒ act.initialize(fanIn, fanOut, fanInA, fanInB))
   protected final val linear: ScalarMatrix = if (lin != null) lin else act.initialize(fanIn, fanOut, fanOut, fanIn)
   protected final val bias: ScalarMatrix = if (const != null) const else act.initialize(fanIn, fanOut, fanOut, 1)
-  /* Weight-Update Stand-by */
-  protected final val dQ: ArrayBuffer[ScalarMatrix] = ArrayBuffer()
-  protected final val dL: ScalarMatrix = ScalarMatrix $0(fanOut, fanIn)
-  protected final val db = ScalarMatrix $0(fanOut, 1)
-
-  /* Initialization */
-  if (quad.nonEmpty) {
-    quadratic ++= quad
-    quadratic.foreach {
-      matx ⇒ dQ += ScalarMatrix.$0(matx.rows, matx.cols)
-    }
-  } else (0 until fanOut) foreach {
-    _ ⇒
-      quadratic += act.initialize(fanIn, fanOut, fanInA, fanInB)
-      dQ += ScalarMatrix.$0(fanInA, fanInB)
-  }
 
   /**
    * Retrieve first input
@@ -107,14 +91,7 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
    *
    * @return weights
    */
-  override val W: IndexedSeq[ScalarMatrix] = bias +: (linear +: quadratic)
-
-  /**
-   * accumulated delta values
-   *
-   * @return delta-weight
-   */
-  override val dW: IndexedSeq[ScalarMatrix] = db +: (dL +: dQ)
+  override val W: IndexedSeq[ScalarMatrix] = (quadratic :+ linear) :+ bias
 
   /**
    * <p>Backward computation.</p>
@@ -134,10 +111,12 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
    *       For the computation rules, see "Matrix Cookbook" from MIT.
    *       </p>
    *
+   * @param delta Sequence of delta amount of weight. The order must be the reverse of [[W]]
+   *              In this case, bias :: linear :: quadratic(K to 0) ::: lowerStack
    * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
    * @return propagated error (in this case, <code>dG/dx</code> )
    */
-  protected[deep] override def updateBy(error: ScalarMatrix): ScalarMatrix = {
+  def updateBy(delta: Iterator[ScalarMatrix], error: ScalarMatrix): ScalarMatrix = {
     val inA = in1(X)
     val inB = in2(X)
 
@@ -152,7 +131,7 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
     val dGdX: ScalarMatrix = dFdX * error
 
     // For bias, input is always 1. We only need dG/dX
-    db += dGdX
+    delta.next += dGdX
 
     /*
      * Chain Rule (Linear weight case) : dG/dW_ij = tr[ ( dG/dX ).t * dX/dW_ij ].
@@ -164,7 +143,7 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
      * Therefore dG/dW = dG/dX * X.t
      */
     val dGdL = dGdX * X.t
-    dL += dGdL
+    delta.next += dGdL
     /*
      * Chain Rule (Linear weight part) : dG/dx_ij = tr[ ( dG/dX ).t * dX/dx_ij ].
      *
@@ -181,12 +160,12 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
     val dXdQ: ScalarMatrix = inA * inB.t //d tr(axb)/dx = a'b'
 
     // Add dG/dx quadratic part.
-    updateQuadratic(inA, inB, dGdX, dXdQ, dGdx)
+    updateQuadratic(inA, inB, dGdX, dXdQ, dGdx, delta)
   }
 
   private def updateQuadratic(inA: ScalarMatrix, inB: ScalarMatrix,
                               dGdXAll: ScalarMatrix, dXdQ: ScalarMatrix,
-                              acc: ScalarMatrix, id: Int = fanOut - 1): ScalarMatrix =
+                              acc: ScalarMatrix, delta: Iterator[ScalarMatrix], id: Int = fanOut - 1): ScalarMatrix =
     if (id >= 0) {
       // This is scalar
       val dGdX = dGdXAll(id, 0)
@@ -198,7 +177,7 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
        * They are scalar, so dG/dQ = dG/dX * dX/dQ.
        */
       val dGdQ: ScalarMatrix = dXdQ :* dGdX
-      dQ(id) += dGdQ
+      delta.next += dGdQ
 
       /*
        * Chain Rule (Linear weight part) : dG/dx_ij = tr[ ( dG/dX ).t * dX/dx_ij ].
@@ -219,7 +198,7 @@ abstract class Rank3TensorLayer(protected val fanIns: (Int, Int, Int),
       val dGdx: ScalarMatrix = restoreError(dXdxQ1, dXdxQ2) :* dGdX
       acc += dGdx
 
-      updateQuadratic(inA, inB, dGdXAll, dXdQ, acc, id - 1)
+      updateQuadratic(inA, inB, dGdXAll, dXdQ, acc, delta, id - 1)
     } else
       acc
 }

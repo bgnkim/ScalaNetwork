@@ -31,10 +31,9 @@ trait ManipulationType[IN, OUT] extends Serializable {
    * Apply & Back-prop given single input
    *
    * @param net A network that gets input
-   * @param in Input for error computation.
-   * @param real Real output for error computation.
+   * @param delta Sequence of delta updates
    */
-  def roundTrip(net: Network, in: IN, real: OUT): Unit
+  def roundTrip(net: Network, delta: Seq[ScalarMatrix]): (IN, OUT) ⇒ Unit
 
   /**
    * Apply given single input as one-way forward trip.

@@ -101,13 +101,8 @@ package object fn {
      *
      * @param x __scalar__ to be assigned for every cell
      */
-    def :=(x: Scalar) = {
-      var i = w.size - 1
-      while (i >= 0) {
-        w(i) := x
-        i -= 1
-      }
-    } 
+    @deprecated
+    def :=(x: Scalar) = w.par.map(_ := 0f)
 
     /**
      * Assign matrices 
@@ -122,31 +117,11 @@ package object fn {
     }
 
     /**
-     * Add onto another matrices if they are exists, otherwise copy these matrices.
-     *
-     * @param w2 __matrix sequence__ to be added onto.
-     * @return added matrices
-     */
-    @deprecated
-    def copy_+(w2: IndexedSeq[ScalarMatrix]) =
-      if (w2.isEmpty) copy
-      else {
-        var i = w.size - 1
-        while (i >= 0) {
-          w2(i) :+= w(i)
-          i -= 1
-        }
-        w2
-      }
-
-    /**
      * Copy these matrices
      *
      * @return copied matrices
      */
-    def copy = w map {
-      _.copy
-    }
+    def copy = w.par.map(_.copy).toIndexedSeq
 
     /**
      * Add another matrices in-place. 
@@ -154,11 +129,7 @@ package object fn {
      * @param w2 __matrix sequence__ to be added
      */
     def :+=(w2: IndexedSeq[ScalarMatrix]) = {
-      var i = w.size - 1
-      while (i >= 0) {
-        w(i) :+= w2(i)
-        i -= 1
-      }
+      (0 until w.size).par.map(i ⇒ w(i) :+= w2(i))
       w
     }
 
@@ -168,11 +139,7 @@ package object fn {
      * @param x __scalar__ as a divider.
      */
     def :/=(x: Scalar) = {
-      var i = w.size - 1
-      while (i >= 0) {
-        w(i) :/= x
-        i -= 1
-      }
+      w.par.map(_ :/= x)
     }
   }
 

@@ -8,7 +8,6 @@ import org.apache.spark.broadcast.Broadcast
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
-import scala.concurrent.duration._
 import scala.reflect._
 
 /**
@@ -52,7 +51,7 @@ class DistBeliefTrainStyle[IN: ClassTag, OUT: ClassTag](net: Network,
       fetchFlag =
         future {
           val oldNet = bcNet
-          bcNet = sc.broadcast(net.copy)
+          bcNet = sc.broadcast(net)
 
           // Because DistBelief submit fetching job after n_fetch steps,
           // submit this fetch after already submitted jobs are done.
@@ -66,6 +65,14 @@ class DistBeliefTrainStyle[IN: ClassTag, OUT: ClassTag](net: Network,
           }
         }
     }
+
+  /**
+   * Non-blocking pending, until all assigned batches are finished
+   */
+  override def stopUntilBatchFinished(): Unit = {
+    AsyncAwait.readyAll(param.submitInterval, batchFlag: _*)
+    batchFlag = batchFlag.filterNot(_.isCompleted)
+  }
 
   /**
    * Send update of weights
@@ -86,7 +93,7 @@ class DistBeliefTrainStyle[IN: ClassTag, OUT: ClassTag](net: Network,
           // and that batch does not affect this thread.
           stopUntilBatchFinished()
 
-          val dWUpdate = accNet.value
+          val dWUpdate = accNet.value.reverse
           accNet.setValue(WeightAccumulator.zero(accNet.zero))
           val count = accCount.value
           accCount.setValue(0)
@@ -95,14 +102,6 @@ class DistBeliefTrainStyle[IN: ClassTag, OUT: ClassTag](net: Network,
           net.W -= dWUpdate
         }
     }
-
-  /**
-   * Non-blocking pending, until all assigned batches are finished
-   */
-  override def stopUntilBatchFinished(): Unit = {
-    AsyncAwait.readyAll(param.submitInterval, batchFlag: _*)
-    batchFlag = batchFlag.filterNot(_.isCompleted)
-  }
 
   /**
    * Indicates whether the asynchrononus update is finished or not.
@@ -115,11 +114,12 @@ class DistBeliefTrainStyle[IN: ClassTag, OUT: ClassTag](net: Network,
    * Do mini-batch
    */
   override def batch(): Unit = {
+    val part = partFunction(bcNet)
     val x = if (param.miniBatchFraction > 0) {
       val rddSet = trainingSet.sample(withReplacement = true, fraction = param.miniBatchFraction)
         .repartition(param.numCores)
 
-      val x = rddSet foreachPartitionAsync partFunction
+      val x = rddSet foreachPartitionAsync part
       batchFlag += x
 
       x.onComplete {
@@ -127,7 +127,7 @@ class DistBeliefTrainStyle[IN: ClassTag, OUT: ClassTag](net: Network,
       }
       x
     } else {
-      val x = trainingSet foreachPartitionAsync partFunction
+      val x = trainingSet foreachPartitionAsync part
       batchFlag += x
 
       x
@@ -138,25 +138,5 @@ class DistBeliefTrainStyle[IN: ClassTag, OUT: ClassTag](net: Network,
     } catch {
       case _: Throwable ⇒
     }
-  }
-
-  private final def partFunction: (Iterator[(IN, OUT)]) ⇒ Unit = {
-    part ⇒
-      val netCopy = bcNet.value.copy
-      var count = 0
-
-      val f = future {
-        while (part.hasNext) {
-          val pair = part.next()
-          count += 1
-
-          make.roundTrip(netCopy, make corrupted pair._1, pair._2)
-        }
-
-        accCount += count
-        accNet += netCopy.dW
-      }
-
-      AsyncAwait.ready(f, 1.second)
   }
 }

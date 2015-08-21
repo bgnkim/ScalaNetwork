@@ -22,12 +22,6 @@ class DropoutOperation(protected val presence: Probability = 1.0f) extends Layer
    * @return weights
    */
   override val W: IndexedSeq[ScalarMatrix] = IndexedSeq.empty
-  /**
-   * accumulated delta values
-   *
-   * @return delta-weight
-   */
-  override val dW: IndexedSeq[ScalarMatrix] = IndexedSeq.empty
   /** Null activation */
   protected override val act = null
   /* On-off matrix */
@@ -59,7 +53,7 @@ class DropoutOperation(protected val presence: Probability = 1.0f) extends Layer
    * @param x input matrix
    * @return output matrix
    */
-  override protected[deep] def into_:(x: ScalarMatrix): ScalarMatrix =
+  override def into_:(x: ScalarMatrix): ScalarMatrix =
     if (presence >= 1.0) x
     else {
       onoff = ScalarMatrix $01(x.rows, x.cols, presence.safe)
@@ -71,10 +65,11 @@ class DropoutOperation(protected val presence: Probability = 1.0f) extends Layer
    *
    * @note Because this layer only mediates two layers, this layer just remove propagated error for unused elements. 
    *
+   * @param delta Sequence of delta amount of weight. The order must be the reverse of [[W]]
    * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
    * @return propagated error (in this case, <code>dG/dx</code> )
    */
-  protected[deep] override def updateBy(error: ScalarMatrix): ScalarMatrix =
+  def updateBy(delta: Iterator[ScalarMatrix], error: ScalarMatrix): ScalarMatrix =
     if (presence >= 1) error
     else error :* onoff
 }

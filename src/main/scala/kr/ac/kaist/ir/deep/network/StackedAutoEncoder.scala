@@ -12,17 +12,6 @@ import scala.collection.mutable.ArrayBuffer
  */
 class StackedAutoEncoder(val encoders: Seq[AutoEncoder]) extends Network {
   /**
-   * All accumulated delta weights of layers
-   *
-   * @return all accumulated delta weights
-   */
-  override val dW: IndexedSeq[ScalarMatrix] = {
-    val matrices = ArrayBuffer[ScalarMatrix]()
-    encoders.flatMap(_.dW).foreach(matrices += _)
-    matrices
-  }
-
-  /**
    * All weights of layers
    *
    * @return all weights of layers
@@ -72,11 +61,12 @@ class StackedAutoEncoder(val encoders: Seq[AutoEncoder]) extends Network {
   /**
    * Backpropagation algorithm
    *
+   * @param delta Sequence of delta amount of weight. The order must be the reverse of [[W]]
    * @param err backpropagated error from error function
    */
-  override def updateBy(err: ScalarMatrix): ScalarMatrix = {
+  override def updateBy(delta: Iterator[ScalarMatrix], err: ScalarMatrix): ScalarMatrix = {
     encoders.foldRight(err) {
-      case (l, e) ⇒ l updateBy e
+      case (l, e) ⇒ l updateBy(delta, e)
     }
   }
 }

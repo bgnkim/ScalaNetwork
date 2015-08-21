@@ -30,10 +30,9 @@ class URAEType(override val corrupt: Corruption = NoCorruption,
    * Apply & Back-prop given single input
    *
    * @param net A network that gets input
-   * @param in Input for error computation.
-   * @param real Real Output for error computation.
+   * @param delta Sequence of delta updates
    */
-  def roundTrip(net: Network, in: BinaryTree, real: Null): Unit =
+  def roundTrip(net: Network, delta: Seq[ScalarMatrix]) = (in: BinaryTree, real: Null) ⇒
     net match {
       case net: AutoEncoder ⇒
         val out = in forward net.encode
@@ -48,10 +47,10 @@ class URAEType(override val corrupt: Corruption = NoCorruption,
         }
 
         // Error propagation for decoder
-        val err = in forward net.decode_!
+        val err = in forward net.decode_!(delta.take(2).toIterator)
 
         // Error propagation for encoder
-        in backward(err, net.encode_!)
+        in backward(err, net.encode_!(delta.takeRight(2).toIterator))
     }
 
 

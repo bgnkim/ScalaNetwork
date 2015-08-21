@@ -19,19 +19,12 @@ class ReconBasicLayer(IO: (Int, Int),
                       rb: ScalarMatrix = null)
   extends BasicLayer(IO, act, w, b) with Reconstructable {
   protected final val reBias = if (rb != null) rb else act initialize(fanIn, fanOut, fanIn, 1)
-  protected final val drBias = ScalarMatrix $0(fanIn, 1)
   /**
    * weights for update
    *
    * @return weights
    */
-  override val W: IndexedSeq[ScalarMatrix] = IndexedSeq(reBias, weight, bias)
-  /**
-   * accumulated delta values
-   *
-   * @return delta-weight
-   */
-  override val dW: IndexedSeq[ScalarMatrix] = IndexedSeq(drBias, delta, dbias)
+  override val W: IndexedSeq[ScalarMatrix] = IndexedSeq(bias, weight, weight, reBias)
 
   /**
    * Sugar: reconstruction
@@ -55,10 +48,12 @@ class ReconBasicLayer(IO: (Int, Int),
   /**
    * Backpropagation of reconstruction. For the information about backpropagation calculation, see [[kr.ac.kaist.ir.deep.layer.Layer]]
    *
+   * @param delta Sequence of delta amount of weight. The order must be the reverse of [[W]]
+   *              In this case, reBias :: weight ::: lowerStack
    * @param error error matrix to be propagated
    * @return propagated error
    */
-  protected[deep] override def decodeUpdateBy(error: ScalarMatrix): ScalarMatrix = {
+  protected[deep] def decodeUpdateBy(delta: Iterator[ScalarMatrix], error: ScalarMatrix): ScalarMatrix = {
     /*
      * Chain Rule : dG/dX_ij = tr[ ( dG/dF ).t * dF/dX_ij ].
      *
@@ -68,6 +63,9 @@ class ReconBasicLayer(IO: (Int, Int),
      * Therefore dG/dX = dF/dX * dG/dF, because dF/dX is symmetric in our case.
      */
     val dGdX: ScalarMatrix = decdFdX * error
+
+    // For bias, input is always 1. We only need dG/dX
+    delta.next += dGdX
 
     /*
      * Chain Rule : dG/dW_ij = tr[ ( dG/dX ).t * dX/dW_ij ].
@@ -79,10 +77,7 @@ class ReconBasicLayer(IO: (Int, Int),
      * Therefore dG/dW = dG/dX * X.t
      */
     val dGdW: ScalarMatrix = dGdX * decX.t
-    delta += dGdW.t // Because we used transposed weight for reconstruction, we need to transpose it.
-
-    // For bias, input is always 1. We only need dG/dX
-    drBias += dGdX
+    delta.next += dGdW.t // Because we used transposed weight for reconstruction, we need to transpose it.
 
     /*
      * Chain Rule : dG/dx_ij = tr[ ( dG/dX ).t * dX/dx_ij ].

@@ -19,12 +19,6 @@ class AutoEncoder(val layer: Reconstructable,
    * @return all weights of layers
    */
   override val W: IndexedSeq[ScalarMatrix] = layer.W
-  /**
-   * All accumulated delta weights of layers
-   *
-   * @return all accumulated delta weights
-   */
-  override val dW: IndexedSeq[ScalarMatrix] = layer.dW
 
   /**
    * Compute output of neural network with given input (without reconstruction)
@@ -57,17 +51,21 @@ class AutoEncoder(val layer: Reconstructable,
   /**
    * Backpropagation algorithm
    *
+   * @param delta Sequence of delta amount of weight. The order must be the reverse of [[W]]
    * @param err backpropagated error from error function
    */
-  override def updateBy(err: ScalarMatrix) = encode_!(decode_!(err))
+  override def updateBy(delta: Iterator[ScalarMatrix], err: ScalarMatrix): ScalarMatrix = {
+    val e = decode_!(delta)(err)
+    encode_!(delta)(e)
+  }
 
   /**
    * Backpropagation algorithm for decoding phrase
    *
    * @param err backpropagated error from error function
    */
-  def decode_!(err: ScalarMatrix) = {
-    layer decodeUpdateBy err
+  def decode_!(delta: Iterator[ScalarMatrix])(err: ScalarMatrix) = {
+    layer decodeUpdateBy(delta, err)
   }
 
   /**
@@ -75,8 +73,8 @@ class AutoEncoder(val layer: Reconstructable,
    *
    * @param err backpropagated error from error function
    */
-  def encode_!(err: ScalarMatrix) = {
-    layer updateBy err
+  def encode_!(delta: Iterator[ScalarMatrix])(err: ScalarMatrix) = {
+    layer updateBy(delta, err)
   }
 
   /**

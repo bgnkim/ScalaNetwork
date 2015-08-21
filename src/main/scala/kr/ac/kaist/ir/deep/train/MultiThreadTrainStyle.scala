@@ -1,6 +1,6 @@
 package kr.ac.kaist.ir.deep.train
 
-import kr.ac.kaist.ir.deep.fn.{WeightSeqOp, WeightUpdater}
+import kr.ac.kaist.ir.deep.fn.{ScalarMatrix, WeightSeqOp, WeightUpdater}
 import kr.ac.kaist.ir.deep.network.Network
 import org.apache.spark.SparkContext
 import org.apache.spark.broadcast.Broadcast
@@ -31,7 +31,8 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
                                                          override val param: DistBeliefCriteria = DistBeliefCriteria())
   extends TrainStyle[IN, OUT] {
   /** Accumulator variable for networks */
-  protected val accNet = sc.accumulator(net.dW)(WeightAccumulator)
+  protected val accNet = sc.accumulator(WeightAccumulator.zero(net.W).reverse)(WeightAccumulator)
+  protected val weightSizes = sc.broadcast(net.W.map(m ⇒ m.rows → m.cols).reverse)
   /** Accumulator variable for counter */
   protected val accCount = sc.accumulator(0)
   /** Training set */
@@ -42,11 +43,12 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
   /**
    * Unpersist all
    */
-  def unpersist(): Unit = {
+  def unpersist(blocking: Boolean = false): Unit = {
     if (trainingSet != null)
-      trainingSet.unpersist()
+      trainingSet.unpersist(blocking = blocking)
     if (testSet != null)
-      testSet.unpersist()
+      testSet.unpersist(blocking = blocking)
+    weightSizes.unpersist(blocking = false)
   }
 
   /**
@@ -55,7 +57,7 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
    * @param iter current iteration
    */
   override def fetch(iter: Int): Unit = {
-    accNet.value.map(_ := 0f)
+    accNet.value.par.map(_ := 0f)
     accCount.setValue(0)
   }
 
@@ -65,7 +67,7 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
    * @param iter current iteration
    */
   override def update(iter: Int): Unit = {
-    val dWUpdate = accNet.value
+    val dWUpdate = accNet.value.reverse
     val cnt = accCount.value.toFloat
     if (cnt > 0) {
       dWUpdate :/= cnt
@@ -91,20 +93,22 @@ class MultiThreadTrainStyle[IN: ClassTag, OUT: ClassTag](override val net: Netwo
     bcNet.unpersist(blocking = false)
   }
 
-  private final def partFunction(net: Broadcast[Network]) = {
-    lazy val netCopy = net.value.copy
+  protected final def partFunction(net: Broadcast[Network]) = {
 
     (part: Iterator[(IN, OUT)]) ⇒ {
       var count = 0
       val f = future {
+        lazy val dW = weightSizes.value.map(ScalarMatrix.$0)
+        lazy val trip = make.roundTrip(net.value, dW)
+
         part.foreach {
           case (x, y) ⇒
             count += 1
-            make.roundTrip(netCopy, make corrupted x, y)
+            trip(x, y)
         }
 
         accCount += count
-        accNet += netCopy.dW
+        accNet += dW
       }
 
       AsyncAwait.ready(f, 1.second)

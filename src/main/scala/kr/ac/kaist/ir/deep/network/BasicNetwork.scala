@@ -16,12 +16,6 @@ class BasicNetwork(val layers: IndexedSeq[Layer])
    * @return all weights of layers
    */
   override val W: IndexedSeq[ScalarMatrix] = layers flatMap (_.W)
-  /**
-   * All accumulated delta weights of layers
-   *
-   * @return all accumulated delta weights
-   */
-  override val dW: IndexedSeq[ScalarMatrix] = layers flatMap (_.dW)
 
   /**
    * Compute output of neural network with given input
@@ -49,11 +43,12 @@ class BasicNetwork(val layers: IndexedSeq[Layer])
   /**
    * Backpropagation algorithm
    *
+   * @param delta Sequence of delta amount of weight. The order must be the reverse of [[W]]
    * @param err backpropagated error from error function
    */
-  override def updateBy(err: ScalarMatrix) = {
+  override def updateBy(delta: Iterator[ScalarMatrix], err: ScalarMatrix): ScalarMatrix = {
     layers.foldRight(err) {
-      case (l, e) ⇒ l updateBy e
+      case (l, e) ⇒ l updateBy(delta, e)
     }
   }
 

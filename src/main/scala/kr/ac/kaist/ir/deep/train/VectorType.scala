@@ -31,13 +31,12 @@ class VectorType(override val corrupt: Corruption = NoCorruption,
    * Apply & Back-prop given single input
    *
    * @param net A network that gets input
-   * @param in Input for error computation.
-   * @param real Real Output for error computation.
+   * @param delta Sequence of delta updates
    */
-  def roundTrip(net: Network, in: ScalarMatrix, real: ScalarMatrix): Unit = {
+  def roundTrip(net: Network, delta: Seq[ScalarMatrix]) = (in: ScalarMatrix, real: ScalarMatrix) ⇒ {
     val out = net passedBy in
     val err: ScalarMatrix = error.derivative(real, out)
-    net updateBy err
+    net updateBy(delta.toIterator, err)
   }
 
   /**

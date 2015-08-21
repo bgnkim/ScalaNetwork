@@ -30,13 +30,12 @@ class AEType(override val corrupt: Corruption = NoCorruption,
    * Apply & Back-prop given single input
    *
    * @param net A network that gets input
-   * @param in Input for error computation.
-   * @param real Real Output for error computation.
+   * @param delta Sequence of delta updates
    */
-  def roundTrip(net: Network, in: ScalarMatrix, real: Null): Unit = {
+  def roundTrip(net: Network, delta: Seq[ScalarMatrix]) = (in: ScalarMatrix, real: Null) ⇒ {
     val out = net passedBy in
     val err: ScalarMatrix = error.derivative(in, out)
-    net updateBy err
+    net updateBy(delta.toIterator, err)
   }
 
   /**

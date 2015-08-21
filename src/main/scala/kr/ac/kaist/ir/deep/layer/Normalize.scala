@@ -15,12 +15,6 @@ trait Normalize extends Layer {
    * @return weights
    */
   override val W: IndexedSeq[ScalarMatrix] = IndexedSeq.empty
-  /**
-   * accumulated delta values
-   *
-   * @return delta-weight
-   */
-  override val dW: IndexedSeq[ScalarMatrix] = IndexedSeq.empty
   /** Null activation */
   protected override val act = null
 
@@ -30,9 +24,10 @@ trait Normalize extends Layer {
    * @param x input matrix
    * @return output matrix
    */
-  override def apply(x: ScalarMatrix): ScalarMatrix = {
-    val len = Math.sqrt(sum(pow(x, 2.0f))).toFloat
-    x :/ len
+  abstract override def apply(x: ScalarMatrix): ScalarMatrix = {
+    val raw = super.apply(x)
+    val len = Math.sqrt(sum(pow(raw, 2.0f))).toFloat
+    raw :/ len
   }
 
   /**
@@ -40,17 +35,18 @@ trait Normalize extends Layer {
    *
    * @return JSON object describes this layer
    */
-  override def toJSON: JsObject = super.toJSON ++ Json.obj("Normalize" → "")
+  abstract override def toJSON: JsObject = super.toJSON ++ Json.obj("Normalize" → "")
 
   /**
    * <p>Backward computation.</p>
    *
    * @note Because this layer only mediates two layers, this layer just remove propagated error for unused elements. 
    *
+   * @param delta Sequence of delta amount of weight. The order must be the reverse of [[W]]
    * @param error to be propagated ( <code>dG / dF</code> is propagated from higher layer )
    * @return propagated error (in this case, <code>dG/dx</code> )
    */
-  protected[deep] override def updateBy(error: ScalarMatrix): ScalarMatrix = {
+  abstract override def updateBy(delta: Iterator[ScalarMatrix], error: ScalarMatrix): ScalarMatrix = {
     val Xsq = pow(X, 2.0f)
     val lenSq = sum(Xsq)
     val len: Scalar = Math.sqrt(lenSq).toFloat
@@ -78,6 +74,6 @@ trait Normalize extends Layer {
     }
 
     // un-normalize the error
-    dZdX * error
+    super.updateBy(delta, dZdX * error)
   }
 }
