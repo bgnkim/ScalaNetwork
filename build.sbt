@@ -17,7 +17,7 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-core" % "1.4.1",
+  "org.apache.spark" %% "spark-core" % "1.5.0",
   "com.typesafe.play" %% "play-json" % "2.3.4",
   "org.scalanlp" %% "breeze" % "0.11.2"
 )
