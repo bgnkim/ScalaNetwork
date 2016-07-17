@@ -1,6 +1,8 @@
 ScalaNetwork 1.3.0
 ====================
 
+## Currently, we don't maintain this repository any more. The code had not designed well, hence we re-designed the entire logic. For the latest library, check [DeepSpark](https://github.com/nearbydelta/deepspark).
+
 A *Neural Network implementation* with Scala, [Breeze](https://github.com/scalanlp/breeze) & [Spark](http://spark.apache.org)
 
 Spark Network follows [GPL v2 license](http://choosealicense.com/licenses/gpl-2.0/).
